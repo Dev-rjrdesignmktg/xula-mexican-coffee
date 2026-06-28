@@ -1,0 +1,157 @@
+{{ "xula-hero.css" | asset_url | stylesheet_tag }}
+<script src='{{ "xula-hero.js" | asset_url }}' defer></script>
+
+<section class="xula-hero">
+  <div class="page-width">
+    <div class="xula-hero__grid">
+
+      <!-- LEFT CONTENT -->
+      <div class="xula-hero__content">
+
+        {% if section.settings.eyebrow != blank %}
+          <span class="xula-eyebrow">
+            {{ section.settings.eyebrow }}
+          </span>
+        {% endif %}
+
+        {% if section.settings.heading != blank %}
+          <h1 class="xula-hero__heading">
+            {{ section.settings.heading }}
+          </h1>
+        {% endif %}
+
+        {% if section.settings.text != blank %}
+          <p class="xula-text">
+            {{ section.settings.text }}
+          </p>
+        {% endif %}
+
+        <div class="xula-hero__actions">
+          {% if section.settings.primary_label != blank %}
+            <a href="{{ section.settings.primary_link }}" class="btn btn--primary">
+              {{ section.settings.primary_label }}
+            </a>
+          {% endif %}
+
+          {% if section.settings.secondary_label != blank %}
+            <a href="{{ section.settings.secondary_link }}" class="btn btn--secondary">
+              {{ section.settings.secondary_label }}
+            </a>
+          {% endif %}
+        </div>
+
+        <div class="xula-hero__meta">
+          <span>Single Origin</span>
+          <span>Small Batch</span>
+          <span>Mexican Highlands</span>
+        </div>
+
+      </div>
+
+      <!-- RIGHT MEDIA -->
+     <div class="xula-hero__media">
+
+  <div class="xula-hero__image-stack">
+
+    {% if section.settings.image_1 != blank %}
+      <img
+        class="xula-hero__img xula-hero__img--1 is-active"
+        src="{{ section.settings.image_1 | image_url: width: "1600px" }}"
+        alt="Xula Coffee lifestyle"
+        loading="eager"
+        width="1600"
+        height="900"
+      >
+    {% endif %}
+
+    {% if section.settings.image_2 != blank %}
+      <img
+        class="xula-hero__img xula-hero__img--2"
+        src="{{ section.settings.image_2 | image_url:  width: "1600px" }}"
+        alt="Xula Coffee product detail"
+        loading="eager"
+        width="1600"
+        height="900"
+      >
+    {% endif %}
+
+  </div>
+
+  <div class="xula-hero__badge">
+    {{ section.settings.badge }}
+  </div>
+
+</div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Xula Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Authentic Mexican Coffee"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Crafted in Mexico. Brewed for Ritual."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Description",
+      "default": "Small-batch roasted coffee rooted in Mexican tradition, designed for slow mornings and rich flavor."
+    },
+    {
+    "type": "image_picker",
+    "id": "image_1",
+    "label": "Hero Image 1 (Lifestyle)"
+    },
+    {
+    "type": "image_picker",
+    "id": "image_2",
+    "label": "Hero Image 2 (Product focus)"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary Button",
+      "default": "Shop Coffee"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary Link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary Button",
+      "default": "Our Story"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary Link"
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Badge",
+      "default": "Fresh Roast"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula Hero"
+    }
+  ]
+}
+{% endschema %}

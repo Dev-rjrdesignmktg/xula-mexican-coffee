@@ -1,0 +1,152 @@
+
+.xula-hero {
+  background: var(--bg);
+  padding: 3rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.xula-hero__grid {
+  display: grid;
+  gap: 40px;
+  align-items: center;
+}
+
+/* LEFT */
+
+.xula-hero__content{
+  width: 100%;
+}
+
+.xula-hero__heading {
+   
+  font-size: clamp(3.5rem, 6vw, 5.3rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
+  color: var(--bg-secondary);
+  max-width: 53rem;
+  font-family: var(--primary-font);
+  font-weight: bold;
+}
+
+.xula-hero__actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+/* META */
+.xula-hero__meta {
+  display: flex;
+  gap: 18px;
+  font-size: 13px;
+  color: rgba(36,23,15,.65);
+  flex-wrap: wrap;
+  font-weight: 700;
+}
+
+/* RIGHT */
+.xula-hero__image-wrapper {
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.xula-hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 4 / 5;
+  z-index: 1;
+}
+
+/* BADGE */
+.xula-hero__badge {
+  position: absolute;
+  bottom: 8%;
+  right: 12%;
+  background: var(--bg-secondary);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  z-index: 6;
+}
+
+.xula-hero__image-stack {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.xula-hero__image-stack::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(36, 23, 15, 0.08) 0%,
+      rgba(36, 23, 15, 0.18) 45%,
+      rgba(36, 23, 15, 0.28) 100%
+    );
+}
+
+.xula-hero__image-stack::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  opacity: .04;
+  pointer-events: none;
+  background-image: url("paper-texture.png");
+  background-size: cover;
+}
+
+/* ambas imágenes */
+.xula-hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 1.6s ease-in-out;
+}
+
+/* estado base */
+.xula-hero__img--1 {
+  opacity: 1;
+  z-index: 2;
+}
+
+.xula-hero__img--2 {
+  opacity: 0;
+  z-index: 1;
+}
+
+/* active state */
+.xula-hero.is-swapped .xula-hero__img--1 {
+  opacity: 0;
+}
+
+.xula-hero.is-swapped .xula-hero__img--2 {
+  opacity: 1;
+}
+
+/* DESKTOP */
+@media (min-width: 768px) {
+  .xula-hero__grid {
+    grid-template-columns: 45% 55%;
+  }
+
+  .xula-hero__image {
+    min-height: 80vh;
+    aspect-ratio: auto;
+  }
+}
