@@ -1,6 +1,7 @@
 :root{
-    --bg: #f9f9f9;
+    --bg: #ffffff;
     --bg-secondary: #24170f;
+    --bg-tertiary: #FAF9F6;
     --text: #000000;
     --accent: #EC0889;
     --text-secondary: #2A7B50;
@@ -11,54 +12,131 @@
 
 .xula-heading{
     font-family: var(--primary-font);
-    font-size: clamp(1rem, 3vw, 3.5rem);
+    font-size: clamp(1.7rem, 3vw, 3.5rem);
     font-weight: 600;
+    line-height: 1;
+    color: var(--bg-secondary);
+    max-width: 14ch;
+    margin: 0 auto;
 }
 
 .xula-subheading{
     font-family: var(--primary-font);
-    font-size: clamp(.8rem, 3vw, 2.6rem);
+    font-size: clamp(1.2rem, 3vw, 2.6rem);
     font-weight: 500;
+    margin-bottom: 12px;
+    color: var(--text);
 }
 
 .xula-text{
     font-family: var(--secondary-font);
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-size: 1.5rem;
     line-height: 1.7;
     max-width: 35rem;
     margin-bottom: 28px;
-    color: rgba(36, 23, 15, 0.75);
+    color: var(--text);
 }
 
-.btn {
-  padding: 14px 22px;
+.xula-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.4rem 2.4rem;
   border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
   text-decoration: none;
-  font-size: 14px;
-  transition: background-color 0.2s ease-in-out;
-  border: 1px solid rgba(36,23,15,.2);
-  font-weight: 700;
+  border: solid 1px var(--bg-secondary);
+  cursor: pointer;
+  transition:
+    color .55s cubic-bezier(.16,1,.3,1),
+    transform .55s cubic-bezier(.16,1,.3,1);
 }
 
-.btn--primary {
-  background: var(--bg-secondary);
-  color: var(--bg);
-}
-
-.btn--secondary{
-  color: var(--accent);
-  border: 1px solid var(--accent);
-}
-
-.btn--primary:hover {
+/* moving fill layer */
+.xula-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: var(--bg);
-  color: var(--bg-secondary);
-  
+  transform: translateY(100%);
+  transition:
+    transform .65s cubic-bezier(.16,1,.3,1);
+  z-index: -1;
 }
 
-.btn--secondary:hover {
-  background: var(--accent);
-  color: var(--bg);
+/* text stays above */
+.xula-btn span {
+  position: relative;
+  z-index: 2;
+}
+
+/* hover */
+.xula-btn:hover::before {
+  transform: translateY(0);
+}
+
+.xula-btn:hover {
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
+.xula-btn--secondary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--accent);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color .45s cubic-bezier(.16,1,.3,1);
+}
+
+/* underline mask system */
+.xula-btn--secondary::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition:
+    transform .55s cubic-bezier(.16,1,.3,1);
+}
+
+/* text motion */
+.xula-btn--secondary span {
+  transition:
+    transform .45s cubic-bezier(.16,1,.3,1);
+}
+
+/* icon motion */
+.xula-btn--secondary svg {
+  transition:
+    transform .45s cubic-bezier(.16,1,.3,1);
+}
+
+/* hover */
+.xula-btn--secondary:hover::after {
+  transform: scaleX(1);
+}
+
+.xula-btn--secondary:hover span {
+  transform: translateX(2px);
+}
+
+.xula-btn--secondary:hover svg {
+  transform: translateX(4px);
 }
 
 .xula-eyebrow {
