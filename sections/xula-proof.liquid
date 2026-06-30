@@ -1,0 +1,92 @@
+{{ "xula-proof.css" | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-proof.js' | asset_url }} " defer></script>
+
+<section class="xula-proof">
+  <div class="page-width">
+<div class="xula-proof__intro">
+  <span class="xula-eyebrow">
+    Rooted in tradition
+  </span>
+
+  <h2 class="xula-heading">
+    Crafted with purpose, from bean to ritual.
+  </h2>
+</div>
+
+<div class="xula-proof__grid">
+
+  {% for block in section.blocks %}
+    <div class="xula-proof__card">
+
+      <div class="xula-proof__media">
+        {% if block.settings.image != blank %}
+          <img
+            src="{{ block.settings.image | image_url: width: 900 }}"
+            alt="{{ block.settings.title }}"
+            loading="lazy"
+            width="900"
+            height="440"
+          >
+        {% endif %}
+      </div>
+
+      <div class="xula-proof__content">
+        <h3 class="xula-subheading">{{ block.settings.title }}</h3>
+        <p class="xula-text">{{ block.settings.text }}</p>
+      </div>
+
+    </div>
+  {% endfor %}
+
+</div>
+
+  </div>
+</section>
+
+{% schema %}
+    {
+        "name": "Xula Proof of Craft",
+        "max_blocks": 3,
+        "blocks": [
+            {
+                "type": "craft_item",
+                "name": "Craft Item",
+                "settings": [
+                    {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Image"
+                    },
+                    {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Title",
+                    "default": "Single-Origin Mexican Coffee"
+                    },
+                    {
+                    "type": "textarea",
+                    "id": "text",
+                    "label": "Description",
+                    "default": "Sourced from the highlands of Mexico, where altitude, soil, and climate shape every cup."
+                    }
+                ]
+            }
+        ],
+    "presets": [
+        {
+            "name": "Xula Proof of Craft",
+            "blocks": [
+                {
+                "type": "craft_item"
+                },
+                {
+                "type": "craft_item"
+                },
+                {
+                "type": "craft_item"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}
