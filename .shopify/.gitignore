@@ -1,0 +1,11 @@
+# Ignore the entire .shopify directory
+
+config.yml
+.env
+.shopify/
+.theme-check.json
+
+# Archivos del sistema y dependencias
+node_modules/
+.DS_Store
+Thumbs.db
