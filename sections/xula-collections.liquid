@@ -1,0 +1,133 @@
+{{ "xula-collections.css" | asset_url | stylesheet_tag }}
+
+<section class="xula-collections">
+  <div class="page-width">
+<div class="xula-intro">
+  <span class="xula-eyebrow">
+    Crafted for every ritual
+  </span>
+
+  <h2 class="xula-heading">
+    Discover the ritual that fits your moment.
+  </h2>
+
+  <p class="xula-text text--collections">
+    From specialty coffee to artisan chocolate and warm baked goods, every offering is made to elevate your daily experience.
+  </p>
+</div>
+
+<div class="xula-mosaic">
+
+  <!-- Large Left -->
+  <a href="{{ section.settings.coffee_link }}" class="xula-mosaic__item xula-mosaic__item--large">
+    {% if section.settings.coffee_image != blank %}
+      <img
+        src="{{ section.settings.coffee_image | image_url: width: 1400 }}"
+        alt="Specialty Coffee"
+        loading="lazy"
+        width="1400"
+        height="800"
+      >
+    {% endif %}
+
+    <div class="xula-mosaic__overlay"></div>
+
+    <div class="xula-mosaic__content">
+      <span>Specialty Coffee</span>
+      <p>
+        Explore small-batch Mexican coffee crafted for depth, ritual, and aroma.
+      </p>
+    </div>
+  </a>
+
+  <!-- Right top -->
+  <a href="{{ section.settings.chocolate_link }}" class="xula-mosaic__item">
+    {% if section.settings.chocolate_image != blank %}
+      <img
+        src="{{ section.settings.chocolate_image | image_url: width: 900 }}"
+        alt="Artisan Chocolate"
+        loading="lazy"
+        width="900"
+        height="300"
+      >
+    {% endif %}
+
+    <div class="xula-mosaic__overlay"></div>
+
+    <div class="xula-mosaic__content">
+      <span>Artisan Chocolate</span>
+      <p>
+        Handcrafted to complement your coffee ritual.
+      </p>
+    </div>
+  </a>
+
+  <!-- Right bottom -->
+  <a href="{{ section.settings.muffins_link }}" class="xula-mosaic__item">
+    {% if section.settings.muffins_image != blank %}
+      <img
+        src="{{ section.settings.muffins_image | image_url: width: 900 }}"
+        alt="Fresh Muffins"
+        loading="lazy"
+        width="900"
+        height="300"
+      >
+    {% endif %}
+
+    <div class="xula-mosaic__overlay"></div>
+
+    <div class="xula-mosaic__content">
+      <span>Fresh Muffins</span>
+      <p>
+        Warm, fresh, and made for slow mornings.
+      </p>
+    </div>
+  </a>
+
+</div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+"name": "Xula Collections Mosaic",
+"settings": [
+{
+"type": "image_picker",
+"id": "coffee_image",
+"label": "Coffee Image"
+},
+{
+"type": "url",
+"id": "coffee_link",
+"label": "Coffee Link"
+},
+{
+"type": "image_picker",
+"id": "chocolate_image",
+"label": "Chocolate Image"
+},
+{
+"type": "url",
+"id": "chocolate_link",
+"label": "Chocolate Link"
+},
+{
+"type": "image_picker",
+"id": "muffins_image",
+"label": "Muffins Image"
+},
+{
+"type": "url",
+"id": "muffins_link",
+"label": "Muffins Link"
+}
+],
+"presets": [
+{
+"name": "Xula Collections Mosaic"
+}
+]
+}
+{% endschema %}

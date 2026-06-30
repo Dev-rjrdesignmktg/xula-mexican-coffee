@@ -1,0 +1,83 @@
+.xula-collections {
+    padding: 100px 0;
+    background: var(--bg-tertiary);
+}
+
+.xula-mosaic {
+    display: grid;
+    gap: 1rem;
+}
+
+.xula-text.text--collections{
+    max-width: 53rem;
+    margin: 0 auto;
+    margin-top: 2rem;
+}
+
+.xula-mosaic__item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    min-height: 300px;
+    display: block;
+}
+
+.xula-mosaic__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+    transform 1.2s cubic-bezier(.22,.61,.36,1);
+}
+
+.xula-mosaic__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+    linear-gradient(
+        to top,
+        rgba(0,0,0,.68) 0%,
+        rgba(0,0,0,.32) 45%,
+        rgba(0,0,0,.12) 100%
+    );
+}
+
+.xula-mosaic__content {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    z-index: 2;
+    color: var(--bg);
+    max-width: 71%;
+}
+
+.xula-mosaic__content span {
+    display: block;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.xula-mosaic__content p {
+    font-size: 1.4rem;
+    line-height: 1.6;
+}
+
+.xula-mosaic__item:hover img {
+    transform: scale(1.06);
+}
+
+@media (min-width: 990px) {
+    .xula-mosaic {
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: repeat(2, 300px);
+        gap: 2rem;
+        align-items: stretch;
+    }
+
+    .xula-mosaic__item--large {
+        grid-row: span 2;
+        min-height: 620px;
+    }
+
+}
