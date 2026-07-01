@@ -1,0 +1,117 @@
+.xula-signature {
+  padding: 120px 0;
+  background: var(--bg);
+}
+
+.xula-signature__grid {
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+/* LEFT */
+.xula-signature__content {
+  position: sticky;
+  top: 120px;
+}
+
+.xula-signature__heading {
+  margin: 20px 0;
+  max-width: 520px;
+}
+
+.xula-signature__text {
+  font-size: 1.6rem;
+  line-height: 1.8;
+  max-width: 480px;
+  margin-bottom: 32px;
+  color: var(--bg-secondary)
+}
+
+.xula-signature__actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* RIGHT */
+.xula-signature__visuals {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.xula-signature__card {
+  position: relative;
+}
+
+.xula-signature__card--2 {
+  margin-top: 80px;
+}
+
+.xula-signature__card--3 {
+  margin-top: -40px;
+}
+
+.xula-signature__media {
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.xula-signature__media img {
+  width: 100%;
+  aspect-ratio: 1 / 1.2;
+  object-fit: cover;
+  transform: scale(1.03);
+  transition: transform .8s cubic-bezier(.22,.61,.36,1);
+}
+
+.xula-signature__card:hover img {
+  transform: scale(1);
+}
+
+.xula-signature__meta {
+  padding-top: 16px;
+}
+
+.xula-signature__meta span {
+  font-size: 1.2rem;
+  opacity: .65;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--bg-secondary);
+}
+
+.xula-signature__meta h3 {
+  font-size: 2rem;
+  margin-top: 8px;
+    color: var(--bg-secondary);
+}
+
+/* MOBILE */
+@media (max-width: 989px) {
+  .xula-signature {
+    padding: 80px 0;
+  }
+
+  .xula-signature__grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .xula-signature__content {
+    position: relative;
+    top: auto;
+  }
+
+  .xula-signature__visuals {
+    grid-template-columns: 1fr;
+  }
+
+  .xula-signature__card--2,
+  .xula-signature__card--3 {
+    margin-top: 0;
+  }
+}
