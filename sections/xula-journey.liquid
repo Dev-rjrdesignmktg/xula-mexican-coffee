@@ -1,0 +1,132 @@
+{{ 'xula-journey.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-journey.js' | asset_url }}" defer></script>
+
+<section class="xula-journey">
+  <div class="page-width">
+    <div class="xula-journey__grid">
+
+      <!-- LEFT STICKY -->
+      <div class="xula-journey__content">
+         {% if section.settings.eyebrow != blank %}
+              <span class="xula-eyebrow journey--eyebrow">
+                {{ section.settings.eyebrow }}
+              </span>
+            {% endif %}
+        {% for block in section.blocks %}
+          <div
+            class="xula-journey__copy {% if forloop.first %}is-active{% endif %}"
+            data-copy="{{ forloop.index0 }}"
+            {{ block.shopify_attributes }}
+          >
+            <small>{{ block.settings.step_label }}</small>
+            <h2 class="xula-heading journey--heading">{{ block.settings.title }}</h2>
+            <p>{{ block.settings.text }}</p>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- RIGHT SCROLL -->
+      <div class="xula-journey__media">
+        {% for block in section.blocks %}
+          <div
+            class="xula-journey__item"
+            data-step="{{ forloop.index0 }}"
+          >
+            {% if block.settings.image != blank %}
+              <img
+                src="{{ block.settings.image | image_url: width: 1600 }}"
+                width="1600"
+                height="440"
+                alt="{{ block.settings.title | escape }}"
+                loading="lazy"
+              >
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Xula Journey",
+  "tag": "section",
+  "class": "section-xula-journey",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The journey of Xula"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "step_label",
+          "label": "Step Label",
+          "default": "Step 1"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "From Bean to Ritual"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "We source premium Mexican coffee directly from high-altitude farms."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula Journey",
+      "settings": {
+        "eyebrow": "The journey of Xula"
+      },
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "step_label": "Step 1",
+            "title": "Source",
+            "text": "Premium coffee beans selected directly from origin."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_label": "Step 2",
+            "title": "Craft",
+            "text": "Roasted with precision to preserve flavor complexity."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_label": "Step 3",
+            "title": "Ritual",
+            "text": "A premium experience rooted in culture and craft."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
