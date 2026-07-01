@@ -9,62 +9,125 @@
  */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "xula_hero_y7UGjx": {
+      "type": "xula-hero",
+      "name": "Xula Hero",
+      "settings": {
+        "eyebrow": "Authentic Mexican Coffee",
+        "heading": "Crafted in Mexico. Brewed for Ritual.",
+        "text": "Small-batch roasted coffee rooted in Mexican tradition, designed for slow mornings and rich flavor.",
+        "image_1": "shopify://shop_images/xula-18.jpg",
+        "image_2": "shopify://shop_images/xula-50-mr.jpg",
+        "primary_label": "Shop Coffee",
+        "primary_link": "",
+        "secondary_label": "Our Story",
+        "secondary_link": "",
+        "badge": "Fresh Roast"
+      }
+    },
+    "xula_proof_NJc79V": {
+      "type": "xula-proof",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "craft_item_n3AUF8": {
+          "type": "craft_item",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "image": "shopify://shop_images/xula-32.jpg",
+            "title": "Single-Origin Mexican Coffee",
+            "text": "Sourced from the highlands of Mexico, where altitude, soil, and climate shape every cup."
           }
         },
-        "button": {
-          "type": "buttons",
+        "craft_item_NxFR3d": {
+          "type": "craft_item",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "image": "shopify://shop_images/xula-56.jpg",
+            "title": "Single-Origin Mexican Coffee",
+            "text": "Sourced from the highlands of Mexico, where altitude, soil, and climate shape every cup."
+          }
+        },
+        "craft_item_8aieCL": {
+          "type": "craft_item",
+          "settings": {
+            "image": "shopify://shop_images/3055416C-A5AB-4D21-A368-0B5BA8F5D3FA.PNG",
+            "title": "Single-Origin Mexican Coffee",
+            "text": "Sourced from the highlands of Mexico, where altitude, soil, and climate shape every cup."
           }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "craft_item_n3AUF8",
+        "craft_item_NxFR3d",
+        "craft_item_8aieCL"
       ],
+      "name": "Xula Proof of Craft",
+      "settings": {}
+    },
+    "xula_collections_RVJVdH": {
+      "type": "xula-collections",
+      "name": "Xula Collections Mosaic",
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "coffee_image": "shopify://shop_images/xula-14.jpg",
+        "coffee_link": "",
+        "chocolate_image": "shopify://shop_images/xula-33.jpg",
+        "chocolate_link": "",
+        "muffins_image": "shopify://shop_images/xula-36.jpg",
+        "muffins_link": ""
       }
+    },
+    "xula_journey_A8wjxT": {
+      "type": "xula-journey",
+      "blocks": {
+        "step_MVnhcm": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/xula-18.jpg",
+            "step_label": "Step 1",
+            "title": "From Bean to Ritual",
+            "text": "We source premium Mexican coffee directly from high-altitude farms."
+          }
+        },
+        "step_GXXACW": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/xula-57.jpg",
+            "step_label": "Step 2",
+            "title": "Crafted with Intention",
+            "text": "Every roast is carefully developed to preserve complexity and aroma."
+          }
+        },
+        "step_jyGWGC": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/3055416C-A5AB-4D21-A368-0B5BA8F5D3FA.PNG",
+            "step_label": "Step 3",
+            "title": "The Xula Experience",
+            "text": "A premium ritual rooted in authenticity, craft and Mexican heritage."
+          }
+        }
+      },
+      "block_order": [
+        "step_MVnhcm",
+        "step_GXXACW",
+        "step_jyGWGC"
+      ],
+      "name": "Xula Journey",
+      "settings": {}
     },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
+        "collection": "all",
+        "products_to_show": 8,
         "title": "Featured products",
         "heading_size": "h2",
         "description": "",
         "show_description": false,
         "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
         "columns_desktop": 4,
-        "color_scheme": "scheme-1",
+        "enable_desktop_slider": false,
         "full_width": false,
         "show_view_all": true,
         "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
+        "color_scheme": "scheme-2",
         "image_ratio": "adapt",
         "image_shape": "default",
         "show_secondary_image": true,
@@ -72,13 +135,17 @@
         "show_rating": false,
         "quick_add": "none",
         "columns_mobile": "2",
+        "swipe_on_mobile": false,
         "padding_top": 44,
         "padding_bottom": 36
       }
     }
   },
   "order": [
-    "image_banner",
+    "xula_hero_y7UGjx",
+    "xula_proof_NJc79V",
+    "xula_collections_RVJVdH",
+    "xula_journey_A8wjxT",
     "featured_collection"
   ]
 }
