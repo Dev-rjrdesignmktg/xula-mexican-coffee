@@ -110,7 +110,53 @@
         "step_jyGWGC"
       ],
       "name": "Xula Journey",
-      "settings": {}
+      "settings": {
+        "eyebrow": "The journey of Xula"
+      }
+    },
+    "xula_signature_MVGPEy": {
+      "type": "xula-signature",
+      "blocks": {
+        "ritual_BqdrCV": {
+          "type": "ritual",
+          "settings": {
+            "image": "shopify://shop_images/xula-20.jpg",
+            "label": "Dark Roast Specialty",
+            "title": "Xula Mexican Coffee - Dark Roast Speciality"
+          }
+        },
+        "ritual_WrihUy": {
+          "type": "ritual",
+          "settings": {
+            "image": "shopify://shop_images/xula-37.jpg",
+            "label": "Artisan Muffins",
+            "title": "Xula Mexican Coffee - Artisan Muffins"
+          }
+        },
+        "ritual_mqmzPJ": {
+          "type": "ritual",
+          "settings": {
+            "image": "shopify://shop_images/65098527-EF24-488A-916E-5F6548DCAB6E.PNG",
+            "label": "Café de olla",
+            "title": "Xula Mexican Coffee - Café de olla"
+          }
+        }
+      },
+      "block_order": [
+        "ritual_BqdrCV",
+        "ritual_WrihUy",
+        "ritual_mqmzPJ"
+      ],
+      "name": "Xula Signature",
+      "settings": {
+        "eyebrow": "Signature Rituals",
+        "heading": "Crafted for every ritual.",
+        "text": "From your first sip in the morning to your sweetest evening comfort, XULA creates moments worth slowing down for.",
+        "button_label": "Shop Coffee",
+        "button_link": "shopify://products/specialty-dark-roast-coffee",
+        "secondary_button_label": "Explore Collection →",
+        "secondary_button_link": "shopify://collections/all"
+      }
     },
     "featured_collection": {
       "type": "featured-collection",
@@ -146,6 +192,7 @@
     "xula_proof_NJc79V",
     "xula_collections_RVJVdH",
     "xula_journey_A8wjxT",
+    "xula_signature_MVGPEy",
     "featured_collection"
   ]
 }
