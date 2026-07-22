@@ -8,27 +8,228 @@
   "market": [],
   "order": [],
   "page": [],
-  "product": [],
+  "product": [
+    {
+      "key": "age-group",
+      "namespace": "shopify",
+      "name": "Age group",
+      "description": "Defines the target age range for a product, such as adults or kids",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "flavor",
+      "namespace": "shopify",
+      "name": "Flavor",
+      "description": "Specifies the taste or flavor of a product, e.g. vanilla, mint",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "product-certifications-standards",
+      "namespace": "shopify",
+      "name": "Product certifications & standards",
+      "description": "Indicates the certifications or standards a product meets, such as organic or cruelty free",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "dietary-preferences",
+      "namespace": "shopify",
+      "name": "Dietary preferences",
+      "description": "Helps identify products suitable for specific diets, e.g. vegan, nut free",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "detailed-ingredients",
+      "namespace": "shopify",
+      "name": "Detailed ingredients",
+      "description": "Lists specific components used in health and beauty, e.g. Vitamin C, probiotics",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "rating",
+      "namespace": "reviews",
+      "name": "Product rating",
+      "description": "Average rating from customers",
+      "type": {
+        "name": "rating",
+        "category": "RATING"
+      }
+    },
+    {
+      "key": "rating_count",
+      "namespace": "reviews",
+      "name": "Product rating count",
+      "description": "Total number of ratings from customers",
+      "type": {
+        "name": "number_integer",
+        "category": "NUMBER"
+      }
+    }
+  ],
   "variant": [],
   "shop": [
     {
-      "key": "merchant_id",
-      "namespace": "mm_google_shopping_extension",
-      "name": "Google: Merchant ID",
-      "description": "Currently Linked Merchant Center ID",
+      "key": "setting",
+      "namespace": "appstle_subscription",
+      "name": "Subscription App Setting",
+      "description": null,
       "type": {
-        "name": "single_line_text_field",
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "widget_template_html",
+      "namespace": "appstle_subscription",
+      "name": "Subscription Widget Template HTML",
+      "description": null,
+      "type": {
+        "name": "multi_line_text_field",
         "category": "TEXT"
       }
     },
     {
-      "key": "show_store_widget_app_embed_block",
-      "namespace": "mm_google_shopping_extension",
-      "name": "Google: Show Store Widget App Embed Block",
-      "description": "Indicates if the store widget app embed block should be shown.",
+      "key": "all_widget_template_html",
+      "namespace": "appstle_subscription",
+      "name": "All Subscription Widget Template HTML",
+      "description": null,
       "type": {
-        "name": "boolean",
-        "category": "TRUE_FALSE"
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "bundle",
+      "namespace": "appstle_subscription",
+      "name": "Subscription Bundle Settings",
+      "description": null,
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "labels",
+      "namespace": "appstle_subscription",
+      "name": "Subscription Labels",
+      "description": null,
+      "type": {
+        "name": "multi_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "customer_portal_label",
+      "namespace": "appstle_subscription",
+      "name": "Subscription Customer Portal Labels",
+      "description": null,
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "selling_plans",
+      "namespace": "appstle_subscription",
+      "name": "Subscription Selling Plans",
+      "description": null,
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "checkout_validation",
+      "namespace": "appstle_subscription",
+      "name": "Checkout Validation",
+      "description": null,
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "bab_subscription_css",
+      "namespace": "appstle_subscription",
+      "name": "Subscription CSS",
+      "description": null,
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "bab_customization_css",
+      "namespace": "appstle_subscription",
+      "name": "Customization CSS",
+      "description": null,
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "shop_info",
+      "namespace": "appstle_subscription",
+      "name": "Shop Information",
+      "description": null,
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "bab_validation_info",
+      "namespace": "appstle_subscription",
+      "name": "Validation Information",
+      "description": null,
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "bab_setting_info",
+      "namespace": "appstle_subscription",
+      "name": "Setting Information",
+      "description": null,
+      "type": {
+        "name": "json",
+        "category": "JSON"
+      }
+    },
+    {
+      "key": "storefront_snippet",
+      "namespace": "appstle_subscription",
+      "name": "Storefront Snippet",
+      "description": null,
+      "type": {
+        "name": "multi_line_text_field",
+        "category": "TEXT"
+      }
+    },
+    {
+      "key": "all_Selling_Plans",
+      "namespace": "appstle_subscription",
+      "name": "All Selling Plans",
+      "description": null,
+      "type": {
+        "name": "json",
+        "category": "JSON"
       }
     }
   ]
