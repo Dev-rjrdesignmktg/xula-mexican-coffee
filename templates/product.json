@@ -12,6 +12,21 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "text_HTUQPp": {
+          "type": "text",
+          "settings": {
+            "text": "Text block",
+            "text_style": "body"
+          }
+        },
+        "inventory_awkwx9": {
+          "type": "inventory",
+          "settings": {
+            "text_style": "body",
+            "inventory_threshold": 10,
+            "show_inventory_quantity": true
+          }
+        },
         "complementary_NePGRV": {
           "type": "complementary",
           "settings": {
@@ -70,6 +85,8 @@
         }
       },
       "block_order": [
+        "text_HTUQPp",
+        "inventory_awkwx9",
         "complementary_NePGRV",
         "vendor",
         "title",
