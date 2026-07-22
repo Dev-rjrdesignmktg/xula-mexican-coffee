@@ -206,12 +206,11 @@
         "secondary_button_label": "Explore Collection →",
         "secondary_button_link": "shopify://collections/all"
       }
-<<<<<<< HEAD
     },
-    "xula_testimonials_pQ7mLk": {
+    "xula_testimonials_Miab8z": {
       "type": "xula-testimonials",
       "blocks": {
-        "testimonial_a1": {
+        "testimonial_T3HMUR": {
           "type": "testimonial",
           "settings": {
             "rating": 5,
@@ -224,79 +223,79 @@
             "review_date": "2 weeks ago"
           }
         },
-        "testimonial_a2": {
+        "testimonial_ELEyJ4": {
           "type": "testimonial",
           "settings": {
             "rating": 5,
-            "quote": "Rich, smooth, and never bitter. This is the best café de olla I've had outside of Oaxaca.",
-            "customer_name": "James R.",
-            "customer_location": "Austin, TX",
-            "product_purchased": "Café de Olla",
-            "roast_type": "Café de Olla",
-            "verified": true,
-            "review_date": "1 month ago"
-          }
-        },
-        "testimonial_a3": {
-          "type": "testimonial",
-          "settings": {
-            "rating": 5,
-            "quote": "I was skeptical about ordering coffee online, but the freshness blew me away. Subscribing for life.",
-            "customer_name": "Carla T.",
-            "customer_location": "Mexico City, MX",
-            "product_purchased": "Medium Roast",
-            "roast_type": "Medium Roast",
-            "verified": true,
-            "review_date": "3 weeks ago"
-          }
-        },
-        "testimonial_a4": {
-          "type": "testimonial",
-          "settings": {
-            "rating": 4,
-            "quote": "Fast shipping and the packaging alone feels premium. The espresso blend is now a daily staple.",
-            "customer_name": "Marcus D.",
-            "customer_location": "Los Angeles, CA",
-            "product_purchased": "Espresso Blend",
-            "roast_type": "Espresso Blend",
-            "verified": true,
-            "review_date": "5 days ago"
-          }
-        },
-        "testimonial_a5": {
-          "type": "testimonial",
-          "settings": {
-            "rating": 5,
-            "quote": "You can taste the altitude. Bold without being harsh — exactly what specialty coffee should be.",
-            "customer_name": "Sofia R.",
-            "customer_location": "Monterrey, MX",
+            "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
+            "customer_name": "Ana M.",
+            "customer_location": "Guadalajara, MX",
             "product_purchased": "Dark Roast Specialty",
             "roast_type": "Dark Roast",
             "verified": true,
-            "review_date": "1 week ago"
+            "review_date": "2 weeks ago"
           }
         },
-        "testimonial_a6": {
+        "testimonial_RM3maE": {
           "type": "testimonial",
           "settings": {
             "rating": 5,
-            "quote": "Their muffins pair perfectly with the medium roast. My Sunday ritual is now XULA.",
-            "customer_name": "Laura P.",
-            "customer_location": "San Antonio, TX",
-            "product_purchased": "Medium Roast",
-            "roast_type": "Medium Roast",
+            "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
+            "customer_name": "Ana M.",
+            "customer_location": "Guadalajara, MX",
+            "product_purchased": "Dark Roast Specialty",
+            "roast_type": "Dark Roast",
             "verified": true,
-            "review_date": "2 months ago"
+            "review_date": "2 weeks ago"
+          }
+        },
+        "testimonial_MYeTkE": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
+            "customer_name": "Ana M.",
+            "customer_location": "Guadalajara, MX",
+            "product_purchased": "Dark Roast Specialty",
+            "roast_type": "Dark Roast",
+            "verified": true,
+            "review_date": "2 weeks ago"
+          }
+        },
+        "testimonial_NNbeFN": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
+            "customer_name": "Ana M.",
+            "customer_location": "Guadalajara, MX",
+            "product_purchased": "Dark Roast Specialty",
+            "roast_type": "Dark Roast",
+            "verified": true,
+            "review_date": "2 weeks ago"
+          }
+        },
+        "testimonial_3qjFwx": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
+            "customer_name": "Ana M.",
+            "customer_location": "Guadalajara, MX",
+            "product_purchased": "Dark Roast Specialty",
+            "roast_type": "Dark Roast",
+            "verified": true,
+            "review_date": "2 weeks ago"
           }
         }
       },
       "block_order": [
-        "testimonial_a1",
-        "testimonial_a2",
-        "testimonial_a3",
-        "testimonial_a4",
-        "testimonial_a5",
-        "testimonial_a6"
+        "testimonial_T3HMUR",
+        "testimonial_ELEyJ4",
+        "testimonial_RM3maE",
+        "testimonial_MYeTkE",
+        "testimonial_NNbeFN",
+        "testimonial_3qjFwx"
       ],
       "name": "Xula Testimonials",
       "settings": {
@@ -310,36 +309,6 @@
         "guarantee_heading": "30-Day Happiness Guarantee",
         "guarantee_text": "Not the right roast for you? We'll make it right — refund or replace, no questions asked."
       }
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "settings": {
-        "collection": "all",
-        "products_to_show": 8,
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "color_scheme": "scheme-2",
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 44,
-        "padding_bottom": 36
-      }
-=======
->>>>>>> refs/remotes/origin/main
     }
   },
   "order": [
@@ -348,12 +317,7 @@
     "xula_proof_NJc79V",
     "xula_collections_RVJVdH",
     "xula_journey_A8wjxT",
-<<<<<<< HEAD
     "xula_signature_MVGPEy",
-    "xula_testimonials_pQ7mLk",
-    "featured_collection"
-=======
-    "xula_signature_MVGPEy"
->>>>>>> refs/remotes/origin/main
+    "xula_testimonials_Miab8z"
   ]
 }
