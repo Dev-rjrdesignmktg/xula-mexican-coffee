@@ -22,12 +22,18 @@
 .xula-cta__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--bg-secondary) 55%, transparent) 0%,
-    color-mix(in srgb, var(--bg-secondary) 82%, transparent) 60%,
-    color-mix(in srgb, var(--bg-secondary) 95%, transparent) 100%
-  );
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg-secondary) 78%, transparent) 0%,
+      color-mix(in srgb, var(--bg-secondary) 70%, transparent) 40%,
+      color-mix(in srgb, var(--bg-secondary) 88%, transparent) 100%
+    ),
+    radial-gradient(
+      120% 100% at 50% 50%,
+      color-mix(in srgb, var(--bg-secondary) 55%, transparent) 0%,
+      color-mix(in srgb, var(--bg-secondary) 80%, transparent) 100%
+    );
 }
 
 .xula-cta--no-image .xula-cta__overlay {
