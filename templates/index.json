@@ -206,34 +206,6 @@
         "secondary_button_label": "Explore Collection →",
         "secondary_button_link": "shopify://collections/all"
       }
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "settings": {
-        "collection": "all",
-        "products_to_show": 8,
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "color_scheme": "scheme-2",
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 44,
-        "padding_bottom": 36
-      }
     }
   },
   "order": [
@@ -242,7 +214,6 @@
     "xula_proof_NJc79V",
     "xula_collections_RVJVdH",
     "xula_journey_A8wjxT",
-    "xula_signature_MVGPEy",
-    "featured_collection"
+    "xula_signature_MVGPEy"
   ]
 }
