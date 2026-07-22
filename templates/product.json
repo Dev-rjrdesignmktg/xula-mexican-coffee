@@ -12,13 +12,6 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "text_HTUQPp": {
-          "type": "text",
-          "settings": {
-            "text": "Text block",
-            "text_style": "body"
-          }
-        },
         "inventory_awkwx9": {
           "type": "inventory",
           "settings": {
@@ -55,6 +48,13 @@
           "type": "price",
           "settings": {}
         },
+        "text_HTUQPp": {
+          "type": "text",
+          "settings": {
+            "text": "Artisan Dark Semi-Bitter Chocolate from Pátzcuaro, MichoacánMade with Cacao from Tabasco, Mexico60% Cacao and 40% Sugar8oz (0.5 lbs)",
+            "text_style": "body"
+          }
+        },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
@@ -73,10 +73,6 @@
             "show_gift_card_recipient": true
           }
         },
-        "description": {
-          "type": "description",
-          "settings": {}
-        },
         "share": {
           "type": "share",
           "settings": {
@@ -85,16 +81,15 @@
         }
       },
       "block_order": [
-        "text_HTUQPp",
         "inventory_awkwx9",
         "complementary_NePGRV",
         "vendor",
         "title",
         "price",
+        "text_HTUQPp",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
-        "description",
         "share"
       ],
       "settings": {
