@@ -25,6 +25,55 @@
         "badge": "Fresh Roast"
       }
     },
+    "xula_origin_R94pYN": {
+      "type": "xula-origin",
+      "blocks": {
+        "stat_FCkjBn": {
+          "type": "stat",
+          "settings": {
+            "value": "1,200m",
+            "label": "Altitude"
+          }
+        },
+        "stat_RRX3RU": {
+          "type": "stat",
+          "settings": {
+            "value": "Bourbon",
+            "label": "Variety"
+          }
+        },
+        "stat_PHd8ac": {
+          "type": "stat",
+          "settings": {
+            "value": "Nov – Feb",
+            "label": "Harvest"
+          }
+        },
+        "stat_Xr69ym": {
+          "type": "stat",
+          "settings": {
+            "value": "40+",
+            "label": "Family farms"
+          }
+        }
+      },
+      "block_order": [
+        "stat_FCkjBn",
+        "stat_RRX3RU",
+        "stat_PHd8ac",
+        "stat_Xr69ym"
+      ],
+      "name": "Xula Origin",
+      "settings": {
+        "image": "shopify://shop_images/xula-18.jpg",
+        "badge": "1,200masl",
+        "eyebrow": "Our Terroir",
+        "heading": "Grown in the highlands of Mexico.",
+        "text": "In the volcanic soil of Veracruz and Chiapas, small family farms nurture every cherry by hand, high above the clouds where the air is thin and the harvest is slow.",
+        "button_label": "About Us",
+        "button_link": ""
+      }
+    },
     "xula_proof_NJc79V": {
       "type": "xula-proof",
       "blocks": {
@@ -157,6 +206,7 @@
         "secondary_button_label": "Explore Collection →",
         "secondary_button_link": "shopify://collections/all"
       }
+<<<<<<< HEAD
     },
     "xula_testimonials_pQ7mLk": {
       "type": "xula-testimonials",
@@ -288,15 +338,22 @@
         "padding_top": 44,
         "padding_bottom": 36
       }
+=======
+>>>>>>> refs/remotes/origin/main
     }
   },
   "order": [
     "xula_hero_y7UGjx",
+    "xula_origin_R94pYN",
     "xula_proof_NJc79V",
     "xula_collections_RVJVdH",
     "xula_journey_A8wjxT",
+<<<<<<< HEAD
     "xula_signature_MVGPEy",
     "xula_testimonials_pQ7mLk",
     "featured_collection"
+=======
+    "xula_signature_MVGPEy"
+>>>>>>> refs/remotes/origin/main
   ]
 }

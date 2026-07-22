@@ -12,6 +12,27 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "inventory_awkwx9": {
+          "type": "inventory",
+          "settings": {
+            "text_style": "body",
+            "inventory_threshold": 10,
+            "show_inventory_quantity": true
+          }
+        },
+        "complementary_NePGRV": {
+          "type": "complementary",
+          "settings": {
+            "block_heading": "Pairs well with",
+            "make_collapsible_row": false,
+            "icon": "price_tag",
+            "product_list_limit": 10,
+            "products_per_page": 3,
+            "pagination_style": "counter",
+            "image_ratio": "square",
+            "enable_quick_add": false
+          }
+        },
         "vendor": {
           "type": "text",
           "settings": {
@@ -26,6 +47,13 @@
         "price": {
           "type": "price",
           "settings": {}
+        },
+        "text_HTUQPp": {
+          "type": "text",
+          "settings": {
+            "text": "Artisan Dark Semi-Bitter Chocolate from Pátzcuaro, MichoacánMade with Cacao from Tabasco, Mexico60% Cacao and 40% Sugar8oz (0.5 lbs)",
+            "text_style": "body"
+          }
         },
         "variant_picker": {
           "type": "variant_picker",
@@ -45,10 +73,6 @@
             "show_gift_card_recipient": true
           }
         },
-        "description": {
-          "type": "description",
-          "settings": {}
-        },
         "share": {
           "type": "share",
           "settings": {
@@ -57,22 +81,24 @@
         }
       },
       "block_order": [
+        "inventory_awkwx9",
+        "complementary_NePGRV",
         "vendor",
         "title",
         "price",
+        "text_HTUQPp",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
-        "description",
         "share"
       ],
       "settings": {
         "enable_sticky_info": true,
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-2",
         "media_size": "large",
         "constrain_to_viewport": true,
         "media_fit": "contain",
-        "gallery_layout": "stacked",
+        "gallery_layout": "thumbnail_slider",
         "mobile_thumbnails": "hide",
         "media_position": "left",
         "image_zoom": "lightbox",
@@ -85,6 +111,10 @@
     "disclosures": {
       "type": "disclosures",
       "settings": {
+        "heading": "Disclosures",
+        "heading_size": "h2",
+        "open_by_default": false,
+        "color_scheme": "",
         "padding_top": 36,
         "padding_bottom": 0
       }
@@ -97,7 +127,7 @@
         "products_to_show": 4,
         "columns_desktop": 4,
         "columns_mobile": "2",
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-2",
         "image_ratio": "square",
         "image_shape": "default",
         "show_secondary_image": true,
