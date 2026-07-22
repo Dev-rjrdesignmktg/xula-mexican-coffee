@@ -1,0 +1,288 @@
+{{ 'xula-testimonials.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-testimonials.js' | asset_url }}" defer="defer"></script>
+
+{% liquid
+  assign heading_id = 'xula-testimonials-heading-' | append: section.id
+  assign summary_rating = section.settings.summary_rating | default: '4.9'
+%}
+
+<section class="xula-testimonials" aria-labelledby="{{ heading_id }}">
+  <div class="page-width">
+
+    <div class="xula-intro">
+      {% if section.settings.eyebrow != blank %}
+        <span class="xula-eyebrow">{{ section.settings.eyebrow }}</span>
+      {% endif %}
+
+      <h2 class="xula-heading" id="{{ heading_id }}">
+        {{ section.settings.heading }}
+      </h2>
+
+      {% if section.settings.text != blank %}
+        <p class="xula-text xula-testimonials__subtitle">{{ section.settings.text }}</p>
+      {% endif %}
+    </div>
+
+    {% if section.settings.show_summary %}
+      <div
+        class="xula-testimonials__summary"
+        role="img"
+        aria-label="Calificación promedio de {{ summary_rating }} sobre 5 estrellas, basada en {{ section.settings.summary_count }}"
+      >
+        <span class="xula-testimonials__summary-stars" aria-hidden="true">
+          {% for i in (1..5) %}
+            <svg class="xula-testimonials__star xula-testimonials__star--filled" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="m10 2.626-1.46 4.71c-.192.62-.743 1.041-1.365 1.041H2.453l3.82 2.91a1.55 1.55 0 0 1 .522 1.685l-1.46 4.71 3.821-2.911a1.38 1.38 0 0 1 1.688 0l3.82 2.91-1.459-4.71c-.192-.62.019-1.3.522-1.683l3.82-2.911h-4.722c-.622 0-1.173-.42-1.366-1.04z"/>
+            </svg>
+          {% endfor %}
+        </span>
+
+        <span class="xula-testimonials__summary-score" data-count-to="{{ summary_rating }}">{{ summary_rating }}</span>
+        <span class="xula-testimonials__summary-count">{{ section.settings.summary_count }}</span>
+      </div>
+    {% endif %}
+
+    <div class="xula-testimonials__grid">
+      {% for block in section.blocks %}
+        {% liquid
+          assign customer_name = block.settings.customer_name | default: 'XULA Customer'
+          assign initial = customer_name | slice: 0, 1 | upcase
+          assign card_label = customer_name | append: ', calificación de ' | append: block.settings.rating | append: ' sobre 5 estrellas'
+        %}
+
+        <article class="xula-testimonials__card" aria-label="{{ card_label }}" {{ block.shopify_attributes }}>
+
+          <div class="xula-testimonials__stars" aria-hidden="true">
+            {% for i in (1..5) %}
+              <svg
+                class="xula-testimonials__star {% if i <= block.settings.rating %}xula-testimonials__star--filled{% endif %}"
+                viewBox="0 0 20 20"
+              >
+                <path d="m10 2.626-1.46 4.71c-.192.62-.743 1.041-1.365 1.041H2.453l3.82 2.91a1.55 1.55 0 0 1 .522 1.685l-1.46 4.71 3.821-2.911a1.38 1.38 0 0 1 1.688 0l3.82 2.91-1.459-4.71c-.192-.62.019-1.3.522-1.683l3.82-2.911h-4.722c-.622 0-1.173-.42-1.366-1.04z"/>
+              </svg>
+            {% endfor %}
+          </div>
+
+          {% if block.settings.quote != blank %}
+            <blockquote class="xula-testimonials__quote">
+              <p>&ldquo;{{ block.settings.quote }}&rdquo;</p>
+            </blockquote>
+          {% endif %}
+
+          {% if block.settings.product_purchased != blank %}
+            <div class="xula-testimonials__product">
+              <span class="xula-testimonials__product-name">{{ block.settings.product_purchased }}</span>
+              {% if block.settings.roast_type != blank %}
+                <span class="xula-testimonials__roast">{{ block.settings.roast_type }}</span>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          <footer class="xula-testimonials__author">
+            <div class="xula-testimonials__avatar">
+              {% if block.settings.avatar != blank %}
+                <img
+                  src="{{ block.settings.avatar | image_url: width: 120 }}"
+                  alt="Foto de perfil de {{ customer_name }}"
+                  width="60"
+                  height="60"
+                  loading="lazy"
+                  decoding="async"
+                >
+              {% else %}
+                <span class="xula-testimonials__avatar-fallback" aria-hidden="true">{{ initial }}</span>
+              {% endif %}
+            </div>
+
+            <div class="xula-testimonials__author-meta">
+              <span class="xula-testimonials__name">
+                {{ customer_name }}
+                {% if block.settings.verified %}
+                  <span class="xula-testimonials__badge">
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.629 15.336 2.293 10l1.414-1.414 3.922 3.922 8.664-8.664 1.414 1.414z"/></svg>
+                    Compra verificada
+                  </span>
+                {% endif %}
+              </span>
+              {% if block.settings.customer_location != blank or block.settings.review_date != blank %}
+                <span class="xula-testimonials__meta">
+                  {{ block.settings.customer_location }}
+                  {% if block.settings.customer_location != blank and block.settings.review_date != blank %}&middot;{% endif %}
+                  {{ block.settings.review_date }}
+                </span>
+              {% endif %}
+            </div>
+          </footer>
+
+        </article>
+      {% endfor %}
+    </div>
+
+    {% if section.settings.show_guarantee %}
+      <div class="xula-testimonials__guarantee">
+        <svg class="xula-testimonials__guarantee-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2 3 6v6c0 5 3.8 9.4 9 10 5.2-.6 9-5 9-10V6l-9-4zm-1.2 13.6-3.4-3.4 1.4-1.4 2 2 4.8-4.8 1.4 1.4z"/>
+        </svg>
+        <div class="xula-testimonials__guarantee-copy">
+          <strong>{{ section.settings.guarantee_heading }}</strong>
+          <span>{{ section.settings.guarantee_text }}</span>
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Xula Testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Trusted by Our Community"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The taste that keeps them coming back."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Subtitle",
+      "default": "Thousands of cups poured, thousands of stories brewed. Here's what real XULA customers are saying."
+    },
+    {
+      "type": "header",
+      "content": "Ratings summary"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_summary",
+      "label": "Show ratings summary",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "summary_rating",
+      "label": "Average rating",
+      "default": "4.9"
+    },
+    {
+      "type": "text",
+      "id": "summary_count",
+      "label": "Review count label",
+      "default": "from 500+ verified reviews"
+    },
+    {
+      "type": "header",
+      "content": "Satisfaction guarantee"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_guarantee",
+      "label": "Show guarantee seal",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "guarantee_heading",
+      "label": "Guarantee heading",
+      "default": "30-Day Happiness Guarantee"
+    },
+    {
+      "type": "textarea",
+      "id": "guarantee_text",
+      "label": "Guarantee text",
+      "default": "Not the right roast for you? We'll make it right — refund or replace, no questions asked."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now."
+        },
+        {
+          "type": "image_picker",
+          "id": "avatar",
+          "label": "Photo (optional, falls back to initials)"
+        },
+        {
+          "type": "text",
+          "id": "customer_name",
+          "label": "Customer name",
+          "default": "Ana M."
+        },
+        {
+          "type": "text",
+          "id": "customer_location",
+          "label": "Customer location",
+          "default": "Guadalajara, MX"
+        },
+        {
+          "type": "text",
+          "id": "product_purchased",
+          "label": "Product purchased",
+          "default": "Dark Roast Specialty"
+        },
+        {
+          "type": "select",
+          "id": "roast_type",
+          "label": "Roast type",
+          "options": [
+            { "value": "Light Roast", "label": "Light Roast" },
+            { "value": "Medium Roast", "label": "Medium Roast" },
+            { "value": "Dark Roast", "label": "Dark Roast" },
+            { "value": "Espresso Blend", "label": "Espresso Blend" },
+            { "value": "Café de Olla", "label": "Café de Olla" }
+          ],
+          "default": "Dark Roast"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Verified purchase",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "review_date",
+          "label": "Review date (optional)",
+          "default": "2 weeks ago"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula Testimonials",
+      "blocks": [
+        { "type": "testimonial" },
+        { "type": "testimonial" },
+        { "type": "testimonial" },
+        { "type": "testimonial" },
+        { "type": "testimonial" },
+        { "type": "testimonial" }
+      ]
+    }
+  ]
+}
+{% endschema %}
