@@ -309,6 +309,53 @@
         "guarantee_heading": "30-Day Happiness Guarantee",
         "guarantee_text": "Not the right roast for you? We'll make it right — refund or replace, no questions asked."
       }
+    },
+    "xula_final_cta_DWCf6t": {
+      "type": "xula-final-cta",
+      "blocks": {
+        "trust_item_9zTTjj": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "shipping",
+            "label": "Free shipping over $50"
+          }
+        },
+        "trust_item_rjg86z": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "guarantee",
+            "label": "30-Day Happiness Guarantee"
+          }
+        },
+        "trust_item_cpEyEE": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "secure",
+            "label": "Secure checkout"
+          }
+        }
+      },
+      "block_order": [
+        "trust_item_9zTTjj",
+        "trust_item_rjg86z",
+        "trust_item_cpEyEE"
+      ],
+      "name": "Xula Final CTA",
+      "settings": {
+        "image": "shopify://shop_images/xula-51-mr.jpg",
+        "image_alt": "xula-coffee-mexican",
+        "eyebrow": "Enjoy Xula Mexican Coffee",
+        "heading": "Begin Your Ritual Today",
+        "text": "Specialty-grade Mexican coffee, roasted in small batches and shipped fresh to your door. Your next great cup is one click away.",
+        "primary_label": "Shop Specialty Coffee",
+        "primary_link": "",
+        "secondary_label": "View All Coffees",
+        "secondary_link": "",
+        "show_urgency": true,
+        "urgency_text": "This week's roast batch closes in",
+        "urgency_cutoff_day": "sunday",
+        "urgency_cutoff_hour": 20
+      }
     }
   },
   "order": [
@@ -318,6 +365,7 @@
     "xula_collections_RVJVdH",
     "xula_journey_A8wjxT",
     "xula_signature_MVGPEy",
-    "xula_testimonials_Miab8z"
+    "xula_testimonials_Miab8z",
+    "xula_final_cta_DWCf6t"
   ]
 }
