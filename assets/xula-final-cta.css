@@ -1,0 +1,199 @@
+.xula-cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  padding: 64px 0;
+}
+
+.xula-cta__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.xula-cta__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.xula-cta__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg-secondary) 55%, transparent) 0%,
+    color-mix(in srgb, var(--bg-secondary) 82%, transparent) 60%,
+    color-mix(in srgb, var(--bg-secondary) 95%, transparent) 100%
+  );
+}
+
+.xula-cta--no-image .xula-cta__overlay {
+  display: none;
+}
+
+/* ---------- Content ---------- */
+
+.xula-cta__content {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.8s ease;
+}
+
+.xula-cta__content.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Urgency ---------- */
+
+.xula-cta__urgency {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--bg-tertiary);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-family: var(--secondary-font);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.xula-cta__urgency-icon {
+  width: 14px;
+  height: 14px;
+  fill: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ---------- Copy ---------- */
+
+.xula-cta__eyebrow {
+  color: var(--bg-tertiary);
+  opacity: 0.85;
+}
+
+.xula-cta__heading {
+  font-family: var(--primary-font);
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  font-weight: 600;
+  line-height: 1.08;
+  color: var(--bg-tertiary);
+  max-width: none;
+  margin: 0 0 16px;
+}
+
+.xula-cta__text {
+  font-family: var(--secondary-font);
+  font-size: 1.6rem;
+  line-height: 1.7;
+  color: var(--bg-tertiary);
+  opacity: 0.88;
+  max-width: 480px;
+  margin: 0 auto 32px;
+}
+
+/* ---------- Actions ---------- */
+
+.xula-cta__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.xula-cta__btn-primary {
+  width: 100%;
+  max-width: 340px;
+}
+
+.xula-cta__btn-secondary {
+  color: var(--accent);
+}
+
+.xula-cta__btn-primary:focus-visible,
+.xula-cta__btn-secondary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* ---------- Trust badges ---------- */
+
+.xula-cta__trust {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.xula-cta__trust-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--secondary-font);
+  font-size: 1.2rem;
+  color: var(--bg-tertiary);
+  opacity: 0.85;
+}
+
+.xula-cta__trust-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--bg-tertiary);
+}
+
+/* ---------- Breakpoints ---------- */
+
+@media (min-width: 560px) {
+  .xula-cta__actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .xula-cta__btn-primary {
+    width: auto;
+  }
+}
+
+@media (min-width: 700px) {
+  .xula-cta__trust {
+    flex-direction: row;
+    justify-content: center;
+    gap: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .xula-cta {
+    padding: 120px 0;
+  }
+
+  .xula-cta__content {
+    max-width: 720px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-cta__content {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
