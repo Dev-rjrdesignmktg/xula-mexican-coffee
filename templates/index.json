@@ -158,6 +158,109 @@
         "secondary_button_link": "shopify://collections/all"
       }
     },
+    "xula_testimonials_pQ7mLk": {
+      "type": "xula-testimonials",
+      "blocks": {
+        "testimonial_a1": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
+            "customer_name": "Ana M.",
+            "customer_location": "Guadalajara, MX",
+            "product_purchased": "Dark Roast Specialty",
+            "roast_type": "Dark Roast",
+            "verified": true,
+            "review_date": "2 weeks ago"
+          }
+        },
+        "testimonial_a2": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "Rich, smooth, and never bitter. This is the best café de olla I've had outside of Oaxaca.",
+            "customer_name": "James R.",
+            "customer_location": "Austin, TX",
+            "product_purchased": "Café de Olla",
+            "roast_type": "Café de Olla",
+            "verified": true,
+            "review_date": "1 month ago"
+          }
+        },
+        "testimonial_a3": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "I was skeptical about ordering coffee online, but the freshness blew me away. Subscribing for life.",
+            "customer_name": "Carla T.",
+            "customer_location": "Mexico City, MX",
+            "product_purchased": "Medium Roast",
+            "roast_type": "Medium Roast",
+            "verified": true,
+            "review_date": "3 weeks ago"
+          }
+        },
+        "testimonial_a4": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 4,
+            "quote": "Fast shipping and the packaging alone feels premium. The espresso blend is now a daily staple.",
+            "customer_name": "Marcus D.",
+            "customer_location": "Los Angeles, CA",
+            "product_purchased": "Espresso Blend",
+            "roast_type": "Espresso Blend",
+            "verified": true,
+            "review_date": "5 days ago"
+          }
+        },
+        "testimonial_a5": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "You can taste the altitude. Bold without being harsh — exactly what specialty coffee should be.",
+            "customer_name": "Sofia R.",
+            "customer_location": "Monterrey, MX",
+            "product_purchased": "Dark Roast Specialty",
+            "roast_type": "Dark Roast",
+            "verified": true,
+            "review_date": "1 week ago"
+          }
+        },
+        "testimonial_a6": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "Their muffins pair perfectly with the medium roast. My Sunday ritual is now XULA.",
+            "customer_name": "Laura P.",
+            "customer_location": "San Antonio, TX",
+            "product_purchased": "Medium Roast",
+            "roast_type": "Medium Roast",
+            "verified": true,
+            "review_date": "2 months ago"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_a1",
+        "testimonial_a2",
+        "testimonial_a3",
+        "testimonial_a4",
+        "testimonial_a5",
+        "testimonial_a6"
+      ],
+      "name": "Xula Testimonials",
+      "settings": {
+        "eyebrow": "Trusted by Our Community",
+        "heading": "The taste that keeps them coming back.",
+        "text": "Thousands of cups poured, thousands of stories brewed. Here's what real XULA customers are saying.",
+        "show_summary": true,
+        "summary_rating": "4.9",
+        "summary_count": "from 500+ verified reviews",
+        "show_guarantee": true,
+        "guarantee_heading": "30-Day Happiness Guarantee",
+        "guarantee_text": "Not the right roast for you? We'll make it right — refund or replace, no questions asked."
+      }
+    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
@@ -193,6 +296,7 @@
     "xula_collections_RVJVdH",
     "xula_journey_A8wjxT",
     "xula_signature_MVGPEy",
+    "xula_testimonials_pQ7mLk",
     "featured_collection"
   ]
 }
