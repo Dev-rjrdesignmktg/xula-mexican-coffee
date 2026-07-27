@@ -213,40 +213,34 @@
         "testimonial_T3HMUR": {
           "type": "testimonial",
           "settings": {
+            "image": "shopify://shop_images/xula-51-mr.jpg",
             "rating": 5,
             "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
             "customer_name": "Ana M.",
-            "customer_location": "Guadalajara, MX",
             "product_purchased": "Dark Roast Specialty",
-            "roast_type": "Dark Roast",
-            "verified": true,
-            "review_date": "2 weeks ago"
+            "verified": true
           }
         },
         "testimonial_ELEyJ4": {
           "type": "testimonial",
           "settings": {
+            "image": "shopify://shop_images/xula-33_98843e05-719f-49dd-b8c3-6dcc280b9a4c.jpg",
             "rating": 5,
             "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
             "customer_name": "Ana M.",
-            "customer_location": "Guadalajara, MX",
             "product_purchased": "Dark Roast Specialty",
-            "roast_type": "Dark Roast",
-            "verified": true,
-            "review_date": "2 weeks ago"
+            "verified": true
           }
         },
         "testimonial_RM3maE": {
           "type": "testimonial",
           "settings": {
+            "image": "shopify://shop_images/xula-50-mr.jpg",
             "rating": 5,
             "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
             "customer_name": "Ana M.",
-            "customer_location": "Guadalajara, MX",
             "product_purchased": "Dark Roast Specialty",
-            "roast_type": "Dark Roast",
-            "verified": true,
-            "review_date": "2 weeks ago"
+            "verified": true
           }
         },
         "testimonial_MYeTkE": {
@@ -255,11 +249,8 @@
             "rating": 5,
             "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
             "customer_name": "Ana M.",
-            "customer_location": "Guadalajara, MX",
             "product_purchased": "Dark Roast Specialty",
-            "roast_type": "Dark Roast",
-            "verified": true,
-            "review_date": "2 weeks ago"
+            "verified": true
           }
         },
         "testimonial_NNbeFN": {
@@ -268,11 +259,8 @@
             "rating": 5,
             "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
             "customer_name": "Ana M.",
-            "customer_location": "Guadalajara, MX",
             "product_purchased": "Dark Roast Specialty",
-            "roast_type": "Dark Roast",
-            "verified": true,
-            "review_date": "2 weeks ago"
+            "verified": true
           }
         },
         "testimonial_3qjFwx": {
@@ -281,11 +269,8 @@
             "rating": 5,
             "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
             "customer_name": "Ana M.",
-            "customer_location": "Guadalajara, MX",
             "product_purchased": "Dark Roast Specialty",
-            "roast_type": "Dark Roast",
-            "verified": true,
-            "review_date": "2 weeks ago"
+            "verified": true
           }
         }
       },
