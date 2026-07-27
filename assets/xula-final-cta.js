@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
-  const content = section.querySelector(".xula-cta__content");
+  const content = section.querySelector(".xula-cta__glass");
 
   if (content) {
     if (prefersReducedMotion) {
