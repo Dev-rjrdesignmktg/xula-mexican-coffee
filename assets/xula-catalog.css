@@ -1,0 +1,555 @@
+/* =========================================================
+   Xula Catalog — Category Tabs + Product Carousel
+   Mobile-first, BEM (.xula-catalog), Glassmorphism hover panel
+   ========================================================= */
+
+.xula-catalog {
+  padding: 56px 0 64px;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.xula-catalog__intro {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 32px;
+}
+
+.xula-catalog__heading {
+  margin: 0 auto 12px;
+  text-align: center;
+}
+
+.xula-catalog__subheading {
+  font-family: var(--secondary-font);
+  font-size: 1.70rem;
+  line-height: 1.6;
+  color: var(--text);
+  opacity: .75;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------
+   Tabs
+   --------------------------------------------------------- */
+
+.xula-catalog__tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 4px 20px;
+  margin: 0 -4px 20px;
+}
+
+.xula-catalog__tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.xula-catalog__tab {
+  flex: 0 0 auto;
+  font-family: var(--secondary-font);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--bg-secondary);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--bg-secondary) 20%, transparent);
+  border-radius: 999px;
+  padding: .7rem 1.3rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color .3s ease, color .3s ease, border-color .3s ease, transform .2s ease;
+}
+
+.xula-catalog__tab:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.xula-catalog__tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.xula-catalog__tab.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ---------------------------------------------------------
+   Panels
+   --------------------------------------------------------- */
+
+.xula-catalog__panel {
+  outline: none;
+}
+
+.xula-catalog__panel[hidden] {
+  display: none;
+}
+
+.xula-catalog__empty {
+  font-family: var(--secondary-font);
+  color: var(--text);
+  opacity: .6;
+  padding: 40px 0;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------
+   Carousel
+   --------------------------------------------------------- */
+
+.xula-catalog__carousel {
+  position: relative;
+  --xula-per-view: 1;
+  --xula-gap: 16px;
+}
+
+.xula-catalog__viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.xula-catalog__track {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--xula-gap);
+  list-style: none;
+  width: 100%;
+  margin: 0;
+  padding: 4px 4px 12px;
+  transition: transform .5s cubic-bezier(.16, 1, .3, 1);
+  will-change: transform;
+}
+
+.xula-catalog__slide {
+  flex: 0 0 auto;
+  width: calc((100% - (var(--xula-per-view) - 1) * var(--xula-gap)) / var(--xula-per-view));
+}
+
+/* Pagination dots */
+
+.xula-catalog__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.xula-catalog__dots:empty {
+  display: none;
+}
+
+.xula-catalog__dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-secondary) 22%, transparent);
+  cursor: pointer;
+  transition: background-color .3s ease, width .3s ease;
+}
+
+.xula-catalog__dot:hover {
+  background: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.xula-catalog__dot.is-active {
+  width: 24px;
+  background: var(--accent);
+}
+
+.xula-catalog__dot:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.xula-catalog__nav {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  z-index: 3;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--bg-secondary) 15%, transparent);
+  background: rgba(255, 255, 255, .9);
+  color: var(--bg-secondary);
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(36, 23, 15, .12);
+  transition: background-color .25s ease, color .25s ease, transform .2s ease;
+}
+
+.xula-catalog__nav:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.xula-catalog__nav--prev {
+  left: -4px;
+}
+
+.xula-catalog__nav--next {
+  right: -4px;
+}
+
+.xula-catalog__nav:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------
+   Product Card
+   --------------------------------------------------------- */
+
+.xula-catalog__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #fff;
+  isolation: isolate;
+}
+
+.xula-catalog__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+}
+
+.xula-catalog__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity .5s ease, transform .6s cubic-bezier(.16, 1, .3, 1);
+}
+
+.xula-catalog__image--secondary {
+  opacity: 0;
+}
+
+.xula-catalog__card:hover .xula-catalog__image--primary {
+  opacity: 0;
+}
+
+.xula-catalog__card:hover .xula-catalog__image--secondary {
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+.xula-catalog__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  font-family: var(--secondary-font);
+  font-size: .9rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--accent-secondary);
+  padding: .35rem .7rem;
+  border-radius: 999px;
+}
+
+/* Quick add trigger button */
+
+.xula-catalog__quick-add {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--secondary-font);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--bg-secondary);
+  background: rgba(255, 255, 255, .92);
+  border: none;
+  border-radius: 999px;
+  padding: .65rem 1.1rem;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .3s ease, transform .3s ease, background-color .3s ease, color .3s ease;
+}
+
+.xula-catalog__quick-add svg {
+  transition: transform .3s ease;
+}
+
+.xula-catalog__card:hover .xula-catalog__quick-add,
+.xula-catalog__card:focus-within .xula-catalog__quick-add {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.xula-catalog__quick-add:hover,
+.xula-catalog__quick-add[aria-expanded="true"] {
+  background: var(--accent);
+  color: #fff;
+}
+
+.xula-catalog__quick-add[aria-expanded="true"] svg {
+  transform: rotate(45deg);
+}
+
+/* ---------------------------------------------------------
+   Glassmorphism floating panel
+   --------------------------------------------------------- */
+
+.xula-catalog__glass {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: flex-end;
+  padding: 10px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity .35s cubic-bezier(.16, 1, .3, 1), transform .35s cubic-bezier(.16, 1, .3, 1), visibility 0s linear .35s;
+  pointer-events: none;
+}
+
+.xula-catalog__glass.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .35s cubic-bezier(.16, 1, .3, 1), transform .35s cubic-bezier(.16, 1, .3, 1), visibility 0s linear 0s;
+  pointer-events: auto;
+}
+
+.xula-catalog__glass-inner {
+  width: 100%;
+  max-height: 92%;
+  overflow-y: auto;
+  border-radius: calc(var(--radius-sm) + .2rem);
+  padding: 18px;
+  color: #fff;
+  background: linear-gradient(160deg, rgba(36, 23, 15, .68), rgba(36, 23, 15, .48));
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, .22);
+  box-shadow: 0 20px 45px rgba(36, 23, 15, .35);
+}
+
+.xula-catalog__glass-title {
+  font-family: var(--primary-font);
+  font-size: 1.52rem;
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+
+.xula-catalog__glass-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+
+.xula-catalog__glass-spec {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, .16);
+}
+
+.xula-catalog__glass-spec dt {
+  font-size: 1.7rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--bg-tertiary);
+}
+
+.xula-catalog__glass-spec dd {
+  margin: 0;
+  font-family: var(--secondary-font);
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+.xula-catalog__glass-price {
+  font-family: var(--secondary-font);
+  font-size: 1.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.xula-catalog__glass-compare {
+  font-size: .92rem;
+  font-weight: 400;
+  opacity: .6;
+}
+
+.xula-catalog__glass-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.xula-catalog__glass-select-label {
+  font-size: .95rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--bg-tertiary);
+}
+
+.xula-catalog__glass-select {
+  width: 100%;
+  font-family: var(--secondary-font);
+  font-size: 1.1rem;
+  color: var(--bg-secondary);
+  background: rgba(255, 255, 255, .92);
+  border: none;
+  border-radius: .6rem;
+  padding: .6rem .7rem;
+}
+
+.xula-catalog__glass-submit {
+  width: 100%;
+  padding: .85rem 1.4rem;
+  font-size: 1.1rem;
+}
+
+.xula-catalog__glass-submit[aria-disabled="true"] {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.xula-catalog__glass-submit.is-loading {
+  opacity: .8;
+  pointer-events: none;
+}
+
+.xula-catalog__glass-submit.is-added {
+  background: var(--text-secondary);
+  border-color: var(--text-secondary);
+}
+
+.xula-catalog__glass-message {
+  min-height: 1em;
+  font-size: .95rem;
+  margin: 0;
+  color: #ffd4c2;
+}
+
+/* ---------------------------------------------------------
+   Card info
+   --------------------------------------------------------- */
+
+.xula-catalog__info {
+  padding: 14px 4px 4px;
+}
+
+.xula-catalog__title {
+  font-family: var(--primary-font);
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: var(--bg-secondary);
+}
+
+.xula-catalog__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.xula-catalog__title a:hover {
+  color: var(--accent);
+}
+
+.xula-catalog__vendor {
+  font-family: var(--secondary-font);
+  font-size: 1.43rem;
+  color: var(--text);
+  opacity: .6;
+  margin: 0 0 6px;
+}
+
+.xula-catalog__price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--secondary-font);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--bg-secondary);
+}
+
+.xula-catalog__price-compare {
+  font-weight: 400;
+  font-size: 1.7rem;
+  opacity: .55;
+}
+
+/* ---------------------------------------------------------
+   Responsive — tablet / desktop
+   --------------------------------------------------------- */
+
+@media (min-width: 700px) {
+  .xula-catalog__carousel {
+    --xula-per-view: 2;
+  }
+}
+
+@media (min-width: 990px) {
+  .xula-catalog {
+    padding: 88px 0 96px;
+  }
+
+  .xula-catalog__tabs {
+    justify-content: center;
+    padding-bottom: 32px;
+  }
+
+  .xula-catalog__carousel {
+    --xula-per-view: 3;
+  }
+
+  .xula-catalog__nav {
+    display: flex;
+  }
+
+  .xula-catalog__glass-inner {
+    padding: 22px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .xula-catalog__carousel {
+    --xula-per-view: 4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-catalog__image,
+  .xula-catalog__glass,
+  .xula-catalog__quick-add,
+  .xula-catalog__tab,
+  .xula-catalog__track {
+    transition: none !important;
+  }
+}
