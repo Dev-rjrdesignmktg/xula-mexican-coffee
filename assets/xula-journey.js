@@ -19,7 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     },
     {
-      threshold: 0.6
+      rootMargin: "-50% 0px -50% 0px",
+      threshold: 0
     }
   );
 

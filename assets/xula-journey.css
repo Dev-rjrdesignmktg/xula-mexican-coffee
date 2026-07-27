@@ -1,63 +1,172 @@
+/* ============================================================
+   MOBILE FIRST (base) — stacked, non-sticky, image + copy pairs
+   ============================================================ */
 .xula-journey {
-    background: var(--bg);
+  background: var(--bg-tertiary);
   color: var(--bg-secondary);
-  padding: 120px 0;
+  padding: 64px 0;
 }
 
 .xula-journey__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
-/* LEFT */
-.xula-journey__content {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
+/* unwrap the two columns so their children can be reordered together */
+.xula-journey__content,
+.xula-journey__media {
+  display: contents;
 }
 
 .journey--eyebrow {
-  position: absolute;
-  top: 210px;
-  left: 0;
-  z-index: 5;
+  order: 1;
+  position: static;
+  margin-bottom: 8px;
+}
+
+.xula-journey .journey--eyebrow {
+  color: var(--text-secondary);
 }
 
 .xula-journey__copy {
-  position: absolute;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity .5s ease, transform .5s ease;
-}
-
-.xula-journey__copy.is-active {
+  position: static;
   opacity: 1;
-  transform: translateY(0);
-}
-
-.xula-heading.journey--heading{
-  margin: 2rem 0;
-}
-
-/* RIGHT */
-.xula-journey__media {
+  transform: none;
   display: flex;
   flex-direction: column;
-  gap: 120px;
+  gap: 8px;
+}
+
+.xula-journey__copy small {
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  opacity: .7;
+}
+
+.xula-journey .journey--heading {
+  color: var(--bg-secondary);
+  margin: 0;
+}
+
+.xula-journey__copy p {
+  color: color-mix(in srgb, var(--bg-secondary) 85%, transparent);
+  margin: 0;
 }
 
 .xula-journey__item {
-  height: 100vh;
-  display: flex;
-  align-items: center;
+  height: auto;
 }
 
 .xula-journey__item img {
   width: 100%;
-  height: 680px;
+  height: 260px;
   object-fit: cover;
-  border-radius: 24px;
+  border-radius: 16px;
+  display: block;
+}
+
+/* interleave copy[n] -> item[n] in scroll order, right after the eyebrow (order: 1) */
+.xula-journey__copy[data-copy="0"] { order: 2; }
+.xula-journey__item[data-step="0"] { order: 3; }
+.xula-journey__copy[data-copy="1"] { order: 4; }
+.xula-journey__item[data-step="1"] { order: 5; }
+.xula-journey__copy[data-copy="2"] { order: 6; }
+.xula-journey__item[data-step="2"] { order: 7; }
+.xula-journey__copy[data-copy="3"] { order: 8; }
+.xula-journey__item[data-step="3"] { order: 9; }
+.xula-journey__copy[data-copy="4"] { order: 10; }
+.xula-journey__item[data-step="4"] { order: 11; }
+.xula-journey__copy[data-copy="5"] { order: 12; }
+.xula-journey__item[data-step="5"] { order: 13; }
+
+/* ============================================================
+   TABLET (750px+) — same stacked layout, more breathing room
+   ============================================================ */
+@media screen and (min-width: 750px) {
+  .xula-journey {
+    padding: 96px 0;
+  }
+
+  .xula-journey__grid {
+    gap: 40px;
+  }
+
+  .xula-journey__item img {
+    height: 420px;
+    border-radius: 20px;
+  }
+}
+
+/* ============================================================
+   DESKTOP (990px+) — two-column sticky scroll-spy
+   ============================================================ */
+@media screen and (min-width: 990px) {
+  .xula-journey {
+    padding: 120px 0;
+  }
+
+  .xula-journey__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+
+  .xula-journey__content,
+  .xula-journey__media {
+    display: block;
+  }
+
+  /* LEFT */
+  .xula-journey__content {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .journey--eyebrow {
+    order: initial;
+    position: absolute;
+    top: 210px;
+    left: 0;
+    z-index: 5;
+    margin-bottom: 0;
+  }
+
+  .xula-journey__copy {
+    order: initial;
+    position: absolute;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .5s ease, transform .5s ease;
+    gap: 0;
+  }
+
+  .xula-journey__copy.is-active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .xula-journey .journey--heading {
+    margin: 2rem 0;
+  }
+
+  /* RIGHT */
+  .xula-journey__media {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .xula-journey__item {
+    order: initial;
+  }
+
+  .xula-journey__item img {
+    height: 480px;
+    border-radius: 24px;
+  }
 }
