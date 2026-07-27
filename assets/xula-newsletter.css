@@ -1,0 +1,380 @@
+/* ==========================================================================
+   Xula Newsletter — mobile first, BEM
+   ========================================================================== */
+
+.xula-newsletter {
+  --xula-newsletter-ink: #ffffff;
+  background: var(--bg);
+  padding: 64px 0;
+}
+
+.xula-newsletter__frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--xula-gold-solid) 55%, transparent);
+  box-shadow: 0 24px 48px color-mix(in srgb, var(--bg-secondary) 35%, transparent);
+}
+
+/* ---------- Media ---------- */
+
+.xula-newsletter__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.xula-newsletter__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- Panel ---------- */
+
+.xula-newsletter__panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 32px 24px 36px;
+  color: var(--xula-newsletter-ink);
+}
+
+.xula-newsletter__badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--xula-gold);
+  border: 1px solid var(--xula-gold-solid);
+  color: var(--bg-secondary);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: var(--secondary-font);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  margin-bottom: 16px;
+}
+
+.xula-newsletter__heading {
+  font-family: var(--primary-font);
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--xula-newsletter-ink);
+  max-width: none;
+  margin: 0 0 14px;
+}
+
+.xula-newsletter__text {
+  font-family: var(--secondary-font);
+  font-size: 1.45rem;
+  line-height: 1.6;
+  color: var(--xula-newsletter-ink);
+  opacity: .9;
+  max-width: 46ch;
+  margin: 0 0 24px;
+}
+
+/* ---------- Benefits list ---------- */
+
+.xula-newsletter__benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+}
+
+.xula-newsletter__benefit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--secondary-font);
+  font-size: 1.2rem;
+  color: var(--xula-newsletter-ink);
+}
+
+.xula-newsletter__benefit-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--xula-gold);
+}
+
+.xula-newsletter__benefit-icon svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--bg-secondary);
+}
+
+/* ---------- Incentive badge ---------- */
+
+.xula-newsletter__incentive {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: color-mix(in srgb, var(--xula-gold-solid) 16%, transparent);
+  border: 1px solid var(--xula-gold-solid);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+}
+
+.xula-newsletter__incentive-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  fill: var(--xula-gold-solid);
+  margin-top: 2px;
+}
+
+.xula-newsletter__incentive-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--secondary-font);
+  color: var(--xula-newsletter-ink);
+}
+
+.xula-newsletter__incentive-text strong {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--xula-gold-solid);
+}
+
+.xula-newsletter__incentive-text span {
+  font-size: 1.1rem;
+  opacity: .8;
+}
+
+/* ---------- Form ---------- */
+
+.xula-newsletter__form-wrapper {
+  width: 100%;
+  border-top: 1px solid color-mix(in srgb, var(--xula-gold-solid) 50%, transparent);
+  padding-top: 24px;
+}
+
+.xula-newsletter__form {
+  width: 100%;
+}
+
+/* honeypot: visually and technically hidden, still readable by bots that ignore CSS */
+.xula-newsletter__hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.xula-newsletter__field-row {
+  width: 100%;
+}
+
+.xula-newsletter__field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.xula-newsletter__input {
+  width: 100%;
+  height: 52px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, #ffffff 40%, transparent);
+  background: color-mix(in srgb, #ffffff 16%, transparent);
+  color: var(--xula-newsletter-ink);
+  font-family: var(--secondary-font);
+  font-size: 1.5rem;
+  transition: border-color .3s ease, background .3s ease;
+}
+
+.xula-newsletter__input::placeholder {
+  color: color-mix(in srgb, var(--xula-newsletter-ink) 65%, transparent);
+}
+
+.xula-newsletter__input:focus-visible {
+  outline: none;
+  border-color: var(--xula-gold-solid);
+  background: color-mix(in srgb, #ffffff 22%, transparent);
+}
+
+.xula-newsletter__input[aria-invalid="true"] {
+  border-color: #fff2b2;
+}
+
+.xula-newsletter__submit {
+  width: 100%;
+  background: var(--xula-gold-solid);
+  border-color: var(--xula-gold-solid);
+  color: var(--bg-secondary);
+}
+
+.xula-newsletter__submit::before {
+  background: var(--bg-secondary);
+}
+
+.xula-newsletter__submit:hover {
+  color: var(--xula-gold-solid);
+  border-color: var(--bg-secondary);
+}
+
+.xula-newsletter__submit:focus-visible {
+  outline: 2px solid var(--xula-gold-solid);
+  outline-offset: 4px;
+}
+
+.xula-newsletter__submit[aria-busy="true"] {
+  opacity: .75;
+  cursor: progress;
+}
+
+.xula-newsletter__consent {
+  font-family: var(--secondary-font);
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: var(--xula-newsletter-ink);
+  opacity: .7;
+  max-width: 46ch;
+  margin: 14px 0 0;
+}
+
+/* ---------- Status messages ---------- */
+
+.xula-newsletter__status {
+  margin-top: 16px;
+}
+
+.xula-newsletter__message {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: var(--secondary-font);
+  font-size: 1.25rem;
+  line-height: 1.5;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin: 0;
+}
+
+.xula-newsletter__message strong {
+  display: block;
+  font-size: 1.35rem;
+  margin-bottom: 2px;
+}
+
+.xula-newsletter__message--success {
+  background: color-mix(in srgb, var(--text-secondary) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text-secondary) 45%, transparent);
+  color: var(--xula-newsletter-ink);
+}
+
+.xula-newsletter__message--error {
+  background: color-mix(in srgb, var(--accent-secondary) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-secondary) 55%, transparent);
+  color: var(--xula-newsletter-ink);
+}
+
+/* success state hides the input row, keeps focus on the confirmation */
+.xula-newsletter__form-wrapper.is-success .xula-newsletter__field-row,
+.xula-newsletter__form-wrapper.is-success .xula-newsletter__consent {
+  display: none;
+}
+
+/* ---------- Entrance animation ---------- */
+
+.xula-newsletter__panel {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: transform .8s cubic-bezier(.16,1,.3,1), opacity .8s ease;
+}
+
+.xula-newsletter__panel.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-newsletter__panel {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Breakpoints ---------- */
+
+@media (min-width: 560px) {
+  .xula-newsletter__field {
+    flex-direction: row;
+  }
+
+  .xula-newsletter__submit {
+    width: auto;
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .xula-newsletter--no-image .xula-newsletter__frame {
+    display: flex;
+    justify-content: center;
+  }
+
+  .xula-newsletter__frame {
+    display: flex;
+    align-items: stretch;
+    min-height: 560px;
+  }
+
+  .xula-newsletter__media {
+    width: 45%;
+    aspect-ratio: auto;
+  }
+
+  .xula-newsletter__panel {
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 56px 64px;
+  }
+
+  .xula-newsletter--no-image .xula-newsletter__panel {
+    width: 100%;
+    max-width: 640px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .xula-newsletter--no-image .xula-newsletter__benefits,
+  .xula-newsletter--no-image .xula-newsletter__field-row,
+  .xula-newsletter--no-image .xula-newsletter__consent {
+    max-width: 480px;
+    width: 100%;
+  }
+
+  .xula-newsletter--no-image .xula-newsletter__benefit {
+    justify-content: center;
+  }
+
+  .xula-newsletter__text {
+    max-width: 42ch;
+  }
+}
+
+@media (min-width: 1200px) {
+  .xula-newsletter__panel {
+    padding: 64px 80px;
+  }
+}
