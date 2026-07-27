@@ -278,6 +278,13 @@
       }
     {% endstyle %}
 
+    {% render 'xula-typography' %}
+
+    {% comment %}theme-check-disable AssetPreload{% endcomment %}
+    <link rel="preload" as="font" href="{{ 'roanne-book.woff2' | asset_url }}" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="{{ 'roanne-semibold.woff2' | asset_url }}" type="font/woff2" crossorigin>
+    {% comment %}theme-check-enable AssetPreload{% endcomment %}
+
     {{ 'base.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
