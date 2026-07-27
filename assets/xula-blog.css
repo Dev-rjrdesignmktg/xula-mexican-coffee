@@ -1,0 +1,244 @@
+.xula-blog {
+  padding: 64px 0;
+  background: var(--bg);
+}
+
+/* ---------- Intro ---------- */
+
+.xula-blog__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.xula-blog__intro-copy {
+  margin: 0;
+  max-width: 640px;
+  text-align: left;
+}
+
+.xula-blog__heading {
+  margin: 0 0 8px;
+  text-align: left;
+}
+
+.xula-blog__subheading {
+  font-family: var(--secondary-font);
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: var(--text);
+  opacity: 0.75;
+  margin: 0;
+}
+
+.xula-blog__view-all {
+  flex-shrink: 0;
+}
+
+/* ---------- Grid ---------- */
+
+.xula-blog__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Visible by default: only JS arms the entrance animation, so content
+   never depends on script execution to be seen. */
+.xula-blog__item {
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xula-blog__item.xula-blog__item--armed {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.xula-blog__item.xula-blog__item--armed.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Card ---------- */
+
+.xula-blog__card {
+  height: 100%;
+}
+
+.xula-blog__card-link {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 1.6rem;
+  outline-offset: 4px;
+}
+
+.xula-blog__media {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.6rem;
+  aspect-ratio: 3 / 4;
+  background: var(--bg-tertiary);
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 4px rgba(23, 28, 36, 0.06);
+}
+
+.xula-blog__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xula-blog__image--placeholder {
+  opacity: 0.5;
+}
+
+.xula-blog__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--bg-secondary) 85%, transparent) 0%,
+    color-mix(in srgb, var(--bg-secondary) 30%, transparent) 45%,
+    transparent 75%
+  );
+  pointer-events: none;
+}
+
+.xula-blog__badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  font-family: var(--secondary-font);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  background: color-mix(in srgb, var(--bg-secondary) 55%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.xula-blog__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 24px 20px;
+}
+
+.xula-blog__title {
+  font-family: var(--primary-font);
+  font-size: clamp(1.6rem, 2.4vw, 2rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+.xula-blog__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-family: var(--secondary-font);
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.xula-blog__author + .xula-blog__date::before {
+  content: "\2022";
+  margin-right: 10px;
+  opacity: 0.7;
+}
+
+/* ---------- Hover: shrink card + subtle zoom-out ---------- */
+
+@media (hover: hover) and (pointer: fine) {
+  .xula-blog__card-link:hover .xula-blog__media,
+  .xula-blog__card-link:focus-visible .xula-blog__media {
+    transform: scale(0.96);
+    box-shadow: 0 12px 32px rgba(23, 28, 36, 0.16);
+  }
+
+  .xula-blog__card-link:hover .xula-blog__image,
+  .xula-blog__card-link:focus-visible .xula-blog__image {
+    transform: scale(1.06);
+  }
+}
+
+.xula-blog__empty {
+  font-family: var(--secondary-font);
+  font-size: 1.4rem;
+  color: var(--text);
+  opacity: 0.7;
+}
+
+/* ---------- Breakpoints ---------- */
+
+@media (min-width: 700px) {
+  .xula-blog__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 700px) and (max-width: 989px) {
+  .xula-blog__grid > .xula-blog__item:only-child,
+  .xula-blog__grid > .xula-blog__item:first-child:nth-last-child(3) {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 990px) {
+  .xula-blog__intro {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .xula-blog__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  .xula-blog {
+    padding: 100px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-blog__item {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .xula-blog__media,
+  .xula-blog__image {
+    transition: none;
+  }
+
+  .xula-blog__card-link:hover .xula-blog__media,
+  .xula-blog__card-link:hover .xula-blog__image {
+    transform: none;
+  }
+}

@@ -1,0 +1,230 @@
+{{ 'xula-blog.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-blog.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign blog_id = 'XulaBlog-' | append: section.id
+  assign blog = section.settings.blog
+  assign articles_to_show = section.settings.articles_to_show | default: 3
+  assign ld_articles = ''
+  assign ld_count = 0
+-%}
+
+<section
+  class="xula-blog"
+  id="{{ blog_id }}"
+  aria-labelledby="{{ blog_id }}-heading"
+>
+  <div class="page-width">
+
+    <div class="xula-blog__intro">
+      <div class="xula-intro xula-blog__intro-copy">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="xula-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 id="{{ blog_id }}-heading" class="xula-heading xula-blog__heading">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.subheading != blank -%}
+          <p class="xula-blog__subheading">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if blog != blank and section.settings.show_view_all -%}
+        <a href="{{ blog.url }}" class="xula-btn--secondary xula-blog__view-all">
+          <span>{{ section.settings.view_all_label | default: 'Read All' }}</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if blog != blank and blog.articles_count > 0 -%}
+      <ul class="xula-blog__grid" data-xula-blog-grid role="list">
+        {%- for article in blog.articles limit: articles_to_show -%}
+          {%- assign category = article.tags.first -%}
+          {%- assign article_image = article.image -%}
+          {%- assign img_alt = article_image.alt | default: article.title | escape -%}
+
+          {%- comment -%} collect articles for JSON-LD {%- endcomment -%}
+          {%- assign ld_count = ld_count | plus: 1 -%}
+          {%- capture ld_item -%}
+            {
+              "@type": "BlogPosting",
+              "headline": {{ article.title | json }},
+              "url": {{ shop.url | append: article.url | json }},
+              "datePublished": {{ article.published_at | date: '%Y-%m-%d' | json }},
+              "image": {{ article_image | image_url: width: 800 | prepend: 'https:' | json }},
+              "author": {
+                "@type": "Person",
+                "name": {{ article.author | json }}
+              }
+            }
+          {%- endcapture -%}
+          {%- if ld_count > 1 -%}
+            {%- assign ld_articles = ld_articles | append: '|XULA_LD_SPLIT|' -%}
+          {%- endif -%}
+          {%- assign ld_articles = ld_articles | append: ld_item -%}
+
+          <li class="xula-blog__item" data-xula-blog-item>
+            <article class="xula-blog__card">
+              <a href="{{ article.url }}" class="xula-blog__card-link" aria-labelledby="{{ blog_id }}-title-{{ forloop.index }}">
+
+                <div class="xula-blog__media">
+                  {%- if article_image -%}
+                    <img
+                      class="xula-blog__image"
+                      src="{{ article_image | image_url: width: 700 }}"
+                      srcset="
+                        {{ article_image | image_url: width: 400 }} 400w,
+                        {{ article_image | image_url: width: 700 }} 700w,
+                        {{ article_image | image_url: width: 1000 }} 1000w"
+                      sizes="(min-width: 990px) 33vw, 100vw"
+                      alt="{{ img_alt }}"
+                      width="{{ article_image.width }}"
+                      height="{{ article_image.height }}"
+                      loading="lazy"
+                      decoding="async"
+                    >
+                  {%- else -%}
+                    {{ 'lifestyle-1' | placeholder_svg_tag: 'xula-blog__image xula-blog__image--placeholder' }}
+                  {%- endif -%}
+
+                  <span class="xula-blog__scrim" aria-hidden="true"></span>
+
+                  {%- if section.settings.show_category and category != blank -%}
+                    <span class="xula-blog__badge">{{ category }}</span>
+                  {%- endif -%}
+
+                  <div class="xula-blog__caption">
+                    <h3 class="xula-blog__title" id="{{ blog_id }}-title-{{ forloop.index }}">
+                      {{ article.title }}
+                    </h3>
+
+                    <p class="xula-blog__meta">
+                      {%- if section.settings.show_author and article.author != blank -%}
+                        <span class="xula-blog__author">by {{ article.author }}</span>
+                      {%- endif -%}
+                      {%- if section.settings.show_date -%}
+                        <time class="xula-blog__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                          {{ article.published_at | date: '%B %d, %Y' }}
+                        </time>
+                      {%- endif -%}
+                    </p>
+                  </div>
+                </div>
+              </a>
+            </article>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <p class="xula-blog__empty">Select a blog with published articles to display them here.</p>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{%- if ld_articles != blank -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": {{ blog.title | default: shop.name | json }},
+      "blogPost": [{{ ld_articles | split: '|XULA_LD_SPLIT|' | join: ',' }}]
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Xula Blog",
+  "tag": "section",
+  "class": "section-xula-blog",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "From the journal"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Latest Articles"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Stories on Mexican specialty coffee, straight from our roastery."
+    },
+    {
+      "type": "header",
+      "content": "Blog source"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "articles_to_show",
+      "label": "Articles to show",
+      "min": 3,
+      "max": 9,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Card content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category",
+      "label": "Show category tag",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Read all link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show \"Read All\" link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "Link label",
+      "default": "Read All"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula Blog"
+    }
+  ]
+}
+{% endschema %}
