@@ -400,6 +400,55 @@
         "urgency_cutoff_day": "sunday",
         "urgency_cutoff_hour": 20
       }
+    },
+    "xula_newsletter_7AjbJF": {
+      "type": "xula-newsletter",
+      "blocks": {
+        "benefit_item_jD64Dr": {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "discount",
+            "label": "10% off your first order"
+          }
+        },
+        "benefit_item_KWFKn7": {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "batch",
+            "label": "Early access to limited batches"
+          }
+        },
+        "benefit_item_efNEiH": {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "tips",
+            "label": "Brewing guides and tasting notes"
+          }
+        }
+      },
+      "block_order": [
+        "benefit_item_jD64Dr",
+        "benefit_item_KWFKn7",
+        "benefit_item_efNEiH"
+      ],
+      "name": "Xula Newsletter",
+      "settings": {
+        "eyebrow": "Exclusive Access",
+        "heading": "Join the Origin of Your Coffee",
+        "text": "Join the XULA community and get early access to limited batches, exclusive tasting notes, and a welcome gift on your first bag.",
+        "show_incentive": true,
+        "incentive_badge": "10% OFF Your First Bag",
+        "incentive_detail": "Code sent to your inbox instantly",
+        "email_placeholder": "you@email.com",
+        "button_label": "Get My Discount",
+        "consent_text": "By subscribing, you agree to receive marketing emails from XULA. You can unsubscribe anytime.",
+        "success_heading": "You're in! Check your inbox.",
+        "success_text": "We sent your welcome code. In the meantime, brew your favorite cup.",
+        "error_text": "Something went wrong. Please try again in a few seconds.",
+        "invalid_text": "Please enter a valid email address.",
+        "image_alt": "",
+        "show_structured_data": true
+      }
     }
   },
   "order": [
@@ -411,6 +460,7 @@
     "xula_journey_A8wjxT",
     "xula_signature_MVGPEy",
     "xula_testimonials_Miab8z",
+    "xula_newsletter_7AjbJF",
     "xula_blog_gMaVkx",
     "xula_final_cta_DWCf6t"
   ]
