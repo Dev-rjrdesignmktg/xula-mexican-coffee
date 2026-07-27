@@ -1,13 +1,17 @@
 :root{
     --bg: #ffffff;
     --bg-secondary: #24170f;
-    --bg-tertiary: #FAF9F6;
+    --bg-tertiary: #E2B582;
     --text: #000000;
-    --accent: #EC0889;
-    --text-secondary: #2A7B50;
+    --accent: #E8318A;
+    --accent-secondary: #E95028;
+    --info: #345DA8;
+    --text-secondary: #439135;
+    --xula-gold: linear-gradient(135deg, #E2B582 0%, #C99354 50%, #E2B582 100%);
+    --xula-gold-solid: #C99354;;
     --radius-sm: .8rem;
-    --primary-font: "serif elegante";
-    --secondary-font: Inter, "System Sans";
+    --primary-font: var(--font-heading-family);
+    --secondary-font: var(--font-body-family);
 }
 
 .xula-intro {
@@ -17,9 +21,9 @@
 }
 
 .xula-heading{
-    font-family: var(--primary-font);
+    font-family: var(--font-heading-family);
     font-size: clamp(2.1rem, 3vw, 3.5rem);
-    font-weight: 600;
+    font-weight: var(--font-heading-weight);
     line-height: 1;
     color: var(--bg-secondary);
     max-width: 35rem;
@@ -27,20 +31,45 @@
 }
 
 .xula-subheading{
-    font-family: var(--primary-font);
+    font-family: var(--font-heading-family);
     font-size: clamp(1.2rem, 3vw, 2.6rem);
-    font-weight: 500;
+    font-weight: var(--font-heading-weight);
     margin-bottom: 12px;
     color: var(--text);
 }
 
 .xula-text{
-    font-family: var(--secondary-font);
-    font-size: 1.5rem;
+    font-family: var(--font-body-family);
+    font-size: clamp(1.7rem, 1.6vw, 1.9rem);
+    font-weight: var(--font-body-weight);
     line-height: 1.7;
     max-width: 35rem;
     margin-bottom: 28px;
     color: var(--text);
+}
+
+/* ---------- Typography utilities (BEM) ---------- */
+
+.xula-type--heading {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+}
+
+.xula-type--body {
+  font-family: var(--font-body-family);
+  font-weight: var(--font-body-weight);
+}
+
+.xula-type--code {
+  font-family: var(--font-code-family);
+  font-weight: var(--font-code-weight);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .02em;
+}
+
+.xula-type--code.xula-type--lot {
+  text-transform: uppercase;
+  letter-spacing: .08em;
 }
 
 .xula-btn {
@@ -52,13 +81,14 @@
   justify-content: center;
   padding: 1.4rem 2.4rem;
   border-radius: 999px;
-  background: var(--text);
-  color: var(--bg);
+  background: var(--accent);
+  color: #fff;
   text-decoration: none;
-  border: solid 1px var(--bg-secondary);
+  border: solid 1px var(--accent);
   cursor: pointer;
   transition:
     color .55s cubic-bezier(.16,1,.3,1),
+    border-color .55s cubic-bezier(.16,1,.3,1),
     transform .55s cubic-bezier(.16,1,.3,1);
 }
 
@@ -67,7 +97,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--bg);
+  background: var(--accent-secondary);
   transform: translateY(100%);
   transition:
     transform .65s cubic-bezier(.16,1,.3,1);
@@ -86,7 +116,8 @@
 }
 
 .xula-btn:hover {
-  color: var(--text);
+  color: #fff;
+  border-color: var(--accent-secondary);
   transform: translateY(-2px);
 }
 
