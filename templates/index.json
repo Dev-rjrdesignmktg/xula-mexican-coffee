@@ -122,6 +122,46 @@
         "muffins_link": ""
       }
     },
+    "xula_catalog_A3gQDt": {
+      "type": "xula-catalog",
+      "blocks": {
+        "tab_dK7Twd": {
+          "type": "tab",
+          "settings": {
+            "collection": "coffee",
+            "label": "Specialty Coffee",
+            "products_to_show": 12
+          }
+        },
+        "tab_F3HUiH": {
+          "type": "tab",
+          "settings": {
+            "collection": "chocolate",
+            "label": "Artisan Chocolate",
+            "products_to_show": 12
+          }
+        },
+        "tab_T4y6rF": {
+          "type": "tab",
+          "settings": {
+            "collection": "muffins",
+            "label": "Artisan Muffins",
+            "products_to_show": 12
+          }
+        }
+      },
+      "block_order": [
+        "tab_dK7Twd",
+        "tab_F3HUiH",
+        "tab_T4y6rF"
+      ],
+      "name": "Xula Catalog Tabs",
+      "settings": {
+        "eyebrow": "Our catalog",
+        "heading": "Choose your XULA ritual",
+        "subheading": "Coffee, chocolate, and artisan baked goods, organized by category."
+      }
+    },
     "xula_journey_A8wjxT": {
       "type": "xula-journey",
       "blocks": {
@@ -213,79 +253,105 @@
         "testimonial_T3HMUR": {
           "type": "testimonial",
           "settings": {
+<<<<<<< Updated upstream
+            "image": "shopify://shop_images/xula-51-mr.jpg",
+=======
+            "image": "shopify://shop_images/xula-32.jpg",
+>>>>>>> Stashed changes
             "rating": 5,
             "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
             "customer_name": "Ana M.",
-            "customer_location": "Guadalajara, MX",
             "product_purchased": "Dark Roast Specialty",
-            "roast_type": "Dark Roast",
-            "verified": true,
-            "review_date": "2 weeks ago"
+            "verified": true
           }
         },
         "testimonial_ELEyJ4": {
           "type": "testimonial",
           "settings": {
+<<<<<<< Updated upstream
+            "image": "shopify://shop_images/xula-33_98843e05-719f-49dd-b8c3-6dcc280b9a4c.jpg",
             "rating": 5,
             "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
             "customer_name": "Ana M.",
-            "customer_location": "Guadalajara, MX",
             "product_purchased": "Dark Roast Specialty",
-            "roast_type": "Dark Roast",
-            "verified": true,
-            "review_date": "2 weeks ago"
+=======
+            "image": "shopify://shop_images/xula-56.jpg",
+            "rating": 5,
+            "quote": "Rich, smooth, and never bitter. This is the best café de olla I've had outside of Oaxaca.",
+            "customer_name": "James R.",
+            "product_purchased": "Café de Olla",
+>>>>>>> Stashed changes
+            "verified": true
           }
         },
         "testimonial_RM3maE": {
           "type": "testimonial",
           "settings": {
+<<<<<<< Updated upstream
+            "image": "shopify://shop_images/xula-50-mr.jpg",
             "rating": 5,
             "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
             "customer_name": "Ana M.",
-            "customer_location": "Guadalajara, MX",
             "product_purchased": "Dark Roast Specialty",
-            "roast_type": "Dark Roast",
-            "verified": true,
-            "review_date": "2 weeks ago"
+=======
+            "image": "shopify://shop_images/xula-14.jpg",
+            "rating": 5,
+            "quote": "I was skeptical about ordering coffee online, but the freshness blew me away. Subscribing for life.",
+            "customer_name": "Carla T.",
+            "product_purchased": "Medium Roast",
+>>>>>>> Stashed changes
+            "verified": true
           }
         },
         "testimonial_MYeTkE": {
           "type": "testimonial",
           "settings": {
+<<<<<<< Updated upstream
             "rating": 5,
             "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
             "customer_name": "Ana M.",
-            "customer_location": "Guadalajara, MX",
             "product_purchased": "Dark Roast Specialty",
-            "roast_type": "Dark Roast",
-            "verified": true,
-            "review_date": "2 weeks ago"
+=======
+            "image": "shopify://shop_images/xula-33.jpg",
+            "rating": 4,
+            "quote": "Fast shipping and the packaging alone feels premium. The espresso blend is now a daily staple.",
+            "customer_name": "Marcus D.",
+            "product_purchased": "Espresso Blend",
+>>>>>>> Stashed changes
+            "verified": true
           }
         },
         "testimonial_NNbeFN": {
           "type": "testimonial",
           "settings": {
+            "image": "shopify://shop_images/xula-36.jpg",
             "rating": 5,
+<<<<<<< Updated upstream
             "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
             "customer_name": "Ana M.",
-            "customer_location": "Guadalajara, MX",
+=======
+            "quote": "You can taste the altitude. Bold without being harsh — exactly what specialty coffee should be.",
+            "customer_name": "Sofia R.",
+>>>>>>> Stashed changes
             "product_purchased": "Dark Roast Specialty",
-            "roast_type": "Dark Roast",
-            "verified": true,
-            "review_date": "2 weeks ago"
+            "verified": true
           }
         },
         "testimonial_3qjFwx": {
           "type": "testimonial",
           "settings": {
+            "image": "shopify://shop_images/xula-18.jpg",
             "rating": 5,
+<<<<<<< Updated upstream
             "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
             "customer_name": "Ana M.",
-            "customer_location": "Guadalajara, MX",
             "product_purchased": "Dark Roast Specialty",
-            "roast_type": "Dark Roast",
-            "verified": true,
-            "review_date": "2 weeks ago"
+=======
+            "quote": "Their muffins pair perfectly with the medium roast. My Sunday ritual is now XULA.",
+            "customer_name": "Laura P.",
+            "product_purchased": "Medium Roast",
+>>>>>>> Stashed changes
+            "verified": true
           }
         }
       },
@@ -308,6 +374,22 @@
         "show_guarantee": true,
         "guarantee_heading": "30-Day Happiness Guarantee",
         "guarantee_text": "Not the right roast for you? We'll make it right — refund or replace, no questions asked."
+      }
+    },
+    "xula_blog_gMaVkx": {
+      "type": "xula-blog",
+      "name": "Xula Blog",
+      "settings": {
+        "eyebrow": "From the journal",
+        "heading": "Latest Articles",
+        "subheading": "Stories on Mexican specialty coffee, straight from our roastery.",
+        "blog": "blog-prueba",
+        "articles_to_show": 3,
+        "show_category": true,
+        "show_author": true,
+        "show_date": true,
+        "show_view_all": true,
+        "view_all_label": "Read All"
       }
     },
     "xula_final_cta_DWCf6t": {
@@ -363,9 +445,11 @@
     "xula_origin_R94pYN",
     "xula_proof_NJc79V",
     "xula_collections_RVJVdH",
+    "xula_catalog_A3gQDt",
     "xula_journey_A8wjxT",
     "xula_signature_MVGPEy",
     "xula_testimonials_Miab8z",
+    "xula_blog_gMaVkx",
     "xula_final_cta_DWCf6t"
   ]
 }
