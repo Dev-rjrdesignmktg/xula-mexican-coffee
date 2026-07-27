@@ -78,7 +78,7 @@
 }
 
 .xula-testimonials__star--filled {
-  fill: var(--info);
+  fill: var(--xula-gold-solid);
 }
 
 .xula-testimonials__author {
