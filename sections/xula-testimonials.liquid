@@ -4,6 +4,7 @@
 {% liquid
   assign heading_id = 'xula-testimonials-heading-' | append: section.id
   assign summary_rating = section.settings.summary_rating | default: '4.9'
+  assign total_blocks = section.blocks.size
 %}
 
 <section class="xula-testimonials" aria-labelledby="{{ heading_id }}">
@@ -42,81 +43,102 @@
       </div>
     {% endif %}
 
-    <div class="xula-testimonials__grid">
-      {% for block in section.blocks %}
-        {% liquid
-          assign customer_name = block.settings.customer_name | default: 'XULA Customer'
-          assign initial = customer_name | slice: 0, 1 | upcase
-          assign card_label = customer_name | append: ', calificación de ' | append: block.settings.rating | append: ' sobre 5 estrellas'
-        %}
+    {% if total_blocks > 0 %}
+      <div class="xula-testimonials__spotlight" data-carousel>
 
-        <article class="xula-testimonials__card" aria-label="{{ card_label }}" {{ block.shopify_attributes }}>
+        <!-- LEFT: content -->
+        <div class="xula-testimonials__panel">
 
-          <div class="xula-testimonials__stars" aria-hidden="true">
-            {% for i in (1..5) %}
-              <svg
-                class="xula-testimonials__star {% if i <= block.settings.rating %}xula-testimonials__star--filled{% endif %}"
-                viewBox="0 0 20 20"
+          <div class="xula-testimonials__slides">
+            {% for block in section.blocks %}
+              {% liquid
+                assign customer_name = block.settings.customer_name | default: 'XULA Customer'
+                assign slide_label = customer_name | append: ', calificación de ' | append: block.settings.rating | append: ' sobre 5 estrellas'
+              %}
+
+              <article
+                class="xula-testimonials__slide{% if forloop.first %} is-active{% endif %}"
+                data-slide
+                role="group"
+                aria-roledescription="slide"
+                aria-label="{{ forloop.index }} de {{ total_blocks }}: {{ slide_label }}"
+                {% if forloop.first == false %}aria-hidden="true" tabindex="-1"{% endif %}
+                {{ block.shopify_attributes }}
               >
-                <path d="m10 2.626-1.46 4.71c-.192.62-.743 1.041-1.365 1.041H2.453l3.82 2.91a1.55 1.55 0 0 1 .522 1.685l-1.46 4.71 3.821-2.911a1.38 1.38 0 0 1 1.688 0l3.82 2.91-1.459-4.71c-.192-.62.019-1.3.522-1.683l3.82-2.911h-4.722c-.622 0-1.173-.42-1.366-1.04z"/>
-              </svg>
+                <div class="xula-testimonials__stars" aria-hidden="true">
+                  {% for i in (1..5) %}
+                    <svg
+                      class="xula-testimonials__star {% if i <= block.settings.rating %}xula-testimonials__star--filled{% endif %}"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="m10 2.626-1.46 4.71c-.192.62-.743 1.041-1.365 1.041H2.453l3.82 2.91a1.55 1.55 0 0 1 .522 1.685l-1.46 4.71 3.821-2.911a1.38 1.38 0 0 1 1.688 0l3.82 2.91-1.459-4.71c-.192-.62.019-1.3.522-1.683l3.82-2.911h-4.722c-.622 0-1.173-.42-1.366-1.04z"/>
+                    </svg>
+                  {% endfor %}
+                </div>
+
+                <p class="xula-testimonials__author">
+                  {{ customer_name }}
+                  {% if block.settings.verified %}
+                    <svg class="xula-testimonials__verified" viewBox="0 0 20 20" aria-hidden="true">
+                      <title>Compra verificada</title>
+                      <path d="M7.629 15.336 2.293 10l1.414-1.414 3.922 3.922 8.664-8.664 1.414 1.414z"/>
+                    </svg>
+                  {% endif %}
+                </p>
+
+                {% if block.settings.quote != blank %}
+                  <blockquote class="xula-testimonials__quote">
+                    <p>&ldquo;{{ block.settings.quote }}&rdquo;</p>
+                  </blockquote>
+                {% endif %}
+
+                {% if block.settings.product_purchased != blank %}
+                  <p class="xula-testimonials__product">{{ block.settings.product_purchased }}</p>
+                {% endif %}
+              </article>
             {% endfor %}
           </div>
 
-          {% if block.settings.quote != blank %}
-            <blockquote class="xula-testimonials__quote">
-              <p>&ldquo;{{ block.settings.quote }}&rdquo;</p>
-            </blockquote>
-          {% endif %}
+          {% if total_blocks > 1 %}
+            <div class="xula-testimonials__nav">
+              <button type="button" class="xula-testimonials__arrow" data-dir="prev" aria-label="Reseña anterior">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6 9 12l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
 
-          {% if block.settings.product_purchased != blank %}
-            <div class="xula-testimonials__product">
-              <span class="xula-testimonials__product-name">{{ block.settings.product_purchased }}</span>
-              {% if block.settings.roast_type != blank %}
-                <span class="xula-testimonials__roast">{{ block.settings.roast_type }}</span>
-              {% endif %}
+              <span class="xula-testimonials__counter">
+                <span data-current>1</span>/<span data-total>{{ total_blocks }}</span>
+              </span>
+
+              <button type="button" class="xula-testimonials__arrow" data-dir="next" aria-label="Siguiente reseña">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
             </div>
           {% endif %}
 
-          <footer class="xula-testimonials__author">
-            <div class="xula-testimonials__avatar">
-              {% if block.settings.avatar != blank %}
+        </div>
+
+        <!-- RIGHT: rotating photo stack -->
+        <div class="xula-testimonials__stack" aria-hidden="true">
+          {% for block in section.blocks %}
+            <div class="xula-testimonials__stack-item" data-stack-item data-depth="{{ forloop.index0 }}">
+              {% if block.settings.image != blank %}
                 <img
-                  src="{{ block.settings.avatar | image_url: width: 120 }}"
-                  alt="Foto de perfil de {{ customer_name }}"
-                  width="60"
-                  height="60"
+                  src="{{ block.settings.image | image_url: width: 900 }}"
+                  alt=""
+                  width="900"
+                  height="900"
                   loading="lazy"
                   decoding="async"
                 >
               {% else %}
-                <span class="xula-testimonials__avatar-fallback" aria-hidden="true">{{ initial }}</span>
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'xula-testimonials__placeholder' }}
               {% endif %}
             </div>
+          {% endfor %}
+        </div>
 
-            <div class="xula-testimonials__author-meta">
-              <span class="xula-testimonials__name">
-                {{ customer_name }}
-                {% if block.settings.verified %}
-                  <span class="xula-testimonials__badge">
-                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.629 15.336 2.293 10l1.414-1.414 3.922 3.922 8.664-8.664 1.414 1.414z"/></svg>
-                    Compra verificada
-                  </span>
-                {% endif %}
-              </span>
-              {% if block.settings.customer_location != blank or block.settings.review_date != blank %}
-                <span class="xula-testimonials__meta">
-                  {{ block.settings.customer_location }}
-                  {% if block.settings.customer_location != blank and block.settings.review_date != blank %}&middot;{% endif %}
-                  {{ block.settings.review_date }}
-                </span>
-              {% endif %}
-            </div>
-          </footer>
-
-        </article>
-      {% endfor %}
-    </div>
+      </div>
+    {% endif %}
 
     {% if section.settings.show_guarantee %}
       <div class="xula-testimonials__guarantee">
@@ -136,6 +158,7 @@
 {% schema %}
 {
   "name": "Xula Testimonials",
+  "max_blocks": 6,
   "settings": [
     {
       "type": "text",
@@ -206,6 +229,11 @@
       "name": "Testimonial",
       "settings": [
         {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo (falls back to a placeholder image)"
+        },
+        {
           "type": "range",
           "id": "rating",
           "label": "Rating",
@@ -221,21 +249,10 @@
           "default": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now."
         },
         {
-          "type": "image_picker",
-          "id": "avatar",
-          "label": "Photo (optional, falls back to initials)"
-        },
-        {
           "type": "text",
           "id": "customer_name",
           "label": "Customer name",
           "default": "Ana M."
-        },
-        {
-          "type": "text",
-          "id": "customer_location",
-          "label": "Customer location",
-          "default": "Guadalajara, MX"
         },
         {
           "type": "text",
@@ -244,29 +261,10 @@
           "default": "Dark Roast Specialty"
         },
         {
-          "type": "select",
-          "id": "roast_type",
-          "label": "Roast type",
-          "options": [
-            { "value": "Light Roast", "label": "Light Roast" },
-            { "value": "Medium Roast", "label": "Medium Roast" },
-            { "value": "Dark Roast", "label": "Dark Roast" },
-            { "value": "Espresso Blend", "label": "Espresso Blend" },
-            { "value": "Café de Olla", "label": "Café de Olla" }
-          ],
-          "default": "Dark Roast"
-        },
-        {
           "type": "checkbox",
           "id": "verified",
           "label": "Verified purchase",
           "default": true
-        },
-        {
-          "type": "text",
-          "id": "review_date",
-          "label": "Review date (optional)",
-          "default": "2 weeks ago"
         }
       ]
     }
@@ -275,9 +273,6 @@
     {
       "name": "Xula Testimonials",
       "blocks": [
-        { "type": "testimonial" },
-        { "type": "testimonial" },
-        { "type": "testimonial" },
         { "type": "testimonial" },
         { "type": "testimonial" },
         { "type": "testimonial" }

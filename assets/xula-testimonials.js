@@ -1,69 +1,50 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const section = document.querySelector(".xula-testimonials");
-
-  if (!section) return;
-
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
-
-  const cards = section.querySelectorAll(".xula-testimonials__card");
-
-  if (cards.length && !prefersReducedMotion) {
-    const cardObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry, index) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => {
-              entry.target.classList.add("is-visible");
-            }, index * 120);
-
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    cards.forEach((card) => cardObserver.observe(card));
-  } else {
-    cards.forEach((card) => card.classList.add("is-visible"));
-  }
-
-  const scoreEl = section.querySelector(".xula-testimonials__summary-score");
-
-  if (scoreEl && !prefersReducedMotion) {
-    const target = parseFloat(scoreEl.dataset.countTo);
-
-    if (!Number.isNaN(target)) {
-      const scoreObserver = new IntersectionObserver(
-        (entries, observer) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-
-            const duration = 900;
-            const start = performance.now();
-
-            const step = (now) => {
-              const progress = Math.min((now - start) / duration, 1);
-              const value = (target * progress).toFixed(1);
-              scoreEl.textContent = value;
-
-              if (progress < 1) {
-                requestAnimationFrame(step);
-              } else {
-                scoreEl.textContent = target.toFixed(1);
-              }
-            };
-
-            requestAnimationFrame(step);
-            observer.unobserve(entry.target);
-          });
-        },
-        { threshold: 0.4 }
-      );
-
-      scoreObserver.observe(scoreEl);
-    }
-  }
+  document
+    .querySelectorAll(".xula-testimonials__spotlight[data-carousel]")
+    .forEach(initTestimonialsCarousel);
 });
+
+function initTestimonialsCarousel(root) {
+  const slides = Array.from(root.querySelectorAll("[data-slide]"));
+  const stackItems = Array.from(root.querySelectorAll("[data-stack-item]"));
+  const total = slides.length;
+
+  if (!total) return;
+
+  const prevBtn = root.querySelector('[data-dir="prev"]');
+  const nextBtn = root.querySelector('[data-dir="next"]');
+  const currentEl = root.querySelector("[data-current]");
+
+  let active = 0;
+
+  function render() {
+    slides.forEach((slide, i) => {
+      const isActive = i === active;
+      slide.classList.toggle("is-active", isActive);
+      slide.setAttribute("aria-hidden", isActive ? "false" : "true");
+      slide.setAttribute("tabindex", isActive ? "0" : "-1");
+    });
+
+    stackItems.forEach((item, i) => {
+      const depth = (i - active + total) % total;
+      item.dataset.depth = depth;
+    });
+
+    if (currentEl) currentEl.textContent = active + 1;
+  }
+
+  function goTo(index) {
+    active = ((index % total) + total) % total;
+    render();
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => goTo(active - 1));
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => goTo(active + 1));
+  }
+
+  render();
+}
