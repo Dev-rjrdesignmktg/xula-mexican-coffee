@@ -257,7 +257,7 @@
   top: 12px;
   left: 12px;
   z-index: 2;
-  font-family: var(--secondary-font);
+  font-family: var(--font-code-family);
   font-size: .9rem;
   font-weight: 700;
   letter-spacing: .04em;
@@ -389,9 +389,10 @@
 }
 
 .xula-catalog__glass-price {
-  font-family: var(--secondary-font);
+  font-family: var(--font-code-family);
   font-size: 1.7rem;
-  font-weight: 700;
+  font-weight: var(--font-code-weight);
+  font-variant-numeric: tabular-nums;
   display: flex;
   align-items: baseline;
   gap: 8px;
@@ -493,9 +494,10 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
-  font-family: var(--secondary-font);
+  font-family: var(--font-code-family);
   font-size: 1.7rem;
-  font-weight: 700;
+  font-weight: var(--font-code-weight);
+  font-variant-numeric: tabular-nums;
   color: var(--bg-secondary);
 }
 
