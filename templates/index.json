@@ -122,6 +122,46 @@
         "muffins_link": ""
       }
     },
+    "xula_catalog_A3gQDt": {
+      "type": "xula-catalog",
+      "blocks": {
+        "tab_dK7Twd": {
+          "type": "tab",
+          "settings": {
+            "collection": "coffee",
+            "label": "Specialty Coffee",
+            "products_to_show": 12
+          }
+        },
+        "tab_F3HUiH": {
+          "type": "tab",
+          "settings": {
+            "collection": "chocolate",
+            "label": "Artisan Chocolate",
+            "products_to_show": 12
+          }
+        },
+        "tab_T4y6rF": {
+          "type": "tab",
+          "settings": {
+            "collection": "muffins",
+            "label": "Artisan Muffins",
+            "products_to_show": 12
+          }
+        }
+      },
+      "block_order": [
+        "tab_dK7Twd",
+        "tab_F3HUiH",
+        "tab_T4y6rF"
+      ],
+      "name": "Xula Catalog Tabs",
+      "settings": {
+        "eyebrow": "Our catalog",
+        "heading": "Choose your XULA ritual",
+        "subheading": "Coffee, chocolate, and artisan baked goods, organized by category."
+      }
+    },
     "xula_journey_A8wjxT": {
       "type": "xula-journey",
       "blocks": {
@@ -348,6 +388,7 @@
     "xula_origin_R94pYN",
     "xula_proof_NJc79V",
     "xula_collections_RVJVdH",
+    "xula_catalog_A3gQDt",
     "xula_journey_A8wjxT",
     "xula_signature_MVGPEy",
     "xula_testimonials_Miab8z",
