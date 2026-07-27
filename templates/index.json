@@ -335,6 +335,22 @@
         "guarantee_text": "Not the right roast for you? We'll make it right — refund or replace, no questions asked."
       }
     },
+    "xula_blog_gMaVkx": {
+      "type": "xula-blog",
+      "name": "Xula Blog",
+      "settings": {
+        "eyebrow": "From the journal",
+        "heading": "Latest Articles",
+        "subheading": "Stories on Mexican specialty coffee, straight from our roastery.",
+        "blog": "blog-prueba",
+        "articles_to_show": 3,
+        "show_category": true,
+        "show_author": true,
+        "show_date": true,
+        "show_view_all": true,
+        "view_all_label": "Read All"
+      }
+    },
     "xula_final_cta_DWCf6t": {
       "type": "xula-final-cta",
       "blocks": {
@@ -392,6 +408,7 @@
     "xula_journey_A8wjxT",
     "xula_signature_MVGPEy",
     "xula_testimonials_Miab8z",
+    "xula_blog_gMaVkx",
     "xula_final_cta_DWCf6t"
   ]
 }
