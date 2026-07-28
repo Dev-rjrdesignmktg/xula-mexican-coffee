@@ -23,29 +23,15 @@
     "content": {
       "type": "xula-article-content",
       "settings": {
+        "show_share_badge": true,
         "show_tags": false,
-        "show_back_link": true
+        "show_back_link": true,
+        "back_link_label": "Back to Blog"
       }
-    },
-    "trust": {
-      "type": "xula-testimonials",
-      "blocks": {
-        "testimonial_1": {
-          "type": "testimonial",
-          "settings": {}
-        },
-        "testimonial_2": {
-          "type": "testimonial",
-          "settings": {}
-        },
-        "testimonial_3": {
-          "type": "testimonial",
-          "settings": {}
-        }
-      },
-      "block_order": ["testimonial_1", "testimonial_2", "testimonial_3"],
-      "settings": {}
     }
   },
-  "order": ["hero", "content", "trust"]
+  "order": [
+    "hero",
+    "content"
+  ]
 }
