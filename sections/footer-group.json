@@ -11,8 +11,57 @@
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
+    "xula_footer_xBMwTy": {
+      "type": "xula-footer",
+      "blocks": {
+        "link_list_i3LxWi": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Menu",
+            "menu": "main-menu"
+          }
+        },
+        "link_list_EEGVhb": {
+          "type": "link_list",
+          "settings": {
+            "heading": "News",
+            "menu": "footer"
+          }
+        },
+        "link_list_EqMJbN": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Company",
+            "menu": "contact-us"
+          }
+        }
+      },
+      "block_order": [
+        "link_list_i3LxWi",
+        "link_list_EEGVhb",
+        "link_list_EqMJbN"
+      ],
+      "name": "Xula Footer",
+      "settings": {
+        "brand_heading": "XULA",
+        "logo": "shopify://shop_images/LOGOTIPO_02.png",
+        "logo_width": 140,
+        "brand_manifesto": "<p>Mexican specialty coffee, small-batch roasted to preserve every note of origin.</p>",
+        "show_social": true,
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "payment_enable": true,
+        "copyright_text": "",
+        "show_policies": true,
+        "show_back_to_top": true,
+        "show_structured_data": false,
+        "contact_email": "",
+        "contact_phone": ""
+      }
+    },
     "footer": {
       "type": "footer",
+      "disabled": true,
       "settings": {
         "color_scheme": "scheme-1",
         "newsletter_enable": true,
@@ -30,6 +79,7 @@
     }
   },
   "order": [
+    "xula_footer_xBMwTy",
     "footer"
   ]
 }
