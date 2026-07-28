@@ -1,0 +1,242 @@
+/* ==========================================================================
+   Xula About — editorial "Our Story" zigzag section
+   Mobile-first, BEM (.xula-about)
+   ========================================================================== */
+
+.xula-about {
+  background: var(--bg);
+  padding: 64px 0;
+  overflow: hidden;
+}
+
+/* ---------- Scroll reveal (progressive enhancement) ---------- */
+
+.xula-about__reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity .9s cubic-bezier(.16,1,.3,1),
+    transform .9s cubic-bezier(.16,1,.3,1);
+}
+
+.xula-about__reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-about__reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- Intro header ---------- */
+
+.xula-about__intro {
+  max-width: 640px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.xula-about__heading {
+  margin: 12px auto 20px;
+}
+
+.xula-about__lead {
+  margin: 0 auto;
+}
+
+.xula-about__lead p {
+  margin: 0;
+}
+
+/* ---------- Chapters wrapper ---------- */
+
+.xula-about__chapters {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+/* ---------- Story chapter (zigzag unit) ----------
+   Mobile: image always on top, text always below — clean stack.
+   Desktop (≥750px): two-column grid, alternating per chapter:
+     odd  → text LEFT  / image RIGHT
+     even → image LEFT / text RIGHT
+   ------------------------------------------------- */
+
+.xula-about__chapter {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.xula-about__chapter-media {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--bg-tertiary);
+}
+
+.xula-about__chapter-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--bg-secondary) 8%, transparent);
+  pointer-events: none;
+}
+
+.xula-about__chapter-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+}
+
+.xula-about__chapter-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 5 / 4;
+}
+
+.xula-about__chapter-placeholder-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.xula-about__chapter-content {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.xula-about__chapter-label {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-family: var(--font-code-family);
+  font-size: 1.2rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.xula-about__chapter-heading {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(1.9rem, 2.6vw, 2.6rem);
+  line-height: 1.1;
+  color: var(--bg-secondary);
+  margin: 0 0 14px;
+}
+
+.xula-about__chapter-text {
+  font-family: var(--font-body-family);
+  font-weight: var(--font-body-weight);
+  font-size: clamp(1.5rem, 1.6vw, 1.7rem);
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.xula-about__chapter-text p {
+  margin: 0 0 12px;
+}
+
+.xula-about__chapter-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Closing CTA ---------- */
+
+.xula-about__cta {
+  max-width: 620px;
+  margin: 64px auto 0;
+  padding-top: 48px;
+  border-top: 1px solid color-mix(in srgb, var(--bg-secondary) 12%, transparent);
+  text-align: center;
+}
+
+.xula-about__cta-heading {
+  margin: 0 auto 16px;
+}
+
+.xula-about__cta-text {
+  margin: 0 auto 28px;
+}
+
+.xula-about__cta-button {
+  margin-bottom: 20px;
+}
+
+.xula-about__cta-tagline {
+  font-family: var(--font-code-family);
+  font-size: 1.2rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ==========================================================================
+   Tablet and up — two-column zigzag grid
+   ========================================================================== */
+
+@media (min-width: 750px) {
+  .xula-about {
+    padding: 96px 0;
+  }
+
+  .xula-about__chapters {
+    gap: 96px;
+  }
+
+  .xula-about__chapter {
+    flex-direction: row;
+    align-items: center;
+    gap: 60px;
+  }
+
+  .xula-about__chapter-media,
+  .xula-about__chapter-content {
+    flex: 1 1 50%;
+    min-width: 0;
+  }
+
+  .xula-about__chapter-content {
+    max-width: 460px;
+    margin: 0;
+  }
+
+  /* image RIGHT / text LEFT — media is first in DOM, so reverse the row */
+  .xula-about__chapter--image-right {
+    flex-direction: row-reverse;
+  }
+
+  .xula-about__chapter--image-right .xula-about__chapter-content {
+    margin-right: auto;
+  }
+
+  /* image LEFT / text RIGHT — natural DOM order */
+  .xula-about__chapter--image-left .xula-about__chapter-content {
+    margin-left: auto;
+  }
+}
+
+@media (min-width: 990px) {
+  .xula-about__intro {
+    max-width: 720px;
+    margin-bottom: 64px;
+  }
+
+  .xula-about__chapter-media img,
+  .xula-about__chapter-placeholder {
+    aspect-ratio: 4 / 5;
+  }
+
+  .xula-about__cta {
+    margin-top: 96px;
+  }
+}

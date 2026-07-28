@@ -1,0 +1,347 @@
+{{ 'xula-about.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-about.js' | asset_url }}" defer="defer"></script>
+
+{% liquid
+  assign heading_id = 'xula-about-heading-' | append: section.id
+  assign intro_id = 'xula-about-intro-' | append: section.id
+  assign section_dom_id = 'xula-about-' | append: section.id
+  assign chapter_index = 0
+%}
+
+{% if section.settings.show_structured_data %}
+  {% capture social_raw %}{{ settings.social_instagram_link }}|{{ settings.social_facebook_link }}|{{ settings.social_tiktok_link }}|{{ settings.social_youtube_link }}|{{ settings.social_twitter_link }}|{{ settings.social_pinterest_link }}{% endcapture %}
+  {% assign social_links = social_raw | split: '|' %}
+  {% assign org_id = request.origin | append: '/#organization' %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": {{ org_id | json }},
+          "name": {{ shop.name | json }},
+          "url": {{ request.origin | json }}
+          {% if settings.logo != blank %}
+            ,"logo": {{ settings.logo | image_url: width: 512 | prepend: 'https:' | json }}
+          {% endif %}
+          {% if section.settings.founding_year != blank %}
+            ,"foundingDate": {{ section.settings.founding_year | json }}
+          {% endif %}
+          {% if section.settings.location != blank %}
+            ,"location": {{ section.settings.location | json }}
+          {% endif %}
+          ,"sameAs": [
+            {% assign is_first_social = true %}
+            {% for link in social_links %}
+              {% if link != blank %}
+                {% unless is_first_social %},{% endunless %}
+                {{ link | json }}
+                {% assign is_first_social = false %}
+              {% endif %}
+            {% endfor %}
+          ]
+        },
+        {
+          "@type": "AboutPage",
+          "@id": {{ request.origin | append: page_url | append: '#aboutpage' | json }},
+          "url": {{ request.origin | append: page_url | json }},
+          "name": {{ section.settings.heading | strip_html | json }},
+          "description": {{ section.settings.intro | strip_html | json }},
+          "about": { "@id": {{ org_id | json }} },
+          "mainEntity": { "@id": {{ org_id | json }} }
+        }
+      ]
+    }
+  </script>
+{% endif %}
+
+<section
+  class="xula-about"
+  id="{{ section_dom_id }}"
+  aria-labelledby="{{ heading_id }}"
+>
+  <div class="page-width">
+
+    <!-- INTRO HEADER -->
+    <header class="xula-about__intro xula-about__reveal">
+      {% if section.settings.eyebrow != blank %}
+        <span class="xula-eyebrow">{{ section.settings.eyebrow }}</span>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h2 class="xula-heading xula-about__heading" id="{{ heading_id }}">
+          {{ section.settings.heading }}
+        </h2>
+      {% endif %}
+
+      {% if section.settings.intro != blank %}
+        <div class="xula-text xula-about__lead" id="{{ intro_id }}">
+          {{ section.settings.intro }}
+        </div>
+      {% endif %}
+    </header>
+
+    <!-- ZIGZAG STORY CHAPTERS -->
+    {% if section.blocks.size > 0 %}
+      <div class="xula-about__chapters">
+        {% for block in section.blocks %}
+          {% liquid
+            assign chapter_index = chapter_index | plus: 1
+            assign chapter_remainder = chapter_index | modulo: 2
+            assign position = 'right'
+            if block.settings.image_position == 'right'
+              assign position = 'right'
+            elsif block.settings.image_position == 'left'
+              assign position = 'left'
+            elsif chapter_remainder == 0
+              assign position = 'left'
+            endif
+            assign chapter_alt = block.settings.image_alt | default: block.settings.heading | strip_html
+            assign chapter_heading_id = 'xula-about-chapter-heading-' | append: block.id
+          %}
+          <article
+            class="xula-about__chapter xula-about__chapter--image-{{ position }} xula-about__reveal"
+            aria-labelledby="{{ chapter_heading_id }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="xula-about__chapter-media">
+              {% if block.settings.image != blank %}
+                <img
+                  src="{{ block.settings.image | image_url: width: 1200 }}"
+                  srcset="
+                    {{ block.settings.image | image_url: width: 480 }} 480w,
+                    {{ block.settings.image | image_url: width: 768 }} 768w,
+                    {{ block.settings.image | image_url: width: 1000 }} 1000w,
+                    {{ block.settings.image | image_url: width: 1200 }} 1200w
+                  "
+                  sizes="(min-width: 750px) 50vw, 100vw"
+                  alt="{{ chapter_alt | escape }}"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
+                  loading="lazy"
+                  decoding="async"
+                >
+              {% else %}
+                <div class="xula-about__chapter-placeholder" role="img" aria-label="{{ chapter_alt | escape }}">
+                  {{ 'image' | placeholder_svg_tag: 'xula-about__chapter-placeholder-svg' }}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="xula-about__chapter-content">
+              {% if block.settings.label != blank %}
+                <span class="xula-about__chapter-label">{{ block.settings.label }}</span>
+              {% endif %}
+
+              {% if block.settings.heading != blank %}
+                <h3 class="xula-about__chapter-heading" id="{{ chapter_heading_id }}">
+                  {{ block.settings.heading }}
+                </h3>
+              {% endif %}
+
+              {% if block.settings.text != blank %}
+                <div class="xula-about__chapter-text">{{ block.settings.text }}</div>
+              {% endif %}
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- CLOSING CTA -->
+    {% if section.settings.cta_heading != blank or section.settings.cta_text != blank %}
+      <div class="xula-about__cta xula-about__reveal">
+        {% if section.settings.cta_heading != blank %}
+          <h2 class="xula-heading xula-about__cta-heading">{{ section.settings.cta_heading }}</h2>
+        {% endif %}
+
+        {% if section.settings.cta_text != blank %}
+          <p class="xula-text xula-about__cta-text">{{ section.settings.cta_text }}</p>
+        {% endif %}
+
+        {% if section.settings.cta_button_label != blank %}
+          <a href="{{ section.settings.cta_button_link | default: '#' }}" class="xula-btn xula-about__cta-button">
+            <span>{{ section.settings.cta_button_label }}</span>
+          </a>
+        {% endif %}
+
+        {% if section.settings.cta_tagline != blank %}
+          <p class="xula-about__cta-tagline">{{ section.settings.cta_tagline }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Xula About",
+  "tag": "section",
+  "class": "section-xula-about",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Manifesto"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Every Cup Carries a Story."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro / manifesto text",
+      "default": "<p>XULA was born from a simple idea: that great coffee is a bridge between the hands that grow it and the hands that hold it. What started as a small family ritual in the highlands of Mexico has become a promise we keep with every batch we roast.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Details"
+    },
+    {
+      "type": "text",
+      "id": "founding_year",
+      "label": "Founding year",
+      "default": "2020"
+    },
+    {
+      "type": "text",
+      "id": "location",
+      "label": "Location",
+      "default": "Veracruz, México"
+    },
+    {
+      "type": "header",
+      "content": "Closing call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "Heading",
+      "default": "Taste Where We Come From."
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "Text",
+      "default": "Every bag is a small piece of our story, roasted in small batches and shipped fresh to your door."
+    },
+    {
+      "type": "text",
+      "id": "cta_button_label",
+      "label": "Button label",
+      "default": "Shop the Collection"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "cta_tagline",
+      "label": "Tagline",
+      "default": "Est. 2020 · Veracruz, México"
+    },
+    {
+      "type": "header",
+      "content": "SEO"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_structured_data",
+      "label": "Include structured data (Organization / AboutPage)",
+      "info": "Disable if this is already included elsewhere in the theme to avoid duplicates.",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "chapter",
+      "name": "Story chapter",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Counterpart image"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text",
+          "info": "Falls back to the chapter title if left blank."
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image position",
+          "info": "Auto keeps the zigzag alternating with the previous chapter.",
+          "options": [
+            { "value": "auto", "label": "Alternate automatically" },
+            { "value": "left", "label": "Image left" },
+            { "value": "right", "label": "Image right" }
+          ],
+          "default": "auto"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Small label",
+          "default": "2020 · The Beginning"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Title",
+          "default": "A Family Ritual"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Story text",
+          "default": "<p>Long before it was a brand, XULA was a ritual: the smell of roasted beans filling the kitchen, cups shared before dawn, stories passed down with every pour.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula About",
+      "blocks": [
+        {
+          "type": "chapter",
+          "settings": {
+            "label": "2020 · The Beginning",
+            "heading": "A Family Ritual",
+            "image_position": "auto"
+          }
+        },
+        {
+          "type": "chapter",
+          "settings": {
+            "label": "2022 · Growing Roots",
+            "heading": "From the Highlands, With Care",
+            "image_position": "auto"
+          }
+        },
+        {
+          "type": "chapter",
+          "settings": {
+            "label": "Today · The Ritual Continues",
+            "heading": "One Cup at a Time",
+            "image_position": "auto"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
