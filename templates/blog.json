@@ -34,7 +34,7 @@
       "settings": {
         "eyebrow": "Keep reading",
         "heading": "More from the Blog",
-        "blog": "",
+        "blog": "blog-prueba",
         "skip_articles": 12,
         "articles_to_show": 12,
         "show_category": true,
