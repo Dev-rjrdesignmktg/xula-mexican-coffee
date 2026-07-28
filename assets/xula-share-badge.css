@@ -1,0 +1,97 @@
+.xula-share-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  background: color-mix(in srgb, var(--text) 5%, var(--bg));
+  border-radius: 1.6rem;
+  padding: 32px;
+  margin: 48px 0;
+}
+
+.xula-share-badge__author {
+  font-family: var(--primary-font);
+  font-size: 1.8rem;
+  font-weight: var(--font-heading-weight);
+  color: var(--bg-secondary);
+}
+
+.xula-share-badge__share {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.xula-share-badge__label {
+  font-family: var(--secondary-font);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.6;
+}
+
+.xula-share-badge__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.xula-share-badge__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  font-family: var(--secondary-font);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xula-share-badge__link svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.xula-share-badge__link--copy svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.xula-share-badge__link:hover,
+.xula-share-badge__link:focus-visible {
+  background: var(--bg-secondary);
+  border-color: var(--bg-secondary);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+@media (min-width: 700px) {
+  .xula-share-badge {
+    padding: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-share-badge__link {
+    transition: none;
+  }
+}

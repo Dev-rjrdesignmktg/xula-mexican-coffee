@@ -9,43 +9,43 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "main-article",
+    "hero": {
+      "type": "xula-article-hero",
+      "settings": {
+        "show_breadcrumb": true,
+        "breadcrumb_home_label": "Home",
+        "blog_label": "Blog",
+        "show_author": true,
+        "show_date": false,
+        "show_share": true
+      }
+    },
+    "content": {
+      "type": "xula-article-content",
+      "settings": {
+        "show_tags": false,
+        "show_back_link": true
+      }
+    },
+    "trust": {
+      "type": "xula-testimonials",
       "blocks": {
-        "featured_image": {
-          "type": "featured_image",
-          "settings": {
-            "image_height": "adapt"
-          }
+        "testimonial_1": {
+          "type": "testimonial",
+          "settings": {}
         },
-        "title": {
-          "type": "title",
-          "settings": {
-            "blog_show_date": true,
-            "blog_show_author": false
-          }
+        "testimonial_2": {
+          "type": "testimonial",
+          "settings": {}
         },
-        "share": {
-          "type": "share",
-          "settings": {
-            "share_label": "Share"
-          }
-        },
-        "content": {
-          "type": "content",
+        "testimonial_3": {
+          "type": "testimonial",
           "settings": {}
         }
       },
-      "block_order": [
-        "featured_image",
-        "title",
-        "share",
-        "content"
-      ],
+      "block_order": ["testimonial_1", "testimonial_2", "testimonial_3"],
       "settings": {}
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["hero", "content", "trust"]
 }

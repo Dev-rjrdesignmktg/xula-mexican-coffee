@@ -1,0 +1,165 @@
+.xula-article-hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 78vh;
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+
+.xula-article-hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.xula-article-hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.xula-article-hero__image--placeholder {
+  opacity: 0.6;
+}
+
+.xula-article-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 42%, rgba(0, 0, 0, 0.12) 68%, rgba(0, 0, 0, 0.05) 100%),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, transparent 22%);
+}
+
+.xula-article-hero__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding-top: 140px;
+  padding-bottom: 48px;
+  color: #fff;
+}
+
+/* ---------- Breadcrumb ---------- */
+
+.xula-article-hero__breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--secondary-font);
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 20px;
+}
+
+.xula-article-hero__breadcrumb a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.xula-article-hero__breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.xula-article-hero__breadcrumb-sep {
+  opacity: 0.6;
+}
+
+/* ---------- Title ---------- */
+
+.xula-article-hero__title {
+  font-family: var(--primary-font);
+  font-size: clamp(3.2rem, 6.4vw, 6.4rem);
+  font-weight: var(--font-heading-weight);
+  line-height: 1.05;
+  color: #fff;
+  max-width: 20ch;
+  margin: 0 0 24px;
+}
+
+/* ---------- Meta row ---------- */
+
+.xula-article-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--secondary-font);
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.xula-article-hero__divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.xula-article-hero__share {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.xula-article-hero__share-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  padding: 0;
+  cursor: pointer;
+  transition:
+    background 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xula-article-hero__share-link svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+
+.xula-article-hero__share-copy svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.xula-article-hero__share-link:hover,
+.xula-article-hero__share-link:focus-visible {
+  background: rgba(255, 255, 255, 0.28);
+  transform: translateY(-2px);
+}
+
+/* ---------- Breakpoints ---------- */
+
+@media (min-width: 700px) {
+  .xula-article-hero {
+    min-height: 88vh;
+  }
+
+  .xula-article-hero__content {
+    padding-top: 180px;
+    padding-bottom: 64px;
+  }
+}
+
+@media (min-width: 990px) {
+  .xula-article-hero {
+    min-height: 92vh;
+    max-height: 960px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-article-hero__share-link {
+    transition: none;
+  }
+}

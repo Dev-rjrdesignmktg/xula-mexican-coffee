@@ -1,0 +1,155 @@
+{{ 'xula-article-hero.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-share.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign hero_id = 'XulaArticleHero-' | append: section.id
+  assign hero_image = article.image
+  assign img_alt = hero_image.alt | default: article.title | escape
+  assign blog_label = section.settings.blog_label | default: blog.title | default: 'Blog'
+  assign share_url = request.origin | append: article.url
+-%}
+
+<section class="xula-article-hero" id="{{ hero_id }}" aria-labelledby="{{ hero_id }}-heading">
+  <div class="xula-article-hero__media">
+    {%- if hero_image -%}
+      <img
+        class="xula-article-hero__image"
+        src="{{ hero_image | image_url: width: 2000 }}"
+        srcset="
+          {{ hero_image | image_url: width: 800 }} 800w,
+          {{ hero_image | image_url: width: 1200 }} 1200w,
+          {{ hero_image | image_url: width: 1800 }} 1800w,
+          {{ hero_image | image_url: width: 2400 }} 2400w"
+        sizes="100vw"
+        alt="{{ img_alt }}"
+        width="{{ hero_image.width }}"
+        height="{{ hero_image.height }}"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      >
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'xula-article-hero__image xula-article-hero__image--placeholder' }}
+    {%- endif -%}
+    <span class="xula-article-hero__scrim" aria-hidden="true"></span>
+  </div>
+
+  <div class="xula-article-hero__content page-width">
+    {%- if section.settings.show_breadcrumb -%}
+      <nav class="xula-article-hero__breadcrumb" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">{{ section.settings.breadcrumb_home_label | default: 'Home' }}</a>
+        <span class="xula-article-hero__breadcrumb-sep" aria-hidden="true">&mdash;</span>
+        <a href="{{ blog.url }}">{{ blog_label }}</a>
+        <span class="xula-article-hero__breadcrumb-sep" aria-hidden="true">&mdash;</span>
+        <span aria-current="page">{{ article.title }}</span>
+      </nav>
+    {%- endif -%}
+
+    <h1 class="xula-article-hero__title" id="{{ hero_id }}-heading">{{ article.title }}</h1>
+
+    <div class="xula-article-hero__meta">
+      {%- if section.settings.show_author and article.author != blank -%}
+        <span class="xula-article-hero__author">by {{ article.author }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.show_date -%}
+        <time class="xula-article-hero__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+          {{ article.published_at | date: '%B %d, %Y' }}
+        </time>
+      {%- endif -%}
+
+      {%- if section.settings.show_share -%}
+        <span class="xula-article-hero__divider" aria-hidden="true"></span>
+        <div
+          class="xula-article-hero__share"
+          data-article-share
+          data-share-url="{{ share_url }}"
+          data-share-title="{{ article.title | escape }}"
+        >
+          <a
+            class="xula-article-hero__share-link"
+            href="https://www.facebook.com/sharer.php?u={{ share_url | url_encode }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Share on Facebook"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg>
+          </a>
+          <a
+            class="xula-article-hero__share-link"
+            href="https://twitter.com/intent/tweet?url={{ share_url | url_encode }}&text={{ article.title | url_encode }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Share on X"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.9 2H22l-7.4 8.4L23.3 22h-6.9l-5.4-6.6L4.8 22H1.7l7.9-9-8.4-11h7l4.9 6.1zM17.6 20h1.9L7 4H5z"/></svg>
+          </a>
+          <a
+            class="xula-article-hero__share-link"
+            href="https://pinterest.com/pin/create/button/?url={{ share_url | url_encode }}&media={{ hero_image | image_url: width: 1200 | prepend: 'https:' | url_encode }}&description={{ article.title | url_encode }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Share on Pinterest"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-3.6 19.3c0-.8 0-1.7.2-2.5l1.4-6s-.3-.7-.3-1.7c0-1.6.9-2.8 2.1-2.8 1 0 1.5.7 1.5 1.6 0 1-.6 2.4-1 3.8-.3 1.1.6 2 1.7 2 2 0 3.5-2.1 3.5-5.2 0-2.7-2-4.6-4.7-4.6-3.2 0-5.1 2.4-5.1 4.9 0 1 .4 2 .9 2.6.1.1.1.2.1.3l-.3 1.4c0 .2-.2.3-.4.2-1.4-.6-2.3-2.6-2.3-4.2 0-3.4 2.5-6.6 7.1-6.6 3.7 0 6.6 2.7 6.6 6.2 0 3.7-2.3 6.7-5.6 6.7-1.1 0-2.1-.6-2.5-1.2l-.7 2.6c-.2 1-.9 2.2-1.3 3A10 10 0 1 0 12 2z"/></svg>
+          </a>
+          <button type="button" class="xula-article-hero__share-link xula-article-hero__share-copy" data-article-share-copy aria-label="Copy link to this article">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10.6 13.4a1 1 0 0 1 0-1.4l3-3a3 3 0 1 1 4.2 4.2l-1.6 1.6a1 1 0 1 1-1.4-1.4l1.6-1.6a1 1 0 1 0-1.4-1.4l-3 3a1 1 0 0 1-1.4 0zm2.8-2.8a1 1 0 0 1 0 1.4l-3 3a3 3 0 1 1-4.2-4.2l1.6-1.6a1 1 0 1 1 1.4 1.4l-1.6 1.6a1 1 0 1 0 1.4 1.4l3-3a1 1 0 0 1 1.4 0z"/></svg>
+          </button>
+          <span class="visually-hidden" role="status" aria-live="polite" data-article-share-status></span>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Xula Article Hero",
+  "tag": "section",
+  "class": "section-xula-article-hero",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show breadcrumb",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_home_label",
+      "label": "Breadcrumb home label",
+      "default": "Home"
+    },
+    {
+      "type": "text",
+      "id": "blog_label",
+      "label": "Blog label override",
+      "info": "Defaults to the blog's title."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share",
+      "label": "Show share links",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula Article Hero"
+    }
+  ]
+}
+{% endschema %}

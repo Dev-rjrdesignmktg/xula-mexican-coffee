@@ -1,0 +1,83 @@
+{{ 'xula-article-content.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign share_url = request.origin | append: article.url
+  assign pin_image_url = article.image | image_url: width: 1200 | prepend: 'https:'
+-%}
+
+<section class="xula-article-content">
+  <div class="page-width page-width--narrow">
+
+    <div class="xula-article-content__rte rte">
+      {{ article.content }}
+    </div>
+
+    {%- if section.settings.show_share_badge -%}
+      {%- render 'xula-share-badge',
+        author: article.author,
+        share_url: share_url,
+        share_title: article.title,
+        pin_image_url: pin_image_url
+      -%}
+    {%- endif -%}
+
+    {%- if section.settings.show_tags and article.tags.size > 0 -%}
+      <ul class="xula-article-content__tags" role="list">
+        {%- for tag in article.tags -%}
+          <li class="xula-article-content__tag">{{ tag }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if section.settings.show_back_link -%}
+      <div class="xula-article-content__back">
+        <a href="{{ blog.url }}" class="xula-btn--secondary">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+            <path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>{{ section.settings.back_link_label | default: 'Back to Blog' }}</span>
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Xula Article Content",
+  "tag": "section",
+  "class": "section-xula-article-content",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_share_badge",
+      "label": "Show author / share badge",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show tags",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_back_link",
+      "label": "Show \"Back to Blog\" link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "back_link_label",
+      "label": "Back link label",
+      "default": "Back to Blog"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula Article Content"
+    }
+  ]
+}
+{% endschema %}
