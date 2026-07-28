@@ -65,6 +65,7 @@
         "chapter_TQEMPF": {
           "type": "chapter",
           "settings": {
+            "image": "shopify://shop_images/IMG_5216.jpg",
             "image_alt": "",
             "image_position": "auto",
             "label": "2022 · Growing Roots",
