@@ -9,8 +9,9 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/Xula_Main_Logo_d70094ab-4099-48f5-8281-1ce6ebbb3db9.jpg",
+    "logo": "shopify://shop_images/LOGOTIPO_02.png",
     "logo_width": 90,
+    "favicon": "shopify://shop_images/ISOTIPO.png",
     "type_header_font": "assistant_n4",
     "heading_scale": 100,
     "type_body_font": "assistant_n4",
@@ -145,9 +146,9 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#EC0889",
+          "background": "#ec0889",
           "background_gradient": "",
-          "text": "#FFFFFF",
+          "text": "#ffffff",
           "button": "#121212",
           "button_label": "#ffffff",
           "secondary_button_label": "#121212",
