@@ -391,7 +391,7 @@
       "type": "xula-blog",
       "name": "Xula Blog",
       "settings": {
-        "eyebrow": "From the journal",
+        "eyebrow": "From the blog",
         "heading": "Latest Articles",
         "subheading": "Stories on Mexican specialty coffee, straight from our roastery.",
         "blog": "blog-prueba",

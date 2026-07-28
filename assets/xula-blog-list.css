@@ -1,0 +1,214 @@
+.xula-blog-list {
+  padding: 40px 0 64px;
+  background: var(--bg);
+}
+
+.xula-blog-list__header {
+  margin-bottom: 24px;
+}
+
+.xula-blog-list__heading {
+  font-family: var(--primary-font);
+  font-size: clamp(2.2rem, 3vw, 3rem);
+  font-weight: var(--font-heading-weight);
+  color: var(--bg-secondary);
+  margin: 0;
+}
+
+/* ---------- Rows ---------- */
+
+.xula-blog-list__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+}
+
+.xula-blog-list__row {
+  border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Visible by default: JS arms the entrance animation and load-more state,
+   so content never depends on script execution to be seen. */
+.xula-blog-list__row.xula-blog-list__row--armed {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.xula-blog-list__row.xula-blog-list__row--armed.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.xula-blog-list__row.is-hidden {
+  display: none;
+}
+
+.xula-blog-list__link {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 16px;
+  padding: 18px 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.xula-blog-list__text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.xula-blog-list__category {
+  display: block;
+  font-family: var(--secondary-font);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.65;
+  margin-bottom: 6px;
+}
+
+.xula-blog-list__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--primary-font);
+  font-size: clamp(1.8rem, 2.4vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--bg-secondary);
+  margin: 0 0 6px;
+}
+
+.xula-blog-list__title-text {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  padding-bottom: 2px;
+  transition: background-size 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xula-blog-list__arrow {
+  flex-shrink: 0;
+  color: var(--bg-secondary);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xula-blog-list__author {
+  font-family: var(--secondary-font);
+  font-size: 1.3rem;
+  color: var(--text);
+  opacity: 0.7;
+  margin: 0;
+}
+
+.xula-blog-list__media {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  background: var(--bg-tertiary);
+}
+
+.xula-blog-list__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xula-blog-list__image--placeholder {
+  opacity: 0.5;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .xula-blog-list__link:hover .xula-blog-list__title-text,
+  .xula-blog-list__link:focus-visible .xula-blog-list__title-text {
+    background-size: 100% 1.5px;
+  }
+
+  .xula-blog-list__link:hover .xula-blog-list__arrow,
+  .xula-blog-list__link:focus-visible .xula-blog-list__arrow {
+    transform: translate(3px, -3px);
+  }
+
+  .xula-blog-list__link:hover .xula-blog-list__image,
+  .xula-blog-list__link:focus-visible .xula-blog-list__image {
+    transform: scale(1.08);
+  }
+}
+
+.xula-blog-list__empty {
+  font-family: var(--secondary-font);
+  font-size: 1.4rem;
+  color: var(--text);
+  opacity: 0.7;
+}
+
+/* ---------- Load more ---------- */
+
+.xula-blog-list__load-more-wrap {
+  display: none;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.xula-blog-list__load-more-wrap.is-active {
+  display: flex;
+}
+
+/* ---------- Breakpoints ---------- */
+
+@media (min-width: 700px) {
+  .xula-blog-list__link {
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    padding: 22px 0;
+  }
+
+  .xula-blog-list__row--reverse .xula-blog-list__link {
+    flex-direction: row-reverse;
+  }
+
+  .xula-blog-list__media {
+    flex: 0 0 38%;
+    width: 38%;
+  }
+}
+
+@media (min-width: 990px) {
+  .xula-blog-list {
+    padding: 56px 0 88px;
+  }
+
+  .xula-blog-list__link {
+    gap: 56px;
+    padding: 26px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-blog-list__row {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .xula-blog-list__title-text,
+  .xula-blog-list__arrow,
+  .xula-blog-list__image {
+    transition: none;
+  }
+
+  .xula-blog-list__link:hover .xula-blog-list__image {
+    transform: none;
+  }
+}

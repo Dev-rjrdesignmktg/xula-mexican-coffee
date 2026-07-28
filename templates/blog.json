@@ -10,19 +10,42 @@
 {
   "sections": {
     "main": {
-      "type": "main-blog",
+      "type": "xula-blog-grid",
       "settings": {
-        "layout": "collage",
-        "show_image": true,
-        "image_height": "medium",
-        "show_date": true,
-        "show_author": false,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "show_breadcrumb": true,
+        "breadcrumb_home_label": "Home",
+        "eyebrow": "From the blog",
+        "heading": "Blog",
+        "subheading": "Stories on Mexican specialty coffee, straight from our roastery.",
+        "articles_to_show": 12,
+        "show_category": true,
+        "show_author": true,
+        "show_date": false,
+        "enable_filters": true,
+        "all_filter_label": "All",
+        "enable_load_more": true,
+        "initial_visible": 6,
+        "load_more_label": "Load More"
+      }
+    },
+    "more_articles": {
+      "type": "xula-blog-list",
+      "settings": {
+        "eyebrow": "Keep reading",
+        "heading": "More from the Blog",
+        "skip_articles": 12,
+        "articles_to_show": 12,
+        "show_category": true,
+        "show_author": true,
+        "alternate_sides": true,
+        "enable_load_more": true,
+        "initial_visible": 4,
+        "load_more_label": "Load More"
       }
     }
   },
   "order": [
-    "main"
+    "main",
+    "more_articles"
   ]
 }
