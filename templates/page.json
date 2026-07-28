@@ -48,13 +48,6 @@
         "section_height": "full"
       }
     },
-    "main": {
-      "type": "main-page",
-      "settings": {
-        "padding_top": 28,
-        "padding_bottom": 28
-      }
-    },
     "xula_about_bzTTFT": {
       "type": "xula-about",
       "blocks": {
@@ -63,7 +56,7 @@
           "settings": {
             "image_alt": "",
             "image_position": "auto",
-            "label": "2020 · The Beginning",
+            "label": "2017 · The Beginning",
             "heading": "A Family Ritual",
             "text": "<p>Long before it was a brand, XULA was a ritual: the smell of roasted beans filling the kitchen, cups shared before dawn, stories passed down with every pour.</p>"
           }
@@ -107,6 +100,13 @@
         "cta_button_link": "",
         "cta_tagline": "Est. 2020 · Veracruz, México",
         "show_structured_data": true
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
       }
     }
   },
