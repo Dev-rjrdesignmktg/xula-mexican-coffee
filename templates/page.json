@@ -76,6 +76,7 @@
         "chapter_DfigYp": {
           "type": "chapter",
           "settings": {
+            "image": "shopify://shop_images/IMG_5203.jpg",
             "image_alt": "",
             "image_position": "auto",
             "label": "Today · The Ritual Continues",
