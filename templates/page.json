@@ -9,52 +9,43 @@
  */
 {
   "sections": {
-    "image_banner_fUw9CC": {
-      "type": "image-banner",
+    "xula_hero_cinematic_8LwAYy": {
+      "type": "xula-hero-cinematic",
       "blocks": {
-        "heading_DniyiR": {
-          "type": "heading",
+        "button_gYMWLk": {
+          "type": "button",
           "settings": {
-            "heading": "Image banner",
-            "heading_size": "h1"
+            "label": "Shop Coffee",
+            "link": "",
+            "style": "primary"
           }
         },
-        "text_EfwDrJ": {
-          "type": "text",
+        "button_qF4VcH": {
+          "type": "button",
           "settings": {
-            "text": "Give customers details about the banner image(s) or content on the template.",
-            "text_style": "body"
-          }
-        },
-        "buttons_8zEmEf": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Button label",
-            "button_link_1": "",
-            "button_style_secondary_1": false,
-            "button_label_2": "Button label",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "label": "Our Story",
+            "link": "",
+            "style": "secondary"
           }
         }
       },
       "block_order": [
-        "heading_DniyiR",
-        "text_EfwDrJ",
-        "buttons_8zEmEf"
+        "button_gYMWLk",
+        "button_qF4VcH"
       ],
-      "name": "t:sections.image-banner.presets.name",
+      "name": "Xula Hero Cinematic",
       "settings": {
-        "image_overlay_opacity": 0,
-        "image_height": "medium",
-        "image_behavior": "none",
-        "desktop_content_position": "bottom-center",
-        "desktop_content_alignment": "left",
-        "show_text_box": false,
-        "color_scheme": "scheme-2",
-        "stack_images_on_mobile": true,
-        "mobile_content_alignment": "center",
-        "show_text_below": true
+        "background_type": "image",
+        "image": "shopify://shop_images/IMG_5198.jpg",
+        "image_alt": "",
+        "disable_video_mobile": true,
+        "video_upload_date": "",
+        "overlay_color": "#24170f",
+        "overlay_opacity": 80,
+        "heading": "Crafted in Mexico. Brewed for Ritual.",
+        "text_position": "left",
+        "vertical_position": "center",
+        "section_height": "full"
       }
     },
     "main": {
@@ -63,10 +54,65 @@
         "padding_top": 28,
         "padding_bottom": 28
       }
+    },
+    "xula_about_bzTTFT": {
+      "type": "xula-about",
+      "blocks": {
+        "chapter_yRTCgc": {
+          "type": "chapter",
+          "settings": {
+            "image_alt": "",
+            "image_position": "auto",
+            "label": "2020 · The Beginning",
+            "heading": "A Family Ritual",
+            "text": "<p>Long before it was a brand, XULA was a ritual: the smell of roasted beans filling the kitchen, cups shared before dawn, stories passed down with every pour.</p>"
+          }
+        },
+        "chapter_TQEMPF": {
+          "type": "chapter",
+          "settings": {
+            "image_alt": "",
+            "image_position": "auto",
+            "label": "2022 · Growing Roots",
+            "heading": "From the Highlands, With Care",
+            "text": "<p>Long before it was a brand, XULA was a ritual: the smell of roasted beans filling the kitchen, cups shared before dawn, stories passed down with every pour.</p>"
+          }
+        },
+        "chapter_DfigYp": {
+          "type": "chapter",
+          "settings": {
+            "image_alt": "",
+            "image_position": "auto",
+            "label": "Today · The Ritual Continues",
+            "heading": "One Cup at a Time",
+            "text": "<p>Long before it was a brand, XULA was a ritual: the smell of roasted beans filling the kitchen, cups shared before dawn, stories passed down with every pour.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "chapter_yRTCgc",
+        "chapter_TQEMPF",
+        "chapter_DfigYp"
+      ],
+      "name": "Xula About",
+      "settings": {
+        "eyebrow": "Our Story",
+        "heading": "Every Cup Carries a Story.",
+        "intro": "<p>XULA was born from a simple idea: that great coffee is a bridge between the hands that grow it and the hands that hold it. What started as a small family ritual in the highlands of Mexico has become a promise we keep with every batch we roast.</p>",
+        "founding_year": "2020",
+        "location": "Veracruz, México",
+        "cta_heading": "Taste Where We Come From.",
+        "cta_text": "Every bag is a small piece of our story, roasted in small batches and shipped fresh to your door.",
+        "cta_button_label": "Shop the Collection",
+        "cta_button_link": "",
+        "cta_tagline": "Est. 2020 · Veracruz, México",
+        "show_structured_data": true
+      }
     }
   },
   "order": [
-    "image_banner_fUw9CC",
+    "xula_hero_cinematic_8LwAYy",
+    "xula_about_bzTTFT",
     "main"
   ]
 }
