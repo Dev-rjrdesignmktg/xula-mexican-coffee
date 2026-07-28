@@ -1,0 +1,323 @@
+/* =========================================================
+   XULA HERO CINEMATIC — BEM
+   Mobile first. Full-bleed cinematic hero (image or video).
+   ========================================================= */
+
+.xula-hero-cinematic {
+  position: relative;
+  width: 100%;
+  display: flex;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  isolation: isolate;
+}
+
+/* ---------- Height modifiers ---------- */
+.xula-hero-cinematic--height-full {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+.xula-hero-cinematic--height-large {
+  min-height: 85vh;
+  min-height: 85svh;
+}
+
+.xula-hero-cinematic--height-auto {
+  min-height: 60vh;
+  padding: 6rem 0;
+}
+
+/* ---------- Media layer ---------- */
+.xula-hero-cinematic__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.xula-hero-cinematic__image,
+.xula-hero-cinematic__video,
+.xula-hero-cinematic__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.xula-hero-cinematic__poster--mobile-only {
+  display: block;
+}
+
+.xula-hero-cinematic__video--desktop-only {
+  display: none;
+}
+
+/* ---------- Overlay ---------- */
+.xula-hero-cinematic__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--xula-hero-cinematic-overlay-color) calc(var(--xula-hero-cinematic-overlay-opacity) * 70%), transparent) 0%,
+    color-mix(in srgb, var(--xula-hero-cinematic-overlay-color) calc(var(--xula-hero-cinematic-overlay-opacity) * 100%), transparent) 55%,
+    color-mix(in srgb, var(--xula-hero-cinematic-overlay-color) calc(var(--xula-hero-cinematic-overlay-opacity) * 130%), transparent) 100%
+  );
+}
+
+/* ---------- Content ---------- */
+.xula-hero-cinematic__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 4rem 2rem;
+  margin: auto 0;
+}
+
+.xula-hero-cinematic--valign-top .xula-hero-cinematic__content {
+  margin-top: 4rem;
+  margin-bottom: auto;
+}
+
+.xula-hero-cinematic--valign-center .xula-hero-cinematic__content {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.xula-hero-cinematic--valign-bottom .xula-hero-cinematic__content {
+  margin-top: auto;
+  margin-bottom: 4rem;
+}
+
+.xula-hero-cinematic--align-left .xula-hero-cinematic__content {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.xula-hero-cinematic--align-center .xula-hero-cinematic__content {
+  align-items: center;
+  text-align: center;
+}
+
+.xula-hero-cinematic--align-right .xula-hero-cinematic__content {
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* ---------- Heading ---------- */
+.xula-hero-cinematic__heading {
+  font-family: 'Roanne', var(--primary-font), 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 600;
+  font-size: clamp(2.6rem, 9vw, 6.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  max-width: 20ch;
+  margin: 0 0 2.4rem;
+  text-wrap: balance;
+}
+
+/* ---------- Actions ---------- */
+.xula-hero-cinematic__actions {
+  display: flex;
+  gap: 1.4rem;
+  flex-wrap: wrap;
+}
+
+.xula-hero-cinematic--align-center .xula-hero-cinematic__actions {
+  justify-content: center;
+}
+
+.xula-hero-cinematic--align-right .xula-hero-cinematic__actions {
+  justify-content: flex-end;
+}
+
+.xula-hero-cinematic__btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.4rem 2.6rem;
+  border-radius: 999px;
+  font-family: var(--secondary-font);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color .5s cubic-bezier(.16, 1, .3, 1),
+    border-color .5s cubic-bezier(.16, 1, .3, 1),
+    transform .5s cubic-bezier(.16, 1, .3, 1);
+}
+
+.xula-hero-cinematic__btn span {
+  position: relative;
+  z-index: 2;
+}
+
+.xula-hero-cinematic__btn:hover {
+  transform: translateY(-2px);
+}
+
+.xula-hero-cinematic__btn:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+/* Primary CTA: brand accent fill */
+.xula-hero-cinematic__btn--primary {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #ffffff;
+}
+
+.xula-hero-cinematic__btn--primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent-secondary);
+  transform: translateY(100%);
+  transition: transform .65s cubic-bezier(.16, 1, .3, 1);
+  z-index: -1;
+}
+
+.xula-hero-cinematic__btn--primary:hover::before {
+  transform: translateY(0);
+}
+
+.xula-hero-cinematic__btn--primary:hover {
+  border-color: var(--accent-secondary);
+}
+
+/* Secondary CTA: mirrors the site-wide .xula-btn--secondary text + underline
+   pattern (assets/custom.css), recolored for legibility over dark media. */
+.xula-hero-cinematic__btn--secondary {
+  overflow: visible;
+  isolation: auto;
+  background: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  color: #ffffff;
+}
+
+.xula-hero-cinematic__btn--secondary::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .55s cubic-bezier(.16, 1, .3, 1);
+}
+
+.xula-hero-cinematic__btn--secondary:hover {
+  transform: none;
+  color: #ffffff;
+}
+
+.xula-hero-cinematic__btn--secondary:hover::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Play / pause toggle (a11y control for autoplay video) ---------- */
+.xula-hero-cinematic__toggle {
+  position: absolute;
+  z-index: 3;
+  right: 1.6rem;
+  bottom: 1.6rem;
+  width: 4.4rem;
+  height: 4.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: color-mix(in srgb, #24170f 40%, transparent);
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  cursor: pointer;
+}
+
+.xula-hero-cinematic__toggle:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+.xula-hero-cinematic__toggle-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.xula-hero-cinematic__toggle-icon--pause {
+  display: block;
+  border-left: 0.4rem solid #ffffff;
+  border-right: 0.4rem solid #ffffff;
+}
+
+.xula-hero-cinematic__toggle-icon--play {
+  display: none;
+  border-top: 0.7rem solid transparent;
+  border-bottom: 0.7rem solid transparent;
+  border-left: 1.1rem solid #ffffff;
+  margin-left: 0.2rem;
+}
+
+.xula-hero-cinematic__toggle[aria-pressed="true"] .xula-hero-cinematic__toggle-icon--pause {
+  display: none;
+}
+
+.xula-hero-cinematic__toggle[aria-pressed="true"] .xula-hero-cinematic__toggle-icon--play {
+  display: block;
+}
+
+/* ---------- States ---------- */
+.xula-hero-cinematic--video-blocked .xula-hero-cinematic__video {
+  opacity: 0;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .xula-hero-cinematic__video {
+    display: none;
+  }
+
+  .xula-hero-cinematic__poster--mobile-only {
+    display: block !important;
+  }
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 750px) {
+  .xula-hero-cinematic__content {
+    padding: 6rem 6rem;
+  }
+
+  .xula-hero-cinematic__poster--mobile-only {
+    display: none;
+  }
+
+  .xula-hero-cinematic__video--desktop-only {
+    display: block;
+  }
+
+  .xula-hero-cinematic__btn {
+    font-size: 1.6rem;
+  }
+}
+
+@media (min-width: 1400px) {
+  .xula-hero-cinematic__content {
+    padding: 8rem 10rem;
+  }
+}

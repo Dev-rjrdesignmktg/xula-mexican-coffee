@@ -1,0 +1,330 @@
+{{ 'xula-hero-cinematic.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-hero-cinematic.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign poster_image = section.settings.video_poster | default: section.settings.image
+  assign heading_text = section.settings.heading | strip_html
+  assign overlay_opacity = section.settings.overlay_opacity | times: 1.0 | divided_by: 100.0
+-%}
+
+<section
+  class="
+    xula-hero-cinematic
+    xula-hero-cinematic--height-{{ section.settings.section_height }}
+    xula-hero-cinematic--align-{{ section.settings.text_position }}
+    xula-hero-cinematic--valign-{{ section.settings.vertical_position }}
+  "
+  style="--xula-hero-cinematic-overlay-color: {{ section.settings.overlay_color }}; --xula-hero-cinematic-overlay-opacity: {{ overlay_opacity }};"
+  data-disable-video-mobile="{{ section.settings.disable_video_mobile }}"
+  aria-label="{{ heading_text | escape }}"
+>
+
+  <div class="xula-hero-cinematic__media">
+
+    {% if section.settings.background_type == 'video' and section.settings.video != null %}
+
+      {% if section.settings.disable_video_mobile and poster_image != blank %}
+        <img
+          class="xula-hero-cinematic__poster xula-hero-cinematic__poster--mobile-only"
+          src="{{ poster_image | image_url: width: 1600 }}"
+          srcset="
+            {{ poster_image | image_url: width: 750 }} 750w,
+            {{ poster_image | image_url: width: 1100 }} 1100w,
+            {{ poster_image | image_url: width: 1600 }} 1600w
+          "
+          sizes="100vw"
+          alt="{{ section.settings.image_alt | default: heading_text | escape }}"
+          loading="eager"
+          fetchpriority="high"
+          width="1600"
+          height="900"
+        >
+      {% endif %}
+
+      <video
+        class="xula-hero-cinematic__video{% if section.settings.disable_video_mobile %} xula-hero-cinematic__video--desktop-only{% endif %}"
+        {% if poster_image != blank %}
+          poster="{{ poster_image | image_url: width: 1600 }}"
+        {% endif %}
+        muted
+        loop
+        playsinline
+        disablepictureinpicture
+        preload="none"
+        aria-hidden="true"
+        tabindex="-1"
+      >
+        {% for source in section.settings.video.sources %}
+          <source data-src="{{ source.url }}" type="{{ source.mime_type }}">
+        {% endfor %}
+      </video>
+
+    {% elsif section.settings.background_type == 'image' and section.settings.image != null %}
+
+      <img
+        class="xula-hero-cinematic__image"
+        src="{{ section.settings.image | image_url: width: 1600 }}"
+        srcset="
+          {{ section.settings.image | image_url: width: 750 }} 750w,
+          {{ section.settings.image | image_url: width: 1100 }} 1100w,
+          {{ section.settings.image | image_url: width: 1600 }} 1600w,
+          {{ section.settings.image | image_url: width: 2400 }} 2400w
+        "
+        sizes="100vw"
+        alt="{{ section.settings.image_alt | default: heading_text | escape }}"
+        loading="eager"
+        fetchpriority="high"
+        width="1600"
+        height="900"
+      >
+
+    {% endif %}
+
+    <div class="xula-hero-cinematic__overlay" aria-hidden="true"></div>
+  </div>
+
+  <div class="xula-hero-cinematic__content">
+
+    {% if section.settings.heading != blank %}
+      <h1 class="xula-hero-cinematic__heading">
+        {{ section.settings.heading }}
+      </h1>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="xula-hero-cinematic__actions">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'button' %}
+              {% if block.settings.label != blank %}
+                <a
+                  href="{{ block.settings.link }}"
+                  class="xula-hero-cinematic__btn xula-hero-cinematic__btn--{{ block.settings.style }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <span>{{ block.settings.label }}</span>
+                </a>
+              {% endif %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </div>
+
+  {% if section.settings.background_type == 'video' and section.settings.video != null %}
+    <button
+      type="button"
+      class="xula-hero-cinematic__toggle"
+      aria-pressed="false"
+      aria-label="{{ 'sections.xula_hero_cinematic.pause_video' | t: default: 'Pausar video de fondo' }}"
+      data-label-pause="{{ 'sections.xula_hero_cinematic.pause_video' | t: default: 'Pausar video de fondo' }}"
+      data-label-play="{{ 'sections.xula_hero_cinematic.play_video' | t: default: 'Reproducir video de fondo' }}"
+    >
+      <span class="xula-hero-cinematic__toggle-icon xula-hero-cinematic__toggle-icon--pause" aria-hidden="true"></span>
+      <span class="xula-hero-cinematic__toggle-icon xula-hero-cinematic__toggle-icon--play" aria-hidden="true"></span>
+    </button>
+  {% endif %}
+
+</section>
+
+{% if section.settings.background_type == 'video' and section.settings.video != null %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      "name": {{ heading_text | default: shop.name | json }},
+      "description": {{ heading_text | default: shop.name | json }},
+      "thumbnailUrl": [{{ poster_image | image_url: width: 1600 | prepend: 'https:' | json }}],
+      {% if section.settings.video_upload_date != blank %}
+        "uploadDate": {{ section.settings.video_upload_date | json }},
+      {% endif %}
+      "contentUrl": {{ section.settings.video.sources.last.url | prepend: 'https:' | json }}
+    }
+  </script>
+{% elsif section.settings.background_type == 'image' and section.settings.image != null %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ImageObject",
+      "contentUrl": {{ section.settings.image | image_url: width: 1600 | prepend: 'https:' | json }},
+      "description": {{ section.settings.image_alt | default: heading_text | json }}
+    }
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Xula Hero Cinematic",
+  "tag": "section",
+  "class": "section xula-hero-cinematic-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Fondo"
+    },
+    {
+      "type": "select",
+      "id": "background_type",
+      "label": "Tipo de fondo",
+      "options": [
+        { "value": "image", "label": "Imagen" },
+        { "value": "video", "label": "Video" }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagen de fondo"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Texto alternativo de la imagen",
+      "info": "Describe la imagen para lectores de pantalla y SEO."
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video de fondo"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster",
+      "label": "Imagen de respaldo (poster / móvil)",
+      "info": "Se muestra mientras carga el video y como fondo en móvil si el video está desactivado."
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_video_mobile",
+      "label": "Desactivar video en móvil",
+      "info": "Recomendado: mejora la velocidad de carga y ahorra datos en dispositivos móviles, mostrando la imagen de respaldo en su lugar.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "video_upload_date",
+      "label": "Fecha de publicación del video (ISO 8601)",
+      "info": "Opcional. Ej: 2026-01-15. Mejora los datos estructurados (JSON-LD) para SEO."
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Color del overlay",
+      "default": "#24170f"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Opacidad del overlay",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Contenido"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Crafted in Mexico. Brewed for Ritual."
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Alineación horizontal del texto",
+      "options": [
+        { "value": "left", "label": "Izquierda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "right", "label": "Derecha" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "vertical_position",
+      "label": "Alineación vertical del contenido",
+      "options": [
+        { "value": "top", "label": "Arriba" },
+        { "value": "center", "label": "Centro" },
+        { "value": "bottom", "label": "Abajo" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Altura de la sección"
+    },
+    {
+      "type": "select",
+      "id": "section_height",
+      "label": "Altura",
+      "options": [
+        { "value": "full", "label": "Pantalla completa (100svh)" },
+        { "value": "large", "label": "Grande (85svh)" },
+        { "value": "auto", "label": "Según contenido" }
+      ],
+      "default": "full"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "Botón",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Texto del botón"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Enlace"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Estilo",
+          "options": [
+            { "value": "primary", "label": "Primario" },
+            { "value": "secondary", "label": "Secundario" }
+          ],
+          "default": "primary"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [
+    {
+      "name": "Xula Hero Cinematic",
+      "blocks": [
+        {
+          "type": "button",
+          "settings": {
+            "label": "Shop Coffee",
+            "style": "primary"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "Our Story",
+            "style": "secondary"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
