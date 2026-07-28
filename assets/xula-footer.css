@@ -1,0 +1,485 @@
+/* ==========================================================================
+   Xula Footer — mobile first, BEM
+   ========================================================================== */
+
+.xula-footer {
+  --xula-footer-ink: #ffffff;
+  --xula-footer-border: color-mix(in srgb, #ffffff 14%, transparent);
+  position: relative;
+  background: var(--accent);
+  color: var(--xula-footer-ink);
+  border-top: 3px solid transparent;
+  border-image: var(--xula-gold) 1;
+  padding: 48px 0 28px;
+}
+
+.xula-footer__container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ---------- Top: brand + nav ---------- */
+
+.xula-footer__top {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.xula-footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 40ch;
+}
+
+.xula-footer__logo {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.xula-footer__wordmark {
+  font-family: var(--primary-font);
+  font-weight: 600;
+  font-size: 2.2rem;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--xula-footer-ink);
+}
+
+.xula-footer__manifesto {
+  font-family: var(--secondary-font);
+  font-size: 1.35rem;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--xula-footer-ink) 78%, transparent);
+  margin: 0;
+}
+
+.xula-footer__manifesto p {
+  margin: 0;
+}
+
+.xula-footer__socials.list-social {
+  gap: 14px;
+  padding: 0;
+  margin: 4px 0 0;
+}
+
+.xula-footer__socials .list-social__link {
+  color: var(--xula-footer-ink);
+  transition: color 0.25s ease;
+}
+
+.xula-footer__socials .list-social__link:hover,
+.xula-footer__socials .list-social__link:focus-visible {
+  color: var(--xula-gold-solid);
+}
+
+/* ---------- Nav ---------- */
+
+.xula-footer__nav-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.xula-footer__nav-group {
+  border-bottom: 1px solid var(--xula-footer-border);
+}
+
+.xula-footer__nav-group:first-child {
+  border-top: 1px solid var(--xula-footer-border);
+}
+
+.xula-footer__nav-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  list-style: none;
+  cursor: pointer;
+  padding: 16px 4px;
+  font-family: var(--secondary-font);
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--xula-footer-ink);
+}
+
+.xula-footer__nav-heading::-webkit-details-marker {
+  display: none;
+}
+
+.xula-footer__nav-caret {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  transition: transform 0.25s ease;
+}
+
+.xula-footer__nav-group[open] > .xula-footer__nav-heading .xula-footer__nav-caret {
+  transform: rotate(180deg);
+}
+
+.xula-footer__links {
+  list-style: none;
+  padding: 0 4px 18px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.xula-footer__link {
+  position: relative;
+  display: inline-block;
+  font-family: var(--secondary-font);
+  font-size: 1.25rem;
+  color: color-mix(in srgb, var(--xula-footer-ink) 80%, transparent);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+/* underline: grows from center, same mechanic as .header__menu-item span::after */
+.xula-footer__link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  width: 0;
+  height: 1.7px;
+  border-radius: 999px;
+  background: var(--xula-gold-solid);
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: width 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.35s ease;
+}
+
+.xula-footer__link:hover,
+.xula-footer__link:focus-visible {
+  color: var(--xula-gold-solid);
+}
+
+.xula-footer__link:hover::after,
+.xula-footer__link:focus-visible::after {
+  width: 100%;
+  opacity: 1;
+}
+
+.xula-footer__link[aria-current='page'] {
+  font-weight: 700;
+  color: var(--xula-gold-solid);
+}
+
+.xula-footer__link[aria-current='page']::after {
+  width: 100%;
+  opacity: 1;
+}
+
+/* ---------- Utility row: localization + payment ---------- */
+
+.xula-footer__utility {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 28px;
+  border-top: 1px solid var(--xula-footer-border);
+}
+
+.xula-footer__localization {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.xula-footer__field {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.xula-footer__select-form {
+  display: block;
+}
+
+.xula-footer__select-label {
+  display: block;
+  font-family: var(--secondary-font);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--xula-footer-ink) 65%, transparent);
+  margin-bottom: 6px;
+}
+
+.xula-footer__select-wrapper {
+  position: relative;
+}
+
+.xula-footer__select {
+  width: 100%;
+  appearance: none;
+  background: color-mix(in srgb, #ffffff 8%, transparent);
+  border: 1px solid var(--xula-footer-border);
+  border-radius: 10px;
+  color: var(--xula-footer-ink);
+  font-family: var(--secondary-font);
+  font-size: 1.3rem;
+  padding: 10px 38px 10px 14px;
+  cursor: pointer;
+}
+
+.xula-footer__select:focus-visible {
+  outline: 2px solid var(--xula-gold-solid);
+  outline-offset: 2px;
+  border-color: var(--xula-gold-solid);
+}
+
+.xula-footer__select[aria-busy='true'] {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.xula-footer__select-caret {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: color-mix(in srgb, var(--xula-footer-ink) 70%, transparent);
+}
+
+.xula-footer__select-submit {
+  margin-top: 8px;
+  background: transparent;
+  border: 1px solid var(--xula-footer-border);
+  color: var(--xula-footer-ink);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-family: var(--secondary-font);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.xula-footer__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.xula-footer__payment-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.xula-footer__payment-item {
+  display: flex;
+  align-items: center;
+}
+
+.xula-footer__payment-icon {
+  width: 40px;
+  height: auto;
+  border-radius: 4px;
+}
+
+/* ---------- Bottom: copyright + legal ---------- */
+
+.xula-footer__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--xula-footer-border);
+  font-family: var(--font-code-family);
+}
+
+.xula-footer__copyright {
+  font-size: 1.1rem;
+  color: color-mix(in srgb, var(--xula-footer-ink) 60%, transparent);
+  margin: 0;
+}
+
+.xula-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.xula-footer__legal-link {
+  position: relative;
+  display: inline-block;
+  font-size: 1.05rem;
+  color: color-mix(in srgb, var(--xula-footer-ink) 60%, transparent);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.xula-footer__legal-link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  width: 0;
+  height: 1.5px;
+  border-radius: 999px;
+  background: var(--xula-gold-solid);
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: width 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.35s ease;
+}
+
+.xula-footer__legal-link:hover,
+.xula-footer__legal-link:focus-visible {
+  color: var(--xula-gold-solid);
+}
+
+.xula-footer__legal-link:hover::after,
+.xula-footer__legal-link:focus-visible::after {
+  width: 100%;
+  opacity: 1;
+}
+
+/* ---------- Back to top (dark contrast block, pink on hover) ---------- */
+
+.xula-footer__back-to-top {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  color: #ffffff;
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--bg-secondary) 45%, transparent);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease, background 0.25s ease;
+}
+
+.xula-footer__back-to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.xula-footer__back-to-top svg {
+  width: 18px;
+  height: 18px;
+}
+
+.xula-footer__back-to-top:hover,
+.xula-footer__back-to-top:focus-visible {
+  background: var(--accent);
+}
+
+.xula-footer__back-to-top:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-footer__back-to-top {
+    transition: opacity 0.01ms, visibility 0.01ms;
+  }
+}
+
+/* ---------- Breakpoints ---------- */
+
+@media (min-width: 750px) {
+  .xula-footer {
+    padding: 64px 0 32px;
+  }
+
+  .xula-footer__top {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 48px;
+  }
+
+  .xula-footer__brand {
+    flex: 0 0 32%;
+  }
+
+  .xula-footer__nav {
+    flex: 1;
+  }
+
+  .xula-footer__nav-columns {
+    flex-direction: row;
+    gap: 32px;
+  }
+
+  .xula-footer__nav-group {
+    flex: 1;
+    border: none;
+  }
+
+  .xula-footer__nav-group:first-child {
+    border: none;
+  }
+
+  .xula-footer__nav-heading {
+    cursor: default;
+    padding: 0 0 16px;
+  }
+
+  .xula-footer__nav-caret {
+    display: none;
+  }
+
+  /* Desktop: link columns are always expanded, independent of the
+     details/summary open state used for the mobile accordion. */
+  .xula-footer__links {
+    display: flex !important;
+    padding: 0;
+  }
+
+  .xula-footer__utility {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .xula-footer__localization {
+    flex-wrap: nowrap;
+  }
+
+  .xula-footer__field {
+    flex: 0 0 220px;
+  }
+
+  .xula-footer__bottom {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: 1200px) {
+  .xula-footer__brand {
+    flex: 0 0 28%;
+  }
+}
