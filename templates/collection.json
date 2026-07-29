@@ -67,7 +67,7 @@
             "text": "",
             "cta_label": "",
             "cta_link": "",
-            "accent_color": "#E8318A",
+            "accent_color": "#e8318a",
             "position": "left",
             "overlay_style": "soft"
           }
@@ -201,12 +201,57 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "xula_product_catalog_CMtr4b": {
+      "type": "xula-product-catalog",
+      "blocks": {
+        "category_97zDPE": {
+          "type": "category",
+          "settings": {
+            "collection": "coffee",
+            "label": "Specialty Coffee",
+            "products_to_show": 12
+          }
+        },
+        "category_xqnrmw": {
+          "type": "category",
+          "settings": {
+            "collection": "chocolate",
+            "label": "Artisan Chocolate",
+            "products_to_show": 12
+          }
+        },
+        "category_48LxeJ": {
+          "type": "category",
+          "settings": {
+            "collection": "muffins",
+            "label": "Artisan Muffins",
+            "products_to_show": 12
+          }
+        }
+      },
+      "block_order": [
+        "category_97zDPE",
+        "category_xqnrmw",
+        "category_48LxeJ"
+      ],
+      "name": "Xula Product Catalog",
+      "settings": {
+        "eyebrow": "Catalog",
+        "heading": "Explore our specialty coffee",
+        "subheading": "Filter by category and discover the intensity, roast, and flavor notes of every batch.",
+        "all_label": "All",
+        "all_products_limit": 48,
+        "items_per_page": 8,
+        "enable_structured_data": true
+      }
     }
   },
   "order": [
     "xula_promo_carousel_qJkDL9",
     "xula_trust_cards_K8NBhF",
     "banner",
-    "product-grid"
+    "product-grid",
+    "xula_product_catalog_CMtr4b"
   ]
 }
