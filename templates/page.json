@@ -9,56 +9,105 @@
  */
 {
   "sections": {
-    "image_banner_fUw9CC": {
-      "type": "image-banner",
+    "xula_hero_cinematic_8LwAYy": {
+      "type": "xula-hero-cinematic",
       "blocks": {
-        "heading_DniyiR": {
-          "type": "heading",
+        "button_gYMWLk": {
+          "type": "button",
           "settings": {
-            "heading": "Image banner",
-            "heading_size": "h1"
+            "label": "Shop Coffee",
+            "link": "",
+            "style": "primary"
           }
         },
-        "text_EfwDrJ": {
-          "type": "text",
+        "button_qF4VcH": {
+          "type": "button",
           "settings": {
-            "text": "Give customers details about the banner image(s) or content on the template.",
-            "text_style": "body"
-          }
-        },
-        "buttons_8zEmEf": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Button label",
-            "button_link_1": "",
-            "button_style_secondary_1": false,
-            "button_label_2": "Button label",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "label": "Our Story",
+            "link": "",
+            "style": "secondary"
           }
         }
       },
       "block_order": [
-        "heading_DniyiR",
-        "text_EfwDrJ",
-        "buttons_8zEmEf"
+        "button_gYMWLk",
+        "button_qF4VcH"
       ],
-      "name": "t:sections.image-banner.presets.name",
+      "name": "Xula Hero Cinematic",
       "settings": {
-        "image_overlay_opacity": 0,
-        "image_height": "medium",
-        "image_behavior": "none",
-        "desktop_content_position": "bottom-center",
-        "desktop_content_alignment": "left",
-        "show_text_box": false,
-        "color_scheme": "scheme-2",
-        "stack_images_on_mobile": true,
-        "mobile_content_alignment": "center",
-        "show_text_below": true
+        "background_type": "image",
+        "image": "shopify://shop_images/IMG_5198.jpg",
+        "image_alt": "",
+        "disable_video_mobile": true,
+        "video_upload_date": "",
+        "overlay_color": "#24170f",
+        "overlay_opacity": 80,
+        "heading": "Crafted in Mexico. Brewed for Ritual.",
+        "text_position": "left",
+        "vertical_position": "center",
+        "section_height": "full"
+      }
+    },
+    "xula_about_bzTTFT": {
+      "type": "xula-about",
+      "blocks": {
+        "chapter_yRTCgc": {
+          "type": "chapter",
+          "settings": {
+            "image": "shopify://shop_images/IMG_5207.jpg",
+            "image_alt": "",
+            "image_position": "auto",
+            "label": "2017 · The Beginning",
+            "heading": "A Family Ritual",
+            "text": "<p>Founded in 2017 by Nelly Garcia, a native of Michoacán, Mexico, Xula Mexican Coffee combines passion and culture to produce specialty products with the highest quality ingredients.</p>"
+          }
+        },
+        "chapter_TQEMPF": {
+          "type": "chapter",
+          "settings": {
+            "image": "shopify://shop_images/IMG_5216.jpg",
+            "image_alt": "",
+            "image_position": "auto",
+            "label": "2022 · Growing Roots",
+            "heading": "From the Highlands, With Care",
+            "text": "<p>Not only does Xula specialize in products you can’t get anywhere else, but Xula also values strong working relationships. We know the importance of having direct partnerships with the coffee growers, cacao farmers, and the chocolate makers. We use 100% pure cacao beans from Tabasco, Mexico to create rich, artisan chocolate, and our coffee beans are hand selected, roasted and brewed to the highest standard to create exceptional flavor. Every detail from growing and harvesting to crafting and importing is carefully overseen.</p>"
+          }
+        },
+        "chapter_DfigYp": {
+          "type": "chapter",
+          "settings": {
+            "image": "shopify://shop_images/IMG_5203.jpg",
+            "image_alt": "",
+            "image_position": "auto",
+            "label": "Today · The Ritual Continues",
+            "heading": "One Cup at a Time",
+            "text": "<p>So, whether you’re sipping a dark roast specialty coffee from your mug, or biting into a warm banana espresso and chocolate chip muffin, you will experience all that Xula is – passion, culture and quality.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "chapter_yRTCgc",
+        "chapter_TQEMPF",
+        "chapter_DfigYp"
+      ],
+      "name": "Xula About",
+      "settings": {
+        "eyebrow": "Our Story",
+        "heading": "Every Cup Carries a Story.",
+        "intro": "<p>The humble beginnings of Xula started in Garcia’s own kitchen with her homemade muffins. After years of hard work and collaboration, the business has since expanded to provide a variety of products including specialty Mexican coffees, artisan chocolates and baked goods.</p>",
+        "founding_year": "2020",
+        "location": "Veracruz, México",
+        "cta_heading": "Taste Where We Come From.",
+        "cta_text": "Please Note: We are currently only offering online sales and catering services. Join our mailing list to stay up to date on our upcoming mobile cart and physical location!\n#xulamexicancoffee",
+        "cta_button_label": "Shop the Collection",
+        "cta_button_link": "",
+        "cta_tagline": "Est. 2017 · Veracruz, México",
+        "show_structured_data": true
       }
     },
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "padding_top": 28,
         "padding_bottom": 28
@@ -66,7 +115,8 @@
     }
   },
   "order": [
-    "image_banner_fUw9CC",
+    "xula_hero_cinematic_8LwAYy",
+    "xula_about_bzTTFT",
     "main"
   ]
 }
