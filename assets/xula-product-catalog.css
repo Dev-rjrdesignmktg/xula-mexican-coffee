@@ -552,6 +552,136 @@
 .xula-product-catalog__spec-badge--note-3 { background: var(--info); }
 
 /* ---------------------------------------------------------
+   Carousel — used where cards should scroll instead of stack
+   (e.g. "You may also like"), reusing the same card markup.
+   --------------------------------------------------------- */
+
+.xula-product-catalog__carousel {
+  position: relative;
+  --xpc-per-view: 1;
+  --xpc-gap: 16px;
+}
+
+.xula-product-catalog__viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.xula-product-catalog__track {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: var(--xpc-gap);
+  list-style: none;
+  width: 100%;
+  margin: 0;
+  padding: 4px 4px 12px;
+  transition: transform .5s cubic-bezier(.16, 1, .3, 1);
+  will-change: transform;
+}
+
+.xula-product-catalog__slide {
+  flex: 0 0 auto;
+  width: calc((100% - (var(--xpc-per-view) - 1) * var(--xpc-gap)) / var(--xpc-per-view));
+}
+
+.xula-product-catalog__nav {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  z-index: 3;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--bg-secondary) 15%, transparent);
+  background: rgba(255, 255, 255, .92);
+  color: var(--bg-secondary);
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(36, 23, 15, .12);
+  transition: background-color .25s ease, color .25s ease;
+}
+
+.xula-product-catalog__nav:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.xula-product-catalog__nav--prev {
+  left: -4px;
+}
+
+.xula-product-catalog__nav--next {
+  right: -4px;
+}
+
+.xula-product-catalog__nav:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.xula-product-catalog__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.xula-product-catalog__dots:empty {
+  display: none;
+}
+
+.xula-product-catalog__dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-secondary) 22%, transparent);
+  cursor: pointer;
+  transition: background-color .3s ease, width .3s ease;
+}
+
+.xula-product-catalog__dot:hover {
+  background: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.xula-product-catalog__dot.is-active {
+  width: 24px;
+  background: var(--accent);
+}
+
+.xula-product-catalog__dot:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (min-width: 700px) {
+  .xula-product-catalog__carousel {
+    --xpc-per-view: 2;
+  }
+}
+
+@media (min-width: 990px) {
+  .xula-product-catalog__carousel {
+    --xpc-per-view: 3;
+  }
+
+  .xula-product-catalog__nav {
+    display: flex;
+  }
+}
+
+@media (min-width: 1200px) {
+  .xula-product-catalog__carousel {
+    --xpc-per-view: 4;
+  }
+}
+
+/* ---------------------------------------------------------
    Responsive — tablet / desktop
    --------------------------------------------------------- */
 
@@ -587,7 +717,8 @@
   .xula-product-catalog__card,
   .xula-product-catalog__item,
   .xula-product-catalog__toggle svg,
-  .xula-product-catalog__details {
+  .xula-product-catalog__details,
+  .xula-product-catalog__track {
     transition: none !important;
     animation: none !important;
   }

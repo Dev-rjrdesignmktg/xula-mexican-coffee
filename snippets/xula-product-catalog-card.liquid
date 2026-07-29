@@ -1,6 +1,9 @@
 {%- comment -%}
   Renders one product card for the Xula Product Catalog section.
   Accepts: product, catalog_id
+  Optional: extra_item_class (string appended to the <li> class list),
+            extra_item_attrs (raw string of extra attributes on the <li>,
+            e.g. 'data-xpc-carousel-slide' for carousel contexts)
 {%- endcomment -%}
 
 {%- liquid
@@ -137,9 +140,10 @@
 {%- endif -%}
 
 <li
-  class="xula-product-catalog__item"
+  class="xula-product-catalog__item{% if extra_item_class != blank %} {{ extra_item_class }}{% endif %}"
   data-xpc-item
   data-categories="{{ categories_lower }}"
+  {%- if extra_item_attrs != blank %} {{ extra_item_attrs }}{% endif %}
 >
   <article class="xula-product-catalog__card" data-xpc-card>
 

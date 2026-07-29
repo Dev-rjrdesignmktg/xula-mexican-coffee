@@ -5,10 +5,107 @@
 
 (() => {
   document.querySelectorAll('[data-xpc-root]').forEach((root) => {
+    initRoot(root);
+
+    // Some roots (e.g. Dawn's <product-recommendations>) inject their
+    // cards asynchronously — an IntersectionObserver-triggered fetch()
+    // that replaces innerHTML with no event fired. Watch for that and
+    // initialize once the real content lands.
+    if (!root.querySelector('[data-xpc-item]')) {
+      const lazyObserver = new MutationObserver(() => {
+        if (root.querySelector('[data-xpc-item]')) {
+          lazyObserver.disconnect();
+          initRoot(root);
+        }
+      });
+      lazyObserver.observe(root, { childList: true, subtree: true });
+    }
+  });
+
+  function initRoot(root) {
     initGrid(root);
+    root.querySelectorAll('[data-xpc-carousel]').forEach(initCarousel);
     root.querySelectorAll('[data-xpc-card]').forEach(initDetailsToggle);
     root.querySelectorAll('[data-xpc-add-form]').forEach(initAddToCartForm);
-  });
+  }
+
+  /* -----------------------------------------------------
+     Carousel — paginated slider with dot navigation, used
+     where cards should scroll instead of stacking (e.g. the
+     "You may also like" strip on the product page).
+     ----------------------------------------------------- */
+  function initCarousel(carousel) {
+    const viewport = carousel.querySelector('.xula-product-catalog__viewport');
+    const track = carousel.querySelector('[data-xpc-carousel-track]');
+    const prevBtn = carousel.querySelector('[data-xpc-carousel-prev]');
+    const nextBtn = carousel.querySelector('[data-xpc-carousel-next]');
+    const dotsContainer = carousel.parentElement?.querySelector('[data-xpc-carousel-dots]');
+    if (!viewport || !track) return;
+
+    const slides = Array.from(track.querySelectorAll('[data-xpc-carousel-slide]'));
+    if (!slides.length) return;
+
+    let current = 0;
+    let totalPages = 1;
+
+    const perView = () => {
+      const value = parseInt(getComputedStyle(carousel).getPropertyValue('--xpc-per-view'), 10);
+      return Number.isFinite(value) && value > 0 ? value : 1;
+    };
+
+    const buildDots = () => {
+      if (!dotsContainer) return;
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < totalPages; i += 1) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'xula-product-catalog__dot';
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-label', `Go to slide group ${i + 1}`);
+        dot.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(dot);
+      }
+    };
+
+    const updateControls = () => {
+      const dots = dotsContainer ? Array.from(dotsContainer.children) : [];
+      dots.forEach((dot, i) => {
+        const active = i === current;
+        dot.classList.toggle('is-active', active);
+        dot.setAttribute('aria-selected', String(active));
+      });
+
+      if (prevBtn) prevBtn.disabled = current === 0;
+      if (nextBtn) nextBtn.disabled = current === totalPages - 1;
+      if (dotsContainer) dotsContainer.hidden = totalPages <= 1;
+    };
+
+    const goTo = (index) => {
+      current = Math.max(0, Math.min(index, totalPages - 1));
+      const viewportWidth = viewport.clientWidth;
+      const maxOffset = Math.max(0, track.scrollWidth - viewportWidth);
+      const offset = Math.min(current * viewportWidth, maxOffset);
+      track.style.transform = `translateX(-${offset}px)`;
+      updateControls();
+    };
+
+    const recalculate = () => {
+      totalPages = Math.max(1, Math.ceil(slides.length / perView()));
+      buildDots();
+      goTo(Math.min(current, totalPages - 1));
+    };
+
+    prevBtn?.addEventListener('click', () => goTo(current - 1));
+    nextBtn?.addEventListener('click', () => goTo(current + 1));
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(recalculate, 150);
+    });
+
+    recalculate();
+  }
 
   /* -----------------------------------------------------
      Grid — category filters (WAI-ARIA radiogroup pattern)
