@@ -1,0 +1,235 @@
+{%- comment -%}
+  Xula Product Meta — coffee profile (Roast, Intensity, Body, Acidity, Notes)
+  Usage:
+    {% render 'xula-product-meta', product: product %}
+    {% render 'xula-product-meta', product: product, compact: true, heading: false %}
+    {% render 'xula-product-meta', product: product, scope_selector: '#quick-add-modal form' %}
+
+  Params:
+    product         required — the product object
+    heading         optional string, default "Coffee profile". Pass false/blank to hide.
+    compact         optional boolean — tighter layout for quick-buy/quick-add contexts
+    scope_selector  optional CSS selector string pointing JS at the add-to-cart form
+                    when this snippet is not rendered inside/next to that form
+                    (e.g. a quick-add modal injected elsewhere in the DOM)
+
+  Data source (in order of precedence): product.metafields.custom.*, then product tags.
+    Roast:    custom.roast_level (text, e.g. "Medium", "Dark Roast") | tags "roast:Medium" / "tueste:Medio"
+    Intensity:custom.intensity (number, 1-10)                        | tags "intensity:7" / "intensidad:7"
+    Body:     custom.body (text, e.g. "Creamy, long, and high.")     | tags "body:..." / "cuerpo:..."
+    Acidity:  custom.acidity (text, e.g. "Bright and citric.")       | tags "acidity:..." / "acidez:..."
+    Notes:    custom.tasting_notes                                  | tags "note:Chocolate" / "nota:Chocolate" / "flavor:" / "sabor:"
+{%- endcomment -%}
+
+{%- liquid
+  assign roast_level = product.metafields.custom.roast_level
+  assign mf_intensity = product.metafields.custom.intensity
+  assign mf_body = product.metafields.custom.body
+  assign mf_acidity = product.metafields.custom.acidity
+  assign tasting_notes_mf = product.metafields.custom.tasting_notes
+
+  assign intensity = blank
+  assign body_value = blank
+  assign acidity_value = blank
+  assign notes_array = blank
+
+  if roast_level == blank
+    for tag in product.tags
+      assign tag_down = tag | downcase
+      if tag_down contains 'roast:' or tag_down contains 'tueste:'
+        assign roast_level = tag | split: ':' | last | strip
+        break
+      endif
+    endfor
+  endif
+  if roast_level != blank
+    assign roast_level = roast_level | strip
+  endif
+
+  assign roast_display = roast_level
+  assign roast_class = 'unspecified'
+  if roast_level != blank
+    assign roast_lower = roast_level | downcase
+    if roast_lower contains 'medium' and roast_lower contains 'dark'
+      assign roast_class = 'medium-dark'
+    elsif roast_lower contains 'light'
+      assign roast_class = 'light'
+    elsif roast_lower contains 'medium'
+      assign roast_class = 'medium'
+    elsif roast_lower contains 'dark'
+      assign roast_class = 'dark'
+    endif
+
+    unless roast_lower contains 'roast'
+      assign roast_display = roast_level | append: ' Roast'
+    endunless
+  endif
+
+  if mf_intensity != blank
+    assign intensity = mf_intensity | times: 1 | at_least: 1 | at_most: 10
+  else
+    for tag in product.tags
+      assign tag_down = tag | downcase
+      if tag_down contains 'intensity:' or tag_down contains 'intensidad:'
+        assign intensity = tag | split: ':' | last | strip | times: 1 | at_least: 1 | at_most: 10
+        break
+      endif
+    endfor
+  endif
+
+  if mf_body != blank
+    assign body_value = mf_body | strip
+  else
+    for tag in product.tags
+      assign tag_down = tag | downcase
+      if tag_down contains 'body:' or tag_down contains 'cuerpo:'
+        assign body_value = tag | split: ':' | last | strip
+        break
+      endif
+    endfor
+  endif
+
+  if mf_acidity != blank
+    assign acidity_value = mf_acidity | strip
+  else
+    for tag in product.tags
+      assign tag_down = tag | downcase
+      if tag_down contains 'acidity:' or tag_down contains 'acidez:'
+        assign acidity_value = tag | split: ':' | last | strip
+        break
+      endif
+    endfor
+  endif
+
+  if tasting_notes_mf != blank
+    if tasting_notes_mf.type == 'list.single_line_text_field'
+      assign notes_array = tasting_notes_mf.value
+    else
+      assign notes_array = tasting_notes_mf | split: ','
+    endif
+  else
+    assign notes_from_tags = ''
+    for tag in product.tags
+      assign tag_down = tag | downcase
+      if tag_down contains 'note:' or tag_down contains 'flavor:' or tag_down contains 'nota:' or tag_down contains 'sabor:'
+        assign note_value = tag | split: ':' | last | strip
+        assign notes_from_tags = notes_from_tags | append: note_value | append: '|XPM_NOTE|'
+      endif
+    endfor
+    if notes_from_tags != blank
+      assign notes_array = notes_from_tags | split: '|XPM_NOTE|'
+    endif
+  endif
+
+  assign has_any = false
+  if roast_display != blank or intensity != blank or body_value != blank or acidity_value != blank or notes_array != blank
+    assign has_any = true
+  endif
+
+  assign is_compact = false
+  if compact
+    assign is_compact = true
+  endif
+
+  assign meta_heading = 'Coffee profile'
+  if heading == false or heading == 'false'
+    assign meta_heading = blank
+  elsif heading != blank
+    assign meta_heading = heading
+  endif
+
+  assign root_id = 'XulaPM-' | append: product.id | append: '-' | append: section.id
+-%}
+
+{%- if has_any -%}
+  {%- assign prop_parts = '' -%}
+  {%- if roast_display != blank -%}
+    {%- capture prop -%}"Roast Level":{{ roast_display | json }}{%- endcapture -%}
+    {%- assign prop_parts = prop_parts | append: prop | append: '|XPM_PROP|' -%}
+  {%- endif -%}
+  {%- if intensity != blank -%}
+    {%- capture prop -%}"Intensity":{{ intensity | append: '/10' | json }}{%- endcapture -%}
+    {%- assign prop_parts = prop_parts | append: prop | append: '|XPM_PROP|' -%}
+  {%- endif -%}
+  {%- if body_value != blank -%}
+    {%- capture prop -%}"Body":{{ body_value | json }}{%- endcapture -%}
+    {%- assign prop_parts = prop_parts | append: prop | append: '|XPM_PROP|' -%}
+  {%- endif -%}
+  {%- if acidity_value != blank -%}
+    {%- capture prop -%}"Acidity":{{ acidity_value | json }}{%- endcapture -%}
+    {%- assign prop_parts = prop_parts | append: prop | append: '|XPM_PROP|' -%}
+  {%- endif -%}
+  {%- if notes_array != blank -%}
+    {%- capture prop -%}"Flavor Notes":{{ notes_array | join: ', ' | json }}{%- endcapture -%}
+    {%- assign prop_parts = prop_parts | append: prop | append: '|XPM_PROP|' -%}
+  {%- endif -%}
+  {%- capture props_json -%}{ {{ prop_parts | split: '|XPM_PROP|' | join: ',' }} }{%- endcapture -%}
+
+  <div
+    class="xula-product-meta{% if is_compact %} xula-product-meta--compact{% endif %}"
+    id="{{ root_id }}"
+    data-xpm-root
+    data-xpm-properties="{{ props_json | strip_newlines | strip | escape }}"
+    {%- if scope_selector != blank %}
+    data-xpm-scope-selector="{{ scope_selector | escape }}"
+    {%- endif %}
+    role="group"
+    aria-label="{{ meta_heading | default: 'Coffee profile' }}"
+  >
+    {%- if meta_heading != blank -%}
+      <p class="xula-product-meta__heading">{{ meta_heading }}</p>
+    {%- endif -%}
+
+    <ul class="xula-product-meta__list">
+      {%- if roast_display != blank -%}
+        <li class="xula-product-meta__row xula-product-meta__row--roast">
+          <span class="xula-product-meta__label">Roast</span>
+          <span class="xula-product-meta__roast">
+            <span class="xula-product-meta__roast-dot xula-product-meta__roast-dot--{{ roast_class }}" aria-hidden="true"></span>
+            {{ roast_display }}
+          </span>
+        </li>
+      {%- endif -%}
+
+      {%- if intensity != blank -%}
+        <li class="xula-product-meta__row xula-product-meta__row--intensity">
+          <span class="xula-product-meta__label">Intensity</span>
+          <span class="xula-product-meta__meter" role="img" aria-label="Intensity {{ intensity }} of 10">
+            <span class="xula-product-meta__bar" aria-hidden="true">
+              {%- for i in (1..10) -%}
+                <span class="xula-product-meta__seg xula-product-meta__seg--intensity{% if forloop.index <= intensity %} is-filled{% endif %}"></span>
+              {%- endfor -%}
+            </span>
+            <span class="xula-product-meta__value xula-type--code">{{ intensity }}/10</span>
+          </span>
+        </li>
+      {%- endif -%}
+
+      {%- if body_value != blank -%}
+        <li class="xula-product-meta__row xula-product-meta__row--body">
+          <span class="xula-product-meta__label">Body</span>
+          <p class="xula-product-meta__description xula-product-meta__description--body">{{ body_value }}</p>
+        </li>
+      {%- endif -%}
+
+      {%- if acidity_value != blank -%}
+        <li class="xula-product-meta__row xula-product-meta__row--acidity">
+          <span class="xula-product-meta__label">Acidity</span>
+          <p class="xula-product-meta__description xula-product-meta__description--acidity">{{ acidity_value }}</p>
+        </li>
+      {%- endif -%}
+
+      {%- if notes_array != blank -%}
+        <li class="xula-product-meta__row xula-product-meta__row--notes">
+          <span class="xula-product-meta__label">Flavor notes</span>
+          <ul class="xula-product-meta__notes">
+            {%- for note in notes_array -%}
+              {%- assign note_mod = forloop.index0 | modulo: 4 -%}
+              <li class="xula-product-meta__note xula-product-meta__note--{{ note_mod }}">{{ note | strip }}</li>
+            {%- endfor -%}
+          </ul>
+        </li>
+      {%- endif -%}
+    </ul>
+  </div>
+{%- endif -%}
