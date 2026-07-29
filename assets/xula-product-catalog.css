@@ -1,0 +1,594 @@
+/* =========================================================
+   Xula Product Catalog — Category Filters + Coffee Metric Cards
+   Mobile-first, BEM (.xula-product-catalog), vanilla JS hooks
+   ========================================================= */
+
+.xula-product-catalog {
+  padding: 56px 0 64px;
+  background: var(--bg);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.xula-product-catalog__intro {
+  margin-bottom: 28px;
+}
+
+.xula-product-catalog__heading {
+  margin: 0 auto 12px;
+}
+
+.xula-product-catalog__subheading {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------
+   Filters
+   --------------------------------------------------------- */
+
+.xula-product-catalog__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 24px;
+}
+
+.xula-product-catalog__filter {
+  font-family: var(--secondary-font);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--bg-secondary);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--bg-secondary) 20%, transparent);
+  border-radius: 999px;
+  padding: .65rem 1.2rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color .3s ease, color .3s ease, border-color .3s ease;
+}
+
+.xula-product-catalog__filter:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.xula-product-catalog__filter:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.xula-product-catalog__filter.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ---------------------------------------------------------
+   Grid
+   --------------------------------------------------------- */
+
+.xula-product-catalog__grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  align-items: start;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.xula-product-catalog__item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.xula-product-catalog__item[hidden] {
+  display: none;
+}
+
+.xula-product-catalog__item.is-entering {
+  animation: xpc-fade-in .4s cubic-bezier(.16, 1, .3, 1);
+}
+
+@keyframes xpc-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.xula-product-catalog__empty {
+  font-family: var(--secondary-font);
+  color: var(--text);
+  opacity: .6;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.xula-product-catalog__empty[hidden] {
+  display: none;
+}
+
+/* ---------------------------------------------------------
+   Show more
+   --------------------------------------------------------- */
+
+.xula-product-catalog__load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.xula-product-catalog__load-more[hidden] {
+  display: none;
+}
+
+/* ---------------------------------------------------------
+   Card
+   --------------------------------------------------------- */
+
+.xula-product-catalog__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #fff;
+  box-shadow:
+    0 2px 4px rgba(23, 28, 36, .06),
+    0 12px 32px rgba(23, 28, 36, .08);
+  transition: box-shadow .35s ease, transform .35s ease;
+}
+
+.xula-product-catalog__card:hover,
+.xula-product-catalog__card:focus-within {
+  transform: translateY(-4px);
+  box-shadow:
+    0 4px 8px rgba(23, 28, 36, .1),
+    0 20px 40px rgba(23, 28, 36, .14);
+}
+
+.xula-product-catalog__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--bg-tertiary);
+}
+
+.xula-product-catalog__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity .5s ease, transform .6s cubic-bezier(.16, 1, .3, 1);
+}
+
+.xula-product-catalog__image--secondary {
+  opacity: 0;
+}
+
+.xula-product-catalog__card:hover .xula-product-catalog__image--primary {
+  opacity: 0;
+}
+
+.xula-product-catalog__card:hover .xula-product-catalog__image--secondary {
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+.xula-product-catalog__flag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  font-family: var(--font-code-family);
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--accent);
+  padding: .32rem .65rem;
+  border-radius: 999px;
+  line-height: 1.4;
+}
+
+/* ---------------------------------------------------------
+   Flavor note chips — overlay on product image
+   --------------------------------------------------------- */
+
+.xula-product-catalog__note-chips {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 78%;
+}
+
+.xula-product-catalog__note-chip {
+  font-family: var(--secondary-font);
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+  text-transform: capitalize;
+  color: #fff;
+  padding: .28rem .6rem;
+  border-radius: .5rem;
+  line-height: 1.3;
+}
+
+.xula-product-catalog__note-chip--0 { background: var(--xula-gold-solid); }
+.xula-product-catalog__note-chip--1 { background: var(--text-secondary); }
+.xula-product-catalog__note-chip--2 { background: var(--accent-secondary); }
+.xula-product-catalog__note-chip--3 { background: var(--info); }
+.xula-product-catalog__note-chip--more {
+  background: color-mix(in srgb, var(--bg-secondary) 65%, transparent);
+}
+
+/* ---------------------------------------------------------
+   Card body
+   --------------------------------------------------------- */
+
+.xula-product-catalog__body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 16px 14px 18px;
+  gap: 8px;
+}
+
+.xula-product-catalog__title {
+  font-family: var(--primary-font);
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--bg-secondary);
+}
+
+.xula-product-catalog__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.xula-product-catalog__title a:hover {
+  color: var(--accent);
+}
+
+.xula-product-catalog__vendor {
+  font-family: var(--secondary-font);
+  font-size: 1.25rem;
+  color: var(--text);
+  opacity: .6;
+  margin: -4px 0 0;
+}
+
+/* ---------------------------------------------------------
+   Price
+   --------------------------------------------------------- */
+
+.xula-product-catalog__price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--font-code-family);
+  font-size: 1.6rem;
+  font-weight: var(--font-code-weight);
+  font-variant-numeric: tabular-nums;
+  color: var(--bg-secondary);
+}
+
+.xula-product-catalog__price-compare {
+  font-weight: 400;
+  font-size: 1.4rem;
+  opacity: .55;
+}
+
+/* ---------------------------------------------------------
+   Flavor notes — plain text line under price
+   --------------------------------------------------------- */
+
+.xula-product-catalog__notes-line {
+  font-family: var(--secondary-font);
+  font-size: .95rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: .55;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------
+   Roast level + Intensity meter
+   --------------------------------------------------------- */
+
+.xula-product-catalog__roast-intensity {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 0;
+  border-top: 1px solid color-mix(in srgb, var(--bg-secondary) 10%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--bg-secondary) 10%, transparent);
+}
+
+.xula-product-catalog__roast-line {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  font-family: var(--secondary-font);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--bg-secondary);
+}
+
+.xula-product-catalog__roast-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.xula-product-catalog__roast-dot--light { background: var(--bg-tertiary); }
+.xula-product-catalog__roast-dot--medium { background: var(--accent-secondary); }
+.xula-product-catalog__roast-dot--medium-dark { background: color-mix(in srgb, var(--accent-secondary) 60%, var(--bg-secondary)); }
+.xula-product-catalog__roast-dot--dark { background: var(--bg-secondary); }
+.xula-product-catalog__roast-dot--unspecified { background: color-mix(in srgb, var(--bg-secondary) 35%, transparent); }
+
+.xula-product-catalog__intensity {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.xula-product-catalog__intensity-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.xula-product-catalog__intensity-label {
+  font-family: var(--secondary-font);
+  font-size: .95rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: .55;
+}
+
+.xula-product-catalog__intensity-badge {
+  font-size: 1.05rem;
+  font-weight: var(--font-code-weight);
+  color: #fff;
+  background: var(--accent-secondary);
+  padding: .15rem .55rem;
+  border-radius: 999px;
+  line-height: 1.5;
+}
+
+.xula-product-catalog__intensity-bar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.xula-product-catalog__intensity-seg {
+  flex: 1 1 0;
+  height: 6px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--bg-secondary) 12%, transparent);
+}
+
+.xula-product-catalog__intensity-seg.is-filled {
+  background: var(--accent-secondary);
+}
+
+/* ---------------------------------------------------------
+   Add to cart form
+   --------------------------------------------------------- */
+
+.xula-product-catalog__add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.xula-product-catalog__select {
+  width: 100%;
+  font-family: var(--secondary-font);
+  font-size: 1.05rem;
+  color: var(--bg-secondary);
+  background: var(--bg);
+  border: 1px solid color-mix(in srgb, var(--bg-secondary) 20%, transparent);
+  border-radius: .6rem;
+  padding: .55rem .65rem;
+}
+
+.xula-product-catalog__add-submit {
+  width: 100%;
+  padding: .8rem 1.2rem;
+  font-size: 1.05rem;
+}
+
+.xula-product-catalog__add-submit[aria-disabled="true"] {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.xula-product-catalog__add-submit.is-loading {
+  opacity: .8;
+  pointer-events: none;
+}
+
+.xula-product-catalog__add-submit.is-added {
+  background: var(--text-secondary);
+  border-color: var(--text-secondary);
+}
+
+.xula-product-catalog__add-message {
+  min-height: 1em;
+  font-size: .92rem;
+  margin: 0;
+  color: var(--accent-secondary);
+}
+
+/* ---------------------------------------------------------
+   Details disclosure
+   --------------------------------------------------------- */
+
+.xula-product-catalog__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  font-family: var(--secondary-font);
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.xula-product-catalog__toggle svg {
+  transition: transform .3s ease;
+}
+
+.xula-product-catalog__toggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.xula-product-catalog__details {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows .35s cubic-bezier(.16, 1, .3, 1), opacity .3s ease;
+}
+
+.xula-product-catalog__details.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.xula-product-catalog__details-inner {
+  overflow: hidden;
+}
+
+.xula-product-catalog__details[hidden] {
+  display: none;
+}
+
+/* ---------------------------------------------------------
+   Details — one styled badge (label) + plain-text value per row
+   --------------------------------------------------------- */
+
+.xula-product-catalog__specs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+.xula-product-catalog__spec {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+}
+
+.xula-product-catalog__spec-badge {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  font-family: var(--font-code-family);
+  font-size: .95rem;
+  font-weight: var(--font-code-weight);
+  color: #fff;
+  padding: .25rem .65rem;
+  border-radius: 999px;
+  line-height: 1.4;
+}
+
+.xula-product-catalog__spec-value {
+  font-family: var(--secondary-font);
+  font-size: 1.05rem;
+  color: var(--text);
+  opacity: .85;
+  margin: 0;
+}
+
+.xula-product-catalog__spec-badge--note-0 { background: var(--xula-gold-solid); }
+.xula-product-catalog__spec-badge--note-1 { background: var(--text-secondary); }
+.xula-product-catalog__spec-badge--note-2 { background: var(--accent-secondary); }
+.xula-product-catalog__spec-badge--note-3 { background: var(--info); }
+
+/* ---------------------------------------------------------
+   Responsive — tablet / desktop
+   --------------------------------------------------------- */
+
+@media (min-width: 700px) {
+  .xula-product-catalog__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 990px) {
+  .xula-product-catalog {
+    padding: 88px 0 96px;
+  }
+
+  .xula-product-catalog__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .xula-product-catalog__filters {
+    justify-content: center;
+  }
+}
+
+@media (min-width: 1200px) {
+  .xula-product-catalog__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-product-catalog__image,
+  .xula-product-catalog__card,
+  .xula-product-catalog__item,
+  .xula-product-catalog__toggle svg,
+  .xula-product-catalog__details {
+    transition: none !important;
+    animation: none !important;
+  }
+}

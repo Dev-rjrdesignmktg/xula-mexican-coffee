@@ -1,0 +1,233 @@
+{{ 'xula-product-catalog.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-product-catalog.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign catalog_id = 'XulaPC-' | append: section.id
+  assign all_label = section.settings.all_label | default: 'All'
+  assign all_products_limit = section.settings.all_products_limit | default: 48
+  assign items_per_page = section.settings.items_per_page | default: 8
+  assign seen_ids = ''
+  assign has_products = false
+-%}
+
+{%- capture cards_html -%}
+  {%- if collections.all != blank -%}
+    {%- for product in collections.all.products limit: all_products_limit -%}
+      {%- assign pid = product.id | append: ',' -%}
+      {%- unless seen_ids contains pid -%}
+        {%- assign seen_ids = seen_ids | append: pid -%}
+        {%- assign has_products = true -%}
+        {%- render 'xula-product-catalog-card', product: product, catalog_id: catalog_id -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- for block in section.blocks -%}
+    {%- assign block_collection = block.settings.collection -%}
+    {%- if block_collection != blank -%}
+      {%- assign block_limit = block.settings.products_to_show | default: 12 -%}
+      {%- for product in block_collection.products limit: block_limit -%}
+        {%- assign pid = product.id | append: ',' -%}
+        {%- unless seen_ids contains pid -%}
+          {%- assign seen_ids = seen_ids | append: pid -%}
+          {%- assign has_products = true -%}
+          {%- render 'xula-product-catalog-card', product: product, catalog_id: catalog_id -%}
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+<section
+  class="xula-product-catalog"
+  id="{{ catalog_id }}"
+  data-xpc-root
+  aria-labelledby="{{ catalog_id }}-heading"
+>
+  <div class="page-width">
+
+    {%- if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div class="xula-intro xula-product-catalog__intro">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="xula-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 id="{{ catalog_id }}-heading" class="xula-heading xula-product-catalog__heading">
+            {{ section.settings.heading }}
+          </h2>
+        {%- else -%}
+          <h2 id="{{ catalog_id }}-heading" class="visually-hidden">{{ shop.name }} — Product catalog</h2>
+        {%- endif -%}
+
+        {%- if section.settings.subheading != blank -%}
+          <p class="xula-text xula-product-catalog__subheading">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if has_products -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div
+          class="xula-product-catalog__filters"
+          role="radiogroup"
+          aria-label="Filter products by category"
+          data-xpc-filters
+        >
+          <button
+            type="button"
+            role="radio"
+            aria-checked="true"
+            class="xula-product-catalog__filter is-active"
+            data-xpc-filter
+            data-filter="all"
+            tabindex="0"
+          >
+            {{ all_label }}
+          </button>
+
+          {%- for block in section.blocks -%}
+            {%- assign block_label = block.settings.label | default: block.settings.collection.title -%}
+            <button
+              type="button"
+              role="radio"
+              aria-checked="false"
+              class="xula-product-catalog__filter"
+              data-xpc-filter
+              data-filter="{{ block.id }}"
+              tabindex="-1"
+              {{ block.shopify_attributes }}
+            >
+              {{ block_label }}
+            </button>
+          {%- endfor -%}
+        </div>
+
+        <p class="visually-hidden" role="status" aria-live="polite" data-xpc-filter-status></p>
+      {%- endif -%}
+
+      <ul class="xula-product-catalog__grid" data-xpc-grid data-items-per-page="{{ items_per_page }}" role="list">
+        {{ cards_html }}
+      </ul>
+
+      <div class="xula-product-catalog__load-more-wrap">
+        <button
+          type="button"
+          class="xula-btn--secondary xula-product-catalog__load-more"
+          data-xpc-load-more
+          hidden
+        >
+          <span>Show more</span>
+        </button>
+      </div>
+
+      <p class="xula-product-catalog__empty" data-xpc-empty hidden>
+        We couldn't find products in this category.
+      </p>
+    {%- else -%}
+      <p class="xula-product-catalog__empty">
+        Add a category and select a collection to display products in this catalog.
+      </p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Xula Product Catalog",
+  "tag": "section",
+  "class": "section-xula-product-catalog",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Catalog"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Explore our specialty coffee"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Filter by category and discover the intensity, roast, and flavor notes of every batch."
+    },
+    {
+      "type": "text",
+      "id": "all_label",
+      "label": "Label for the \"All\" filter",
+      "default": "All"
+    },
+    {
+      "type": "range",
+      "id": "all_products_limit",
+      "label": "Products to show in \"All\"",
+      "info": "Pulls from every collection in the store. Category filters below always show their full collection regardless of this limit.",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "items_per_page",
+      "label": "Products per page",
+      "info": "How many cards show at once before the \"Show more\" button reveals the rest.",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_structured_data",
+      "label": "Enable structured data (JSON-LD)",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Visible label",
+          "info": "Leave blank to use the collection title."
+        },
+        {
+          "type": "range",
+          "id": "products_to_show",
+          "label": "Products to show",
+          "min": 4,
+          "max": 24,
+          "step": 1,
+          "default": 12
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Xula Product Catalog",
+      "blocks": [
+        { "type": "category", "settings": { "label": "Espresso" } },
+        { "type": "category", "settings": { "label": "Filter coffee" } },
+        { "type": "category", "settings": { "label": "Decaf" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
