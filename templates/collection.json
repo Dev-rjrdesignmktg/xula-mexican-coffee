@@ -10,6 +10,7 @@
 {
   "sections": {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "xula_promo_carousel_iy3rKH": {
       "type": "xula-promo-carousel",
       "blocks": {
@@ -19,6 +20,8 @@
             "image": "shopify://shop_images/BANNER_01.webp",
             "image_alt": "",
 =======
+=======
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
     "xula_promo_carousel_qJkDL9": {
       "type": "xula-promo-carousel",
       "blocks": {
@@ -27,6 +30,9 @@
           "settings": {
             "image": "shopify://shop_images/BANNER_01.webp",
             "image_alt": "Xula banner Drink More Xula Mexican Cafecito",
+<<<<<<< HEAD
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
+=======
 >>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "badge": "",
             "heading": "",
@@ -35,6 +41,7 @@
             "cta_link": "#",
             "accent_color": "#e8318a",
             "position": "left",
+<<<<<<< HEAD
 <<<<<<< HEAD
             "overlay_style": "solid"
           }
@@ -45,6 +52,8 @@
             "image": "shopify://shop_images/BANNER_04.webp",
             "image_alt": "",
 =======
+=======
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "overlay_style": "soft"
           }
         },
@@ -53,6 +62,9 @@
           "settings": {
             "image": "shopify://shop_images/BANNER_04.webp",
             "image_alt": "Xula banner Artisan Dark Chocolate From Patzcuaro",
+<<<<<<< HEAD
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
+=======
 >>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "badge": "",
             "heading": "",
@@ -65,6 +77,7 @@
           }
         },
 <<<<<<< HEAD
+<<<<<<< HEAD
         "slide_xYkFBQ": {
           "type": "slide",
           "settings": {
@@ -75,6 +88,8 @@
             "text": "",
             "cta_label": "",
 =======
+=======
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
         "slide_A6faPR": {
           "type": "slide",
           "settings": {
@@ -84,6 +99,9 @@
             "heading": "",
             "text": "",
             "cta_label": "Learn about our origin",
+<<<<<<< HEAD
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
+=======
 >>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "cta_link": "#",
             "accent_color": "#345da8",
@@ -92,17 +110,23 @@
           }
         },
 <<<<<<< HEAD
+<<<<<<< HEAD
         "slide_mtnMVT": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/BANNER_05.webp",
             "image_alt": "",
 =======
+=======
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
         "slide_mTfGVb": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/BANNER_05.webp",
             "image_alt": "Xula banner Artisan Muffins",
+<<<<<<< HEAD
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
+=======
 >>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "badge": "",
             "heading": "",
@@ -110,7 +134,11 @@
             "cta_label": "",
             "cta_link": "",
 <<<<<<< HEAD
+<<<<<<< HEAD
             "accent_color": "#e8318a",
+=======
+            "accent_color": "#E8318A",
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
 =======
             "accent_color": "#E8318A",
 >>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
@@ -121,15 +149,21 @@
       },
       "block_order": [
 <<<<<<< HEAD
+<<<<<<< HEAD
         "slide_gEaxat",
         "slide_ixMEAL",
         "slide_xYkFBQ",
         "slide_mtnMVT"
 =======
+=======
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
         "slide_RBPmNH",
         "slide_hXgypw",
         "slide_A6faPR",
         "slide_mTfGVb"
+<<<<<<< HEAD
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
+=======
 >>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
       ],
       "name": "Xula Promo Carousel",
@@ -141,7 +175,10 @@
       }
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
     "xula_trust_cards_K8NBhF": {
       "type": "xula-trust-cards",
       "blocks": {
@@ -227,6 +264,9 @@
         "text": "Mexican tradition, verified quality, and customers who keep coming back."
       }
     },
+<<<<<<< HEAD
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
+=======
 >>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
     "banner": {
       "type": "main-collection-banner",
@@ -548,7 +588,12 @@
   },
   "order": [
 <<<<<<< HEAD
+<<<<<<< HEAD
     "xula_promo_carousel_iy3rKH",
+=======
+    "xula_promo_carousel_qJkDL9",
+    "xula_trust_cards_K8NBhF",
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
 =======
     "xula_promo_carousel_qJkDL9",
     "xula_trust_cards_K8NBhF",
