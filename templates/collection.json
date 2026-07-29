@@ -9,6 +9,7 @@
  */
 {
   "sections": {
+<<<<<<< HEAD
     "xula_promo_carousel_iy3rKH": {
       "type": "xula-promo-carousel",
       "blocks": {
@@ -17,6 +18,16 @@
           "settings": {
             "image": "shopify://shop_images/BANNER_01.webp",
             "image_alt": "",
+=======
+    "xula_promo_carousel_qJkDL9": {
+      "type": "xula-promo-carousel",
+      "blocks": {
+        "slide_RBPmNH": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/BANNER_01.webp",
+            "image_alt": "Xula banner Drink More Xula Mexican Cafecito",
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "badge": "",
             "heading": "",
             "text": "",
@@ -24,6 +35,7 @@
             "cta_link": "#",
             "accent_color": "#e8318a",
             "position": "left",
+<<<<<<< HEAD
             "overlay_style": "solid"
           }
         },
@@ -32,6 +44,16 @@
           "settings": {
             "image": "shopify://shop_images/BANNER_04.webp",
             "image_alt": "",
+=======
+            "overlay_style": "soft"
+          }
+        },
+        "slide_hXgypw": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/BANNER_04.webp",
+            "image_alt": "Xula banner Artisan Dark Chocolate From Patzcuaro",
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "badge": "",
             "heading": "",
             "text": "",
@@ -42,6 +64,7 @@
             "overlay_style": "soft"
           }
         },
+<<<<<<< HEAD
         "slide_xYkFBQ": {
           "type": "slide",
           "settings": {
@@ -51,33 +74,63 @@
             "heading": "",
             "text": "",
             "cta_label": "",
+=======
+        "slide_A6faPR": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/BANNER_03.webp",
+            "image_alt": "Xula banner Specialty Coffee From Veracruz",
+            "badge": "",
+            "heading": "",
+            "text": "",
+            "cta_label": "Learn about our origin",
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "cta_link": "#",
             "accent_color": "#345da8",
             "position": "left",
             "overlay_style": "soft"
           }
         },
+<<<<<<< HEAD
         "slide_mtnMVT": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/BANNER_05.webp",
             "image_alt": "",
+=======
+        "slide_mTfGVb": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/BANNER_05.webp",
+            "image_alt": "Xula banner Artisan Muffins",
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "badge": "",
             "heading": "",
             "text": "",
             "cta_label": "",
             "cta_link": "",
+<<<<<<< HEAD
             "accent_color": "#e8318a",
+=======
+            "accent_color": "#E8318A",
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "position": "left",
             "overlay_style": "soft"
           }
         }
       },
       "block_order": [
+<<<<<<< HEAD
         "slide_gEaxat",
         "slide_ixMEAL",
         "slide_xYkFBQ",
         "slide_mtnMVT"
+=======
+        "slide_RBPmNH",
+        "slide_hXgypw",
+        "slide_A6faPR",
+        "slide_mTfGVb"
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
       ],
       "name": "Xula Promo Carousel",
       "settings": {
@@ -87,6 +140,94 @@
         "autoplay_interval": 5
       }
     },
+<<<<<<< HEAD
+=======
+    "xula_trust_cards_K8NBhF": {
+      "type": "xula-trust-cards",
+      "blocks": {
+        "metric_card_YwxKCP": {
+          "type": "metric_card",
+          "settings": {
+            "icon": "founding",
+            "prefix": "",
+            "value": "2017",
+            "suffix": "",
+            "decimals": "0",
+            "group_thousands": false,
+            "label": "Founding year",
+            "description": "Mexican tradition since the source",
+            "show_stars": false,
+            "rating": 5,
+            "review_count": 500,
+            "link": ""
+          }
+        },
+        "metric_card_mJUQL9": {
+          "type": "metric_card",
+          "settings": {
+            "icon": "customers",
+            "prefix": "+",
+            "value": "10000",
+            "suffix": "",
+            "decimals": "0",
+            "group_thousands": true,
+            "label": "Happy customers",
+            "description": "And growing every day",
+            "show_stars": false,
+            "rating": 5,
+            "review_count": 500,
+            "link": ""
+          }
+        },
+        "metric_card_FXfeVq": {
+          "type": "metric_card",
+          "settings": {
+            "icon": "reviews",
+            "prefix": "",
+            "value": "4.9",
+            "suffix": "",
+            "decimals": "1",
+            "group_thousands": false,
+            "label": "Customer reviews",
+            "description": "",
+            "show_stars": true,
+            "rating": 4.9,
+            "review_count": 500,
+            "link": ""
+          }
+        },
+        "metric_card_tMTTh6": {
+          "type": "metric_card",
+          "settings": {
+            "icon": "origin",
+            "prefix": "",
+            "value": "100",
+            "suffix": "%",
+            "decimals": "0",
+            "group_thousands": false,
+            "label": "Mexican origin",
+            "description": "From the highlands of Mexico to your cup",
+            "show_stars": false,
+            "rating": 5,
+            "review_count": 500,
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "metric_card_YwxKCP",
+        "metric_card_mJUQL9",
+        "metric_card_FXfeVq",
+        "metric_card_tMTTh6"
+      ],
+      "name": "Xula Trust Cards",
+      "settings": {
+        "eyebrow": "Trust you can taste",
+        "heading": "Numbers behind every cup",
+        "text": "Mexican tradition, verified quality, and customers who keep coming back."
+      }
+    },
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
     "banner": {
       "type": "main-collection-banner",
       "settings": {
@@ -406,7 +547,12 @@
     }
   },
   "order": [
+<<<<<<< HEAD
     "xula_promo_carousel_iy3rKH",
+=======
+    "xula_promo_carousel_qJkDL9",
+    "xula_trust_cards_K8NBhF",
+>>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
     "banner",
     "product-grid",
     "xula_trust_cards_ewrfwJ",
