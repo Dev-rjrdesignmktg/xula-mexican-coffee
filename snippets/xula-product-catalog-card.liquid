@@ -1,0 +1,339 @@
+{%- comment -%}
+  Renders one product card for the Xula Product Catalog section.
+  Accepts: product, catalog_id
+{%- endcomment -%}
+
+{%- liquid
+  assign featured_image = product.featured_image
+  assign hover_image = product.images[1]
+  assign variant = product.selected_or_first_available_variant
+
+  assign roast_level = product.metafields.custom.roast_level
+  assign tasting_notes_mf = product.metafields.custom.tasting_notes
+  assign mf_intensity = product.metafields.custom.intensity
+  assign intensity = blank
+
+  if roast_level == blank
+    for tag in product.tags
+      assign tag_down = tag | downcase
+      if tag_down contains 'roast:' or tag_down contains 'tueste:'
+        assign roast_level = tag | split: ':' | last | strip
+        break
+      endif
+    endfor
+  endif
+
+  assign roast_display = roast_level
+  assign roast_class = 'unspecified'
+  if roast_level != blank
+    assign roast_class = roast_level | handleize
+    assign roast_lower_check = roast_level | downcase
+    unless roast_lower_check contains 'roast'
+      assign roast_display = roast_level | append: ' Roast'
+    endunless
+  endif
+
+  if mf_intensity != blank
+    assign intensity = mf_intensity | times: 1 | at_least: 1 | at_most: 10
+  else
+    for tag in product.tags
+      assign tag_down = tag | downcase
+      if tag_down contains 'intensity:' or tag_down contains 'intensidad:'
+        assign intensity = tag | split: ':' | last | strip | times: 1 | at_least: 1 | at_most: 10
+        break
+      endif
+    endfor
+  endif
+
+  assign notes_array = blank
+  if tasting_notes_mf != blank
+    if tasting_notes_mf.type == 'list.single_line_text_field'
+      assign notes_array = tasting_notes_mf.value
+    else
+      assign notes_array = tasting_notes_mf | split: ','
+    endif
+  else
+    assign notes_from_tags = ''
+    for tag in product.tags
+      assign tag_down = tag | downcase
+      if tag_down contains 'note:' or tag_down contains 'flavor:' or tag_down contains 'nota:' or tag_down contains 'sabor:'
+        assign note_value = tag | split: ':' | last | strip
+        assign notes_from_tags = notes_from_tags | append: note_value | append: '|XPC_NOTE|'
+      endif
+    endfor
+    if notes_from_tags != blank
+      assign notes_array = notes_from_tags | split: '|XPC_NOTE|'
+    endif
+  endif
+
+  assign notes_size = 0
+  if notes_array != blank
+    assign notes_size = notes_array.size
+  endif
+
+  assign badge_counter = 0
+-%}
+{%- capture specs_html -%}
+  {%- for metafield in product.metafields.custom -%}
+    {%- assign mf_key = metafield[0] -%}
+    {%- assign mf_obj = metafield[1] -%}
+    {%- if mf_key == 'roast_level' or mf_key == 'intensity' -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if mf_obj == blank -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- assign mf_label = mf_key | replace: '_', ' ' | capitalize -%}
+    {%- if mf_key == 'tasting_notes' -%}
+      {%- assign mf_label = 'Flavor notes' -%}
+    {%- endif -%}
+
+    {%- assign mf_value_text = '' -%}
+    {%- if mf_obj.type == 'list.single_line_text_field' -%}
+      {%- assign mf_value_text = mf_obj.value | join: ', ' -%}
+    {%- else -%}
+      {%- assign mf_value_text = mf_obj -%}
+    {%- endif -%}
+
+    {%- assign badge_mod = badge_counter | modulo: 4 -%}
+    <div class="xula-product-catalog__spec">
+      <dt class="xula-product-catalog__spec-badge xula-product-catalog__spec-badge--note-{{ badge_mod }}">{{ mf_label }}</dt>
+      <dd class="xula-product-catalog__spec-value">{{ mf_value_text }}</dd>
+    </div>
+    {%- assign badge_counter = badge_counter | plus: 1 -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- liquid
+  assign categories_lower = ''
+  for block in section.blocks
+    if block.settings.collection != blank and product.collections contains block.settings.collection
+      assign categories_lower = categories_lower | append: block.id | append: ','
+    endif
+  endfor
+
+  assign alt_text = product.title
+  if roast_display != blank
+    assign alt_text = alt_text | append: ', ' | append: roast_display
+  endif
+  if intensity != blank
+    assign alt_text = alt_text | append: ', intensity ' | append: intensity | append: ' of 10'
+  endif
+
+  assign prop_parts = ''
+-%}
+{%- if roast_display != blank -%}
+  {%- capture prop -%}{"@type":"PropertyValue","name":"Roast Level","value":{{ roast_display | json }}}{%- endcapture -%}
+  {%- assign prop_parts = prop_parts | append: prop | append: '|XPC_PROP|' -%}
+{%- endif -%}
+{%- if intensity != blank -%}
+  {%- capture prop -%}{"@type":"PropertyValue","name":"Intensity","value":{{ intensity | json }}}{%- endcapture -%}
+  {%- assign prop_parts = prop_parts | append: prop | append: '|XPC_PROP|' -%}
+{%- endif -%}
+{%- if notes_array != blank -%}
+  {%- capture prop -%}{"@type":"PropertyValue","name":"Flavor Notes","value":{{ notes_array | join: ', ' | json }}}{%- endcapture -%}
+  {%- assign prop_parts = prop_parts | append: prop | append: '|XPC_PROP|' -%}
+{%- endif -%}
+
+<li
+  class="xula-product-catalog__item"
+  data-xpc-item
+  data-categories="{{ categories_lower }}"
+>
+  <article class="xula-product-catalog__card" data-xpc-card>
+
+    <a href="{{ product.url }}" class="xula-product-catalog__media" tabindex="-1">
+      {%- if featured_image -%}
+        <img
+          class="xula-product-catalog__image xula-product-catalog__image--primary"
+          src="{{ featured_image | image_url: width: 600 }}"
+          srcset="
+            {{ featured_image | image_url: width: 400 }} 400w,
+            {{ featured_image | image_url: width: 600 }} 600w,
+            {{ featured_image | image_url: width: 800 }} 800w"
+          sizes="(min-width: 1200px) 22vw, (min-width: 990px) 30vw, (min-width: 700px) 45vw, 90vw"
+          alt="{{ featured_image.alt | default: alt_text | escape }}"
+          width="{{ featured_image.width }}"
+          height="{{ featured_image.height }}"
+          loading="lazy"
+          decoding="async"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'xula-product-catalog__image xula-product-catalog__image--primary xula-product-catalog__image--placeholder' }}
+      {%- endif -%}
+
+      {%- if hover_image -%}
+        <img
+          class="xula-product-catalog__image xula-product-catalog__image--secondary"
+          src="{{ hover_image | image_url: width: 600 }}"
+          alt=""
+          width="{{ hover_image.width }}"
+          height="{{ hover_image.height }}"
+          loading="lazy"
+          decoding="async"
+          aria-hidden="true"
+        >
+      {%- endif -%}
+
+      {%- if notes_array != blank -%}
+        <span class="xula-product-catalog__note-chips" aria-hidden="true">
+          {%- for note in notes_array limit: 4 -%}
+            {%- assign note_mod = forloop.index0 | modulo: 4 -%}
+            <span class="xula-product-catalog__note-chip xula-product-catalog__note-chip--{{ note_mod }}">{{ note | strip }}</span>
+          {%- endfor -%}
+          {%- if notes_size > 4 -%}
+            <span class="xula-product-catalog__note-chip xula-product-catalog__note-chip--more">+{{ notes_size | minus: 4 }}</span>
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+
+      {%- if product.compare_at_price > product.price -%}
+        <span class="xula-product-catalog__flag xula-product-catalog__flag--sale">Sale</span>
+      {%- endif -%}
+    </a>
+
+    <div class="xula-product-catalog__body">
+      <h3 class="xula-product-catalog__title">
+        <a href="{{ product.url }}">{{ product.title }}</a>
+      </h3>
+
+      {%- if product.vendor != blank -%}
+        <p class="xula-product-catalog__vendor">{{ product.vendor }}</p>
+      {%- endif -%}
+
+      <div class="xula-product-catalog__price">
+        <span class="xula-product-catalog__price-current">{{ variant.price | money }}</span>
+        {%- if product.compare_at_price > variant.price -%}
+          <s class="xula-product-catalog__price-compare">{{ product.compare_at_price | money }}</s>
+        {%- endif -%}
+      </div>
+
+      {%- if notes_array != blank -%}
+        <p class="xula-product-catalog__notes-line">{{ notes_array | join: ', ' }}</p>
+      {%- endif -%}
+
+      {%- if roast_display != blank or intensity != blank -%}
+        <div class="xula-product-catalog__roast-intensity">
+          {%- if roast_display != blank -%}
+            <p class="xula-product-catalog__roast-line">
+              <span class="xula-product-catalog__roast-dot xula-product-catalog__roast-dot--{{ roast_class }}" aria-hidden="true"></span>
+              <span class="visually-hidden">Roast level: </span>{{ roast_display }}
+            </p>
+          {%- endif -%}
+
+          {%- if intensity != blank -%}
+            <div class="xula-product-catalog__intensity">
+              <div class="xula-product-catalog__intensity-head">
+                <span class="xula-product-catalog__intensity-label">Intensity</span>
+                <span class="xula-product-catalog__intensity-badge xula-type--code">{{ intensity }}/10</span>
+              </div>
+              <div
+                class="xula-product-catalog__intensity-bar"
+                role="img"
+                aria-label="Intensity {{ intensity }} of 10"
+              >
+                {%- for i in (1..10) -%}
+                  <span class="xula-product-catalog__intensity-seg{% if forloop.index <= intensity %} is-filled{% endif %}"></span>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <form
+        method="post"
+        action="{{ routes.cart_add_url }}"
+        class="xula-product-catalog__add-form"
+        data-xpc-add-form
+      >
+        <input type="hidden" name="id" value="{{ variant.id }}" data-xpc-variant-id>
+        <input type="hidden" name="quantity" value="1">
+
+        {%- if product.variants.size > 1 -%}
+          <label class="visually-hidden" for="{{ catalog_id }}-select-{{ product.id }}">
+            Choose an option for {{ product.title }}
+          </label>
+          <select
+            id="{{ catalog_id }}-select-{{ product.id }}"
+            class="xula-product-catalog__select"
+            data-xpc-variant-select
+          >
+            {%- for v in product.variants -%}
+              <option value="{{ v.id }}" {% if v.id == variant.id %}selected{% endif %} {% unless v.available %}disabled{% endunless %}>
+                {{ v.title }} — {{ v.price | money }}{% unless v.available %} (Sold out){% endunless %}
+              </option>
+            {%- endfor -%}
+          </select>
+        {%- endif -%}
+
+        <button
+          type="submit"
+          class="xula-btn xula-product-catalog__add-submit"
+          data-xpc-add-submit
+          {% unless variant.available %}disabled aria-disabled="true"{% endunless %}
+        >
+          <span class="xula-product-catalog__add-text">
+            {%- if variant.available -%}
+              Add to cart
+            {%- else -%}
+              Sold out
+            {%- endif -%}
+          </span>
+        </button>
+
+        <p class="xula-product-catalog__add-message" data-xpc-add-message role="status" aria-live="polite"></p>
+      </form>
+
+      {%- if specs_html != blank -%}
+        <button
+          type="button"
+          class="xula-product-catalog__toggle"
+          data-xpc-toggle
+          aria-expanded="false"
+          aria-controls="{{ catalog_id }}-details-{{ product.id }}"
+        >
+          <span>View details</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div
+          id="{{ catalog_id }}-details-{{ product.id }}"
+          class="xula-product-catalog__details"
+          data-xpc-details
+          hidden
+        >
+          <div class="xula-product-catalog__details-inner">
+            <dl class="xula-product-catalog__specs">{{ specs_html }}</dl>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </article>
+</li>
+
+{%- if section.settings.enable_structured_data -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": {{ product.title | json }},
+      "url": {{ shop.url | append: product.url | json }},
+      "image": {{ featured_image | image_url: width: 800 | prepend: 'https:' | json }},
+      "sku": {{ variant.sku | json }}
+      {%- if prop_parts != blank -%}
+      ,"additionalProperty": [{{ prop_parts | split: '|XPC_PROP|' | join: ',' }}]
+      {%- endif -%},
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": {{ cart.currency.iso_code | json }},
+        "price": {{ variant.price | divided_by: 100.0 | json }},
+        "availability": "https://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+        "url": {{ shop.url | append: product.url | json }}
+      }
+    }
+  </script>
+{%- endif -%}
