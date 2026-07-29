@@ -152,22 +152,100 @@
         "heading": "You may also like",
         "heading_size": "h2",
         "products_to_show": 4,
-        "columns_desktop": 4,
-        "columns_mobile": "2",
         "color_scheme": "scheme-2",
-        "image_ratio": "square",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
         "padding_top": 36,
         "padding_bottom": 28
+      }
+    },
+    "xula_recipe_guide_R9Wm8f": {
+      "type": "xula-recipe-guide",
+      "blocks": {
+        "method_Rnr7rB": {
+          "type": "method",
+          "settings": {
+            "id": "v60",
+            "name": "V60 / Pour Over",
+            "icon": "v60",
+            "ratio": "1:16",
+            "temperature": "92–94 °C",
+            "time": "2:30 – 3:00 min",
+            "grind": "Medium-fine (sea salt)",
+            "steps": "Heat the water to 92-94°C and rinse the paper filter.\nAdd 15 g of medium-fine ground coffee and level the bed.\nPour 30 g of water for the bloom and wait 30 seconds.\nPour the rest of the water in circular motions up to 240 g.\nLet the coffee drain fully, 2:30 to 3:00 minutes total."
+          }
+        },
+        "method_7aRnVd": {
+          "type": "method",
+          "settings": {
+            "id": "french_press",
+            "name": "French Press",
+            "icon": "french_press",
+            "ratio": "1:15",
+            "temperature": "93–96 °C",
+            "time": "4:00 min",
+            "grind": "Coarse (raw sugar)",
+            "steps": "Heat the water to 93-96°C and preheat the French press.\nAdd 20 g of coarse ground coffee.\nPour 300 g of hot water and stir gently.\nPlace the lid with the plunger up and steep for 4 minutes.\nPress the plunger slowly and serve immediately."
+          }
+        },
+        "method_EiUdKm": {
+          "type": "method",
+          "settings": {
+            "id": "espresso",
+            "name": "Espresso",
+            "icon": "espresso",
+            "ratio": "1:2",
+            "temperature": "92–94 °C",
+            "time": "25 – 30 sec",
+            "grind": "Fine (table salt)",
+            "steps": "Grind 18 g of coffee to a fine, even consistency.\nDistribute and tamp the coffee with even pressure.\nExtract at 9 bars of pressure.\nStop the extraction between 25 and 30 seconds, with 36 g in the cup.\nServe right away to preserve the crema and aromas."
+          }
+        },
+        "method_wMHkAi": {
+          "type": "method",
+          "settings": {
+            "id": "chemex",
+            "name": "Chemex",
+            "icon": "chemex",
+            "ratio": "1:15",
+            "temperature": "92–94 °C",
+            "time": "3:30 – 4:00 min",
+            "grind": "Medium-coarse",
+            "steps": "Place the Chemex filter (triple layer) and rinse it with hot water.\nAdd 30 g of medium-coarse ground coffee.\nPour 60 g of water for the bloom and wait 45 seconds.\nPour the rest of the water in pulses up to 450 g.\nLet it drain fully, 3:30 to 4:00 minutes."
+          }
+        },
+        "method_e9WjMF": {
+          "type": "method",
+          "settings": {
+            "id": "aeropress",
+            "name": "AeroPress",
+            "icon": "aeropress",
+            "ratio": "1:14",
+            "temperature": "85–88 °C",
+            "time": "1:30 – 2:00 min",
+            "grind": "Medium-fine",
+            "steps": "Place the paper filter, rinse it, and assemble the AeroPress in normal mode.\nAdd 17 g of medium-fine ground coffee.\nPour 240 g of water at 85-88°C and stir for 10 seconds.\nInsert the plunger and steep for 1 minute.\nPress gently for 30 seconds until you hear the final hiss."
+          }
+        }
+      },
+      "block_order": [
+        "method_Rnr7rB",
+        "method_7aRnVd",
+        "method_EiUdKm",
+        "method_wMHkAi",
+        "method_e9WjMF"
+      ],
+      "name": "Xula Recipe Guide",
+      "settings": {
+        "show_heading": true,
+        "heading": "Recipes & Brewing Methods",
+        "intro": "<p>Pick your favorite method and dial in the recipe for this coffee.</p>",
+        "show_schema": true
       }
     }
   },
   "order": [
     "main",
     "disclosures",
-    "related-products"
+    "related-products",
+    "xula_recipe_guide_R9Wm8f"
   ]
 }
