@@ -240,35 +240,12 @@
         "intro": "<p>Pick your favorite method and dial in the recipe for this coffee.</p>",
         "show_schema": true
       }
-    },
-    "1785355889e833140a": {
-      "type": "apps",
-      "blocks": {
-        "stamped_reviews_checkout_comments_jaX7Ay": {
-          "type": "shopify://apps/stamped-reviews/blocks/checkout-comments/a103faaf-2125-4b0e-89fa-de5149736723",
-          "settings": {
-            "product_ids": "147219513397",
-            "style": "bubble",
-            "title": "",
-            "timeago": true,
-            "style_color_text": "",
-            "style_color_link": ""
-          }
-        }
-      },
-      "block_order": [
-        "stamped_reviews_checkout_comments_jaX7Ay"
-      ],
-      "settings": {
-        "include_margins": true
-      }
     }
   },
   "order": [
     "main",
     "disclosures",
     "related-products",
-    "xula_recipe_guide_R9Wm8f",
-    "1785355889e833140a"
+    "xula_recipe_guide_R9Wm8f"
   ]
 }
