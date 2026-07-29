@@ -114,10 +114,96 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "xula_trust_cards_K8NBhF": {
+      "type": "xula-trust-cards",
+      "blocks": {
+        "metric_card_YwxKCP": {
+          "type": "metric_card",
+          "settings": {
+            "icon": "founding",
+            "prefix": "",
+            "value": "2015",
+            "suffix": "",
+            "decimals": "0",
+            "group_thousands": false,
+            "label": "Founding year",
+            "description": "Mexican tradition since the source",
+            "show_stars": false,
+            "rating": 5,
+            "review_count": 500,
+            "link": ""
+          }
+        },
+        "metric_card_mJUQL9": {
+          "type": "metric_card",
+          "settings": {
+            "icon": "customers",
+            "prefix": "+",
+            "value": "50000",
+            "suffix": "",
+            "decimals": "0",
+            "group_thousands": true,
+            "label": "Happy customers",
+            "description": "And growing every day",
+            "show_stars": false,
+            "rating": 5,
+            "review_count": 500,
+            "link": ""
+          }
+        },
+        "metric_card_FXfeVq": {
+          "type": "metric_card",
+          "settings": {
+            "icon": "reviews",
+            "prefix": "",
+            "value": "4.9",
+            "suffix": "",
+            "decimals": "1",
+            "group_thousands": false,
+            "label": "Customer reviews",
+            "description": "",
+            "show_stars": true,
+            "rating": 4.9,
+            "review_count": 500,
+            "link": ""
+          }
+        },
+        "metric_card_tMTTh6": {
+          "type": "metric_card",
+          "settings": {
+            "icon": "origin",
+            "prefix": "",
+            "value": "100",
+            "suffix": "%",
+            "decimals": "0",
+            "group_thousands": false,
+            "label": "Mexican origin",
+            "description": "From the highlands of Mexico to your cup",
+            "show_stars": false,
+            "rating": 5,
+            "review_count": 500,
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "metric_card_YwxKCP",
+        "metric_card_mJUQL9",
+        "metric_card_FXfeVq",
+        "metric_card_tMTTh6"
+      ],
+      "name": "Xula Trust Cards",
+      "settings": {
+        "eyebrow": "Trust you can taste",
+        "heading": "Numbers behind every cup",
+        "text": "Mexican tradition, verified quality, and customers who keep coming back."
+      }
     }
   },
   "order": [
     "xula_promo_carousel_qJkDL9",
+    "xula_trust_cards_K8NBhF",
     "banner",
     "product-grid"
   ]
