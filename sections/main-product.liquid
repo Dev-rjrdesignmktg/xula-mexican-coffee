@@ -15,6 +15,11 @@
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+  {{ 'xula-product-meta.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'xula-product-meta.js' | asset_url }}" defer="defer"></script>
+  {{ 'xula-trust-badges.css' | asset_url | stylesheet_tag }}
+  {{ 'xula-social-share.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'xula-social-share.js' | asset_url }}" defer="defer"></script>
 
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
@@ -688,6 +693,44 @@
                   </product-recommendations>
                 {%- when 'icon-with-text' -%}
                   {% render 'icon-with-text', block: block %}
+                {%- when 'xula_product_meta' -%}
+                  {%- assign xpm_heading = block.settings.heading -%}
+                  {%- unless block.settings.show_heading -%}
+                    {%- assign xpm_heading = false -%}
+                  {%- endunless -%}
+                  <div {{ block.shopify_attributes }}>
+                    {%- render 'xula-product-meta', product: product, heading: xpm_heading -%}
+                  </div>
+                {%- when 'xula_trust_badges' -%}
+                  <div {{ block.shopify_attributes }}>
+                    {%- render 'xula-trust-badges',
+                      badge_1_icon: block.settings.badge_1_icon,
+                      badge_1_text: block.settings.badge_1_text,
+                      badge_2_icon: block.settings.badge_2_icon,
+                      badge_2_text: block.settings.badge_2_text,
+                      badge_3_icon: block.settings.badge_3_icon,
+                      badge_3_text: block.settings.badge_3_text
+                    -%}
+                  </div>
+                {%- when 'xula_social_share' -%}
+                  {%- assign xss_heading = block.settings.heading -%}
+                  {%- unless block.settings.show_heading -%}
+                    {%- assign xss_heading = false -%}
+                  {%- endunless -%}
+                  <div {{ block.shopify_attributes }}>
+                    {%- render 'xula-social-share',
+                      url: canonical_url,
+                      title: product.title,
+                      image: product.featured_image,
+                      heading: xss_heading,
+                      show_facebook: block.settings.show_facebook,
+                      show_x: block.settings.show_x,
+                      show_pinterest: block.settings.show_pinterest,
+                      show_whatsapp: block.settings.show_whatsapp,
+                      show_email: block.settings.show_email,
+                      show_copy_link: block.settings.show_copy_link
+                    -%}
+                  </div>
               {%- endcase -%}
             {%- endfor -%}
             <a href="{{ product.url }}" class="link product__view-details animate-arrow">
@@ -803,6 +846,159 @@
       "type": "price",
       "name": "t:sections.main-product.blocks.price.name",
       "limit": 1
+    },
+    {
+      "type": "xula_product_meta",
+      "name": "Xula Coffee Profile",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_heading",
+          "label": "Show heading",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Coffee profile"
+        }
+      ]
+    },
+    {
+      "type": "xula_trust_badges",
+      "name": "Xula Trust Badges",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Badge 1"
+        },
+        {
+          "type": "select",
+          "id": "badge_1_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "guarantee", "label": "Guarantee (shield check)" },
+            { "value": "delivery", "label": "Delivery (truck)" },
+            { "value": "worldwide", "label": "Worldwide (globe)" },
+            { "value": "secure", "label": "Secure checkout (lock)" },
+            { "value": "support", "label": "Support (chat)" },
+            { "value": "none", "label": "No icon" }
+          ],
+          "default": "guarantee"
+        },
+        {
+          "type": "text",
+          "id": "badge_1_text",
+          "label": "Text",
+          "default": "30-day money-back guarantee"
+        },
+        {
+          "type": "header",
+          "content": "Badge 2"
+        },
+        {
+          "type": "select",
+          "id": "badge_2_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "guarantee", "label": "Guarantee (shield check)" },
+            { "value": "delivery", "label": "Delivery (truck)" },
+            { "value": "worldwide", "label": "Worldwide (globe)" },
+            { "value": "secure", "label": "Secure checkout (lock)" },
+            { "value": "support", "label": "Support (chat)" },
+            { "value": "none", "label": "No icon" }
+          ],
+          "default": "delivery"
+        },
+        {
+          "type": "text",
+          "id": "badge_2_text",
+          "label": "Text",
+          "default": "Delivery in 3-5 business days"
+        },
+        {
+          "type": "header",
+          "content": "Badge 3"
+        },
+        {
+          "type": "select",
+          "id": "badge_3_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "guarantee", "label": "Guarantee (shield check)" },
+            { "value": "delivery", "label": "Delivery (truck)" },
+            { "value": "worldwide", "label": "Worldwide (globe)" },
+            { "value": "secure", "label": "Secure checkout (lock)" },
+            { "value": "support", "label": "Support (chat)" },
+            { "value": "none", "label": "No icon" }
+          ],
+          "default": "worldwide"
+        },
+        {
+          "type": "text",
+          "id": "badge_3_text",
+          "label": "Text",
+          "default": "Worldwide shipping"
+        }
+      ]
+    },
+    {
+      "type": "xula_social_share",
+      "name": "Xula Social Share",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_heading",
+          "label": "Show heading",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Share"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_facebook",
+          "label": "Facebook",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_x",
+          "label": "X (Twitter)",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_pinterest",
+          "label": "Pinterest",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_whatsapp",
+          "label": "WhatsApp",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_email",
+          "label": "Email",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_copy_link",
+          "label": "Copy link",
+          "default": true
+        }
+      ]
     },
     {
       "type": "sku",
