@@ -1,0 +1,522 @@
+{%- comment -%}
+  Xula Recipe Guide — "Recipes & Brewing Methods"
+  Standalone section for the Product template (PDP). Renders a tabbed brewing
+  guide (V60, French Press, Espresso, Chemex, AeroPress...) scoped to the
+  product currently being viewed, plus a HowTo JSON-LD graph. Each panel is a
+  two-column grid: recipe content on one side, a recipe image on the other.
+
+  Each brewing method is a repeatable "method" block (add/remove/reorder from
+  the theme editor) — that's the *global* default recipe for that method.
+
+  Data source (in order of precedence), per method:
+    1. product.metafields.custom.brew_recipe_overrides (json)
+       Partial override keyed by method id, e.g.:
+       {
+         "v60": { "ratio": "1:15", "temperature": "93°C", "time": "2:45 min", "grind": "Medium-fine",
+                   "steps": ["Step 1...", "Step 2..."] }
+       }
+       Any field left out falls back to the block's global default for that method.
+    2. The block's own settings — the global defaults, editable in the theme editor.
+
+  "Recommended method" badge (the smart product ↔ recipe relation):
+    product.metafields.custom.recommended_brew_method (single_line_text_field, value = a method id)
+    falls back to a product tag: "brew:v60"
+{%- endcomment -%}
+
+{{ 'xula-recipe-guide.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-recipe-guide.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign heading = section.settings.heading
+  assign show_heading = section.settings.show_heading
+  assign intro = section.settings.intro
+  assign show_schema = section.settings.show_schema
+  assign heading_id = 'xula-recipe-guide-heading-' | append: section.id
+
+  assign recommended_id = blank
+  assign rec_mf = product.metafields.custom.recommended_brew_method
+  if rec_mf != blank
+    assign recommended_id = rec_mf | strip | downcase
+  else
+    for tag in product.tags
+      assign tag_down = tag | downcase
+      if tag_down contains 'brew:'
+        assign recommended_id = tag | split: ':' | last | strip | downcase
+        break
+      endif
+    endfor
+  endif
+
+  assign overrides = product.metafields.custom.brew_recipe_overrides.value
+
+  assign tabs_html = ''
+  assign panels_html = ''
+  assign howto_items = ''
+  assign visible_count = 0
+-%}
+
+{%- if product -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'method' -%}
+      {%- liquid
+        assign m_id = block.settings.id | strip | downcase
+        assign m_name = block.settings.name
+      -%}
+
+      {%- if m_id != blank and m_name != blank -%}
+        {%- liquid
+          assign m_icon = block.settings.icon
+          assign m_image = block.settings.image
+          assign m_ratio = block.settings.ratio
+          assign m_temp = block.settings.temperature
+          assign m_time = block.settings.time
+          assign m_grind = block.settings.grind
+          assign m_steps_raw = block.settings.steps
+          assign m_steps = m_steps_raw | newline_to_br | strip_newlines | split: '<br />'
+
+          assign ov = blank
+          if overrides != blank
+            assign ov = overrides[m_id]
+          endif
+
+          if ov != blank
+            if ov.ratio != blank
+              assign m_ratio = ov.ratio
+            endif
+            if ov.temperature != blank
+              assign m_temp = ov.temperature
+            endif
+            if ov.time != blank
+              assign m_time = ov.time
+            endif
+            if ov.grind != blank
+              assign m_grind = ov.grind
+            endif
+            if ov.steps != blank
+              assign m_steps = ov.steps
+            endif
+          endif
+
+          assign is_recommended = false
+          if recommended_id != blank and m_id == recommended_id
+            assign is_recommended = true
+          endif
+
+          assign is_first = false
+          if visible_count == 0
+            assign is_first = true
+          endif
+        -%}
+
+        {%- capture icon_svg -%}
+          {%- case m_icon -%}
+            {%- when 'french_press' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="8.5" width="12" height="12" rx="1"/><path d="M12 8.5V4M9.5 4h5"/><rect x="10.8" y="4" width="2.4" height="2.2"/><path d="M6 13h12"/></svg>
+            {%- when 'espresso' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11h11v4a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><path d="M16 12.5h1.5a2 2 0 0 1 0 4H16"/><path d="M8 4.5c0 1-1.2 1-1.2 2S8 7.5 8 8.5M12 4.5c0 1-1.2 1-1.2 2S12 7.5 12 8.5"/></svg>
+            {%- when 'chemex' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 3h5l.8 8-2 1.5v6.5a1 1 0 0 1-1 1h-.6a1 1 0 0 1-1-1V12.5l-2-1.5z"/><path d="M8.7 6.5h6.6"/></svg>
+            {%- when 'aeropress' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="9" width="8" height="11" rx="1"/><path d="M12 9V4M9.2 4h5.6"/><path d="M8 15h8"/></svg>
+            {%- when 'moka' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10h10l-2 5H9z"/><path d="M9 15h6l1 5H8z"/><path d="M8 10 9.5 5h5L16 10"/></svg>
+            {%- when 'cold_brew' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h12l-1.2 13.2a1 1 0 0 1-1 .8H8.2a1 1 0 0 1-1-.8z"/><path d="M5 6h14M9 10.5h6M9 14.5h6"/></svg>
+            {%- else -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M15.5 10.5H17a2.3 2.3 0 0 1 0 4.6h-1.5"/><path d="M8 3.2c0 1.1-1.4 1.1-1.4 2.3S8 6.8 8 7.9M12.3 3.2c0 1.1-1.4 1.1-1.4 2.3s1.4 1.1 1.4 2.4"/></svg>
+          {%- endcase -%}
+        {%- endcapture -%}
+
+        {%- capture tab_html -%}
+          <button
+            type="button"
+            class="xula-recipe-guide__tab{% if is_first %} is-active{% endif %}"
+            id="xrg-tab-{{ block.id }}"
+            role="tab"
+            aria-selected="{% if is_first %}true{% else %}false{% endif %}"
+            aria-controls="xrg-panel-{{ block.id }}"
+            tabindex="{% if is_first %}0{% else %}-1{% endif %}"
+            data-xrg-tab
+            data-method="{{ m_id }}"
+            {{ block.shopify_attributes }}
+          >
+            <span class="xula-recipe-guide__tab-icon" aria-hidden="true">{{ icon_svg }}</span>
+            <span class="xula-recipe-guide__tab-label">{{ m_name }}</span>
+            {%- if is_recommended -%}
+              <span class="xula-recipe-guide__tab-badge">Recommended</span>
+            {%- endif -%}
+          </button>
+        {%- endcapture -%}
+        {%- assign tabs_html = tabs_html | append: tab_html -%}
+
+        {%- capture panel_html -%}
+          <div
+            class="xula-recipe-guide__panel{% if is_first %} is-active{% endif %}"
+            id="xrg-panel-{{ block.id }}"
+            role="tabpanel"
+            aria-labelledby="xrg-tab-{{ block.id }}"
+            tabindex="0"
+            data-xrg-panel
+            {% unless is_first %}hidden{% endunless %}
+            {{ block.shopify_attributes }}
+          >
+            <div class="xula-recipe-guide__panel-grid">
+              <div class="xula-recipe-guide__panel-media">
+                {%- if m_image -%}
+                  {{ m_image | image_url: width: 900 | image_tag:
+                      loading: 'lazy',
+                      widths: '400, 600, 900',
+                      sizes: '(min-width: 700px) 380px, 100vw',
+                      alt: m_image.alt | default: m_name,
+                      class: 'xula-recipe-guide__image'
+                  }}
+                {%- else -%}
+                  <div class="xula-recipe-guide__media-placeholder" aria-hidden="true">
+                    <span class="xula-recipe-guide__media-icon">{{ icon_svg }}</span>
+                  </div>
+                {%- endif -%}
+              </div>
+
+              <div class="xula-recipe-guide__panel-content">
+                {%- if is_recommended -%}
+                  <p class="xula-recipe-guide__recommended">
+                    <span class="xula-recipe-guide__recommended-icon" aria-hidden="true">★</span>
+                    Recommended for {{ product.title }}
+                  </p>
+                {%- endif -%}
+
+                <dl class="xula-recipe-guide__metrics">
+                  {%- if m_ratio != blank -%}
+                    <div class="xula-recipe-guide__metric">
+                      <dt class="xula-recipe-guide__metric-label">Ratio</dt>
+                      <dd class="xula-recipe-guide__metric-value xula-type--code">{{ m_ratio }}</dd>
+                    </div>
+                  {%- endif -%}
+                  {%- if m_temp != blank -%}
+                    <div class="xula-recipe-guide__metric">
+                      <dt class="xula-recipe-guide__metric-label">Temperature</dt>
+                      <dd class="xula-recipe-guide__metric-value xula-type--code">{{ m_temp }}</dd>
+                    </div>
+                  {%- endif -%}
+                  {%- if m_time != blank -%}
+                    <div class="xula-recipe-guide__metric">
+                      <dt class="xula-recipe-guide__metric-label">Time</dt>
+                      <dd class="xula-recipe-guide__metric-value xula-type--code">{{ m_time }}</dd>
+                    </div>
+                  {%- endif -%}
+                  {%- if m_grind != blank -%}
+                    <div class="xula-recipe-guide__metric">
+                      <dt class="xula-recipe-guide__metric-label">Grind</dt>
+                      <dd class="xula-recipe-guide__metric-value xula-type--code">{{ m_grind }}</dd>
+                    </div>
+                  {%- endif -%}
+                </dl>
+
+                {%- if m_steps != blank -%}
+                  <ol class="xula-recipe-guide__steps">
+                    {%- for step in m_steps -%}
+                      {%- assign step_clean = step | strip -%}
+                      {%- if step_clean != blank -%}
+                        <li class="xula-recipe-guide__step">{{ step_clean }}</li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ol>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endcapture -%}
+        {%- assign panels_html = panels_html | append: panel_html -%}
+
+        {%- if show_schema -%}
+          {%- liquid
+            assign step_parts = ''
+            for step in m_steps
+              assign step_clean = step | strip
+              if step_clean != blank
+                capture sp
+                  echo '{"@type":"HowToStep","text":'
+                  echo step_clean | json
+                  echo '}'
+                endcapture
+                assign step_parts = step_parts | append: sp | append: '|XRG_STEP|'
+              endif
+            endfor
+            assign step_list = step_parts | split: '|XRG_STEP|' | join: ','
+
+            assign supply_parts = ''
+            if m_ratio != blank
+              assign supply_name = 'Coffee-to-water ratio — ' | append: m_ratio
+              capture sp
+                echo '{"@type":"HowToSupply","name":'
+                echo supply_name | json
+                echo '}'
+              endcapture
+              assign supply_parts = supply_parts | append: sp | append: '|XRG_SUP|'
+            endif
+            if m_temp != blank
+              assign supply_name = 'Water temperature — ' | append: m_temp
+              capture sp
+                echo '{"@type":"HowToSupply","name":'
+                echo supply_name | json
+                echo '}'
+              endcapture
+              assign supply_parts = supply_parts | append: sp | append: '|XRG_SUP|'
+            endif
+            if m_grind != blank
+              assign supply_name = 'Grind — ' | append: m_grind
+              capture sp
+                echo '{"@type":"HowToSupply","name":'
+                echo supply_name | json
+                echo '}'
+              endcapture
+              assign supply_parts = supply_parts | append: sp | append: '|XRG_SUP|'
+            endif
+            assign supply_list = supply_parts | split: '|XRG_SUP|' | join: ','
+
+            assign howto_name = m_name | append: ' — ' | append: product.title
+            assign howto_desc = 'How to brew ' | append: product.title | append: ' using the ' | append: m_name | append: ' method.'
+            if m_ratio != blank
+              assign howto_desc = howto_desc | append: ' Ratio: ' | append: m_ratio | append: '.'
+            endif
+            if m_temp != blank
+              assign howto_desc = howto_desc | append: ' Water at ' | append: m_temp | append: '.'
+            endif
+            if m_time != blank
+              assign howto_desc = howto_desc | append: ' Extraction time: ' | append: m_time | append: '.'
+            endif
+            if m_grind != blank
+              assign howto_desc = howto_desc | append: ' Grind: ' | append: m_grind | append: '.'
+            endif
+          -%}
+          {%- capture howto_item -%}
+            {
+              "@type": "HowTo",
+              "name": {{ howto_name | json }},
+              "description": {{ howto_desc | json }}
+              {%- if m_image -%},"image": {{ m_image | image_url: width: 1200 | prepend: 'https:' | json }}
+              {%- elsif product.featured_image -%},"image": {{ product.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}{%- endif -%}
+              {%- if supply_list != blank -%},"supply": [{{ supply_list }}]{%- endif -%}
+              {%- if step_list != blank -%},"step": [{{ step_list }}]{%- endif -%}
+            }
+          {%- endcapture -%}
+          {%- assign howto_items = howto_items | append: howto_item | append: '|XRG_ITEM|' -%}
+        {%- endif -%}
+
+        {%- assign visible_count = visible_count | plus: 1 -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- if visible_count > 0 -%}
+  <section class="xula-recipe-guide-section" aria-labelledby="{{ heading_id }}">
+    <div class="page-width">
+      <div class="xula-recipe-guide" data-xrg-root>
+        {%- if show_heading and heading != blank -%}
+          <div class="xula-recipe-guide__header">
+            <h2 class="xula-recipe-guide__heading" id="{{ heading_id }}">{{ heading }}</h2>
+            {%- if intro != blank -%}
+              <div class="xula-recipe-guide__intro">{{ intro }}</div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <div class="xula-recipe-guide__tabs-wrap">
+          <div
+            class="xula-recipe-guide__tablist"
+            role="tablist"
+            aria-label="{{ heading | default: 'Brewing methods' | escape }}"
+            data-xrg-tablist
+          >
+            {{ tabs_html }}
+          </div>
+        </div>
+
+        <div class="xula-recipe-guide__panels" data-xrg-panels>
+          {{ panels_html }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- if show_schema -%}
+    {%- assign howto_list = howto_items | split: '|XRG_ITEM|' | join: ',' -%}
+    {%- if howto_list != blank -%}
+      <script type="application/ld+json">
+        {"@context":"https://schema.org","@graph":[{{ howto_list }}]}
+      </script>
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Xula Recipe Guide",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show heading",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recipes & Brewing Methods"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro text",
+      "default": "<p>Pick your favorite method and dial in the recipe for this coffee.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_schema",
+      "label": "Add HowTo structured data (SEO)",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "Any method can be overridden per product with the JSON metafield product.metafields.custom.brew_recipe_overrides, and the recommended method with product.metafields.custom.recommended_brew_method (or a \"brew:id\" tag)."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "method",
+      "name": "Brewing method",
+      "settings": [
+        {
+          "type": "text",
+          "id": "id",
+          "label": "Method ID",
+          "info": "Lowercase, no spaces. Used to match metafield overrides and tags.",
+          "default": "v60"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "V60 / Pour Over"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "v60", "label": "V60 / Pour Over" },
+            { "value": "french_press", "label": "French Press" },
+            { "value": "espresso", "label": "Espresso" },
+            { "value": "chemex", "label": "Chemex" },
+            { "value": "aeropress", "label": "AeroPress" },
+            { "value": "moka", "label": "Moka" },
+            { "value": "cold_brew", "label": "Cold Brew" }
+          ],
+          "default": "v60"
+        },
+        {
+          "type": "header",
+          "content": "Recipe image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Shown next to the recipe content. Falls back to an icon if left blank."
+        },
+        {
+          "type": "header",
+          "content": "Brewing metrics"
+        },
+        { "type": "text", "id": "ratio", "label": "Ratio (coffee : water)", "default": "1:16" },
+        { "type": "text", "id": "temperature", "label": "Water temperature", "default": "92–94 °C" },
+        { "type": "text", "id": "time", "label": "Extraction time", "default": "2:30 – 3:00 min" },
+        { "type": "text", "id": "grind", "label": "Recommended grind", "default": "Medium-fine (sea salt)" },
+        {
+          "type": "textarea",
+          "id": "steps",
+          "label": "Steps (one per line)",
+          "default": "Heat the water and set up your gear.\nAdd the ground coffee.\nPour the water following the ratio above.\nLet the coffee extract for the time indicated.\nServe and enjoy."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula Recipe Guide",
+      "blocks": [
+        {
+          "type": "method",
+          "settings": {
+            "id": "v60",
+            "name": "V60 / Pour Over",
+            "icon": "v60",
+            "ratio": "1:16",
+            "temperature": "92–94 °C",
+            "time": "2:30 – 3:00 min",
+            "grind": "Medium-fine (sea salt)",
+            "steps": "Heat the water to 92-94°C and rinse the paper filter.\nAdd 15 g of medium-fine ground coffee and level the bed.\nPour 30 g of water for the bloom and wait 30 seconds.\nPour the rest of the water in circular motions up to 240 g.\nLet the coffee drain fully, 2:30 to 3:00 minutes total."
+          }
+        },
+        {
+          "type": "method",
+          "settings": {
+            "id": "french_press",
+            "name": "French Press",
+            "icon": "french_press",
+            "ratio": "1:15",
+            "temperature": "93–96 °C",
+            "time": "4:00 min",
+            "grind": "Coarse (raw sugar)",
+            "steps": "Heat the water to 93-96°C and preheat the French press.\nAdd 20 g of coarse ground coffee.\nPour 300 g of hot water and stir gently.\nPlace the lid with the plunger up and steep for 4 minutes.\nPress the plunger slowly and serve immediately."
+          }
+        },
+        {
+          "type": "method",
+          "settings": {
+            "id": "espresso",
+            "name": "Espresso",
+            "icon": "espresso",
+            "ratio": "1:2",
+            "temperature": "92–94 °C",
+            "time": "25 – 30 sec",
+            "grind": "Fine (table salt)",
+            "steps": "Grind 18 g of coffee to a fine, even consistency.\nDistribute and tamp the coffee with even pressure.\nExtract at 9 bars of pressure.\nStop the extraction between 25 and 30 seconds, with 36 g in the cup.\nServe right away to preserve the crema and aromas."
+          }
+        },
+        {
+          "type": "method",
+          "settings": {
+            "id": "chemex",
+            "name": "Chemex",
+            "icon": "chemex",
+            "ratio": "1:15",
+            "temperature": "92–94 °C",
+            "time": "3:30 – 4:00 min",
+            "grind": "Medium-coarse",
+            "steps": "Place the Chemex filter (triple layer) and rinse it with hot water.\nAdd 30 g of medium-coarse ground coffee.\nPour 60 g of water for the bloom and wait 45 seconds.\nPour the rest of the water in pulses up to 450 g.\nLet it drain fully, 3:30 to 4:00 minutes."
+          }
+        },
+        {
+          "type": "method",
+          "settings": {
+            "id": "aeropress",
+            "name": "AeroPress",
+            "icon": "aeropress",
+            "ratio": "1:14",
+            "temperature": "85–88 °C",
+            "time": "1:30 – 2:00 min",
+            "grind": "Medium-fine",
+            "steps": "Place the paper filter, rinse it, and assemble the AeroPress in normal mode.\nAdd 17 g of medium-fine ground coffee.\nPour 240 g of water at 85-88°C and stir for 10 seconds.\nInsert the plunger and steep for 1 minute.\nPress gently for 30 seconds until you hear the final hiss."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
