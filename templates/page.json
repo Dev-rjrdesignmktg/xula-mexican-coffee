@@ -36,8 +36,8 @@
       "name": "Xula Hero Cinematic",
       "settings": {
         "background_type": "image",
-        "image": "shopify://shop_images/IMG_5198.jpg",
-        "image_alt": "",
+        "image": "shopify://shop_images/IMG_5198.webp",
+        "image_alt": "Xula CEO imagen full cinematic",
         "disable_video_mobile": true,
         "video_upload_date": "",
         "overlay_color": "#24170f",
