@@ -59,6 +59,13 @@
             "text_style": "body"
           }
         },
+        "xula_product_meta_n8XbNK": {
+          "type": "xula_product_meta",
+          "settings": {
+            "show_heading": true,
+            "heading": "Coffee profile"
+          }
+        },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
@@ -77,10 +84,28 @@
             "show_gift_card_recipient": true
           }
         },
-        "share": {
-          "type": "share",
+        "xula_trust_badges_JbcqBw": {
+          "type": "xula_trust_badges",
           "settings": {
-            "share_label": "Share"
+            "badge_1_icon": "guarantee",
+            "badge_1_text": "30-day money-back guarantee",
+            "badge_2_icon": "delivery",
+            "badge_2_text": "Delivery in 3-5 business days",
+            "badge_3_icon": "worldwide",
+            "badge_3_text": "Worldwide shipping"
+          }
+        },
+        "xula_social_share_TUA4ab": {
+          "type": "xula_social_share",
+          "settings": {
+            "show_heading": true,
+            "heading": "Share",
+            "show_facebook": true,
+            "show_x": true,
+            "show_pinterest": true,
+            "show_whatsapp": true,
+            "show_email": true,
+            "show_copy_link": true
           }
         }
       },
@@ -92,10 +117,12 @@
         "title",
         "price",
         "text_HTUQPp",
+        "xula_product_meta_n8XbNK",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
-        "share"
+        "xula_trust_badges_JbcqBw",
+        "xula_social_share_TUA4ab"
       ],
       "settings": {
         "enable_sticky_info": true,
