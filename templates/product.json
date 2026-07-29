@@ -12,6 +12,10 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "rating_GL8FFw": {
+          "type": "rating",
+          "settings": {}
+        },
         "inventory_awkwx9": {
           "type": "inventory",
           "settings": {
@@ -81,6 +85,7 @@
         }
       },
       "block_order": [
+        "rating_GL8FFw",
         "inventory_awkwx9",
         "complementary_NePGRV",
         "vendor",
