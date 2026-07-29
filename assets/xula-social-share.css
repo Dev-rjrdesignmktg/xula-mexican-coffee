@@ -1,0 +1,115 @@
+/* =========================================================
+   Xula Social Share — icon badges to share the current page
+   Mobile-first, BEM (.xula-social-share)
+   ========================================================= */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.xula-social-share__heading {
+  font-family: var(--secondary-font);
+  font-size: .95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text);
+  opacity: .55;
+  margin: 0 0 10px;
+}
+
+.xula-social-share__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xula-social-share__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: color-mix(in srgb, var(--bg-secondary) 6%, transparent);
+  color: var(--bg-secondary);
+  cursor: pointer;
+  transition: background-color .25s ease, color .25s ease, transform .2s ease;
+}
+
+.xula-social-share__link svg {
+  width: 17px;
+  height: 17px;
+}
+
+.xula-social-share__link:hover {
+  transform: translateY(-2px);
+  color: #fff;
+}
+
+.xula-social-share__link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.xula-social-share__link--facebook:hover { background: #1877F2; }
+.xula-social-share__link--x:hover { background: #000; }
+.xula-social-share__link--pinterest:hover { background: #E60023; }
+.xula-social-share__link--whatsapp:hover { background: #25D366; }
+.xula-social-share__link--email:hover { background: var(--accent-secondary); }
+.xula-social-share__link--copy:hover { background: var(--accent); }
+
+.xula-social-share__link--copy {
+  font: inherit;
+}
+
+.xula-social-share__icon-success {
+  color: var(--text-secondary);
+}
+
+.xula-social-share__link--copy.is-copied .xula-social-share__icon-default {
+  display: none;
+}
+
+.xula-social-share__link--copy.is-copied .xula-social-share__icon-success {
+  display: inline-flex;
+}
+
+.xula-social-share__link--copy.is-copied:hover {
+  background: var(--text-secondary);
+  color: #fff;
+}
+
+/* ---------------------------------------------------------
+   Compact modifier
+   --------------------------------------------------------- */
+
+.xula-social-share--compact .xula-social-share__link {
+  width: 32px;
+  height: 32px;
+}
+
+.xula-social-share--compact .xula-social-share__link svg {
+  width: 14px;
+  height: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-social-share__link {
+    transition: none !important;
+  }
+}
