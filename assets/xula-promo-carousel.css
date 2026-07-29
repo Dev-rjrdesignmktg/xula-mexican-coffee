@@ -1,0 +1,407 @@
+/* ==========================================================================
+   Xula Promo Carousel — mobile first, BEM
+   ========================================================================== */
+
+.xula-promo-carousel {
+  background: var(--bg);
+  padding: 4.8rem 0;
+}
+
+/* ---------- Section header ---------- */
+
+.xula-promo-carousel__header {
+  margin-bottom: 2.4rem;
+}
+
+.xula-promo-carousel__heading {
+  font-family: var(--primary-font);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  line-height: 1.1;
+  color: var(--bg-secondary);
+  margin: 0;
+  max-width: 40ch;
+}
+
+/* ---------- Wrapper / viewport ---------- */
+
+.xula-promo-carousel__wrapper {
+  position: relative;
+}
+
+.xula-promo-carousel__viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  border-radius: 1.8rem;
+}
+
+.xula-promo-carousel__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.xula-promo-carousel__viewport:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 4px;
+}
+
+.xula-promo-carousel__track {
+  display: flex;
+  align-items: stretch;
+  gap: 1.6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------- Slide ---------- */
+
+.xula-promo-carousel__slide {
+  position: relative;
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  border-radius: 1.8rem;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--bg-tertiary);
+}
+
+.xula-promo-carousel--height-compact .xula-promo-carousel__slide {
+  min-height: 34rem;
+}
+
+.xula-promo-carousel--height-standard .xula-promo-carousel__slide {
+  min-height: 42rem;
+}
+
+.xula-promo-carousel--height-tall .xula-promo-carousel__slide {
+  min-height: 48rem;
+}
+
+.xula-promo-carousel__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.xula-promo-carousel__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.xula-promo-carousel__image--placeholder {
+  object-fit: cover;
+  color: var(--bg-tertiary);
+}
+
+/* ---------- Overlay (always present when content sits over the image) ---------- */
+
+.xula-promo-carousel__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.xula-promo-carousel__overlay--soft {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg-secondary) 0%, transparent) 40%,
+    color-mix(in srgb, var(--bg-secondary) 65%, transparent) 100%
+  );
+}
+
+.xula-promo-carousel__overlay--strong {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg-secondary) 15%, transparent) 0%,
+    color-mix(in srgb, var(--bg-secondary) 85%, transparent) 100%
+  );
+}
+
+.xula-promo-carousel__overlay--solid {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--xula-promo-carousel-accent) 15%, transparent) 0%,
+    color-mix(in srgb, var(--bg-secondary) 80%, var(--xula-promo-carousel-accent)) 100%
+  );
+  opacity: 0.75;
+}
+
+.xula-promo-carousel__overlay--none {
+  display: none;
+}
+
+/* ---------- Content ---------- */
+
+.xula-promo-carousel__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: flex-end;
+  padding: 2.4rem 2rem;
+  color: #ffffff;
+}
+
+.xula-promo-carousel__content--left {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.xula-promo-carousel__content--center {
+  align-items: center;
+  text-align: center;
+}
+
+.xula-promo-carousel__content--right {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.xula-promo-carousel__badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--xula-promo-carousel-accent);
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 0.5rem 1.2rem;
+  font-family: var(--secondary-font);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+}
+
+.xula-promo-carousel__slide-heading {
+  font-family: var(--primary-font);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  line-height: 1.12;
+  color: #ffffff;
+  margin: 0 0 1rem;
+  max-width: 32ch;
+}
+
+.xula-promo-carousel__text {
+  font-family: var(--secondary-font);
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: #ffffff;
+  opacity: 0.92;
+  max-width: 42ch;
+  margin: 0 0 2rem;
+}
+
+.xula-promo-carousel__cta {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  padding: 1.3rem 2.2rem;
+  border-radius: 999px;
+  background: var(--xula-promo-carousel-accent);
+  border: 1px solid var(--xula-promo-carousel-accent);
+  color: #ffffff;
+  font-family: var(--secondary-font);
+  font-weight: 700;
+  font-size: 1.4rem;
+  text-decoration: none;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+}
+
+.xula-promo-carousel__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--xula-promo-carousel-accent) 45%, transparent);
+}
+
+.xula-promo-carousel__cta:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+/* ---------- Controls ---------- */
+
+.xula-promo-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: 2rem;
+}
+
+.xula-promo-carousel__nav {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--bg-secondary) 25%, transparent);
+  background: var(--bg);
+  color: var(--bg-secondary);
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+.xula-promo-carousel__nav svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.xula-promo-carousel__nav:hover:not(:disabled) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.xula-promo-carousel__nav:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+}
+
+.xula-promo-carousel__nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.xula-promo-carousel__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  flex: 1 1 0%;
+}
+
+.xula-promo-carousel__dot {
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--bg-secondary) 35%, transparent);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+}
+
+.xula-promo-carousel__dot:hover {
+  border-color: var(--accent);
+}
+
+.xula-promo-carousel__dot:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+}
+
+.xula-promo-carousel__dot--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.2);
+}
+
+/* ---------- Autoplay toggle ---------- */
+
+.xula-promo-carousel__toggle {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--bg-secondary) 25%, transparent);
+  background: var(--bg);
+  cursor: pointer;
+}
+
+.xula-promo-carousel__toggle:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+}
+
+.xula-promo-carousel__toggle-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.xula-promo-carousel__toggle-icon--pause {
+  display: block;
+  border-left: 0.4rem solid var(--bg-secondary);
+  border-right: 0.4rem solid var(--bg-secondary);
+}
+
+.xula-promo-carousel__toggle-icon--play {
+  display: none;
+  border-top: 0.7rem solid transparent;
+  border-bottom: 0.7rem solid transparent;
+  border-left: 1.1rem solid var(--bg-secondary);
+  margin-left: 0.2rem;
+}
+
+.xula-promo-carousel__toggle[aria-pressed="true"] .xula-promo-carousel__toggle-icon--pause {
+  display: none;
+}
+
+.xula-promo-carousel__toggle[aria-pressed="true"] .xula-promo-carousel__toggle-icon--play {
+  display: block;
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-promo-carousel__viewport {
+    scroll-behavior: auto;
+  }
+
+  .xula-promo-carousel__cta,
+  .xula-promo-carousel__dot {
+    transition: none;
+  }
+}
+
+/* ---------- Desktop ---------- */
+
+@media screen and (min-width: 750px) {
+  .xula-promo-carousel {
+    padding: 6.4rem 0;
+  }
+
+  .xula-promo-carousel__header {
+    margin-bottom: 3.2rem;
+  }
+
+  .xula-promo-carousel__track {
+    gap: 2rem;
+  }
+
+  .xula-promo-carousel--height-compact .xula-promo-carousel__slide {
+    min-height: 38rem;
+  }
+
+  .xula-promo-carousel--height-standard .xula-promo-carousel__slide {
+    min-height: 52rem;
+  }
+
+  .xula-promo-carousel--height-tall .xula-promo-carousel__slide {
+    min-height: 64rem;
+  }
+
+  .xula-promo-carousel__content {
+    padding: 5.6rem;
+  }
+
+  .xula-promo-carousel__controls {
+    margin-top: 2.4rem;
+  }
+}

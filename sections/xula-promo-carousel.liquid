@@ -1,0 +1,391 @@
+{{ 'xula-promo-carousel.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-promo-carousel.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign slides = section.blocks
+  assign slide_count = slides.size
+  assign heading_id = 'xula-promo-carousel-heading-' | append: section.id
+  assign track_id = 'xula-promo-carousel-track-' | append: section.id
+  assign live_id = 'xula-promo-carousel-live-' | append: section.id
+  assign autoplay_ms = section.settings.autoplay_interval | times: 1000 | round
+-%}
+
+{%- if slide_count > 0 -%}
+<section
+  class="xula-promo-carousel xula-promo-carousel--height-{{ section.settings.slide_height }}"
+  {% if section.settings.heading != blank %}aria-labelledby="{{ heading_id }}"{% else %}aria-label="Featured promotions"{% endif %}
+  data-xula-promo-carousel
+  data-autoplay="{{ section.settings.enable_autoplay }}"
+  data-autoplay-interval="{{ autoplay_ms }}"
+>
+  <div class="page-width">
+
+    {%- if section.settings.heading != blank -%}
+      <div class="xula-promo-carousel__header">
+        <h2 class="xula-promo-carousel__heading" id="{{ heading_id }}">{{ section.settings.heading }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div
+      class="xula-promo-carousel__wrapper"
+      role="region"
+      aria-roledescription="carousel"
+      {% if section.settings.heading != blank %}aria-labelledby="{{ heading_id }}"{% else %}aria-label="Featured promotions"{% endif %}
+    >
+
+      <div class="xula-promo-carousel__viewport" tabindex="0" role="group" aria-label="Scroll to see more">
+        <ul class="xula-promo-carousel__track" id="{{ track_id }}" data-xula-promo-carousel-track>
+          {%- for block in slides -%}
+            {%- liquid
+              assign img_alt = block.settings.image_alt | default: block.settings.heading | default: shop.name
+              assign has_mobile_image = false
+              if block.settings.image_mobile != blank
+                assign has_mobile_image = true
+              endif
+            -%}
+            <li
+              class="xula-promo-carousel__slide xula-promo-carousel__slide--{{ block.settings.position }}"
+              role="group"
+              aria-roledescription="slide"
+              aria-label="{{ forloop.index }} of {{ slide_count }}"
+              style="--xula-promo-carousel-accent: {{ block.settings.accent_color }};"
+              data-xula-promo-carousel-slide
+              {{ block.shopify_attributes }}
+            >
+              <div class="xula-promo-carousel__media">
+                <picture>
+                  {%- if has_mobile_image -%}
+                    <source
+                      media="(max-width: 749px)"
+                      srcset="
+                        {{ block.settings.image_mobile | image_url: width: 480 }} 480w,
+                        {{ block.settings.image_mobile | image_url: width: 750 }} 750w,
+                        {{ block.settings.image_mobile | image_url: width: 1080 }} 1080w
+                      "
+                    >
+                  {%- endif -%}
+                  {%- if block.settings.image != blank -%}
+                    <img
+                      class="xula-promo-carousel__image"
+                      src="{{ block.settings.image | image_url: width: 1600 }}"
+                      srcset="
+                        {{ block.settings.image | image_url: width: 750 }} 750w,
+                        {{ block.settings.image | image_url: width: 1100 }} 1100w,
+                        {{ block.settings.image | image_url: width: 1600 }} 1600w,
+                        {{ block.settings.image | image_url: width: 2400 }} 2400w
+                      "
+                      sizes="(min-width: 750px) 100vw, 92vw"
+                      alt="{{ img_alt | escape }}"
+                      width="{{ block.settings.image.width }}"
+                      height="{{ block.settings.image.height }}"
+                      loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                      fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}"
+                      decoding="async"
+                    >
+                  {%- else -%}
+                    {{ 'lifestyle-1' | placeholder_svg_tag: 'xula-promo-carousel__image xula-promo-carousel__image--placeholder placeholder-svg' }}
+                  {%- endif -%}
+                </picture>
+                <div class="xula-promo-carousel__overlay xula-promo-carousel__overlay--{{ block.settings.overlay_style }}" aria-hidden="true"></div>
+              </div>
+
+              {%- if block.settings.heading != blank or block.settings.text != blank or block.settings.badge != blank -%}
+                <div class="xula-promo-carousel__content xula-promo-carousel__content--{{ block.settings.position }}">
+                  {%- if block.settings.badge != blank -%}
+                    <span class="xula-promo-carousel__badge">{{ block.settings.badge }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.heading != blank -%}
+                    <h3 class="xula-promo-carousel__slide-heading">{{ block.settings.heading }}</h3>
+                  {%- endif -%}
+                  {%- if block.settings.text != blank -%}
+                    <p class="xula-promo-carousel__text">{{ block.settings.text }}</p>
+                  {%- endif -%}
+                  {%- if block.settings.cta_label != blank -%}
+                    <a href="{{ block.settings.cta_link | default: '#' }}" class="xula-promo-carousel__cta">
+                      <span>{{ block.settings.cta_label }}</span>
+                    </a>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div class="xula-promo-carousel__controls">
+        <button
+          type="button"
+          class="xula-promo-carousel__nav xula-promo-carousel__nav--prev"
+          aria-label="Previous slide"
+          aria-controls="{{ track_id }}"
+          data-xula-promo-carousel-prev
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 4L7 12L15 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        {%- if slide_count > 1 -%}
+          <div class="xula-promo-carousel__dots" role="group" aria-label="Select slide" data-xula-promo-carousel-dots>
+            {%- for block in slides -%}
+              <button
+                type="button"
+                class="xula-promo-carousel__dot{% if forloop.first %} xula-promo-carousel__dot--active{% endif %}"
+                aria-label="Go to slide {{ forloop.index }}"
+                aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+                data-xula-promo-carousel-dot
+                data-index="{{ forloop.index0 }}"
+              ></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <button
+          type="button"
+          class="xula-promo-carousel__nav xula-promo-carousel__nav--next"
+          aria-label="Next slide"
+          aria-controls="{{ track_id }}"
+          data-xula-promo-carousel-next
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4L17 12L9 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        {%- if section.settings.enable_autoplay -%}
+          <button
+            type="button"
+            class="xula-promo-carousel__toggle"
+            aria-pressed="false"
+            aria-label="Pause autoplay"
+            data-label-pause="Pause autoplay"
+            data-label-play="Resume autoplay"
+            data-xula-promo-carousel-toggle
+          >
+            <span class="xula-promo-carousel__toggle-icon xula-promo-carousel__toggle-icon--pause" aria-hidden="true"></span>
+            <span class="xula-promo-carousel__toggle-icon xula-promo-carousel__toggle-icon--play" aria-hidden="true"></span>
+          </button>
+        {%- endif -%}
+      </div>
+
+      <div class="visually-hidden" role="status" aria-live="polite" id="{{ live_id }}" data-xula-promo-carousel-live></div>
+
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": [
+      {%- for block in slides -%}
+        {
+          "@type": "ListItem",
+          "position": {{ forloop.index }},
+          "name": {{ block.settings.heading | default: block.settings.badge | default: shop.name | json }},
+          "image": {% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 1600 | prepend: 'https:' | json }}{% else %}null{% endif %},
+          "url": {{ block.settings.cta_link | default: shop.url | json }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  }
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Xula Promo Carousel",
+  "tag": "section",
+  "class": "section xula-promo-carousel-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "info": "Optional. Leave blank to hide it."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "slide_height",
+      "label": "Slide height",
+      "options": [
+        { "value": "compact", "label": "Compact" },
+        { "value": "standard", "label": "Standard" },
+        { "value": "tall", "label": "Tall" }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "header",
+      "content": "Autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Enable autoplay",
+      "info": "Automatically pauses on hover, on keyboard focus, and for users with reduced motion. Includes a visible pause button.",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_interval",
+      "label": "Interval between slides",
+      "min": 3,
+      "max": 10,
+      "step": 0.5,
+      "unit": "s",
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image (desktop)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Background image (mobile)",
+          "info": "Optional. If omitted, the desktop image is used cropped."
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Alt text",
+          "info": "Describes the image for screen readers and SEO. If omitted, the heading is used."
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge / label",
+          "info": "Optional. E.g. 'New', 'Limited edition'."
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description text"
+        },
+        {
+          "type": "header",
+          "content": "Call to action"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "Link"
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Accent color",
+          "info": "Used for this slide's badge, button, and dot indicator.",
+          "default": "#E8318A"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Content position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "overlay_style",
+          "label": "Image overlay",
+          "info": "Improves text legibility over the image.",
+          "options": [
+            { "value": "soft", "label": "Soft gradient" },
+            { "value": "strong", "label": "Strong gradient" },
+            { "value": "solid", "label": "Brand tint (accent color)" },
+            { "value": "none", "label": "None" }
+          ],
+          "default": "soft"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Xula Promo Carousel",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "badge": "New collection",
+            "heading": "Seasonal coffee, freshly roasted",
+            "text": "Limited single-origin lots, roasted in small batches to bring out every flavor note.",
+            "cta_label": "Discover the collection",
+            "cta_link": "#",
+            "accent_color": "#E8318A",
+            "position": "left",
+            "overlay_style": "soft"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "badge": "Xula Subscription",
+            "heading": "Your favorite coffee, every month",
+            "text": "Pick your roast profile and get fresh coffee delivered to your door, hassle-free.",
+            "cta_label": "Subscribe now",
+            "cta_link": "#",
+            "accent_color": "#E95028",
+            "position": "left",
+            "overlay_style": "soft"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "badge": "Single origin",
+            "heading": "From the Mexican farm to your cup",
+            "text": "We work directly with local growers to guarantee quality and fair trade.",
+            "cta_label": "Learn about our origin",
+            "cta_link": "#",
+            "accent_color": "#345DA8",
+            "position": "left",
+            "overlay_style": "soft"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
