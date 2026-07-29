@@ -1,0 +1,1075 @@
+{{ 'xula-coffee-quiz.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-coffee-quiz.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign quiz_id = 'XulaQuiz-' | append: section.id
+  assign question_blocks = section.blocks | where: 'type', 'question'
+  assign result_blocks = section.blocks | where: 'type', 'result'
+  assign step_blocks = section.blocks | where: 'type', 'step'
+  assign total_questions = question_blocks.size
+  assign newsletter_tag = section.settings.newsletter_tag | default: 'quiz-lead'
+
+  assign has_media = false
+  if section.settings.media_image != blank
+    assign has_media = true
+  else
+    for block in result_blocks
+      if block.settings.product.featured_image != blank
+        assign has_media = true
+        break
+      endif
+    endfor
+  endif
+
+  assign default_media = section.settings.media_image
+  if default_media == blank
+    for block in result_blocks
+      if block.settings.product.featured_image != blank
+        assign default_media = block.settings.product.featured_image
+        break
+      endif
+    endfor
+  endif
+-%}
+
+<section
+  class="xula-quiz{% if has_media %} xula-quiz--has-media{% endif %}"
+  id="{{ quiz_id }}"
+  aria-labelledby="{{ quiz_id }}-heading"
+  data-xula-quiz
+  data-newsletter-tag="{{ newsletter_tag | escape }}"
+  data-question-word="{{ section.settings.question_word | default: 'Question' | escape }}"
+  data-of-word="{{ section.settings.of_word | default: 'of' | escape }}"
+>
+  <div class="page-width xula-quiz__inner">
+
+    {%- if total_questions == 0 or result_blocks.size == 0 -%}
+      <p class="xula-quiz__empty">
+        Add at least one question and one result (product) from the section editor to activate the quiz.
+      </p>
+    {%- else -%}
+
+      <div class="xula-quiz__frame xula-quiz__frame--media-{{ section.settings.mobile_media_position | default: 'above' }}">
+
+        {%- if has_media -%}
+          <div class="xula-quiz__media">
+            <img
+              class="xula-quiz__media-image"
+              data-xula-quiz-media-image
+              data-default-src="{{ default_media | image_url: width: 1200 }}"
+              data-default-srcset="
+                {{- default_media | image_url: width: 600 }} 600w,
+                {{ default_media | image_url: width: 1200 }} 1200w,
+                {{ default_media | image_url: width: 1800 }} 1800w"
+              src="{{ default_media | image_url: width: 1200 }}"
+              srcset="
+                {{ default_media | image_url: width: 600 }} 600w,
+                {{ default_media | image_url: width: 1200 }} 1200w,
+                {{ default_media | image_url: width: 1800 }} 1800w"
+              sizes="(min-width: 990px) 44vw, 100vw"
+              alt=""
+              width="{{ default_media.width }}"
+              height="{{ default_media.height }}"
+              loading="eager"
+              decoding="async"
+            >
+          </div>
+        {%- endif -%}
+
+        <div class="xula-quiz__content">
+
+          <div class="xula-quiz__progress" data-xula-quiz-progress hidden>
+            <div class="xula-quiz__progress-track">
+              <div class="xula-quiz__progress-fill" data-xula-quiz-progress-fill></div>
+            </div>
+            <p class="xula-quiz__progress-text xula-type--code" data-xula-quiz-progress-text></p>
+          </div>
+
+          <div class="xula-quiz__panels" data-xula-quiz-panels data-total-questions="{{ total_questions }}">
+
+            {%- comment -%} Welcome panel {%- endcomment -%}
+            <div class="xula-quiz__panel xula-quiz__panel--welcome" data-xula-quiz-panel data-panel="welcome">
+              {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+                <div class="xula-quiz__welcome-intro">
+                  {%- if section.settings.eyebrow != blank -%}
+                    <span class="xula-eyebrow">{{ section.settings.eyebrow }}</span>
+                  {%- endif -%}
+                  {%- if section.settings.heading != blank -%}
+                    <h2 class="xula-heading xula-quiz__welcome-heading" id="{{ quiz_id }}-heading">
+                      {{ section.settings.heading }}
+                    </h2>
+                  {%- else -%}
+                    <h2 class="visually-hidden" id="{{ quiz_id }}-heading">XULA Coffee Quiz</h2>
+                  {%- endif -%}
+                  {%- if section.settings.subheading != blank -%}
+                    <p class="xula-text xula-quiz__welcome-subheading">{{ section.settings.subheading }}</p>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              {%- if step_blocks.size > 0 -%}
+                <ol class="xula-quiz__steps">
+                  {%- for block in step_blocks -%}
+                    <li class="xula-quiz__step" {{ block.shopify_attributes }}>
+                      <span class="xula-quiz__step-number" aria-hidden="true">{{ forloop.index }}</span>
+                      <span class="xula-quiz__step-text">{{ block.settings.step_text }}</span>
+                    </li>
+                  {%- endfor -%}
+                </ol>
+              {%- endif -%}
+
+              <button type="button" class="xula-btn xula-quiz__start" data-xula-quiz-start>
+                <span>{{ section.settings.start_button_label | default: 'Start the quiz' }}</span>
+              </button>
+              {%- if section.settings.start_time_label != blank -%}
+                <p class="xula-quiz__time-note">{{ section.settings.start_time_label }}</p>
+              {%- endif -%}
+            </div>
+
+            {%- comment -%} Question panels {%- endcomment -%}
+            {%- for block in question_blocks -%}
+              {%- liquid
+                assign q_index = forloop.index0
+                assign is_single = true
+                if block.settings.selection_type == 'multiple'
+                  assign is_single = false
+                endif
+                assign legend_id = quiz_id | append: '-q' | append: q_index | append: '-legend'
+              -%}
+              <div
+                class="xula-quiz__panel xula-quiz__panel--question"
+                data-xula-quiz-panel
+                data-panel="question"
+                data-index="{{ q_index }}"
+                data-selection="{{ block.settings.selection_type | default: 'single' }}"
+                hidden
+                {{ block.shopify_attributes }}
+              >
+                <fieldset class="xula-quiz__fieldset">
+                  <legend class="xula-quiz__question" id="{{ legend_id }}" tabindex="-1">
+                    {{ block.settings.question_text }}
+                  </legend>
+
+                  {%- if block.settings.question_helper != blank -%}
+                    <p class="xula-quiz__helper">{{ block.settings.question_helper }}</p>
+                  {%- endif -%}
+
+                  <div
+                    class="xula-quiz__options"
+                    role="{% if is_single %}radiogroup{% else %}group{% endif %}"
+                    aria-labelledby="{{ legend_id }}"
+                    data-xula-quiz-options
+                  >
+                    {%- for i in (1..5) -%}
+                      {%- assign label_key = 'option_' | append: i | append: '_label' -%}
+                      {%- assign tags_key = 'option_' | append: i | append: '_tags' -%}
+                      {%- assign option_label = block.settings[label_key] -%}
+                      {%- assign option_tags = block.settings[tags_key] -%}
+                      {%- if option_label != blank -%}
+                        <button
+                          type="button"
+                          class="xula-quiz__option"
+                          role="{% if is_single %}radio{% else %}checkbox{% endif %}"
+                          aria-checked="false"
+                          tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+                          data-xula-quiz-option
+                          data-tags="{{ option_tags | escape }}"
+                        >
+                          <span class="xula-quiz__option-check" aria-hidden="true"></span>
+                          <span class="xula-quiz__option-label">{{ option_label }}</span>
+                        </button>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                </fieldset>
+
+                <div class="xula-quiz__nav">
+                  <button type="button" class="xula-quiz__nav-btn xula-quiz__nav-btn--back" data-xula-quiz-back>
+                    {{ section.settings.back_label | default: 'Back' }}
+                  </button>
+                  <button
+                    type="button"
+                    class="xula-quiz__nav-btn xula-btn xula-quiz__nav-btn--next"
+                    data-xula-quiz-next
+                    {% if is_single %}hidden{% endif %}
+                    disabled
+                  >
+                    <span>{{ section.settings.next_label | default: 'Next' }}</span>
+                  </button>
+                </div>
+              </div>
+            {%- endfor -%}
+
+            {%- comment -%} Results panel {%- endcomment -%}
+            <div class="xula-quiz__panel xula-quiz__panel--results" data-xula-quiz-panel data-panel="results" hidden>
+              <div class="xula-quiz__results-intro">
+                {%- if section.settings.results_eyebrow != blank -%}
+                  <span class="xula-eyebrow">{{ section.settings.results_eyebrow }}</span>
+                {%- endif -%}
+                <h3 class="xula-quiz__results-heading" tabindex="-1" data-xula-quiz-results-heading>
+                  {{ section.settings.results_heading | default: 'This is your ideal coffee' }}
+                </h3>
+                {%- if section.settings.results_text != blank -%}
+                  <p class="xula-quiz__results-text">{{ section.settings.results_text }}</p>
+                {%- endif -%}
+              </div>
+
+              <div class="xula-quiz__results-list" data-xula-quiz-results-list>
+                {%- for block in result_blocks -%}
+                  {%- liquid
+                    assign product = block.settings.product
+                    assign is_default = false
+                    if block.settings.is_default
+                      assign is_default = true
+                    endif
+                  -%}
+                  {%- if product != blank -%}
+                    {%- liquid
+                      assign variant = product.selected_or_first_available_variant
+                      assign has_plans = false
+                      if product.selling_plan_groups.size > 0
+                        assign has_plans = true
+                        assign first_plan = product.selling_plan_groups.first.selling_plans.first
+                      endif
+
+                      # Features — badge + value pairs injected from product
+                      # metafields, with a product-tag fallback for stores that
+                      # haven't set up metafields yet (same convention used in
+                      # xula-product-catalog.liquid).
+                      assign roast_level = product.metafields.custom.roast_level
+                      assign mf_intensity = product.metafields.custom.intensity
+                      assign tasting_notes_mf = product.metafields.custom.tasting_notes
+                      assign mf_origin = product.metafields.custom.origin
+                      assign intensity = blank
+                      assign notes_array = blank
+                      assign origin_display = mf_origin
+
+                      if roast_level == blank
+                        for tag in product.tags
+                          assign tag_down = tag | downcase
+                          if tag_down contains 'roast:'
+                            assign roast_level = tag | split: ':' | last | strip
+                            break
+                          endif
+                        endfor
+                      endif
+                      assign roast_display = roast_level
+
+                      if mf_intensity != blank
+                        assign intensity = mf_intensity | times: 1 | at_least: 1 | at_most: 10
+                      else
+                        for tag in product.tags
+                          assign tag_down = tag | downcase
+                          if tag_down contains 'intensity:'
+                            assign intensity = tag | split: ':' | last | strip | times: 1 | at_least: 1 | at_most: 10
+                            break
+                          endif
+                        endfor
+                      endif
+
+                      if tasting_notes_mf != blank
+                        if tasting_notes_mf.type == 'list.single_line_text_field'
+                          assign notes_array = tasting_notes_mf.value
+                        else
+                          assign notes_array = tasting_notes_mf | split: ','
+                        endif
+                      else
+                        assign notes_from_tags = ''
+                        for tag in product.tags
+                          assign tag_down = tag | downcase
+                          if tag_down contains 'note:' or tag_down contains 'flavor:'
+                            assign note_value = tag | split: ':' | last | strip
+                            assign notes_from_tags = notes_from_tags | append: note_value | append: '|QNOTE|'
+                          endif
+                        endfor
+                        if notes_from_tags != blank
+                          assign notes_array = notes_from_tags | split: '|QNOTE|'
+                        endif
+                      endif
+
+                      if origin_display == blank
+                        for tag in product.tags
+                          assign tag_down = tag | downcase
+                          if tag_down contains 'origin:'
+                            assign origin_display = tag | split: ':' | last | strip
+                            break
+                          endif
+                        endfor
+                      endif
+
+                      assign has_features = false
+                      if roast_display != blank or intensity != blank or notes_array != blank or origin_display != blank
+                        assign has_features = true
+                      endif
+                    -%}
+                    <article
+                      class="xula-quiz__result"
+                      data-xula-quiz-result
+                      data-match-tags="{{ block.settings.match_tags | escape }}"
+                      data-default="{{ is_default }}"
+                      data-handle="{{ product.handle }}"
+                      {%- if product.featured_image != blank %}
+                      data-image="{{ product.featured_image | image_url: width: 1200 }}"
+                      data-image-srcset="
+                        {{- product.featured_image | image_url: width: 600 }} 600w,
+                        {{ product.featured_image | image_url: width: 1200 }} 1200w,
+                        {{ product.featured_image | image_url: width: 1800 }} 1800w"
+                      {%- endif %}
+                      hidden
+                      {{ block.shopify_attributes }}
+                    >
+                      {%- if block.settings.badge != blank -%}
+                        <span class="xula-quiz__result-badge">{{ block.settings.badge }}</span>
+                      {%- endif -%}
+
+                      {%- unless has_media -%}
+                        {%- comment -%}
+                          Only needed as a fallback thumbnail when the section
+                          has no persistent media column (no image configured
+                          anywhere). When has_media is true, the right-hand
+                          column already swaps to this product's photo.
+                        {%- endcomment -%}
+                        <div class="xula-quiz__result-media">
+                          {%- if product.featured_image != blank -%}
+                            <img
+                              src="{{ product.featured_image | image_url: width: 500 }}"
+                              srcset="
+                                {{ product.featured_image | image_url: width: 320 }} 320w,
+                                {{ product.featured_image | image_url: width: 500 }} 500w,
+                                {{ product.featured_image | image_url: width: 700 }} 700w"
+                              sizes="(min-width: 750px) 240px, 60vw"
+                              alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                              width="{{ product.featured_image.width }}"
+                              height="{{ product.featured_image.height }}"
+                              loading="lazy"
+                              decoding="async"
+                            >
+                          {%- else -%}
+                            {{ 'product-1' | placeholder_svg_tag: 'xula-quiz__result-image xula-quiz__result-image--placeholder placeholder-svg' }}
+                          {%- endif -%}
+                        </div>
+                      {%- endunless -%}
+
+                      <div class="xula-quiz__result-body">
+                        <h4 class="xula-quiz__result-title">
+                          {{ block.settings.title_override | default: product.title }}
+                        </h4>
+
+                        <div class="xula-quiz__result-price">
+                          <span>{{ variant.price | money }}</span>
+                          {%- if product.compare_at_price > variant.price -%}
+                            <s>{{ product.compare_at_price | money }}</s>
+                          {%- endif -%}
+                        </div>
+
+                        {%- if block.settings.description != blank -%}
+                          <p class="xula-quiz__result-description">{{ block.settings.description }}</p>
+                        {%- endif -%}
+
+                        {%- if has_features -%}
+                          <ul class="xula-quiz__features" role="list">
+                            {%- if roast_display != blank -%}
+                              <li class="xula-quiz__feature">
+                                <span class="xula-quiz__feature-icon" aria-hidden="true">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2c2 2.5 3 4.6 3 6.5A3 3 0 0 1 9 8.5C9 6.6 10 4.5 12 2z"/>
+                                    <path d="M6.5 12c-1 2-1.5 3.6-1.5 5a7 7 0 0 0 14 0c0-1.4-.5-3-1.5-5"/>
+                                  </svg>
+                                </span>
+                                <span class="xula-quiz__feature-text">
+                                  <span class="xula-quiz__feature-label">Roast</span>
+                                  <span class="xula-quiz__feature-value xula-type--code">{{ roast_display }}</span>
+                                </span>
+                              </li>
+                            {%- endif -%}
+
+                            {%- if intensity != blank -%}
+                              <li class="xula-quiz__feature">
+                                <span class="xula-quiz__feature-icon" aria-hidden="true">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M13 2 4 14h6l-1 8 9-12h-6z"/>
+                                  </svg>
+                                </span>
+                                <span class="xula-quiz__feature-text">
+                                  <span class="xula-quiz__feature-label">Intensity</span>
+                                  <span class="xula-quiz__feature-value xula-type--code">{{ intensity }}/10</span>
+                                </span>
+                              </li>
+                            {%- endif -%}
+
+                            {%- if notes_array != blank -%}
+                              <li class="xula-quiz__feature">
+                                <span class="xula-quiz__feature-icon" aria-hidden="true">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 21s-7-5.2-7-11a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 5.8-7 11-7 11 0 0-2-1.5-4-3.5"/>
+                                  </svg>
+                                </span>
+                                <span class="xula-quiz__feature-text">
+                                  <span class="xula-quiz__feature-label">Notes</span>
+                                  <span class="xula-quiz__feature-value xula-type--code">{{ notes_array | join: ', ' }}</span>
+                                </span>
+                              </li>
+                            {%- endif -%}
+
+                            {%- if origin_display != blank -%}
+                              <li class="xula-quiz__feature">
+                                <span class="xula-quiz__feature-icon" aria-hidden="true">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 21s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12z"/>
+                                    <circle cx="12" cy="9" r="2.5"/>
+                                  </svg>
+                                </span>
+                                <span class="xula-quiz__feature-text">
+                                  <span class="xula-quiz__feature-label">Origin</span>
+                                  <span class="xula-quiz__feature-value xula-type--code">{{ origin_display }}</span>
+                                </span>
+                              </li>
+                            {%- endif -%}
+                          </ul>
+                        {%- endif -%}
+
+                        <form
+                          method="post"
+                          action="{{ routes.cart_add_url }}"
+                          class="xula-quiz__result-form"
+                          data-xula-quiz-add-form
+                        >
+                          <input type="hidden" name="id" value="{{ variant.id }}" data-xula-quiz-variant-id>
+                          <input type="hidden" name="quantity" value="1">
+
+                          {%- if has_plans -%}
+                            <div
+                              class="xula-quiz__purchase-toggle"
+                              role="radiogroup"
+                              aria-label="Purchase option"
+                              data-xula-quiz-purchase-toggle
+                            >
+                              <button
+                                type="button"
+                                class="xula-quiz__purchase-option is-active"
+                                role="radio"
+                                aria-checked="true"
+                                data-purchase="onetime"
+                                tabindex="0"
+                              >
+                                {{ section.settings.onetime_label | default: 'One-time purchase' }}
+                              </button>
+                              <button
+                                type="button"
+                                class="xula-quiz__purchase-option"
+                                role="radio"
+                                aria-checked="false"
+                                data-purchase="subscribe"
+                                data-selling-plan-id="{{ first_plan.id }}"
+                                tabindex="-1"
+                              >
+                                {{ section.settings.subscribe_label | default: 'Subscribe & save' }}
+                              </button>
+                            </div>
+                            <input type="hidden" name="selling_plan" value="" data-xula-quiz-selling-plan>
+                          {%- endif -%}
+
+                          <button
+                            type="submit"
+                            class="xula-btn xula-quiz__add-submit"
+                            data-xula-quiz-add-submit
+                            {% unless variant.available %}disabled aria-disabled="true"{% endunless %}
+                          >
+                            <span class="xula-quiz__add-text">
+                              {%- if variant.available -%}
+                                {{ section.settings.add_to_cart_label | default: 'Add to cart' }}
+                              {%- else -%}
+                                {{ section.settings.sold_out_label | default: 'Sold out' }}
+                              {%- endif -%}
+                            </span>
+                          </button>
+
+                          <p class="xula-quiz__add-message" data-xula-quiz-add-message role="status" aria-live="polite"></p>
+                        </form>
+
+                        <a href="{{ product.url }}" class="xula-quiz__result-link">View product details</a>
+                      </div>
+                    </article>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+
+              <div class="xula-quiz__results-actions">
+                <button type="button" class="xula-btn--secondary xula-quiz__retake" data-xula-quiz-retake>
+                  <span>{{ section.settings.retake_label | default: 'Retake the quiz' }}</span>
+                </button>
+                {%- if section.settings.catalog_link != blank -%}
+                  <a href="{{ section.settings.catalog_link }}" class="xula-btn--secondary">
+                    <span>{{ section.settings.catalog_link_label | default: 'View full catalog' }}</span>
+                  </a>
+                {%- endif -%}
+              </div>
+
+              {%- if section.settings.enable_email_capture -%}
+                <div class="xula-quiz__email" data-xula-quiz-email>
+                  {%- form 'customer', class: 'xula-quiz__email-form', novalidate: 'novalidate' -%}
+                    <input type="hidden" name="contact[tags]" value="{{ newsletter_tag }}" data-xula-quiz-tags-field>
+                    <input type="hidden" name="contact[accepts_marketing]" value="1">
+
+                    <h4 class="xula-quiz__email-heading">
+                      {{ section.settings.email_heading | default: 'Get your result and a welcome code' }}
+                    </h4>
+                    {%- if section.settings.email_text != blank -%}
+                      <p class="xula-quiz__email-text">{{ section.settings.email_text }}</p>
+                    {%- endif -%}
+
+                    <div class="xula-quiz__email-field">
+                      <label class="visually-hidden" for="{{ quiz_id }}-email">Email address</label>
+                      <input
+                        type="email"
+                        id="{{ quiz_id }}-email"
+                        name="contact[email]"
+                        class="xula-quiz__email-input"
+                        placeholder="{{ section.settings.email_placeholder | default: 'you@email.com' }}"
+                        autocomplete="email"
+                        required
+                      >
+                      <button type="submit" class="xula-btn xula-quiz__email-submit">
+                        <span>{{ section.settings.email_button_label | default: 'Send me my code' }}</span>
+                      </button>
+                    </div>
+
+                    <p
+                      class="xula-quiz__email-message"
+                      data-xula-quiz-email-message
+                      data-success="{{ section.settings.email_success_message | escape }}"
+                      role="status"
+                      aria-live="polite"
+                    ></p>
+                  {%- endform -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+
+          <div class="visually-hidden" role="status" aria-live="polite" data-xula-quiz-live></div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{%- if section.settings.enable_structured_data and result_blocks.size > 0 -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": {{ section.settings.heading | default: shop.name | json }},
+      "itemListElement": [
+        {%- for block in result_blocks -%}
+          {%- assign product = block.settings.product -%}
+          {%- if product != blank -%}
+            {
+              "@type": "ListItem",
+              "position": {{ forloop.index }},
+              "item": {
+                "@type": "Product",
+                "name": {{ block.settings.title_override | default: product.title | json }},
+                "url": {{ shop.url | append: product.url | json }},
+                "image": {{ product.featured_image | image_url: width: 800 | prepend: 'https:' | json }},
+                "offers": {
+                  "@type": "Offer",
+                  "priceCurrency": {{ cart.currency.iso_code | json }},
+                  "price": {{ product.selected_or_first_available_variant.price | divided_by: 100.0 | json }},
+                  "availability": "https://schema.org/{% if product.selected_or_first_available_variant.available %}InStock{% else %}OutOfStock{% endif %}",
+                  "url": {{ shop.url | append: product.url | json }}
+                }
+              }
+            }{%- unless forloop.last -%},{%- endunless -%}
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Xula Coffee Quiz",
+  "tag": "section",
+  "class": "section-xula-coffee-quiz",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header (welcome screen)"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Find your ideal coffee"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What's your perfect XULA coffee?"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Answer a few quick questions and we'll recommend the ideal coffee or subscription for you."
+    },
+    {
+      "type": "header",
+      "content": "Image (fixed column)"
+    },
+    {
+      "type": "image_picker",
+      "id": "media_image",
+      "label": "Main image",
+      "info": "Shown on every step of the quiz. When reaching results, it's automatically replaced with the recommended product's photo. If no image is chosen, the first result's image is used."
+    },
+    {
+      "type": "select",
+      "id": "mobile_media_position",
+      "label": "Image position on mobile",
+      "options": [
+        { "value": "above", "label": "Above the content" },
+        { "value": "below", "label": "Below the content" }
+      ],
+      "default": "above"
+    },
+    {
+      "type": "text",
+      "id": "start_button_label",
+      "label": "Start button text",
+      "default": "Start the quiz"
+    },
+    {
+      "type": "text",
+      "id": "start_time_label",
+      "label": "Note below the button",
+      "default": "Takes less than 1 minute"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "text",
+      "id": "back_label",
+      "label": "'Back' text",
+      "default": "Back"
+    },
+    {
+      "type": "text",
+      "id": "next_label",
+      "label": "'Next' text",
+      "default": "Next"
+    },
+    {
+      "type": "text",
+      "id": "question_word",
+      "label": "Word for 'Question' (progress bar)",
+      "default": "Question"
+    },
+    {
+      "type": "text",
+      "id": "of_word",
+      "label": "Word for 'of' (progress bar)",
+      "default": "of"
+    },
+    {
+      "type": "header",
+      "content": "Results screen"
+    },
+    {
+      "type": "text",
+      "id": "results_eyebrow",
+      "label": "Results eyebrow",
+      "default": "Your result"
+    },
+    {
+      "type": "text",
+      "id": "results_heading",
+      "label": "Results heading",
+      "default": "This is your ideal coffee"
+    },
+    {
+      "type": "textarea",
+      "id": "results_text",
+      "label": "Results text",
+      "default": "Chosen based on your answers."
+    },
+    {
+      "type": "text",
+      "id": "retake_label",
+      "label": "'Retake quiz' text",
+      "default": "Retake the quiz"
+    },
+    {
+      "type": "url",
+      "id": "catalog_link",
+      "label": "Catalog link (optional)"
+    },
+    {
+      "type": "text",
+      "id": "catalog_link_label",
+      "label": "Catalog link text",
+      "default": "View full catalog"
+    },
+    {
+      "type": "header",
+      "content": "Purchase & subscription"
+    },
+    {
+      "type": "text",
+      "id": "onetime_label",
+      "label": "'One-time purchase' text",
+      "default": "One-time purchase"
+    },
+    {
+      "type": "text",
+      "id": "subscribe_label",
+      "label": "'Subscribe' text",
+      "default": "Subscribe & save"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_label",
+      "label": "'Add to cart' text",
+      "default": "Add to cart"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "'Sold out' text",
+      "default": "Sold out"
+    },
+    {
+      "type": "header",
+      "content": "Email capture / marketing"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_email_capture",
+      "label": "Show email form on results",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "email_heading",
+      "label": "Form heading",
+      "default": "Get your result and a welcome code"
+    },
+    {
+      "type": "textarea",
+      "id": "email_text",
+      "label": "Form text",
+      "default": "We'll send it to your email along with a discount on your first purchase."
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email field placeholder",
+      "default": "you@email.com"
+    },
+    {
+      "type": "text",
+      "id": "email_button_label",
+      "label": "Submit button text",
+      "default": "Send me my code"
+    },
+    {
+      "type": "text",
+      "id": "email_success_message",
+      "label": "Success message",
+      "default": "Done! Check your email — your discount is on its way."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_tag",
+      "label": "Base customer tag",
+      "info": "Added as a customer tag along with tags derived from their answers, to trigger email marketing automations (Klaviyo, Omnisend, Shopify Flow, etc.).",
+      "default": "quiz-lead"
+    },
+    {
+      "type": "header",
+      "content": "SEO"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_structured_data",
+      "label": "Enable structured data (JSON-LD)",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step (how it works)",
+      "settings": [
+        {
+          "type": "text",
+          "id": "step_text",
+          "label": "Step text",
+          "default": "Take the quiz in under 1 minute"
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "question_text",
+          "label": "Question",
+          "default": "What's your favorite brewing method?"
+        },
+        {
+          "type": "text",
+          "id": "question_helper",
+          "label": "Helper text (optional)"
+        },
+        {
+          "type": "header",
+          "content": "Behavior"
+        },
+        {
+          "type": "select",
+          "id": "selection_type",
+          "label": "Selection type",
+          "info": "Single selection advances automatically. Multiple selection requires the Next button.",
+          "options": [
+            { "value": "single", "label": "Single (one option)" },
+            { "value": "multiple", "label": "Multiple (several options)" }
+          ],
+          "default": "single"
+        },
+        {
+          "type": "header",
+          "content": "Option 1"
+        },
+        {
+          "type": "text",
+          "id": "option_1_label",
+          "label": "Option text",
+          "default": "Espresso"
+        },
+        {
+          "type": "text",
+          "id": "option_1_tags",
+          "label": "Tags (comma-separated)",
+          "info": "Used to calculate the final recommendation. Must match a result's 'Match tags'.",
+          "default": "espresso"
+        },
+        {
+          "type": "header",
+          "content": "Option 2"
+        },
+        {
+          "type": "text",
+          "id": "option_2_label",
+          "label": "Option text",
+          "default": "Filter / Drip"
+        },
+        {
+          "type": "text",
+          "id": "option_2_tags",
+          "label": "Tags (comma-separated)",
+          "default": "filter"
+        },
+        {
+          "type": "header",
+          "content": "Option 3"
+        },
+        {
+          "type": "text",
+          "id": "option_3_label",
+          "label": "Option text",
+          "default": "French press"
+        },
+        {
+          "type": "text",
+          "id": "option_3_tags",
+          "label": "Tags (comma-separated)",
+          "default": "french-press"
+        },
+        {
+          "type": "header",
+          "content": "Option 4"
+        },
+        {
+          "type": "text",
+          "id": "option_4_label",
+          "label": "Option text"
+        },
+        {
+          "type": "text",
+          "id": "option_4_tags",
+          "label": "Tags (comma-separated)"
+        },
+        {
+          "type": "header",
+          "content": "Option 5"
+        },
+        {
+          "type": "text",
+          "id": "option_5_label",
+          "label": "Option text"
+        },
+        {
+          "type": "text",
+          "id": "option_5_tags",
+          "label": "Tags (comma-separated)"
+        }
+      ]
+    },
+    {
+      "type": "result",
+      "name": "Result / Product",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Product"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Recommended product"
+        },
+        {
+          "type": "paragraph",
+          "content": "Features (roast, intensity, notes, origin) are read automatically from the chosen product's metafields.custom.roast_level / intensity / tasting_notes / origin. If the product doesn't have those metafields, they're looked up as a fallback in tags formatted as 'roast:', 'intensity:', 'note:', 'origin:'."
+        },
+        {
+          "type": "text",
+          "id": "title_override",
+          "label": "Alternate title (optional)"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge (optional)",
+          "default": "Your perfect match"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Custom description"
+        },
+        {
+          "type": "header",
+          "content": "Match logic"
+        },
+        {
+          "type": "text",
+          "id": "match_tags",
+          "label": "Match tags (comma-separated)",
+          "info": "Must match the tags used in the question options. The result with the most matches is shown to the user.",
+          "default": "espresso"
+        },
+        {
+          "type": "checkbox",
+          "id": "is_default",
+          "label": "Default result",
+          "info": "Shown when no answer produces any matches (zero-score tie).",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula Coffee Quiz",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": { "step_text": "Take the quiz in under 1 minute" }
+        },
+        {
+          "type": "step",
+          "settings": { "step_text": "Discover your ideal coffee" }
+        },
+        {
+          "type": "step",
+          "settings": { "step_text": "Get it fresh at your door" }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question_text": "What's your favorite brewing method?",
+            "selection_type": "single",
+            "option_1_label": "Espresso",
+            "option_1_tags": "espresso",
+            "option_2_label": "Filter / Drip",
+            "option_2_tags": "filter",
+            "option_3_label": "French press",
+            "option_3_tags": "french-press"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question_text": "What roast level do you prefer?",
+            "selection_type": "single",
+            "option_1_label": "Light roast",
+            "option_1_tags": "light-roast",
+            "option_2_label": "Medium roast",
+            "option_2_tags": "medium-roast",
+            "option_3_label": "Dark roast",
+            "option_3_tags": "dark-roast"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question_text": "Which flavor notes do you like most?",
+            "selection_type": "multiple",
+            "option_1_label": "Chocolate",
+            "option_1_tags": "chocolate",
+            "option_2_label": "Fruity",
+            "option_2_tags": "fruity",
+            "option_3_label": "Nutty / Caramel",
+            "option_3_tags": "nutty-caramel",
+            "option_4_label": "Floral",
+            "option_4_tags": "floral"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question_text": "What type of grind do you need?",
+            "selection_type": "single",
+            "option_1_label": "Whole bean",
+            "option_1_tags": "whole-bean",
+            "option_2_label": "Fine grind (espresso)",
+            "option_2_tags": "espresso",
+            "option_3_label": "Medium grind (filter)",
+            "option_3_tags": "filter"
+          }
+        },
+        {
+          "type": "result",
+          "settings": {
+            "badge": "Your perfect match",
+            "description": "Bold, full-bodied, with chocolate notes. Ideal for espresso.",
+            "match_tags": "espresso,dark-roast,chocolate",
+            "is_default": true
+          }
+        },
+        {
+          "type": "result",
+          "settings": {
+            "badge": "Your perfect match",
+            "description": "Smooth and bright, perfect for filter brewing with fruity notes.",
+            "match_tags": "filter,light-roast,fruity"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
