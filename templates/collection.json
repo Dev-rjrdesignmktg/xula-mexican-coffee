@@ -245,6 +245,166 @@
         "items_per_page": 8,
         "enable_structured_data": true
       }
+    },
+    "xula_coffee_quiz_trRm3J": {
+      "type": "xula-coffee-quiz",
+      "blocks": {
+        "step_B8kPpb": {
+          "type": "step",
+          "settings": {
+            "step_text": "Take the quiz in under 1 minute"
+          }
+        },
+        "step_qwhUm8": {
+          "type": "step",
+          "settings": {
+            "step_text": "Discover your ideal coffee"
+          }
+        },
+        "step_wLceFh": {
+          "type": "step",
+          "settings": {
+            "step_text": "Get it fresh at your door"
+          }
+        },
+        "question_firTpi": {
+          "type": "question",
+          "settings": {
+            "question_text": "What's your favorite brewing method?",
+            "question_helper": "",
+            "selection_type": "single",
+            "option_1_label": "Espresso",
+            "option_1_tags": "espresso",
+            "option_2_label": "Filter / Drip",
+            "option_2_tags": "filter",
+            "option_3_label": "French press",
+            "option_3_tags": "french-press",
+            "option_4_label": "",
+            "option_4_tags": "",
+            "option_5_label": "",
+            "option_5_tags": ""
+          }
+        },
+        "question_AFJW8R": {
+          "type": "question",
+          "settings": {
+            "question_text": "What roast level do you prefer?",
+            "question_helper": "",
+            "selection_type": "single",
+            "option_1_label": "Light roast",
+            "option_1_tags": "light-roast",
+            "option_2_label": "Medium roast",
+            "option_2_tags": "medium-roast",
+            "option_3_label": "Dark roast",
+            "option_3_tags": "dark-roast",
+            "option_4_label": "",
+            "option_4_tags": "",
+            "option_5_label": "",
+            "option_5_tags": ""
+          }
+        },
+        "question_mkgMT8": {
+          "type": "question",
+          "settings": {
+            "question_text": "Which flavor notes do you like most?",
+            "question_helper": "",
+            "selection_type": "multiple",
+            "option_1_label": "Chocolate",
+            "option_1_tags": "chocolate",
+            "option_2_label": "Fruity",
+            "option_2_tags": "fruity",
+            "option_3_label": "Nutty / Caramel",
+            "option_3_tags": "nutty-caramel",
+            "option_4_label": "Floral",
+            "option_4_tags": "floral",
+            "option_5_label": "",
+            "option_5_tags": ""
+          }
+        },
+        "question_z8DfGK": {
+          "type": "question",
+          "settings": {
+            "question_text": "What type of grind do you need?",
+            "question_helper": "",
+            "selection_type": "single",
+            "option_1_label": "Whole bean",
+            "option_1_tags": "whole-bean",
+            "option_2_label": "Fine grind (espresso)",
+            "option_2_tags": "espresso",
+            "option_3_label": "Medium grind (filter)",
+            "option_3_tags": "filter",
+            "option_4_label": "",
+            "option_4_tags": "",
+            "option_5_label": "",
+            "option_5_tags": ""
+          }
+        },
+        "result_FDFECW": {
+          "type": "result",
+          "settings": {
+            "product": "",
+            "title_override": "",
+            "badge": "Your perfect match",
+            "description": "Bold, full-bodied, with chocolate notes. Ideal for espresso.",
+            "match_tags": "espresso,dark-roast,chocolate",
+            "is_default": true
+          }
+        },
+        "result_YnpUix": {
+          "type": "result",
+          "settings": {
+            "product": "",
+            "title_override": "",
+            "badge": "Your perfect match",
+            "description": "Smooth and bright, perfect for filter brewing with fruity notes.",
+            "match_tags": "filter,light-roast,fruity",
+            "is_default": false
+          }
+        }
+      },
+      "block_order": [
+        "step_B8kPpb",
+        "step_qwhUm8",
+        "step_wLceFh",
+        "question_firTpi",
+        "question_AFJW8R",
+        "question_mkgMT8",
+        "question_z8DfGK",
+        "result_FDFECW",
+        "result_YnpUix"
+      ],
+      "name": "Xula Coffee Quiz",
+      "settings": {
+        "eyebrow": "Find your ideal coffee",
+        "heading": "What's your perfect XULA coffee?",
+        "subheading": "Answer a few quick questions and we'll recommend the ideal coffee or subscription for you.",
+        "media_image": "shopify://shop_images/IMG_5230.jpg",
+        "mobile_media_position": "above",
+        "start_button_label": "Start the quiz",
+        "start_time_label": "Takes less than 1 minute",
+        "back_label": "Back",
+        "next_label": "Next",
+        "question_word": "Question",
+        "of_word": "of",
+        "results_eyebrow": "Your result",
+        "results_heading": "This is your ideal coffee",
+        "results_text": "Chosen based on your answers.",
+        "retake_label": "Retake the quiz",
+        "catalog_link": "",
+        "catalog_link_label": "View full catalog",
+        "onetime_label": "One-time purchase",
+        "subscribe_label": "Subscribe & save",
+        "add_to_cart_label": "Add to cart",
+        "sold_out_label": "Sold out",
+        "enable_email_capture": true,
+        "email_heading": "Get your result and a welcome code",
+        "email_text": "We'll send it to your email along with a discount on your first purchase.",
+        "email_placeholder": "you@email.com",
+        "email_button_label": "Send me my code",
+        "email_success_message": "Done! Check your email — your discount is on its way.",
+        "newsletter_tag": "quiz-lead",
+        "enable_structured_data": true
+      }
     }
   },
   "order": [
@@ -252,6 +412,7 @@
     "xula_trust_cards_K8NBhF",
     "banner",
     "product-grid",
-    "xula_product_catalog_CMtr4b"
+    "xula_product_catalog_CMtr4b",
+    "xula_coffee_quiz_trRm3J"
   ]
 }
