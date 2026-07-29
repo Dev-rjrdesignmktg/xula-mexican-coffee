@@ -251,8 +251,8 @@
             "animation": true,
             "offset": 0,
             "tags_exclude": "",
-            "tags_include": "",
-            "search": "",
+            "tags_include": "{{ product.vendor }}",
+            "search": "{{ product.title }}",
             "linkify": true,
             "use_metafields": true,
             "sku_tagtype": "sku"
