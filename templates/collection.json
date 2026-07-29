@@ -9,6 +9,84 @@
  */
 {
   "sections": {
+    "xula_promo_carousel_qJkDL9": {
+      "type": "xula-promo-carousel",
+      "blocks": {
+        "slide_RBPmNH": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/BANNER_01.webp",
+            "image_alt": "",
+            "badge": "",
+            "heading": "",
+            "text": "",
+            "cta_label": "",
+            "cta_link": "#",
+            "accent_color": "#e8318a",
+            "position": "left",
+            "overlay_style": "soft"
+          }
+        },
+        "slide_hXgypw": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/BANNER_04.webp",
+            "image_alt": "",
+            "badge": "Xula Subscription",
+            "heading": "Your favorite coffee, every month",
+            "text": "Pick your roast profile and get fresh coffee delivered to your door, hassle-free.",
+            "cta_label": "Subscribe now",
+            "cta_link": "#",
+            "accent_color": "#e95028",
+            "position": "left",
+            "overlay_style": "soft"
+          }
+        },
+        "slide_A6faPR": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/BANNER_03.webp",
+            "image_alt": "",
+            "badge": "Single origin",
+            "heading": "From the Mexican farm to your cup",
+            "text": "We work directly with local growers to guarantee quality and fair trade.",
+            "cta_label": "Learn about our origin",
+            "cta_link": "#",
+            "accent_color": "#345da8",
+            "position": "left",
+            "overlay_style": "soft"
+          }
+        },
+        "slide_mTfGVb": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/BANNER_05.webp",
+            "image_alt": "",
+            "badge": "",
+            "heading": "",
+            "text": "",
+            "cta_label": "",
+            "cta_link": "",
+            "accent_color": "#E8318A",
+            "position": "left",
+            "overlay_style": "soft"
+          }
+        }
+      },
+      "block_order": [
+        "slide_RBPmNH",
+        "slide_hXgypw",
+        "slide_A6faPR",
+        "slide_mTfGVb"
+      ],
+      "name": "Xula Promo Carousel",
+      "settings": {
+        "heading": "",
+        "slide_height": "standard",
+        "enable_autoplay": false,
+        "autoplay_interval": 5
+      }
+    },
     "banner": {
       "type": "main-collection-banner",
       "settings": {
@@ -39,6 +117,7 @@
     }
   },
   "order": [
+    "xula_promo_carousel_qJkDL9",
     "banner",
     "product-grid"
   ]
