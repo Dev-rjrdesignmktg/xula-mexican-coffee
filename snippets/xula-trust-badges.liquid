@@ -1,0 +1,85 @@
+{%- comment -%}
+  Xula Trust Badges — short trust signals (guarantee, delivery time, shipping, etc.)
+  Usage:
+    {% render 'xula-trust-badges',
+      badge_1_icon: 'guarantee', badge_1_text: '30-day money-back guarantee',
+      badge_2_icon: 'delivery',  badge_2_text: 'Delivery in 3-5 business days',
+      badge_3_icon: 'worldwide', badge_3_text: 'Worldwide shipping'
+    %}
+  Each badge is optional — pass blank/omit its *_text to skip it.
+  Icon values: guarantee | delivery | worldwide | secure | support | none
+{%- endcomment -%}
+
+{%- liquid
+  assign has_any = false
+  if badge_1_text != blank or badge_2_text != blank or badge_3_text != blank
+    assign has_any = true
+  endif
+-%}
+
+{%- if has_any -%}
+  <ul class="xula-trust-badges" role="list">
+    {%- if badge_1_text != blank -%}
+      <li class="xula-trust-badges__item">
+        <span class="xula-trust-badges__icon" aria-hidden="true">
+          {%- case badge_1_icon -%}
+            {%- when 'delivery' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="7" width="14" height="10"/><path d="M15.5 10.5h3.7l3.3 3.4V17h-7z"/><circle cx="6" cy="19" r="1.8"/><circle cx="17.5" cy="19" r="1.8"/></svg>
+            {%- when 'worldwide' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.8 2.6 4.2 6 4.2 9.5s-1.4 6.9-4.2 9.5c-2.8-2.6-4.2-6-4.2-9.5S9.2 5.1 12 2.5z"/></svg>
+            {%- when 'secure' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="1.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+            {%- when 'support' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 1 8 8"/><path d="M4 12v3.5a1.5 1.5 0 0 0 1.5 1.5H7v-5H5.5A1.5 1.5 0 0 0 4 13.5z"/><path d="M20 12v3.5a1.5 1.5 0 0 1-1.5 1.5H17v-5h1.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg>
+            {%- when 'none' -%}
+            {%- else -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7.5 3.4v6c0 5-3.2 8.4-7.5 9.6-4.3-1.2-7.5-4.6-7.5-9.6v-6z"/><path d="M8.5 12.3l2.3 2.3 4.7-4.9"/></svg>
+          {%- endcase -%}
+        </span>
+        <span class="xula-trust-badges__text">{{ badge_1_text }}</span>
+      </li>
+    {%- endif -%}
+
+    {%- if badge_2_text != blank -%}
+      <li class="xula-trust-badges__item">
+        <span class="xula-trust-badges__icon" aria-hidden="true">
+          {%- case badge_2_icon -%}
+            {%- when 'guarantee' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7.5 3.4v6c0 5-3.2 8.4-7.5 9.6-4.3-1.2-7.5-4.6-7.5-9.6v-6z"/><path d="M8.5 12.3l2.3 2.3 4.7-4.9"/></svg>
+            {%- when 'worldwide' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.8 2.6 4.2 6 4.2 9.5s-1.4 6.9-4.2 9.5c-2.8-2.6-4.2-6-4.2-9.5S9.2 5.1 12 2.5z"/></svg>
+            {%- when 'secure' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="1.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+            {%- when 'support' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 1 8 8"/><path d="M4 12v3.5a1.5 1.5 0 0 0 1.5 1.5H7v-5H5.5A1.5 1.5 0 0 0 4 13.5z"/><path d="M20 12v3.5a1.5 1.5 0 0 1-1.5 1.5H17v-5h1.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg>
+            {%- when 'none' -%}
+            {%- else -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="7" width="14" height="10"/><path d="M15.5 10.5h3.7l3.3 3.4V17h-7z"/><circle cx="6" cy="19" r="1.8"/><circle cx="17.5" cy="19" r="1.8"/></svg>
+          {%- endcase -%}
+        </span>
+        <span class="xula-trust-badges__text">{{ badge_2_text }}</span>
+      </li>
+    {%- endif -%}
+
+    {%- if badge_3_text != blank -%}
+      <li class="xula-trust-badges__item">
+        <span class="xula-trust-badges__icon" aria-hidden="true">
+          {%- case badge_3_icon -%}
+            {%- when 'guarantee' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7.5 3.4v6c0 5-3.2 8.4-7.5 9.6-4.3-1.2-7.5-4.6-7.5-9.6v-6z"/><path d="M8.5 12.3l2.3 2.3 4.7-4.9"/></svg>
+            {%- when 'delivery' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="7" width="14" height="10"/><path d="M15.5 10.5h3.7l3.3 3.4V17h-7z"/><circle cx="6" cy="19" r="1.8"/><circle cx="17.5" cy="19" r="1.8"/></svg>
+            {%- when 'secure' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="1.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+            {%- when 'support' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 1 8 8"/><path d="M4 12v3.5a1.5 1.5 0 0 0 1.5 1.5H7v-5H5.5A1.5 1.5 0 0 0 4 13.5z"/><path d="M20 12v3.5a1.5 1.5 0 0 1-1.5 1.5H17v-5h1.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg>
+            {%- when 'none' -%}
+            {%- else -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.8 2.6 4.2 6 4.2 9.5s-1.4 6.9-4.2 9.5c-2.8-2.6-4.2-6-4.2-9.5S9.2 5.1 12 2.5z"/></svg>
+          {%- endcase -%}
+        </span>
+        <span class="xula-trust-badges__text">{{ badge_3_text }}</span>
+      </li>
+    {%- endif -%}
+  </ul>
+{%- endif -%}

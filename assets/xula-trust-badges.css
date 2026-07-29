@@ -1,0 +1,67 @@
+/* =========================================================
+   Xula Trust Badges — short trust signals (guarantee, delivery,
+   worldwide shipping, etc). Mobile-first, BEM (.xula-trust-badges)
+   ========================================================= */
+
+.xula-trust-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 14px 16px;
+  list-style: none;
+  background: color-mix(in srgb, var(--bg-tertiary) 18%, transparent);
+  border-radius: var(--radius-sm);
+}
+
+.xula-trust-badges__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid color-mix(in srgb, var(--bg-secondary) 10%, transparent);
+}
+
+.xula-trust-badges__item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.xula-trust-badges__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--accent);
+}
+
+.xula-trust-badges__icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.xula-trust-badges__text {
+  font-family: var(--secondary-font);
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--bg-secondary);
+}
+
+/* ---------------------------------------------------------
+   Responsive — tablet / desktop
+   --------------------------------------------------------- */
+
+@media (min-width: 700px) {
+  .xula-trust-badges {
+    padding: 16px 18px;
+  }
+
+  .xula-trust-badges__text {
+    font-size: 1.1rem;
+  }
+}
