@@ -9,19 +9,6 @@
  */
 {
   "sections": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "xula_promo_carousel_iy3rKH": {
-      "type": "xula-promo-carousel",
-      "blocks": {
-        "slide_gEaxat": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/BANNER_01.webp",
-            "image_alt": "",
-=======
-=======
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
     "xula_promo_carousel_qJkDL9": {
       "type": "xula-promo-carousel",
       "blocks": {
@@ -30,10 +17,6 @@
           "settings": {
             "image": "shopify://shop_images/BANNER_01.webp",
             "image_alt": "Xula banner Drink More Xula Mexican Cafecito",
-<<<<<<< HEAD
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
-=======
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "badge": "",
             "heading": "",
             "text": "",
@@ -41,19 +24,6 @@
             "cta_link": "#",
             "accent_color": "#e8318a",
             "position": "left",
-<<<<<<< HEAD
-<<<<<<< HEAD
-            "overlay_style": "solid"
-          }
-        },
-        "slide_ixMEAL": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/BANNER_04.webp",
-            "image_alt": "",
-=======
-=======
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "overlay_style": "soft"
           }
         },
@@ -62,10 +32,6 @@
           "settings": {
             "image": "shopify://shop_images/BANNER_04.webp",
             "image_alt": "Xula banner Artisan Dark Chocolate From Patzcuaro",
-<<<<<<< HEAD
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
-=======
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "badge": "",
             "heading": "",
             "text": "",
@@ -76,20 +42,6 @@
             "overlay_style": "soft"
           }
         },
-<<<<<<< HEAD
-<<<<<<< HEAD
-        "slide_xYkFBQ": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/BANNER_03.webp",
-            "image_alt": "",
-            "badge": "",
-            "heading": "",
-            "text": "",
-            "cta_label": "",
-=======
-=======
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
         "slide_A6faPR": {
           "type": "slide",
           "settings": {
@@ -99,72 +51,33 @@
             "heading": "",
             "text": "",
             "cta_label": "Learn about our origin",
-<<<<<<< HEAD
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
-=======
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "cta_link": "#",
             "accent_color": "#345da8",
             "position": "left",
             "overlay_style": "soft"
           }
         },
-<<<<<<< HEAD
-<<<<<<< HEAD
-        "slide_mtnMVT": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/BANNER_05.webp",
-            "image_alt": "",
-=======
-=======
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
         "slide_mTfGVb": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/BANNER_05.webp",
             "image_alt": "Xula banner Artisan Muffins",
-<<<<<<< HEAD
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
-=======
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "badge": "",
             "heading": "",
             "text": "",
             "cta_label": "",
             "cta_link": "",
-<<<<<<< HEAD
-<<<<<<< HEAD
-            "accent_color": "#e8318a",
-=======
             "accent_color": "#E8318A",
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
-=======
-            "accent_color": "#E8318A",
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
             "position": "left",
             "overlay_style": "soft"
           }
         }
       },
       "block_order": [
-<<<<<<< HEAD
-<<<<<<< HEAD
-        "slide_gEaxat",
-        "slide_ixMEAL",
-        "slide_xYkFBQ",
-        "slide_mtnMVT"
-=======
-=======
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
         "slide_RBPmNH",
         "slide_hXgypw",
         "slide_A6faPR",
         "slide_mTfGVb"
-<<<<<<< HEAD
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
-=======
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
       ],
       "name": "Xula Promo Carousel",
       "settings": {
@@ -174,11 +87,6 @@
         "autoplay_interval": 5
       }
     },
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
     "xula_trust_cards_K8NBhF": {
       "type": "xula-trust-cards",
       "blocks": {
@@ -264,12 +172,9 @@
         "text": "Mexican tradition, verified quality, and customers who keep coming back."
       }
     },
-<<<<<<< HEAD
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
-=======
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
     "banner": {
       "type": "main-collection-banner",
+      "disabled": true,
       "settings": {
         "show_collection_description": true,
         "show_collection_image": false,
@@ -278,6 +183,7 @@
     },
     "product-grid": {
       "type": "main-collection-product-grid",
+      "disabled": true,
       "settings": {
         "products_per_page": 16,
         "columns_desktop": 4,
@@ -295,313 +201,12 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
-    },
-    "xula_trust_cards_ewrfwJ": {
-      "type": "xula-trust-cards",
-      "blocks": {
-        "metric_card_qVWGyc": {
-          "type": "metric_card",
-          "settings": {
-            "icon": "founding",
-            "prefix": "",
-            "value": "2017",
-            "suffix": "",
-            "decimals": "0",
-            "group_thousands": false,
-            "label": "Founding year",
-            "description": "Mexican tradition since the source",
-            "show_stars": false,
-            "rating": 5,
-            "review_count": 500,
-            "link": ""
-          }
-        },
-        "metric_card_FjNj96": {
-          "type": "metric_card",
-          "settings": {
-            "icon": "customers",
-            "prefix": "+",
-            "value": "50000",
-            "suffix": "",
-            "decimals": "0",
-            "group_thousands": true,
-            "label": "Happy customers",
-            "description": "And growing every day",
-            "show_stars": false,
-            "rating": 5,
-            "review_count": 500,
-            "link": ""
-          }
-        },
-        "metric_card_QWicCh": {
-          "type": "metric_card",
-          "settings": {
-            "icon": "reviews",
-            "prefix": "",
-            "value": "4.9",
-            "suffix": "",
-            "decimals": "1",
-            "group_thousands": true,
-            "label": "Customer reviews",
-            "description": "",
-            "show_stars": true,
-            "rating": 4.9,
-            "review_count": 500,
-            "link": ""
-          }
-        },
-        "metric_card_rnLgYc": {
-          "type": "metric_card",
-          "settings": {
-            "icon": "origin",
-            "prefix": "",
-            "value": "100",
-            "suffix": "%",
-            "decimals": "0",
-            "group_thousands": true,
-            "label": "Mexican origin",
-            "description": "From the highlands of Mexico to your cup",
-            "show_stars": false,
-            "rating": 5,
-            "review_count": 500,
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "metric_card_qVWGyc",
-        "metric_card_FjNj96",
-        "metric_card_QWicCh",
-        "metric_card_rnLgYc"
-      ],
-      "name": "Xula Trust Cards",
-      "settings": {
-        "eyebrow": "Trust you can taste",
-        "heading": "Numbers behind every cup",
-        "text": "Mexican tradition, verified quality, and customers who keep coming back."
-      }
-    },
-    "xula_product_catalog_9xzydk": {
-      "type": "xula-product-catalog",
-      "blocks": {
-        "category_JfwEpJ": {
-          "type": "category",
-          "settings": {
-            "collection": "coffee",
-            "label": "",
-            "products_to_show": 12
-          }
-        },
-        "category_xhkd6D": {
-          "type": "category",
-          "settings": {
-            "collection": "chocolate",
-            "label": "Espresso",
-            "products_to_show": 12
-          }
-        },
-        "category_rUnrwk": {
-          "type": "category",
-          "settings": {
-            "collection": "muffins",
-            "label": "Atisan Muffins",
-            "products_to_show": 12
-          }
-        }
-      },
-      "block_order": [
-        "category_JfwEpJ",
-        "category_xhkd6D",
-        "category_rUnrwk"
-      ],
-      "name": "Xula Product Catalog",
-      "settings": {
-        "eyebrow": "Catalog",
-        "heading": "Explore our specialty coffee",
-        "subheading": "Filter by category and discover the intensity, roast, and flavor notes of every batch.",
-        "all_label": "All",
-        "all_products_limit": 48,
-        "items_per_page": 8,
-        "enable_structured_data": true
-      }
-    },
-    "xula_coffee_quiz_eEWBmR": {
-      "type": "xula-coffee-quiz",
-      "blocks": {
-        "step_TDgWnw": {
-          "type": "step",
-          "settings": {
-            "step_text": "Take the quiz in under 1 minute"
-          }
-        },
-        "step_CNDxY8": {
-          "type": "step",
-          "settings": {
-            "step_text": "Discover your ideal coffee"
-          }
-        },
-        "step_WnNcKc": {
-          "type": "step",
-          "settings": {
-            "step_text": "Get it fresh at your door"
-          }
-        },
-        "question_mnVNFw": {
-          "type": "question",
-          "settings": {
-            "question_text": "What's your favorite brewing method?",
-            "question_helper": "",
-            "selection_type": "single",
-            "option_1_label": "Espresso",
-            "option_1_tags": "espresso",
-            "option_2_label": "Filter / Drip",
-            "option_2_tags": "filter",
-            "option_3_label": "French press",
-            "option_3_tags": "french-press",
-            "option_4_label": "",
-            "option_4_tags": "",
-            "option_5_label": "",
-            "option_5_tags": ""
-          }
-        },
-        "question_byENR6": {
-          "type": "question",
-          "settings": {
-            "question_text": "What roast level do you prefer?",
-            "question_helper": "",
-            "selection_type": "single",
-            "option_1_label": "Light roast",
-            "option_1_tags": "light-roast",
-            "option_2_label": "Medium roast",
-            "option_2_tags": "medium-roast",
-            "option_3_label": "Dark roast",
-            "option_3_tags": "dark-roast",
-            "option_4_label": "",
-            "option_4_tags": "",
-            "option_5_label": "",
-            "option_5_tags": ""
-          }
-        },
-        "question_xLrtgN": {
-          "type": "question",
-          "settings": {
-            "question_text": "Which flavor notes do you like most?",
-            "question_helper": "",
-            "selection_type": "multiple",
-            "option_1_label": "Chocolate",
-            "option_1_tags": "chocolate",
-            "option_2_label": "Fruity",
-            "option_2_tags": "fruity",
-            "option_3_label": "Nutty / Caramel",
-            "option_3_tags": "nutty-caramel",
-            "option_4_label": "Floral",
-            "option_4_tags": "floral",
-            "option_5_label": "",
-            "option_5_tags": ""
-          }
-        },
-        "question_hrTAWe": {
-          "type": "question",
-          "settings": {
-            "question_text": "What type of grind do you need?",
-            "question_helper": "",
-            "selection_type": "single",
-            "option_1_label": "Whole bean",
-            "option_1_tags": "whole-bean",
-            "option_2_label": "Fine grind (espresso)",
-            "option_2_tags": "espresso",
-            "option_3_label": "Medium grind (filter)",
-            "option_3_tags": "filter",
-            "option_4_label": "",
-            "option_4_tags": "",
-            "option_5_label": "",
-            "option_5_tags": ""
-          }
-        },
-        "result_yrfWyK": {
-          "type": "result",
-          "settings": {
-            "product": "",
-            "title_override": "",
-            "badge": "Your perfect match",
-            "description": "Bold, full-bodied, with chocolate notes. Ideal for espresso.",
-            "match_tags": "espresso,dark-roast,chocolate",
-            "is_default": true
-          }
-        },
-        "result_J44W6Y": {
-          "type": "result",
-          "settings": {
-            "product": "",
-            "title_override": "",
-            "badge": "Your perfect match",
-            "description": "Smooth and bright, perfect for filter brewing with fruity notes.",
-            "match_tags": "filter,light-roast,fruity",
-            "is_default": false
-          }
-        }
-      },
-      "block_order": [
-        "step_TDgWnw",
-        "step_CNDxY8",
-        "step_WnNcKc",
-        "question_mnVNFw",
-        "question_byENR6",
-        "question_xLrtgN",
-        "question_hrTAWe",
-        "result_yrfWyK",
-        "result_J44W6Y"
-      ],
-      "name": "Xula Coffee Quiz",
-      "settings": {
-        "eyebrow": "Find your ideal coffee",
-        "heading": "What's your perfect XULA coffee?",
-        "subheading": "Answer a few quick questions and we'll recommend the ideal coffee or subscription for you.",
-        "media_image": "shopify://shop_images/5marzo.png",
-        "mobile_media_position": "above",
-        "start_button_label": "Start the quiz",
-        "start_time_label": "Takes less than 1 minute",
-        "back_label": "Back",
-        "next_label": "Next",
-        "question_word": "Question",
-        "of_word": "of",
-        "results_eyebrow": "Your result",
-        "results_heading": "This is your ideal coffee",
-        "results_text": "Chosen based on your answers.",
-        "retake_label": "Retake the quiz",
-        "catalog_link": "",
-        "catalog_link_label": "View full catalog",
-        "onetime_label": "One-time purchase",
-        "subscribe_label": "Subscribe & save",
-        "add_to_cart_label": "Add to cart",
-        "sold_out_label": "Sold out",
-        "enable_email_capture": true,
-        "email_heading": "Get your result and a welcome code",
-        "email_text": "We'll send it to your email along with a discount on your first purchase.",
-        "email_placeholder": "you@email.com",
-        "email_button_label": "Send me my code",
-        "email_success_message": "Done! Check your email — your discount is on its way.",
-        "newsletter_tag": "quiz-lead",
-        "enable_structured_data": true
-      }
     }
   },
   "order": [
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "xula_promo_carousel_iy3rKH",
-=======
     "xula_promo_carousel_qJkDL9",
     "xula_trust_cards_K8NBhF",
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
-=======
-    "xula_promo_carousel_qJkDL9",
-    "xula_trust_cards_K8NBhF",
->>>>>>> ff1b0fe9809fa39dc56ae6e5595314a490666e51
     "banner",
-    "product-grid",
-    "xula_trust_cards_ewrfwJ",
-    "xula_product_catalog_9xzydk",
-    "xula_coffee_quiz_eEWBmR"
+    "product-grid"
   ]
 }
