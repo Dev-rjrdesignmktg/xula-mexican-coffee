@@ -241,41 +241,6 @@
         "show_schema": true
       }
     },
-    "custom_liquid_gAFDc6": {
-      "type": "custom-liquid",
-      "name": "t:sections.custom-liquid.presets.name",
-      "settings": {
-        "custom_liquid": "{% render 'xula-reviews-heading' %}",
-        "color_scheme": "scheme-2",
-        "padding_top": 40,
-        "padding_bottom": 52
-      }
-    },
-    "178535794264049d78": {
-      "type": "apps",
-      "blocks": {
-        "stamped_reviews_main_widget_cEjcNb": {
-          "type": "shopify://apps/stamped-reviews/blocks/main-widget/a103faaf-2125-4b0e-89fa-de5149736723",
-          "settings": {
-            "take_questions": 12,
-            "animation": true,
-            "offset": 0,
-            "tags_exclude": "",
-            "tags_include": "{{ product.vendor }}",
-            "search": "{{ product.title }}",
-            "linkify": true,
-            "use_metafields": true,
-            "sku_tagtype": "sku"
-          }
-        }
-      },
-      "block_order": [
-        "stamped_reviews_main_widget_cEjcNb"
-      ],
-      "settings": {
-        "include_margins": true
-      }
-    },
     "xula_faq_GgeHGg": {
       "type": "xula-faq",
       "blocks": {
@@ -326,6 +291,41 @@
         "contact_text": "Our team is ready to help you find your ideal coffee.",
         "contact_button_label": "Contact Us",
         "contact_button_link": ""
+      }
+    },
+    "custom_liquid_gAFDc6": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "{% render 'xula-reviews-heading' %}",
+        "color_scheme": "scheme-2",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "178535794264049d78": {
+      "type": "apps",
+      "blocks": {
+        "stamped_reviews_main_widget_cEjcNb": {
+          "type": "shopify://apps/stamped-reviews/blocks/main-widget/a103faaf-2125-4b0e-89fa-de5149736723",
+          "settings": {
+            "take_questions": 12,
+            "animation": true,
+            "offset": 0,
+            "tags_exclude": "",
+            "tags_include": "{{ product.vendor }}",
+            "search": "{{ product.title }}",
+            "linkify": true,
+            "use_metafields": true,
+            "sku_tagtype": "sku"
+          }
+        }
+      },
+      "block_order": [
+        "stamped_reviews_main_widget_cEjcNb"
+      ],
+      "settings": {
+        "include_margins": true
       }
     }
   },
