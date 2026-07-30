@@ -112,7 +112,7 @@
           "settings": {
             "icon": "customers",
             "prefix": "+",
-            "value": "10000",
+            "value": "1000",
             "suffix": "",
             "decimals": "0",
             "group_thousands": true,
@@ -129,7 +129,7 @@
           "settings": {
             "icon": "reviews",
             "prefix": "",
-            "value": "4.9",
+            "value": "4.5",
             "suffix": "",
             "decimals": "1",
             "group_thousands": false,
