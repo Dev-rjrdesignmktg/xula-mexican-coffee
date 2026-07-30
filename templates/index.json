@@ -31,14 +31,14 @@
         "stat_FCkjBn": {
           "type": "stat",
           "settings": {
-            "value": "1,200m",
+            "value": "1,000–1,350",
             "label": "Altitude"
           }
         },
         "stat_RRX3RU": {
           "type": "stat",
           "settings": {
-            "value": "Bourbon",
+            "value": "100% Arabica",
             "label": "Variety"
           }
         },
@@ -52,8 +52,8 @@
         "stat_Xr69ym": {
           "type": "stat",
           "settings": {
-            "value": "40+",
-            "label": "Family farms"
+            "value": "Hand-picked, freshly roasted",
+            "label": "Features"
           }
         }
       },
@@ -66,7 +66,7 @@
       "name": "Xula Origin",
       "settings": {
         "image": "shopify://shop_images/xula-18.jpg",
-        "badge": "1,200masl",
+        "badge": "1350 masl",
         "eyebrow": "Our Terroir",
         "heading": "Grown in the highlands of Mexico.",
         "text": "In the volcanic soil of Veracruz and Chiapas, small family farms nurture every cherry by hand, high above the clouds where the air is thin and the harvest is slow.",
