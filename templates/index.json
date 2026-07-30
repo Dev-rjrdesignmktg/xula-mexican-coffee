@@ -89,16 +89,16 @@
           "type": "craft_item",
           "settings": {
             "image": "shopify://shop_images/xula-56.jpg",
-            "title": "Single-Origin Mexican Coffee",
-            "text": "Sourced from the highlands of Mexico, where altitude, soil, and climate shape every cup."
+            "title": "Small-Batch Roasted",
+            "text": "Every batch is roasted with precision to preserve aroma, body, and depth."
           }
         },
         "craft_item_8aieCL": {
           "type": "craft_item",
           "settings": {
             "image": "shopify://shop_images/3055416C-A5AB-4D21-A368-0B5BA8F5D3FA.PNG",
-            "title": "Single-Origin Mexican Coffee",
-            "text": "Sourced from the highlands of Mexico, where altitude, soil, and climate shape every cup."
+            "title": "Built for the Ritual",
+            "text": "Designed for slow mornings, intentional brewing, and richer coffee experiences."
           }
         }
       },
