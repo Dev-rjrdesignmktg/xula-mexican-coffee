@@ -19,9 +19,9 @@
         "image_1": "shopify://shop_images/IMG_5236.jpg",
         "image_2": "shopify://shop_images/xula-50-mr.jpg",
         "primary_label": "Shop Coffee",
-        "primary_link": "",
+        "primary_link": "shopify://collections/all",
         "secondary_label": "Our Story",
-        "secondary_link": "",
+        "secondary_link": "shopify://pages/about-xula-mexican-coffee",
         "badge": "Fresh Roast"
       }
     },
@@ -71,7 +71,7 @@
         "heading": "Grown in the highlands of Mexico.",
         "text": "In the volcanic soil of Veracruz and Chiapas, small family farms nurture every cherry by hand, high above the clouds where the air is thin and the harvest is slow.",
         "button_label": "About Us",
-        "button_link": ""
+        "button_link": "shopify://pages/about-xula-mexican-coffee"
       }
     },
     "xula_proof_NJc79V": {
@@ -441,7 +441,7 @@
         "heading": "Begin Your Ritual Today",
         "text": "Specialty-grade Mexican coffee, roasted in small batches and shipped fresh to your door. Your next great cup is one click away.",
         "primary_label": "Shop Specialty Coffee",
-        "primary_link": "shopify://collections/all",
+        "primary_link": "shopify://products/specialty-dark-roast-coffee",
         "secondary_label": "View All Coffees",
         "secondary_link": "shopify://collections",
         "show_urgency": true,
