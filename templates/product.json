@@ -166,6 +166,7 @@
             "id": "v60",
             "name": "V60 / Pour Over",
             "icon": "v60",
+            "image": "shopify://shop_images/pour_over.jpg",
             "ratio": "1:16",
             "temperature": "92–94 °C",
             "time": "2:30 – 3:00 min",
