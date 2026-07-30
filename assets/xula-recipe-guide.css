@@ -167,16 +167,17 @@
 .xula-recipe-guide__image {
   display: block;
   width: 100%;
-  height: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
+  object-position: center;
 }
 
 .xula-recipe-guide__media-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 4 / 3;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   background: var(--xula-gold);
   border-radius: calc(var(--radius-sm) - .2rem);
 }
@@ -340,11 +341,6 @@
 
   .xula-recipe-guide__panel-content {
     order: 1;
-  }
-
-  .xula-recipe-guide__image,
-  .xula-recipe-guide__media-placeholder {
-    aspect-ratio: 3 / 4;
   }
 }
 
