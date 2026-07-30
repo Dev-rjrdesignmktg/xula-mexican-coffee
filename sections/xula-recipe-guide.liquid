@@ -163,11 +163,12 @@
             <div class="xula-recipe-guide__panel-grid">
               <div class="xula-recipe-guide__panel-media">
                 {%- if m_image -%}
+                  {%- assign m_image_alt = m_image.alt | default: m_name -%}
                   {{ m_image | image_url: width: 900 | image_tag:
                       loading: 'lazy',
                       widths: '400, 600, 900',
                       sizes: '(min-width: 700px) 320px, 100vw',
-                      alt: m_image.alt | default: m_name,
+                      alt: m_image_alt,
                       class: 'xula-recipe-guide__image'
                   }}
                 {%- else -%}
