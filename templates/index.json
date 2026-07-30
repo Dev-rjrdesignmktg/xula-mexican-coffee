@@ -115,11 +115,11 @@
       "name": "Xula Collections Mosaic",
       "settings": {
         "coffee_image": "shopify://shop_images/xula-14.jpg",
-        "coffee_link": "",
+        "coffee_link": "shopify://collections/coffee",
         "chocolate_image": "shopify://shop_images/xula-33.jpg",
-        "chocolate_link": "",
+        "chocolate_link": "shopify://collections/chocolate",
         "muffins_image": "shopify://shop_images/xula-36.jpg",
-        "muffins_link": ""
+        "muffins_link": "shopify://collections/muffins"
       }
     },
     "xula_catalog_A3gQDt": {
