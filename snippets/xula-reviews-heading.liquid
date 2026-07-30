@@ -1,0 +1,18 @@
+{% liquid
+  assign heading_id = 'xula-reviews-heading'
+  assign eyebrow = 'CUSTOMER LOVE'
+  assign heading = 'What Our Customers Are Saying'
+  assign description = 'Real stories from coffee lovers who have made Xula part of their morning ritual.'
+%}
+
+<div class="xula-intro" style="max-width: 70rem; margin-top: 4.8rem;">
+  <span class="xula-eyebrow">{{ eyebrow }}</span>
+
+  <h2 class="xula-heading" id="{{ heading_id }}" style="max-width: none; font-size: clamp(2.4rem, 4vw, 3.6rem);">
+    {{ heading }}
+  </h2>
+
+  <p class="xula-text" style="max-width: 56rem; margin-left: auto; margin-right: auto;">
+    {{ description }}
+  </p>
+</div>
