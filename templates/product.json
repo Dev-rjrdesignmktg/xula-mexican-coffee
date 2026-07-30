@@ -204,7 +204,13 @@
           }
         }
       },
-      "block_order": ["method_v60", "method_french_press", "method_espresso", "method_chemex", "method_aeropress"],
+      "block_order": [
+        "method_v60",
+        "method_french_press",
+        "method_espresso",
+        "method_chemex",
+        "method_aeropress"
+      ],
       "settings": {
         "show_heading": true,
         "heading": "Recipes & Brewing Methods",
@@ -342,6 +348,16 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "custom_liquid_gAFDc6": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "{% render 'xula-reviews-heading' %}",
+        "color_scheme": "scheme-2",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
     }
   },
   "order": [
@@ -350,6 +366,7 @@
     "disclosures",
     "related-products",
     "xula_recipe_guide_R9Wm8f",
+    "custom_liquid_gAFDc6",
     "178535794264049d78"
   ]
 }
