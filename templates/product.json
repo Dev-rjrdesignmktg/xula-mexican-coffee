@@ -275,6 +275,58 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "xula_faq_GgeHGg": {
+      "type": "xula-faq",
+      "blocks": {
+        "question_fha7Ec": {
+          "type": "question",
+          "settings": {
+            "question": "How long does my order take to arrive?",
+            "answer": "<p>We prepare and ship every order within 24-48 business hours. Once shipped, you'll receive a tracking number so you can follow your package in real time right to your door.</p>"
+          }
+        },
+        "question_xQArXn": {
+          "type": "question",
+          "settings": {
+            "question": "Can I choose the grind type?",
+            "answer": "<p>Yes. When choosing your coffee, select the grind that's right for your brew method: whole bean, filter, espresso, or French press. We grind right before packing to lock in every bit of flavor.</p>"
+          }
+        },
+        "question_n774x9": {
+          "type": "question",
+          "settings": {
+            "question": "How fresh is the coffee I receive?",
+            "answer": "<p>We roast in small batches and ship within 7 days of roasting. Every bag is printed with the roast date, so you always know exactly how fresh your coffee is.</p>"
+          }
+        },
+        "question_p9tfae": {
+          "type": "question",
+          "settings": {
+            "question": "Where does XULA coffee come from?",
+            "answer": "<p>Our coffee comes from high-altitude farms in Mexico, grown by producer families we work with directly. Every purchase directly supports these coffee-growing communities.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_fha7Ec",
+        "question_xQArXn",
+        "question_n774x9",
+        "question_p9tfae"
+      ],
+      "name": "Xula FAQ",
+      "settings": {
+        "eyebrow": "Frequently Asked Questions",
+        "heading": "Before You Brew the Perfect Morning",
+        "text": "We answer the most common questions about shipping, grind, freshness, and the origin of our coffee.",
+        "open_first": true,
+        "allow_multiple": false,
+        "show_contact_cta": true,
+        "contact_heading": "Still have questions?",
+        "contact_text": "Our team is ready to help you find your ideal coffee.",
+        "contact_button_label": "Contact Us",
+        "contact_button_link": ""
+      }
     }
   },
   "order": [
@@ -282,6 +334,7 @@
     "disclosures",
     "related-products",
     "xula-recipe-guide",
+    "xula_faq_GgeHGg",
     "custom_liquid_gAFDc6",
     "178535794264049d78"
   ]
