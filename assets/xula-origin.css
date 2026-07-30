@@ -94,7 +94,18 @@
   }
 
   .xula-origin__stats {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+    align-content: center;
+    justify-items: center;
+    text-align: center;
     gap: 24px;
+  }
+
+  .xula-origin__stat {
+    align-items: center;
+  }
+
+  .xula-origin__content {
+    text-align: center;
   }
 }
