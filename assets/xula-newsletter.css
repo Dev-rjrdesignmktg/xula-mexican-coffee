@@ -368,6 +368,21 @@
     justify-content: center;
   }
 
+  .xula-newsletter__benefits {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 24px;
+  }
+
+  .xula-newsletter--no-image .xula-newsletter__benefits {
+    justify-content: center;
+  }
+
+  .xula-newsletter__benefit {
+    width: auto;
+  }
+
   .xula-newsletter__text {
     max-width: 42ch;
   }
