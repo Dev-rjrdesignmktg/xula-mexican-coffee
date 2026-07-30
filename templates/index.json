@@ -266,7 +266,7 @@
           "settings": {
             "image": "shopify://shop_images/xula-20.jpg",
             "rating": 5,
-            "quote": "Delicious 🤤 must try!\nI made myself a double of espresso and drip pour cup. Bold yet creamy and nutty. Well balanced and not too acidic like most in the region. \n\nReally a fan of Xula coffee!",
+            "quote": "I made myself a double of espresso and drip pour cup. Bold yet creamy and nutty. Well balanced and not too acidic like most in the region. \nReally a fan of Xula coffee!",
             "customer_name": "Victor Velazquez",
             "product_purchased": "Dark Roast Specialty Coffee",
             "verified": true
@@ -277,7 +277,7 @@
           "settings": {
             "image": "shopify://shop_images/xula-43.jpg",
             "rating": 5,
-            "quote": "I can't even...\nI have had carrot cake all over the universe, it is my absolute favorite. Since tasting the Xula take on carrot cake all the rest taste like rotten, sour disappointment on my tongue. I would rather lose my pinki finger than have to eat any other carrot cake again.",
+            "quote": "I have had carrot cake all over the universe, it is my absolute favorite. Since tasting the Xula take on carrot cake all the rest taste like rotten, sour disappointment on my tongue. I would rather lose my pinki finger than have to eat any other carrot cake again.",
             "customer_name": "Brett Sirianni",
             "product_purchased": "Artisan Muffins",
             "verified": true
@@ -288,7 +288,7 @@
           "settings": {
             "image": "shopify://shop_images/xula-33.jpg",
             "rating": 4,
-            "quote": "Outstanding Coffee\nI'm drinking Xula's Medium Roast coffee these days and thoroughly enjoying it. Grinding it in a manual grinder and brewing it in a Chemex 3-Cup pour-over coffee maker produces an outstanding morning cup. I'll definitely be back for more.",
+            "quote": "I'm drinking Xula's Medium Roast coffee these days and thoroughly enjoying it. Grinding it in a manual grinder and brewing it in a Chemex 3-Cup pour-over coffee maker produces an outstanding morning cup. I'll definitely be back for more.",
             "customer_name": "Leo M. Fontaine",
             "product_purchased": "Medium Roast Specialty Coffee",
             "verified": true
@@ -308,11 +308,11 @@
         "testimonial_3qjFwx": {
           "type": "testimonial",
           "settings": {
-            "image": "shopify://shop_images/xula-18.jpg",
+            "image": "shopify://shop_images/xula-20.jpg",
             "rating": 5,
-            "quote": "Their muffins pair perfectly with the medium roast. My Sunday ritual is now XULA.",
-            "customer_name": "Laura P.",
-            "product_purchased": "Medium Roast",
+            "quote": "This has been my favorite go to coffee for almost two years. It’s smooth and aromatic.",
+            "customer_name": "Cynthia Gutierrez",
+            "product_purchased": "Dark Roast Specialty Coffee",
             "verified": true
           }
         }
