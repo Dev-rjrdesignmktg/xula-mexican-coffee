@@ -255,9 +255,9 @@
           "settings": {
             "image": "shopify://shop_images/xula-32.jpg",
             "rating": 5,
-            "quote": "The Dark Roast tastes like the coffee my abuela used to make. I order every month now.",
-            "customer_name": "Ana M.",
-            "product_purchased": "Dark Roast Specialty",
+            "quote": "Love the coffee and service\nGreat experience. Fast service and received my order very fast. This is my 'go to' for Mexican coffee Thank you very much !!!",
+            "customer_name": "Gary Britton",
+            "product_purchased": "Medium Roast Specialty",
             "verified": true
           }
         },
@@ -331,7 +331,7 @@
         "heading": "The taste that keeps them coming back.",
         "text": "Thousands of cups poured, thousands of stories brewed. Here's what real XULA customers are saying.",
         "show_summary": true,
-        "summary_rating": "4.9",
+        "summary_rating": "4.5",
         "summary_count": "from 500+ verified reviews",
         "show_guarantee": true,
         "guarantee_heading": "30-Day Happiness Guarantee",
