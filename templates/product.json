@@ -180,6 +180,7 @@
             "id": "french_press",
             "name": "French Press",
             "icon": "french_press",
+            "image": "shopify://shop_images/french_press.jpg",
             "ratio": "1:15",
             "temperature": "93–96 °C",
             "time": "4:00 min",
