@@ -1,6 +1,23 @@
 .xula-origin {
+  /* Section color scheme maps onto the theme's shared bg/bg-secondary tokens,
+     so every existing rule below (and shared .xula-heading/.xula-btn classes)
+     picks it up automatically through inheritance. */
+  --bg: rgb(var(--color-background));
+  --bg-secondary: rgb(var(--color-foreground));
   background: var(--bg);
   padding: 120px 0;
+  transition: background-color .3s ease;
+}
+
+.xula-origin .xula-btn {
+  background: rgb(var(--color-button));
+  border-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+}
+
+.xula-origin .xula-btn::before {
+  background: rgb(var(--color-button));
+  filter: brightness(0.88);
 }
 
 .xula-origin__grid {
@@ -17,11 +34,30 @@
   overflow: hidden;
 }
 
-.xula-origin__media img {
+.xula-origin__slides {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+}
+
+.xula-origin__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  z-index: 1;
+  transition: opacity 1.2s ease-in-out;
+}
+
+.xula-origin__slide.is-active {
+  opacity: 1;
+  z-index: 2;
+}
+
+.xula-origin__slide img {
   width: 100%;
   height: 100%;
-  aspect-ratio: 4 / 5;
   object-fit: cover;
+  display: block;
 }
 
 .xula-origin__badge {
@@ -35,6 +71,69 @@
   font-size: 1.2rem;
   letter-spacing: .06em;
   text-transform: uppercase;
+  z-index: 3;
+}
+
+/* DOTS */
+.xula-origin__dots {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 4;
+}
+
+.xula-origin__dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .45);
+  cursor: pointer;
+  overflow: hidden;
+  transition: width .35s ease, background-color .35s ease;
+}
+
+.xula-origin__dot:hover {
+  background: rgba(255, 255, 255, .7);
+}
+
+.xula-origin__dot.is-active {
+  width: 34px;
+  background: rgba(255, 255, 255, .35);
+}
+
+.xula-origin__dot-fill {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.xula-origin__dot.is-active .xula-origin__dot-fill {
+  animation: xula-origin-dot-progress var(--xula-origin-autoplay, 5000ms) linear forwards;
+}
+
+@keyframes xula-origin-dot-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-origin__slide {
+    transition: none;
+  }
+
+  .xula-origin__dot-fill {
+    animation: none !important;
+    transform: scaleX(1);
+  }
 }
 
 /* RIGHT */
@@ -63,6 +162,28 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.xula-origin__stat-top {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.xula-origin__stat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--bg-secondary);
+}
+
+.xula-origin__stat-icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 .xula-origin__stat-value {

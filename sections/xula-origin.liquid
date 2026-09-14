@@ -1,23 +1,71 @@
 {{ 'xula-origin.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-origin.js' | asset_url }}" defer></script>
 
-<section class="xula-origin">
+{% liquid
+  assign origin_slides = section.blocks | where: 'type', 'image'
+%}
+
+<section class="xula-origin color-{{ section.settings.color_scheme }} gradient">
   <div class="page-width">
     <div class="xula-origin__grid">
 
       <!-- LEFT MEDIA -->
       <div class="xula-origin__media">
-        {% if section.settings.image != blank %}
-          <img
-            src="{{ section.settings.image | image_url: width: 1400 }}"
-            alt="{{ section.settings.heading | escape }}"
-            width="1400"
-            height="1600"
-            loading="lazy"
-          >
-        {% endif %}
+        <div class="xula-origin__slides" data-xula-origin-slides data-autoplay="{{ section.settings.autoplay_speed | times: 1000 }}">
+          {% assign slide_index = 0 %}
+          {% for image_block in origin_slides %}
+            {% if image_block.settings.image != blank %}
+              <div
+                class="xula-origin__slide{% if slide_index == 0 %} is-active{% endif %}"
+                {{ image_block.shopify_attributes }}
+              >
+                <img
+                  src="{{ image_block.settings.image | image_url: width: 1400 }}"
+                  srcset="{{ image_block.settings.image | image_url: width: 700 }} 700w, {{ image_block.settings.image | image_url: width: 1400 }} 1400w"
+                  sizes="(min-width: 990px) 45vw, 90vw"
+                  alt="{{ image_block.settings.image.alt | default: section.settings.heading | escape }}"
+                  width="1400"
+                  height="1600"
+                  loading="{% if slide_index == 0 %}eager{% else %}lazy{% endif %}"
+                >
+              </div>
+              {% assign slide_index = slide_index | plus: 1 %}
+            {% endif %}
+          {% endfor %}
+
+          {% if slide_index == 0 and section.settings.image != blank %}
+            <div class="xula-origin__slide is-active">
+              <img
+                src="{{ section.settings.image | image_url: width: 1400 }}"
+                alt="{{ section.settings.heading | escape }}"
+                width="1400"
+                height="1600"
+                loading="eager"
+              >
+            </div>
+            {% assign slide_index = 1 %}
+          {% endif %}
+        </div>
 
         {% if section.settings.badge != blank %}
           <div class="xula-origin__badge">{{ section.settings.badge }}</div>
+        {% endif %}
+
+        {% if slide_index > 1 %}
+          <div class="xula-origin__dots" role="tablist" aria-label="Gallery navigation">
+            {% for i in (1..slide_index) %}
+              <button
+                type="button"
+                class="xula-origin__dot{% if forloop.first %} is-active{% endif %}"
+                data-slide-dot="{{ forloop.index0 }}"
+                role="tab"
+                aria-label="Show image {{ forloop.index }}"
+                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              >
+                <span class="xula-origin__dot-fill"></span>
+              </button>
+            {% endfor %}
+          </div>
         {% endif %}
       </div>
 
@@ -45,10 +93,19 @@
         {% if section.blocks.size > 0 %}
           <div class="xula-origin__stats">
             {% for block in section.blocks %}
-              <div class="xula-origin__stat" {{ block.shopify_attributes }}>
-                <span class="xula-origin__stat-value">{{ block.settings.value }}</span>
-                <span class="xula-origin__stat-label">{{ block.settings.label }}</span>
-              </div>
+              {% if block.type == 'stat' %}
+                <div class="xula-origin__stat" {{ block.shopify_attributes }}>
+                  <span class="xula-origin__stat-top">
+                    {% if block.settings.icon != 'none' %}
+                      <span class="xula-origin__stat-icon">
+                        {% render 'xula-stat-icon', icon: block.settings.icon %}
+                      </span>
+                    {% endif %}
+                    <span class="xula-origin__stat-label">{{ block.settings.label }}</span>
+                  </span>
+                  <span class="xula-origin__stat-value">{{ block.settings.value }}</span>
+                </div>
+              {% endif %}
             {% endfor %}
           </div>
         {% endif %}
@@ -74,13 +131,32 @@
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Image"
+      "label": "Image",
+      "info": "Used only if no slide images are added below."
     },
     {
       "type": "text",
       "id": "badge",
       "label": "Badge",
       "default": "1,200masl"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay speed",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Content"
     },
     {
       "type": "text",
@@ -110,6 +186,16 @@
       "type": "url",
       "id": "button_link",
       "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
     }
   ],
   "blocks": [
@@ -118,6 +204,21 @@
       "name": "Stat",
       "limit": 4,
       "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "mountain", "label": "Mountain (altitude)" },
+            { "value": "leaf", "label": "Leaf (variety)" },
+            { "value": "calendar", "label": "Calendar (harvest)" },
+            { "value": "home", "label": "Home (family farms)" },
+            { "value": "bean", "label": "Coffee bean" },
+            { "value": "drop", "label": "Drop (process)" }
+          ],
+          "default": "none"
+        },
         {
           "type": "text",
           "id": "value",
@@ -131,6 +232,17 @@
           "default": "Altitude"
         }
       ]
+    },
+    {
+      "type": "image",
+      "name": "Slide image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
     }
   ],
   "presets": [
@@ -140,6 +252,7 @@
         {
           "type": "stat",
           "settings": {
+            "icon": "mountain",
             "value": "1,200m",
             "label": "Altitude"
           }
@@ -147,6 +260,7 @@
         {
           "type": "stat",
           "settings": {
+            "icon": "leaf",
             "value": "Bourbon",
             "label": "Variety"
           }
@@ -154,6 +268,7 @@
         {
           "type": "stat",
           "settings": {
+            "icon": "calendar",
             "value": "Nov – Feb",
             "label": "Harvest"
           }
@@ -161,6 +276,7 @@
         {
           "type": "stat",
           "settings": {
+            "icon": "home",
             "value": "40+",
             "label": "Family farms"
           }
