@@ -31,6 +31,7 @@
         "stat_FCkjBn": {
           "type": "stat",
           "settings": {
+            "icon": "mountain",
             "value": "1,000–1,350",
             "label": "Altitude"
           }
@@ -38,6 +39,7 @@
         "stat_RRX3RU": {
           "type": "stat",
           "settings": {
+            "icon": "leaf",
             "value": "100% Arabica",
             "label": "Variety"
           }
@@ -45,6 +47,7 @@
         "stat_PHd8ac": {
           "type": "stat",
           "settings": {
+            "icon": "calendar",
             "value": "Nov – Feb",
             "label": "Harvest"
           }
@@ -52,6 +55,7 @@
         "stat_Xr69ym": {
           "type": "stat",
           "settings": {
+            "icon": "bean",
             "value": "Hand-picked, freshly roasted",
             "label": "Features"
           }
