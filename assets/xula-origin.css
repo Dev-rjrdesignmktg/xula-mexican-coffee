@@ -1,7 +1,4 @@
 .xula-origin {
-  /* Section color scheme maps onto the theme's shared bg/bg-secondary tokens,
-     so every existing rule below (and shared .xula-heading/.xula-btn classes)
-     picks it up automatically through inheritance. */
   --bg: rgb(var(--color-background));
   --bg-secondary: rgb(var(--color-foreground));
   background: var(--bg);
@@ -212,10 +209,11 @@
 
   .xula-origin__content {
     max-width: none;
+    justify-content: center;
   }
 
   .xula-origin__stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     align-content: center;
     justify-items: center;
     text-align: center;
@@ -228,5 +226,22 @@
 
   .xula-origin__content {
     text-align: center;
+  }
+
+    .xula-origin__content .xula-heading {
+    margin: 20px auto;
+  }
+
+  .xula-origin__content .xula-text {
+    margin: 0 auto;
+    margin-bottom: 40px;
+  }
+
+}
+
+@media (max-width: 767px){
+  .xula-origin__stats {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
