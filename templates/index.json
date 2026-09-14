@@ -28,6 +28,12 @@
     "xula_origin_R94pYN": {
       "type": "xula-origin",
       "blocks": {
+        "image_6JKBYy": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/xula-18.jpg"
+          }
+        },
         "image_W4PJpX": {
           "type": "image",
           "settings": {
@@ -80,6 +86,7 @@
         }
       },
       "block_order": [
+        "image_6JKBYy",
         "image_W4PJpX",
         "image_Nf3hXN",
         "image_nJhVaV",
