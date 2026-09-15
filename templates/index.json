@@ -175,8 +175,8 @@
           "type": "collection",
           "settings": {
             "image": "shopify://shop_images/xula-57.jpg",
-            "link": "",
-            "title": "Cacao Roasted",
+            "link": "shopify://collections/roasted-cacao",
+            "title": "Roasted Cacao",
             "text_description": "From your first sip in the morning to your sweetest evening comfort, XULA creates moments worth slowing down for."
           }
         },
