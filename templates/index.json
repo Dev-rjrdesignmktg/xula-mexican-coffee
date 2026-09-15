@@ -101,7 +101,7 @@
         "badge": "1350 masl",
         "autoplay_speed": 5,
         "eyebrow": "Our Terroir",
-        "heading": "Grown in the highlands of Mexico.",
+        "heading": "Grown in the Highlands of Mexico.",
         "text": "In the volcanic soil of Veracruz and Chiapas, small family farms nurture every cherry by hand, high above the clouds where the air is thin and the harvest is slow.",
         "button_label": "About Us",
         "button_link": "shopify://pages/about-xula-mexican-coffee",
@@ -117,8 +117,8 @@
             "image": "shopify://shop_images/xula-32.jpg",
             "title": "Single-Origin Mexican Coffee",
             "text": "Sourced from the highlands of Mexico, where altitude, soil, and climate shape every cup.",
-            "background_color": "#E95028",
-            "text_color": "#F4F0E8"
+            "background_color": "#e95028",
+            "text_color": "#f4f0e8"
           }
         },
         "craft_item_NxFR3d": {
@@ -127,8 +127,8 @@
             "image": "shopify://shop_images/xula-56.jpg",
             "title": "Small-Batch Roasted",
             "text": "Every batch is roasted with precision to preserve aroma, body, and depth.",
-            "background_color": "#345DA8",
-            "text_color": "#F4F0E8"
+            "background_color": "#345da8",
+            "text_color": "#f4f0e8"
           }
         },
         "craft_item_8aieCL": {
@@ -138,7 +138,7 @@
             "title": "Built for the Ritual",
             "text": "Designed for slow mornings, intentional brewing, and richer coffee experiences.",
             "background_color": "#439105",
-            "text_color": "#F4F0E8"
+            "text_color": "#f4f0e8"
           }
         }
       },
@@ -152,15 +152,52 @@
     },
     "xula_collections_RVJVdH": {
       "type": "xula-collections",
+      "blocks": {
+        "collection_ChYzKr": {
+          "type": "collection",
+          "settings": {
+            "image": "shopify://shop_images/xula-50-mr.jpg",
+            "link": "shopify://collections/coffee",
+            "title": "Specialty Coffee",
+            "text_description": "Explore small-batch Mexican Coffee crafted for depth, ritual and aroma."
+          }
+        },
+        "collection_9QzC8D": {
+          "type": "collection",
+          "settings": {
+            "image": "shopify://shop_images/xula-33_98843e05-719f-49dd-b8c3-6dcc280b9a4c.jpg",
+            "link": "shopify://collections/chocolate",
+            "title": "Artisan Chocolate",
+            "text_description": "Hancrafted to complemented your coffee ritual."
+          }
+        },
+        "collection_9qTDej": {
+          "type": "collection",
+          "settings": {
+            "image": "shopify://shop_images/xula-57.jpg",
+            "link": "",
+            "title": "Cacao Roasted",
+            "text_description": "From your first sip in the morning to your sweetest evening comfort, XULA creates moments worth slowing down for."
+          }
+        },
+        "collection_j4GfUy": {
+          "type": "collection",
+          "settings": {
+            "image": "shopify://shop_images/xula-36.jpg",
+            "link": "shopify://collections/muffins",
+            "title": "Specialty Coffee",
+            "text_description": "Warm, fresh, and made for slow mornings."
+          }
+        }
+      },
+      "block_order": [
+        "collection_ChYzKr",
+        "collection_9QzC8D",
+        "collection_9qTDej",
+        "collection_j4GfUy"
+      ],
       "name": "Xula Collections Mosaic",
-      "settings": {
-        "coffee_image": "shopify://shop_images/xula-14.jpg",
-        "coffee_link": "shopify://collections/coffee",
-        "chocolate_image": "shopify://shop_images/xula-33.jpg",
-        "chocolate_link": "shopify://collections/chocolate",
-        "muffins_image": "shopify://shop_images/xula-36.jpg",
-        "muffins_link": "shopify://collections/muffins"
-      }
+      "settings": {}
     },
     "xula_catalog_A3gQDt": {
       "type": "xula-catalog",
