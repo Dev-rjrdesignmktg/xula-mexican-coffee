@@ -16,8 +16,11 @@
 <div class="xula-proof__grid">
 
   {% for block in section.blocks %}
-    <div class="xula-proof__card">
-
+    <div class="xula-proof__card" style="
+        --xula-proof-bg: {{ block.settings.background_color }};
+        --xula-proof-text: {{ block.settings.text_color }};"
+      {{ block.shopify_attributes }}
+    >
       <div class="xula-proof__media">
         {% if block.settings.image != blank %}
           <img
@@ -61,13 +64,25 @@
                     "type": "text",
                     "id": "title",
                     "label": "Title",
-                    "default": "Single-Origin Mexican Coffee"
+                    "default": "Single-Origin Mexican Coffee hhghghg"
                     },
                     {
                     "type": "textarea",
                     "id": "text",
                     "label": "Description",
                     "default": "Sourced from the highlands of Mexico, where altitude, soil, and climate shape every cup."
+                    },
+                    {
+                      "type": "color",
+                      "id": "background_color",
+                      "label": "Background color",
+                      "default": "#F4F0E8"
+                    },
+                    {
+                      "type": "color",
+                      "id": "text_color",
+                      "label": "Text color",
+                      "default": "#1C1C1C"
                     }
                 ]
             }
