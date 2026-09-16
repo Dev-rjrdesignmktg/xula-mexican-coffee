@@ -96,7 +96,7 @@
    TITLE
    ========================================================= */
 
-.xula-mosaic__content span {
+.xula-mosaic__title{
     display: block;
     width: 100%;
     margin-bottom: 10px;
@@ -111,7 +111,7 @@
    DESCRIPTION
    ========================================================= */
 
-.xula-mosaic__content p {
+.xula-mosaic__description {
     width: 100%;
     max-width: none;
     margin: 0;
@@ -125,19 +125,18 @@
    ========================================================= */
 
 .xula-mosaic__link {
+    position: relative;
     display: inline-flex;
     align-items: center;
-
     gap: 8px;
-
     margin-top: 16px;
-
-    font-size: .8rem;
+    font-size: 1.2rem;
     font-weight: 600;
-
     letter-spacing: .1em;
     text-transform: uppercase;
+    text-decoration: none;
 }
+
 
 
 /* =========================================================
@@ -148,11 +147,23 @@
     transform: scale(1.06);
 }
 
-.xula-mosaic__item:hover .xula-mosaic__link {
-    text-decoration: underline;
-    text-underline-offset: 5px;
+.xula-mosaic__link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -7px;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform .45s cubic-bezier(.22,.61,.36,1);
 }
 
+/* Hover */
+.xula-mosaic__item:hover .xula-mosaic__link::after {
+    transform: scaleX(1);
+}
 
 /* =========================================================
    DESKTOP
@@ -296,7 +307,6 @@
     .xula-mosaic__item--large {
         grid-column: 1;
         grid-row: 1;
-
         min-height: 460px;
     }
 
