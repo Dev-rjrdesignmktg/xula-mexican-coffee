@@ -185,7 +185,7 @@
           "settings": {
             "image": "shopify://shop_images/xula-36.jpg",
             "link": "shopify://collections/muffins",
-            "title": "Specialty Coffee",
+            "title": "Artisan Muffins",
             "text_description": "Warm, fresh, and made for slow mornings."
           }
         }
@@ -197,7 +197,13 @@
         "collection_j4GfUy"
       ],
       "name": "Xula Collections Mosaic",
-      "settings": {}
+      "settings": {
+        "eyebrow": "Crafted for every ritual",
+        "heading": "Discover the ritual that fits your moment.",
+        "description": "From specialty coffee to artisan chocolate and warm baked goods, every offering is made to elevate your daily experience.",
+        "background_color": "#439105",
+        "text_color": "#f4f0e8"
+      }
     },
     "xula_catalog_A3gQDt": {
       "type": "xula-catalog",
