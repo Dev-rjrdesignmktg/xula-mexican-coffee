@@ -95,6 +95,20 @@
   margin-bottom: 10px;
 }
 
+/* Shopify's blog editor often wraps each list item's line in its own <p>
+   (and leaves empty <p></p> for blank lines). Without this, those nested
+   paragraphs inherit the 28px paragraph margin and force a line break
+   between the bullet/number and its text. */
+.xula-article-content__rte li > p {
+  display: inline;
+  margin: 0;
+}
+
+.xula-article-content__rte li:empty,
+.xula-article-content__rte li p:empty {
+  display: none;
+}
+
 /* ---------- Tags ---------- */
 
 .xula-article-content__tags {
