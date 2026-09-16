@@ -1,7 +1,13 @@
 {{ 'xula-journey.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'xula-journey.js' | asset_url }}" defer></script>
 
-<section class="xula-journey">
+<section class="xula-journey" 
+      style="
+        --xula-journey-bg: {{ section.settings.background_color }};
+        --xula-journey-text: {{ section.settings.text_color }};
+        --xula-journey-eyebrow: {{ section.settings.eyebrow_color }};
+        --xula-journey-step: {{ section.settings.step_color }};
+      ">
   <div class="page-width">
     <div class="xula-journey__grid">
 
@@ -60,7 +66,31 @@
       "id": "eyebrow",
       "label": "Eyebrow",
       "default": "The journey of Xula"
-    }
+    },
+    {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#439105"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#F4F0E8"
+        },
+        {
+          "type": "color",
+          "id" : "eyebrow_color",
+          "label": "Eyebrow Color",
+          "default": "#F4F0E8"
+        },
+        {
+          "type": "color",
+          "id": "step_color",
+          "label": "Step Color",
+          "default": "#F4F0E8"
+        },
   ],
   "blocks": [
     {

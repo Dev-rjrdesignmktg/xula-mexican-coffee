@@ -2,8 +2,8 @@
    MOBILE FIRST (base) — stacked, non-sticky, image + copy pairs
    ============================================================ */
 .xula-journey {
-  background: var(--bg-tertiary);
-  color: var(--bg-secondary);
+  background: var(--xula-journey-bg);
+  color: var(--xula-journey-text);
   padding: 64px 0;
 }
 
@@ -23,10 +23,11 @@
   order: 1;
   position: static;
   margin-bottom: 8px;
+  color: var(--xula-journey-text);
 }
 
 .xula-journey .journey--eyebrow {
-  color: var(--text-secondary);
+  color: var(--xula-journey-eyebrow);
 }
 
 .xula-journey__copy {
@@ -39,19 +40,19 @@
 }
 
 .xula-journey__copy small {
-  color: var(--text-secondary);
+  color: var(--xula-journey-step);
   text-transform: uppercase;
   letter-spacing: .1em;
   opacity: .7;
 }
 
 .xula-journey .journey--heading {
-  color: var(--bg-secondary);
+  color: var(--xula-journey-text);
   margin: 0;
 }
 
 .xula-journey__copy p {
-  color: color-mix(in srgb, var(--bg-secondary) 85%, transparent);
+  color: color-mix(in srgb, var(--xula-journey-text) 85%, transparent);
   margin: 0;
 }
 
