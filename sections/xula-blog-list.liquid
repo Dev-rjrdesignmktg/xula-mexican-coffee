@@ -10,6 +10,9 @@
   assign enable_load_more = section.settings.enable_load_more
 
   if list_blog != blank
+    if skip_articles >= list_blog.articles.size
+      assign skip_articles = 0
+    endif
     assign articles = list_blog.articles | slice: skip_articles, articles_to_show
   else
     assign articles = empty
@@ -99,8 +102,10 @@
           </button>
         </div>
       {%- endif -%}
-    {%- else -%}
+    {%- elsif list_blog == blank -%}
       <p class="xula-blog-list__empty">Select a blog with published articles to display them here.</p>
+    {%- else -%}
+      <p class="xula-blog-list__empty">This blog doesn't have any published articles yet.</p>
     {%- endif -%}
 
   </div>
