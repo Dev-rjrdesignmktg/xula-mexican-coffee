@@ -1,0 +1,153 @@
+
+{%- liquid
+  assign product = featured_product | default: collection.products.first
+
+  assign media = image
+  if media == blank and product != blank
+    assign media = product.featured_media.preview_image
+  endif
+  if media == blank
+    assign media = collection.featured_image
+  endif
+
+  assign badge_text = badge
+  if badge_text == blank and auto_badge and product.selling_plan_groups.size > 0
+    assign badge_text = subscription_label
+    assign badge_style = 'gold'
+  endif
+  assign badge_style = badge_style | default: 'accent'
+
+  assign is_current = false
+  if collection.url == request.path
+    assign is_current = true
+  endif
+-%}
+
+{%- case part -%}
+  {%- when 'link' -%}
+    <li class="xula-dropdown__collection" role="none" data-collection="{{ collection.handle }}" {% if block %}{{ block.shopify_attributes }}{% endif %}>
+      <a
+        href="{{ collection.url }}"
+        class="xula-dropdown__collection-link{% if position == 1 %} is-active{% endif %}"
+        role="menuitem"
+        data-xula-dropdown-item
+        data-xula-preview-target="{{ position }}"
+        {% if is_current %}
+          aria-current="page"
+        {% endif %}
+      >
+        <span class="xula-dropdown__collection-title">{{ collection.title | escape }}</span>
+        <span class="xula-dropdown__collection-count xula-type--code">{{ collection.products_count }}</span>
+        <svg class="xula-dropdown__collection-arrow" aria-hidden="true" focusable="false" viewBox="0 0 14 10" width="14" height="10">
+          <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 5h12M9 1l4 4-4 4"/>
+        </svg>
+      </a>
+    </li>
+
+  {%- when 'preview' -%}
+    {%- liquid
+      if product != blank
+        assign preview_url = product.url
+      else
+        assign preview_url = collection.url
+      endif
+    -%}
+    <a
+      href="{{ preview_url }}"
+      class="xula-dropdown__feature{% if position == 1 %} is-active{% endif %}"
+      data-collection="{{ collection.handle }}"
+      data-xula-preview="{{ position }}"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <span class="xula-dropdown__feature-media">
+        {%- if media != blank -%}
+          {{
+            media
+            | image_url: width: 1200
+            | image_tag:
+              loading: 'lazy',
+              sizes: '(min-width: 1200px) 560px, 50vw',
+              widths: '400, 560, 800, 1120',
+              alt: '',
+              class: 'xula-dropdown__feature-image'
+          }}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'xula-dropdown__feature-image xula-dropdown__feature-image--placeholder' }}
+        {%- endif -%}
+      </span>
+
+      <span class="xula-dropdown__feature-body">
+        {%- if badge_text != blank -%}
+          <span class="xula-dropdown__badge xula-dropdown__badge--{{ badge_style }} xula-type--code">
+            {{- badge_text | escape -}}
+          </span>
+        {%- endif -%}
+
+        <span class="xula-dropdown__feature-collection xula-type--code">{{ collection.title | escape }}</span>
+
+        {%- if product != blank -%}
+          <span class="xula-dropdown__feature-title">{{ product.title | escape }}</span>
+          <span class="xula-dropdown__price xula-type--code">
+            {%- if product.price_varies -%}
+              {%- assign price_min = product.price_min | money -%}
+              {{- 'products.product.price.from_price_html' | t: price: price_min -}}
+            {%- else -%}
+              {{- product.price | money -}}
+            {%- endif -%}
+            {%- if product.compare_at_price > product.price -%}
+              <s class="xula-dropdown__price-compare">{{ product.compare_at_price | money }}</s>
+            {%- endif -%}
+          </span>
+        {%- elsif collection.description != blank -%}
+          <span class="xula-dropdown__feature-text">{{ collection.description | strip_html | truncatewords: 18 }}</span>
+        {%- endif -%}
+
+        <span class="xula-dropdown__feature-cta">
+          {{- cta_label | escape -}}
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 14 10" width="14" height="10">
+            <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 5h12M9 1l4 4-4 4"/>
+          </svg>
+        </span>
+      </span>
+    </a>
+
+  {%- when 'mobile' -%}
+    <li class="xula-dropdown__collection" data-collection="{{ collection.handle }}" {% if block %}{{ block.shopify_attributes }}{% endif %}>
+      <a
+        href="{{ collection.url }}"
+        class="xula-dropdown__row"
+        {% if is_current %}
+          aria-current="page"
+        {% endif %}
+      >
+        <span class="xula-dropdown__row-media">
+          {%- if media != blank -%}
+            {{
+              media
+              | image_url: width: 192
+              | image_tag:
+                loading: 'lazy',
+                sizes: '64px',
+                widths: '64, 128, 192',
+                alt: '',
+                class: 'xula-dropdown__row-image'
+            }}
+          {%- else -%}
+            {{ 'collection-1' | placeholder_svg_tag: 'xula-dropdown__row-image xula-dropdown__feature-image--placeholder' }}
+          {%- endif -%}
+        </span>
+        <span class="xula-dropdown__row-body">
+          <span class="xula-dropdown__row-title">{{ collection.title | escape }}</span>
+          {%- if product != blank -%}
+            <span class="xula-dropdown__row-meta xula-type--code">{{ product.title | escape }}</span>
+          {%- endif -%}
+        </span>
+        {%- if badge_text != blank -%}
+          <span class="xula-dropdown__badge xula-dropdown__badge--{{ badge_style }} xula-type--code">
+            {{- badge_text | escape -}}
+          </span>
+        {%- endif -%}
+      </a>
+    </li>
+{%- endcase -%}

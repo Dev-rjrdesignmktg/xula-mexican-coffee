@@ -8,8 +8,20 @@
 <nav class="header__inline-menu">
   <ul class="list-menu list-menu--inline" role="list">
     {%- for link in section.settings.menu.links -%}
-      <li>
-        {%- if link.links != blank -%}
+      {%- liquid
+        assign is_xula_dropdown = false
+        if section.settings.xula_dropdown_enable
+          if link.handle == section.settings.xula_dropdown_link_handle
+            assign is_xula_dropdown = true
+          elsif section.settings.xula_dropdown_collection != blank and link.url == section.settings.xula_dropdown_collection.url
+            assign is_xula_dropdown = true
+          endif
+        endif
+      -%}
+      <li{% if is_xula_dropdown %} class="xula-nav__item"{% endif %}>
+        {%- if is_xula_dropdown -%}
+          {%- render 'xula-nav-dropdown', link: link, mode: 'desktop', index: forloop.index -%}
+        {%- elsif link.links != blank -%}
           <header-menu>
             <details id="Details-HeaderMenu-{{ forloop.index }}">
               <summary

@@ -1,0 +1,177 @@
+
+
+{%- liquid
+  assign s = section.settings
+  assign uid = mode | append: '-' | append: index
+  assign panel_id = 'XulaDropdown-' | append: uid
+  assign toggle_id = 'XulaDropdownToggle-' | append: uid
+
+  assign collection_blocks = section.blocks | where: 'type', 'xula_nav_collection'
+
+  assign view_all_url = link.url
+  if s.xula_dropdown_collection != blank
+    assign view_all_url = s.xula_dropdown_collection.url
+  endif
+
+  assign view_all_label = s.xula_dropdown_view_all_label | default: 'Shop all products'
+  assign subscription_label = s.xula_dropdown_subscription_label | default: 'Subscription available'
+  assign cta_label = s.xula_dropdown_cta_label | default: 'Shop now'
+
+  if mode == 'desktop'
+    assign parts = 'link,preview' | split: ','
+  else
+    assign parts = 'mobile' | split: ','
+  endif
+-%}
+
+{%- for part in parts -%}
+  {%- capture rendered -%}
+    {%- assign position = 0 -%}
+    {%- if collection_blocks.size > 0 -%}
+      {%- for block in collection_blocks -%}
+        {%- if block.settings.collection != blank -%}
+          {%- assign position = position | plus: 1 -%}
+          {%- render 'xula-nav-collection',
+            collection: block.settings.collection,
+            featured_product: block.settings.product,
+            image: block.settings.image,
+            badge: block.settings.badge,
+            badge_style: block.settings.badge_style,
+            block: block,
+            part: part,
+            position: position,
+            auto_badge: s.xula_dropdown_auto_badge,
+            subscription_label: subscription_label,
+            cta_label: cta_label
+          -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for collection in s.xula_dropdown_collections -%}
+        {%- assign position = position | plus: 1 -%}
+        {%- render 'xula-nav-collection',
+          collection: collection,
+          part: part,
+          position: position,
+          auto_badge: s.xula_dropdown_auto_badge,
+          subscription_label: subscription_label,
+          cta_label: cta_label
+        -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endcapture -%}
+  {%- case part -%}
+    {%- when 'link' -%}
+      {%- assign collection_links = rendered -%}
+    {%- when 'preview' -%}
+      {%- assign collection_previews = rendered -%}
+    {%- when 'mobile' -%}
+      {%- assign collection_rows = rendered -%}
+  {%- endcase -%}
+{%- endfor -%}
+
+{%- if mode == 'desktop' -%}
+  <xula-dropdown class="xula-dropdown xula-dropdown--desktop" data-mode="desktop">
+    <div class="xula-dropdown__trigger">
+      <a
+        id="HeaderMenu-{{ link.handle }}"
+        href="{{ link.url }}"
+        class="header__menu-item list-menu__item link focus-inset xula-dropdown__label"
+        data-xula-dropdown-label
+        {% if link.current %}
+          aria-current="page"
+        {% endif %}
+      >
+        <span
+          {%- if link.active or link.child_active %}
+            class="header__active-menu-item"
+          {% endif %}
+        >
+          {{- link.title | escape -}}
+        </span>
+      </a>
+      <button
+        type="button"
+        id="{{ toggle_id }}"
+        class="xula-dropdown__toggle focus-inset"
+        aria-expanded="false"
+        aria-haspopup="true"
+        aria-controls="{{ panel_id }}"
+        data-xula-dropdown-toggle
+      >
+        <span class="visually-hidden">
+          {{- s.xula_dropdown_toggle_label | default: 'Show collections' }}: {{ link.title | escape -}}
+        </span>
+        <svg class="xula-dropdown__caret" aria-hidden="true" focusable="false" viewBox="0 0 10 6" width="10" height="6">
+          <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 1l4 4 4-4"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="{{ panel_id }}" class="xula-dropdown__panel" data-xula-dropdown-panel>
+      <div class="xula-dropdown__inner page-width">
+        <div class="xula-dropdown__intro">
+          {%- if s.xula_dropdown_eyebrow != blank -%}
+            <p class="xula-dropdown__eyebrow xula-type--code">{{ s.xula_dropdown_eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if s.xula_dropdown_heading != blank -%}
+            <p class="xula-dropdown__heading">{{ s.xula_dropdown_heading | escape }}</p>
+          {%- endif -%}
+
+          <ul class="xula-dropdown__collections" role="menu" aria-labelledby="HeaderMenu-{{ link.handle }}">
+            {{ collection_links }}
+          </ul>
+
+          <a href="{{ view_all_url }}" class="xula-dropdown__view-all" data-xula-dropdown-item>
+            {{- view_all_label | escape -}}
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 14 10" width="14" height="10">
+              <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 5h12M9 1l4 4-4 4"/>
+            </svg>
+          </a>
+        </div>
+
+        {%- if collection_previews != blank -%}
+          <div class="xula-dropdown__preview">
+            {{ collection_previews }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </xula-dropdown>
+{%- else -%}
+  <xula-dropdown class="xula-dropdown xula-dropdown--mobile" data-mode="mobile">
+    <button
+      type="button"
+      id="{{ toggle_id }}"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset xula-dropdown__accordion-toggle{% if link.active or link.child_active %} menu-drawer__menu-item--active{% endif %}"
+      aria-expanded="false"
+      aria-controls="{{ panel_id }}"
+      data-xula-dropdown-toggle
+    >
+      <span>{{ link.title | escape }}</span>
+      <svg class="xula-dropdown__caret" aria-hidden="true" focusable="false" viewBox="0 0 10 6" width="12" height="8">
+        <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 1l4 4 4-4"/>
+      </svg>
+    </button>
+
+    <div
+      id="{{ panel_id }}"
+      class="xula-dropdown__panel"
+      role="region"
+      aria-labelledby="{{ toggle_id }}"
+      data-xula-dropdown-panel
+    >
+      <div class="xula-dropdown__panel-clip">
+        <ul class="xula-dropdown__collections" role="list">
+          {{ collection_rows }}
+        </ul>
+        <a href="{{ view_all_url }}" class="xula-dropdown__view-all">
+          {{- view_all_label | escape -}}
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 14 10" width="14" height="10">
+            <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 5h12M9 1l4 4-4 4"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </xula-dropdown>
+{%- endif -%}

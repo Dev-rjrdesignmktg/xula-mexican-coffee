@@ -12,6 +12,11 @@
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
 
+{%- if section.settings.xula_dropdown_enable -%}
+  {{ 'xula-nav.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'xula-nav.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
 {%- if section.settings.menu_type_desktop == 'mega' -%}
   <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
@@ -470,7 +475,7 @@
 {
   "name": "t:sections.header.name",
   "class": "section-header",
-  "max_blocks": 3,
+  "max_blocks": 12,
   "settings": [
     {
       "type": "select",
@@ -647,11 +652,130 @@
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 20
+    },
+    {
+      "type": "header",
+      "content": "XULA · Products mega menu"
+    },
+    {
+      "type": "paragraph",
+      "content": "Pick every collection to list in \"Collections to list\" below (click \"Select\" and tick as many as you need). For a custom featured product, image or badge per collection, add \"Mega menu collection\" blocks instead — blocks take priority."
+    },
+    {
+      "type": "checkbox",
+      "id": "xula_dropdown_enable",
+      "label": "Enable products mega menu",
+      "default": true
+    },
+    {
+      "type": "collection_list",
+      "id": "xula_dropdown_collections",
+      "label": "Collections to list (select multiple)",
+      "limit": 12,
+      "info": "Shown vertically in this order, each with a large image of its first product. Drag to reorder."
+    },
+    {
+      "type": "text",
+      "id": "xula_dropdown_link_handle",
+      "label": "Menu link handle",
+      "default": "our-products",
+      "info": "Handle of the menu link that opens the mega menu (e.g. \"our-products\" or \"nuestros-productos\"). It also opens if the link points to the \"View all\" collection."
+    },
+    {
+      "type": "collection",
+      "id": "xula_dropdown_collection",
+      "label": "\"View all\" link destination (single collection)",
+      "info": "Destination of the \"View all\" link. Defaults to the menu link URL."
+    },
+    {
+      "type": "text",
+      "id": "xula_dropdown_eyebrow",
+      "label": "Eyebrow",
+      "default": "Specialty coffee"
+    },
+    {
+      "type": "text",
+      "id": "xula_dropdown_heading",
+      "label": "Heading",
+      "default": "Find your roast"
+    },
+    {
+      "type": "text",
+      "id": "xula_dropdown_view_all_label",
+      "label": "\"View all\" label",
+      "default": "Shop all products"
+    },
+    {
+      "type": "text",
+      "id": "xula_dropdown_cta_label",
+      "label": "Featured product button label",
+      "default": "Shop now"
+    },
+    {
+      "type": "text",
+      "id": "xula_dropdown_toggle_label",
+      "label": "Toggle button accessible label",
+      "default": "Show collections",
+      "info": "Screen readers only."
+    },
+    {
+      "type": "checkbox",
+      "id": "xula_dropdown_auto_badge",
+      "label": "Show subscription badge automatically",
+      "default": true,
+      "info": "Applies when a featured product has no custom badge and has selling plans."
+    },
+    {
+      "type": "text",
+      "id": "xula_dropdown_subscription_label",
+      "label": "Subscription badge text",
+      "default": "Subscription available"
     }
   ],
   "blocks": [
     {
       "type": "@app"
+    },
+    {
+      "type": "xula_nav_collection",
+      "name": "Mega menu collection",
+      "limit": 10,
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Featured product",
+          "info": "Defaults to the first product in the collection."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom image",
+          "info": "Overrides the featured product image."
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "info": "e.g. \"Best Seller\", \"New\". Leave empty for automatic."
+        },
+        {
+          "type": "select",
+          "id": "badge_style",
+          "label": "Badge style",
+          "options": [
+            { "value": "accent", "label": "XULA pink" },
+            { "value": "gold", "label": "Gold" },
+            { "value": "dark", "label": "Dark coffee" }
+          ],
+          "default": "accent"
+        }
+      ]
     }
   ]
 }

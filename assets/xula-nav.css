@@ -1,0 +1,644 @@
+/* =========================================================
+   XULA Nav — "Our Products" mega menu.
+   Mobile-first, BEM (.xula-nav / .xula-dropdown).
+   ========================================================= */
+
+.xula-dropdown {
+  --xula-dd-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --xula-dd-duration: 320ms;
+  --xula-dd-ink: var(--bg-secondary, #24170f);
+  --xula-dd-surface: var(--bg, #ffffff);
+  --xula-dd-cream: #f6efe6;
+  --xula-dd-line: rgba(36, 23, 15, 0.1);
+  --xula-dd-shadow: 0 24px 48px -24px rgba(36, 23, 15, 0.28), 0 2px 8px rgba(36, 23, 15, 0.06);
+  --xula-dd-focus: 0 0 0 2px var(--xula-dd-surface), 0 0 0 4px var(--accent, #e8318a);
+  --xula-dd-caret: #ffffff;
+
+  display: block;
+  font-family: var(--font-body-family);
+}
+
+.xula-dropdown :focus-visible {
+  outline: none;
+  box-shadow: var(--xula-dd-focus);
+}
+
+.xula-dropdown__panel {
+  color: var(--xula-dd-ink);
+}
+
+/* ---------------------------------------------------------
+   Shared
+   --------------------------------------------------------- */
+
+.xula-dropdown__collections {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xula-dropdown__caret {
+  flex: none;
+  transition: transform var(--xula-dd-duration) var(--xula-dd-ease);
+}
+
+[aria-expanded='true'] > .xula-dropdown__caret {
+  transform: rotate(180deg);
+}
+
+.xula-dropdown__badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 99rem;
+  font-size: 1rem;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.xula-dropdown__badge--accent {
+  background: rgba(232, 49, 138, 0.1);
+  color: #b51e68;
+}
+
+.xula-dropdown__badge--gold {
+  background: rgba(226, 181, 130, 0.28);
+  color: #7a5226;
+}
+
+.xula-dropdown__badge--dark {
+  background: var(--xula-dd-ink);
+  color: #ffffff;
+}
+
+.xula-dropdown__price {
+  display: inline-flex;
+  gap: 0.6rem;
+  font-size: 1.4rem;
+  color: rgba(36, 23, 15, 0.75);
+}
+
+.xula-dropdown__price-compare {
+  opacity: 0.55;
+}
+
+.xula-dropdown__view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.4rem;
+  color: var(--xula-dd-ink);
+  text-decoration: none;
+  border-radius: 0.4rem;
+}
+
+.xula-dropdown__view-all svg,
+.xula-dropdown__feature-cta svg,
+.xula-dropdown__collection-arrow {
+  transition: transform 240ms var(--xula-dd-ease), opacity 240ms ease;
+}
+
+.xula-dropdown__view-all:hover svg,
+.xula-dropdown__view-all:focus-visible svg {
+  transform: translateX(0.4rem);
+}
+
+.xula-dropdown__feature-image--placeholder {
+  fill: rgba(36, 23, 15, 0.25);
+}
+
+/* ---------------------------------------------------------
+   Mobile: accordion inside the Dawn drawer
+   --------------------------------------------------------- */
+
+.xula-dropdown__accordion-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.xula-dropdown--mobile .xula-dropdown__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--xula-dd-duration) var(--xula-dd-ease),
+    visibility 0s linear var(--xula-dd-duration);
+}
+
+.xula-dropdown--mobile.is-open .xula-dropdown__panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition:
+    grid-template-rows var(--xula-dd-duration) var(--xula-dd-ease),
+    visibility 0s;
+}
+
+.xula-dropdown__panel-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.xula-dropdown--mobile .xula-dropdown__collections {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0 1.6rem 0 2rem;
+}
+
+.xula-dropdown--mobile .xula-dropdown__collection {
+  opacity: 0;
+  transform: translateY(-0.6rem);
+  transition: opacity 200ms ease, transform 280ms var(--xula-dd-ease);
+}
+
+.xula-dropdown--mobile.is-open .xula-dropdown__collection {
+  opacity: 1;
+  transform: none;
+}
+
+.xula-dropdown--mobile.is-open .xula-dropdown__collection:nth-child(2) { transition-delay: 40ms; }
+.xula-dropdown--mobile.is-open .xula-dropdown__collection:nth-child(3) { transition-delay: 80ms; }
+.xula-dropdown--mobile.is-open .xula-dropdown__collection:nth-child(4) { transition-delay: 120ms; }
+.xula-dropdown--mobile.is-open .xula-dropdown__collection:nth-child(5) { transition-delay: 160ms; }
+.xula-dropdown--mobile.is-open .xula-dropdown__collection:nth-child(n + 6) { transition-delay: 200ms; }
+
+.xula-dropdown__row {
+  display: grid;
+  grid-template-columns: 5.6rem 1fr auto;
+  gap: 1.2rem;
+  align-items: center;
+  min-height: 4.8rem; /* touch target */
+  padding: 0.8rem;
+  border-radius: var(--radius-sm, 0.8rem);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 200ms ease;
+}
+
+/* Per-collection color: hover/focus = tint, active/current = solid.
+   Default is XULA pink; set each collection manually below. */
+.xula-dropdown__collection,
+.xula-dropdown__feature {
+  --xula-collection-color: var(--accent, #e8318a);
+  --xula-collection-contrast: #ffffff;
+}
+
+/* ---------------------------------------------------------
+   Manual collection colors — one rule per collection handle.
+   --xula-collection-color: hover tint / active background
+   --xula-collection-contrast: text on the solid active background
+   --------------------------------------------------------- */
+
+/*
+[data-collection='medium-roast'] {
+  --xula-collection-color: #c99354;
+  --xula-collection-contrast: #24170f;
+}
+
+[data-collection='dark-roast'] {
+  --xula-collection-color: #24170f;
+  --xula-collection-contrast: #ffffff;
+}
+*/
+
+.xula-dropdown__row:focus-visible {
+  background: color-mix(in srgb, var(--xula-collection-color) 14%, transparent);
+  box-shadow: inset 0.3rem 0 0 var(--xula-collection-color);
+}
+
+@media (hover: hover) {
+  .xula-dropdown__row:hover {
+    background: color-mix(in srgb, var(--xula-collection-color) 14%, transparent);
+    box-shadow: inset 0.3rem 0 0 var(--xula-collection-color);
+  }
+}
+
+.xula-dropdown__row:active,
+.xula-dropdown__row[aria-current='page'] {
+  background: var(--xula-collection-color);
+  color: var(--xula-collection-contrast);
+  box-shadow: none;
+}
+
+.xula-dropdown__row:active .xula-dropdown__row-meta,
+.xula-dropdown__row[aria-current='page'] .xula-dropdown__row-meta {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.xula-dropdown__row-media {
+  box-shadow: 0 0 0 2px transparent;
+  transition: box-shadow 200ms ease;
+}
+
+.xula-dropdown__row:hover .xula-dropdown__row-media,
+.xula-dropdown__row:focus-visible .xula-dropdown__row-media {
+  box-shadow: 0 0 0 2px var(--xula-collection-color);
+}
+
+.xula-dropdown__row-media {
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 0.6rem;
+  background: var(--xula-dd-cream);
+}
+
+.xula-dropdown__row-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.xula-dropdown__row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.xula-dropdown__row-title {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
+.xula-dropdown__row-meta {
+  overflow: hidden;
+  font-size: 1.2rem;
+  color: rgba(36, 23, 15, 0.65);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.xula-dropdown--mobile .xula-dropdown__view-all {
+  margin: 0.8rem 1.6rem 1.6rem 2.8rem;
+  padding: 1rem 0;
+}
+
+/* ---------------------------------------------------------
+   Desktop: trigger in the header (white chevron)
+   --------------------------------------------------------- */
+
+.xula-nav__item {
+  position: static;
+}
+
+.xula-dropdown--desktop .xula-dropdown__trigger {
+  display: flex;
+  align-items: center;
+}
+
+.xula-dropdown--desktop .xula-dropdown__label {
+  padding-right: 0.4rem;
+}
+
+.xula-dropdown__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  margin-left: -0.2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--xula-dd-caret);
+  cursor: pointer;
+  transition: background-color 200ms ease;
+}
+
+.xula-dropdown__toggle:hover,
+.xula-dropdown__toggle[aria-expanded='true'] {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.xula-dropdown__trigger :focus-visible {
+  box-shadow: 0 0 0 2px var(--xula-dd-caret);
+}
+
+/* ---------------------------------------------------------
+   Desktop: mega panel anchored to .header-wrapper
+   --------------------------------------------------------- */
+
+.xula-dropdown--desktop .xula-dropdown__panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  background: var(--xula-dd-surface);
+  border-top: 1px solid var(--xula-dd-line);
+  box-shadow: var(--xula-dd-shadow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-0.8rem);
+  pointer-events: none;
+  transition:
+    opacity 200ms ease,
+    transform 260ms var(--xula-dd-ease),
+    visibility 0s linear 260ms;
+}
+
+.xula-dropdown--desktop.is-open .xula-dropdown__panel {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  pointer-events: auto;
+  transition:
+    opacity var(--xula-dd-duration) ease,
+    transform var(--xula-dd-duration) var(--xula-dd-ease),
+    visibility 0s;
+}
+
+/* Hover bridge so the cursor can travel into the panel */
+.xula-dropdown--desktop.is-open .xula-dropdown__panel::before {
+  content: '';
+  position: absolute;
+  inset: -1.6rem 0 100% 0;
+}
+
+.xula-dropdown--desktop .xula-dropdown__inner {
+  display: grid;
+  grid-template-columns: minmax(24rem, 32rem) 1fr;
+  gap: 4rem;
+  padding-top: 3.2rem;
+  padding-bottom: 3.6rem;
+}
+
+.xula-dropdown--desktop .xula-dropdown__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.xula-dropdown__eyebrow {
+  margin: 0;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent, #e8318a);
+}
+
+.xula-dropdown__heading {
+  margin: 0 0 1.2rem;
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(2.2rem, 2vw, 2.8rem);
+  line-height: 1.1;
+  color: var(--xula-dd-ink);
+}
+
+/* Vertical collection list */
+.xula-dropdown--desktop .xula-dropdown__collections {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.6rem;
+  border-top: 1px solid var(--xula-dd-line);
+}
+
+.xula-dropdown__collection {
+  border-bottom: 1px solid var(--xula-dd-line);
+}
+
+.xula-dropdown__collection-link {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 1.2rem;
+  align-items: center;
+  padding: 1.4rem 0.8rem;
+  color: var(--xula-dd-ink);
+  text-decoration: none;
+  transition:
+    color 200ms ease,
+    background-color 200ms ease,
+    box-shadow 200ms ease,
+    padding 240ms var(--xula-dd-ease);
+}
+
+.xula-dropdown__collection-title {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+
+.xula-dropdown__collection-count {
+  font-size: 1.1rem;
+  opacity: 0.55;
+}
+
+.xula-dropdown__collection-arrow {
+  opacity: 0;
+  transform: translateX(-0.6rem);
+  color: var(--xula-collection-color);
+}
+
+/* Hover / focus / previewed: tint + color bar */
+.xula-dropdown__collection-link:hover,
+.xula-dropdown__collection-link:focus-visible,
+.xula-dropdown__collection-link.is-active {
+  padding-left: 1.4rem;
+  background: color-mix(in srgb, var(--xula-collection-color) 14%, transparent);
+  box-shadow: inset 0.3rem 0 0 var(--xula-collection-color);
+}
+
+/* Pressed / current page: solid collection color */
+.xula-dropdown__collection-link:active,
+.xula-dropdown__collection-link[aria-current='page'] {
+  padding-left: 1.4rem;
+  background: var(--xula-collection-color);
+  color: var(--xula-collection-contrast);
+  box-shadow: none;
+}
+
+.xula-dropdown__collection-link:active .xula-dropdown__collection-arrow,
+.xula-dropdown__collection-link[aria-current='page'] .xula-dropdown__collection-arrow {
+  color: inherit;
+}
+
+.xula-dropdown__collection-link[aria-current='page'] .xula-dropdown__collection-arrow {
+  opacity: 1;
+  transform: none;
+}
+
+.xula-dropdown__collection-link.is-active .xula-dropdown__collection-arrow {
+  opacity: 1;
+  transform: none;
+}
+
+/* Featured product preview */
+.xula-dropdown__preview {
+  position: relative;
+  display: grid;
+  min-height: 36rem;
+}
+
+.xula-dropdown__feature {
+  grid-area: 1 / 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 3.2rem;
+  align-items: center;
+  color: var(--xula-dd-ink);
+  text-decoration: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 260ms ease,
+    visibility 0s linear 260ms;
+}
+
+.xula-dropdown__feature.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 360ms ease,
+    visibility 0s;
+}
+
+.xula-dropdown__feature-media {
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: calc(var(--radius-sm, 0.8rem) * 1.5);
+  background: var(--xula-dd-cream);
+}
+
+.xula-dropdown__feature-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.04);
+  transition: transform 700ms var(--xula-dd-ease);
+}
+
+.xula-dropdown__feature.is-active .xula-dropdown__feature-image {
+  transform: scale(1);
+}
+
+.xula-dropdown__feature:hover .xula-dropdown__feature-image {
+  transform: scale(1.03);
+}
+
+.xula-dropdown__feature-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  transform: translateY(0.8rem);
+  transition: transform 420ms var(--xula-dd-ease);
+}
+
+.xula-dropdown__feature.is-active .xula-dropdown__feature-body {
+  transform: none;
+}
+
+.xula-dropdown__feature-collection {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(36, 23, 15, 0.6);
+}
+
+.xula-dropdown__feature-title {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(2.4rem, 2.4vw, 3.2rem);
+  line-height: 1.05;
+}
+
+.xula-dropdown__feature-text {
+  font-size: 1.5rem;
+  line-height: 1.6;
+}
+
+.xula-dropdown__feature-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+  padding: 1.2rem 2rem;
+  border-radius: 99rem;
+  background: var(--xula-dd-ink);
+  color: #ffffff;
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.4rem;
+  transition: background-color 200ms ease;
+}
+
+.xula-dropdown__feature-collection::before {
+  content: '';
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-right: 0.8rem;
+  border-radius: 50%;
+  background: var(--xula-collection-color, var(--accent, #e8318a));
+  vertical-align: 0.05em;
+}
+
+.xula-dropdown__feature:hover .xula-dropdown__feature-cta,
+.xula-dropdown__feature:active .xula-dropdown__feature-cta {
+  background: var(--xula-collection-color, var(--accent, #e8318a));
+  color: var(--xula-collection-contrast, #ffffff);
+}
+
+.xula-dropdown__feature:hover .xula-dropdown__feature-cta svg {
+  transform: translateX(0.4rem);
+}
+
+@media screen and (max-width: 1199px) {
+  .xula-dropdown__feature {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2.4rem;
+  }
+
+  .xula-dropdown__preview {
+    min-height: 30rem;
+  }
+}
+
+/* No-JS / pre-upgrade fallback: keyboard users can still reach the panel */
+xula-dropdown.xula-dropdown--desktop:not(:defined):focus-within .xula-dropdown__panel {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* ---------------------------------------------------------
+   Reduced motion
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-dropdown,
+  .xula-dropdown * {
+    --xula-dd-duration: 1ms;
+    transition-duration: 1ms !important;
+    transition-delay: 0s !important;
+  }
+
+  .xula-dropdown--desktop .xula-dropdown__panel,
+  .xula-dropdown__collection,
+  .xula-dropdown__feature-body,
+  .xula-dropdown__feature-image {
+    transform: none !important;
+  }
+}
