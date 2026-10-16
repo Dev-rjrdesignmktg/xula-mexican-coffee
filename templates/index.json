@@ -283,7 +283,11 @@
       ],
       "name": "Xula Journey",
       "settings": {
-        "eyebrow": "The journey of Xula"
+        "eyebrow": "The journey of Xula",
+        "background_color": "#439105",
+        "text_color": "#f4f0e8",
+        "eyebrow_color": "#f4f0e8",
+        "step_color": "#f4f0e8"
       }
     },
     "xula_signature_MVGPEy": {
@@ -457,7 +461,7 @@
         "heading": "Join the Origin of Your Coffee",
         "text": "Join the XULA community and get early access to limited batches, exclusive tasting notes, and a welcome gift on your first bag.",
         "show_incentive": true,
-        "incentive_badge": "10% OFF Your First Bag",
+        "incentive_badge": "15% OFF Your First Bag",
         "incentive_detail": "Code sent to your inbox instantly",
         "email_placeholder": "you@email.com",
         "button_label": "Get My Discount",
@@ -466,6 +470,7 @@
         "success_text": "We sent your welcome code. In the meantime, brew your favorite cup.",
         "error_text": "Something went wrong. Please try again in a few seconds.",
         "invalid_text": "Please enter a valid email address.",
+        "image": "shopify://shop_images/IMG_5201.jpg",
         "image_alt": "",
         "show_structured_data": true
       }
