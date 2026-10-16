@@ -221,6 +221,14 @@
             "products_to_show": 12
           }
         },
+        "category_FgjWiT": {
+          "type": "category",
+          "settings": {
+            "collection": "",
+            "label": "",
+            "products_to_show": 12
+          }
+        },
         "category_48LxeJ": {
           "type": "category",
           "settings": {
@@ -233,6 +241,7 @@
       "block_order": [
         "category_97zDPE",
         "category_xqnrmw",
+        "category_FgjWiT",
         "category_48LxeJ"
       ],
       "name": "Xula Product Catalog",
