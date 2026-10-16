@@ -219,8 +219,16 @@
         "tab_F3HUiH": {
           "type": "tab",
           "settings": {
-            "collection": "chocolate",
+            "collection": "artisan-chocolate",
             "label": "Artisan Chocolate",
+            "products_to_show": 12
+          }
+        },
+        "tab_BmP8hx": {
+          "type": "tab",
+          "settings": {
+            "collection": "roasted-cacao",
+            "label": "",
             "products_to_show": 12
           }
         },
@@ -236,6 +244,7 @@
       "block_order": [
         "tab_dK7Twd",
         "tab_F3HUiH",
+        "tab_BmP8hx",
         "tab_T4y6rF"
       ],
       "name": "Xula Catalog Tabs",
