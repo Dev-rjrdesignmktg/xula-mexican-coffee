@@ -470,7 +470,6 @@
         "success_text": "We sent your welcome code. In the meantime, brew your favorite cup.",
         "error_text": "Something went wrong. Please try again in a few seconds.",
         "invalid_text": "Please enter a valid email address.",
-        "image": "shopify://shop_images/IMG_5201.jpg",
         "image_alt": "",
         "show_structured_data": true
       }
