@@ -205,35 +205,17 @@
     "xula_product_catalog_CMtr4b": {
       "type": "xula-product-catalog",
       "blocks": {
-        "category_97zDPE": {
+        "category_DnPqF7": {
           "type": "category",
           "settings": {
-            "collection": "coffee",
-            "label": "Specialty Coffee",
-            "products_to_show": 12
-          }
-        },
-        "category_xqnrmw": {
-          "type": "category",
-          "settings": {
-            "collection": "chocolate",
-            "label": "Artisan Chocolate",
-            "products_to_show": 12
-          }
-        },
-        "category_48LxeJ": {
-          "type": "category",
-          "settings": {
-            "collection": "muffins",
-            "label": "Artisan Muffins",
+            "collection": "roasted-cacao",
+            "label": "",
             "products_to_show": 12
           }
         }
       },
       "block_order": [
-        "category_97zDPE",
-        "category_xqnrmw",
-        "category_48LxeJ"
+        "category_DnPqF7"
       ],
       "name": "Xula Product Catalog",
       "settings": {
