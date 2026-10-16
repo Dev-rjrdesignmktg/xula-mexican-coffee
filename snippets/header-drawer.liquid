@@ -22,8 +22,20 @@
           <nav class="menu-drawer__navigation">
             <ul class="menu-drawer__menu has-submenu list-menu" role="list">
               {%- for link in section.settings.menu.links -%}
-                <li>
-                  {%- if link.links != blank -%}
+                {%- liquid
+                  assign is_xula_dropdown = false
+                  if section.settings.xula_dropdown_enable
+                    if link.handle == section.settings.xula_dropdown_link_handle
+                      assign is_xula_dropdown = true
+                    elsif section.settings.xula_dropdown_collection != blank and link.url == section.settings.xula_dropdown_collection.url
+                      assign is_xula_dropdown = true
+                    endif
+                  endif
+                -%}
+                <li{% if is_xula_dropdown %} class="xula-nav__item xula-nav__item--drawer"{% endif %}>
+                  {%- if is_xula_dropdown -%}
+                    {%- render 'xula-nav-dropdown', link: link, mode: 'mobile', index: forloop.index -%}
+                  {%- elsif link.links != blank -%}
                     <details id="Details-menu-drawer-menu-item-{{ forloop.index }}">
                       <summary
                         id="HeaderDrawer-{{ link.handle }}"

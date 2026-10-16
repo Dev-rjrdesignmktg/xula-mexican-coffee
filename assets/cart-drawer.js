@@ -79,6 +79,9 @@ class CartDrawer extends HTMLElement {
   renderContents(parsedState) {
     this.querySelector('.drawer__inner').classList.contains('is-empty') &&
       this.querySelector('.drawer__inner').classList.remove('is-empty');
+    // The empty state is driven by `cart-drawer.is-empty`; clear it here so
+    // every caller (not just product-form.js) shows the freshly added items.
+    this.classList.remove('is-empty');
     this.productId = parsedState.id;
     this.getSectionsToRender().forEach((section) => {
       const sectionElement = section.selector

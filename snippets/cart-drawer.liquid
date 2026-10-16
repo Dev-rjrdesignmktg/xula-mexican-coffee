@@ -7,6 +7,18 @@
 
 {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'xula-cart-drawer.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign xula_ship_threshold = settings.xula_free_shipping_threshold | default: 0 | times: 100
+  if xula_ship_threshold > 0
+    assign xula_ship_remaining = xula_ship_threshold | minus: cart.total_price
+    assign xula_ship_progress = cart.total_price | times: 100 | divided_by: xula_ship_threshold
+    if xula_ship_progress > 100
+      assign xula_ship_progress = 100
+    endif
+  endif
+-%}
 
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
@@ -31,7 +43,15 @@
         <div class="drawer__inner-empty">
           <div class="cart-drawer__warnings center{% if settings.cart_drawer_collection != blank %} cart-drawer__warnings--has-collection{% endif %}">
             <div class="cart-drawer__empty-content">
+              <span class="xula-cart__empty-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 18h26v11a11 11 0 0 1-11 11h-4A11 11 0 0 1 9 29V18Z"/>
+                  <path d="M35 21h2.5a4.5 4.5 0 0 1 0 9H35"/>
+                  <path d="M17 6c-1.5 2 1.5 3.5 0 6M23 6c-1.5 2 1.5 3.5 0 6M29 6c-1.5 2 1.5 3.5 0 6"/>
+                </svg>
+              </span>
               <h2 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h2>
+              <p class="xula-cart__empty-sub">Your next favorite cup is one click away.</p>
               <button
                 class="drawer__close"
                 type="button"
@@ -62,7 +82,12 @@
         </div>
       {%- endif -%}
       <div class="drawer__header">
-        <h2 class="drawer__heading">{{ 'sections.cart.title' | t }}</h2>
+        <h2 class="drawer__heading">
+          {{ 'sections.cart.title' | t }}
+          {%- if cart.item_count > 0 -%}
+            <span class="xula-cart__count">{{ cart.item_count }}</span>
+          {%- endif -%}
+        </h2>
         <button
           class="drawer__close"
           type="button"
@@ -74,6 +99,26 @@
           </span>
         </button>
       </div>
+      {%- if xula_ship_threshold > 0 and cart != empty -%}
+        <div class="xula-cart__shipping{% if xula_ship_remaining <= 0 %} is-unlocked{% endif %}">
+          <p class="xula-cart__shipping-text">
+            {%- if xula_ship_remaining > 0 -%}
+              You're <strong>{{ xula_ship_remaining | money }}</strong> away from free shipping
+            {%- else -%}
+              You've unlocked <strong>free shipping</strong>
+            {%- endif -%}
+          </p>
+          <div
+            class="xula-cart__shipping-bar"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="{{ xula_ship_progress }}"
+          >
+            <span style="width: {{ xula_ship_progress }}%"></span>
+          </div>
+        </div>
+      {%- endif -%}
       <cart-drawer-items
         view-event-payload="{{ cart | standard_event_data: 'view', context: 'dialog' | escape }}"
         view-event-trigger="manual"
@@ -587,6 +632,13 @@
           >
             {{ 'sections.cart.checkout' | t }}
           </button>
+          <p class="xula-cart__secure">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="5" y="11" width="14" height="10" rx="2"/>
+              <path d="M8 11V8a4 4 0 0 1 8 0v3"/>
+            </svg>
+            Secure checkout · Freshly roasted in Mexico
+          </p>
         </div>
       </div>
     </div>
