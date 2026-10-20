@@ -9,7 +9,7 @@
 <section
   class="xula-trust-cards"
   aria-labelledby="{{ heading_id }}"
-  style="--xula-trust-cards-count: {{ total_blocks }};"
+  style="--xula-trust-cards-count: {{ total_blocks }};{% if section.settings.background_color != blank %} --xula-trust-cards-bg: {{ section.settings.background_color }};{% endif %}{% if section.settings.card_background_color != blank %} --xula-trust-cards-card-bg: {{ section.settings.card_background_color }};{% endif %}{% if section.settings.eyebrow_color != blank %} --xula-trust-cards-eyebrow-color: {{ section.settings.eyebrow_color }}; --xula-trust-cards-eyebrow-opacity: 1;{% endif %}{% if section.settings.heading_color != blank %} --xula-trust-cards-heading-color: {{ section.settings.heading_color }};{% endif %}{% if section.settings.subheading_color != blank %} --xula-trust-cards-subheading-color: {{ section.settings.subheading_color }};{% endif %}{% if section.settings.label_color != blank %} --xula-trust-cards-label-color: {{ section.settings.label_color }};{% endif %}{% if section.settings.description_color != blank %} --xula-trust-cards-description-color: {{ section.settings.description_color }};{% endif %}"
 >
   <div class="page-width">
 
@@ -205,6 +205,52 @@
       "id": "text",
       "label": "Subtitle",
       "default": "Mexican tradition, verified quality, and customers who keep coming back."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background color",
+      "info": "Leave empty to use the theme default."
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "info": "Leave empty to use the theme default."
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Eyebrow color",
+      "info": "Leave empty to use the theme default."
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "info": "Leave empty to use the theme default."
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subtitle color",
+      "info": "Leave empty to use the theme default."
+    },
+    {
+      "type": "color",
+      "id": "label_color",
+      "label": "Card label color",
+      "info": "Leave empty to use the theme default."
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Card description color",
+      "info": "Leave empty to use the theme default."
     }
   ],
   "blocks": [
