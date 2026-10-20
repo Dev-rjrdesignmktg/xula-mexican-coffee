@@ -91,6 +91,13 @@
             "badge_3_text": "Secure checkout"
           }
         },
+        "text_8decqb": {
+          "type": "text",
+          "settings": {
+            "text": "Text block{{ product.metafields.shopify[\"care-instructions\"] | metafield_text: field: 'label' }}",
+            "text_style": "body"
+          }
+        },
         "xula_social_share_TUA4ab": {
           "type": "xula_social_share",
           "settings": {
@@ -117,6 +124,7 @@
         "quantity_selector",
         "buy_buttons",
         "xula_trust_badges_JbcqBw",
+        "text_8decqb",
         "xula_social_share_TUA4ab"
       ],
       "settings": {
@@ -133,17 +141,6 @@
         "enable_video_looping": false,
         "padding_top": 100,
         "padding_bottom": 52
-      }
-    },
-    "disclosures": {
-      "type": "disclosures",
-      "settings": {
-        "heading": "Disclosures",
-        "heading_size": "h2",
-        "open_by_default": false,
-        "color_scheme": "",
-        "padding_top": 36,
-        "padding_bottom": 0
       }
     },
     "related-products": {
@@ -335,7 +332,6 @@
   },
   "order": [
     "main",
-    "disclosures",
     "related-products",
     "xula-recipe-guide",
     "xula_faq_GgeHGg",
