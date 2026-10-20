@@ -1,0 +1,928 @@
+/* ==========================================================================
+   Xula Contact Premium — mobile first, BEM
+   ========================================================================== */
+
+.xula-contact-premium {
+  --xula-contact-line: color-mix(in srgb, var(--xula-contact-ink) 22%, transparent);
+  --xula-contact-muted: color-mix(in srgb, var(--xula-contact-ink) 68%, transparent);
+  --xula-contact-error: #B3261E;
+  --xula-contact-success: var(--text-secondary);
+  --xula-contact-ease: cubic-bezier(.16, 1, .3, 1);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--xula-contact-bg);
+  color: var(--xula-contact-ink);
+  padding: calc(var(--xula-contact-pt) * .6) 0 calc(var(--xula-contact-pb) * .6);
+}
+
+/* ---------- Background ---------- */
+
+.xula-contact-premium__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: var(--xula-contact-bg-opacity);
+  pointer-events: none;
+}
+
+.xula-contact-premium__bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- Grid ---------- */
+
+.xula-contact-premium__grid {
+  display: grid;
+  gap: 48px;
+}
+
+/* ---------- Info column ---------- */
+
+.xula-contact-premium__eyebrow {
+  font-family: var(--font-code-family);
+  font-weight: var(--font-code-weight);
+  font-size: 1.2rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--xula-gold-solid);
+  margin: 0 0 16px;
+}
+
+.xula-contact-premium__heading {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(3.2rem, 7vw, 6.4rem);
+  line-height: 1.02;
+  letter-spacing: -.02em;
+  color: var(--xula-contact-ink);
+  margin: 0 0 20px;
+  max-width: 14ch;
+}
+
+.xula-contact-premium__intro {
+  font-family: var(--font-body-family);
+  font-weight: var(--font-body-weight);
+  font-size: 1.7rem;
+  line-height: 1.7;
+  color: var(--xula-contact-muted);
+  max-width: 46ch;
+  margin-bottom: 36px;
+}
+
+.xula-contact-premium__intro p {
+  margin: 0;
+}
+
+/* ---------- Details ---------- */
+
+.xula-contact-premium__details {
+  display: grid;
+  margin: 0 0 32px;
+  border-top: 1px solid var(--xula-contact-line);
+}
+
+.xula-contact-premium__detail {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  column-gap: 16px;
+  row-gap: 4px;
+  align-content: start;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--xula-contact-line);
+}
+
+/* Icon as a pseudo-element keeps the <dl> markup valid */
+.xula-contact-premium__detail::before {
+  content: "";
+  grid-row: 1 / span 3;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--xula-gold-solid) 55%, transparent);
+  background:
+    var(--xula-detail-icon) center / 18px 18px no-repeat,
+    color-mix(in srgb, var(--xula-gold-solid) 8%, transparent);
+}
+
+.xula-contact-premium__detail--email {
+  --xula-detail-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C99354' stroke-width='1.5'%3E%3Crect x='3' y='5' width='18' height='14' rx='2'/%3E%3Cpath d='m3.5 6 8.5 7 8.5-7'/%3E%3C/svg%3E");
+}
+
+.xula-contact-premium__detail--phone {
+  --xula-detail-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C99354' stroke-width='1.5'%3E%3Cpath d='M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.2A8 8 0 1 1 20 11.5z'/%3E%3Cpath d='M9 9.5c.5 2.2 2.3 4 4.5 4.5l1.2-1.2 1.8.8-.4 1.6c-3.6.2-7.2-3.4-7-7l1.6-.4.8 1.8z'/%3E%3C/svg%3E");
+}
+
+.xula-contact-premium__detail--hours {
+  --xula-detail-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C99354' stroke-width='1.5'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E");
+}
+
+.xula-contact-premium__label,
+.xula-contact-premium__value,
+.xula-contact-premium__meta-link {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.xula-contact-premium__label {
+  font-family: var(--font-code-family);
+  font-size: 1.15rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--xula-contact-muted);
+  padding-top: 2px;
+}
+
+.xula-contact-premium__value {
+  margin: 0;
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(1.6rem, 1.1rem + .6vw, 2rem);
+  line-height: 1.35;
+}
+
+.xula-contact-premium__meta-link {
+  margin: 4px 0 0;
+}
+
+.xula-contact-premium__link,
+.xula-contact-premium__sublink {
+  color: inherit;
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size .5s var(--xula-contact-ease), color .3s;
+}
+
+/* Emails break only at natural points, never mid-word unless they truly can't fit */
+.xula-contact-premium__detail--email .xula-contact-premium__link {
+  overflow-wrap: break-word;
+}
+
+.xula-contact-premium__link:hover,
+.xula-contact-premium__sublink:hover {
+  background-size: 100% 1px;
+  color: var(--accent);
+}
+
+.xula-contact-premium__sublink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-code-family);
+  font-size: 1.15rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--xula-gold-solid);
+}
+
+.xula-contact-premium__sublink::after {
+  content: "→";
+  transition: transform .4s var(--xula-contact-ease);
+}
+
+.xula-contact-premium__sublink:hover::after {
+  transform: translateX(4px);
+}
+
+.xula-contact-premium__hours {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  display: grid;
+  gap: 8px;
+  max-width: 340px;
+}
+
+.xula-contact-premium__hours-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--font-code-family);
+  font-weight: var(--font-code-weight);
+  font-size: 1.4rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dotted leader between day and time */
+.xula-contact-premium__hours-row::after {
+  content: "";
+  order: 1;
+  flex: 1;
+  border-bottom: 1px dotted var(--xula-contact-line);
+  transform: translateY(-4px);
+}
+
+.xula-contact-premium__hours-time {
+  order: 2;
+  color: var(--xula-contact-muted);
+}
+
+/* ---------- Social ---------- */
+
+.xula-contact-premium__social-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 36px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.xula-contact-premium__social-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--xula-contact-line);
+  border-radius: 999px;
+  font-family: var(--font-code-family);
+  font-size: 1.2rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color .3s, background-color .3s, color .3s;
+}
+
+.xula-contact-premium__social-link:hover {
+  border-color: var(--xula-contact-ink);
+  background: var(--xula-contact-ink);
+  color: var(--xula-contact-bg);
+}
+
+/* ---------- Trust ---------- */
+
+.xula-contact-premium__trust {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.xula-contact-premium__trust-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 18px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--xula-contact-ink) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--xula-gold-solid) 35%, transparent);
+}
+
+.xula-contact-premium__trust-icon {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--xula-gold);
+  color: var(--bg-secondary);
+}
+
+.xula-contact-premium__trust-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.xula-contact-premium__trust-copy {
+  display: grid;
+  gap: 2px;
+}
+
+.xula-contact-premium__trust-title {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.5rem;
+}
+
+.xula-contact-premium__trust-text {
+  font-family: var(--font-body-family);
+  font-size: 1.35rem;
+  color: var(--xula-contact-muted);
+}
+
+/* ---------- Form panel ---------- */
+
+.xula-contact-premium__panel {
+  background: var(--bg);
+  color: var(--bg-secondary);
+  border-radius: 24px;
+  padding: 32px 22px;
+  border: 1px solid color-mix(in srgb, var(--xula-gold-solid) 40%, transparent);
+  box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--bg-secondary) 35%, transparent);
+}
+
+.xula-contact-premium__form-heading {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(2.2rem, 3vw, 2.8rem);
+  margin: 0 0 6px;
+  color: var(--bg-secondary);
+}
+
+.xula-contact-premium__required-note {
+  font-family: var(--font-code-family);
+  font-size: 1.15rem;
+  color: color-mix(in srgb, var(--bg-secondary) 65%, transparent);
+  margin: 0 0 28px;
+}
+
+.xula-contact-premium__form {
+  display: grid;
+  gap: 24px;
+}
+
+.xula-contact-premium__field {
+  display: grid;
+  gap: 8px;
+}
+
+.xula-contact-premium__field-label {
+  font-family: var(--font-code-family);
+  font-size: 1.2rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--bg-secondary);
+}
+
+.xula-contact-premium__req {
+  color: var(--accent);
+}
+
+.xula-contact-premium__input {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 16px;
+  font-family: var(--font-body-family);
+  font-size: 1.6rem; /* >=16px prevents iOS zoom */
+  color: var(--bg-secondary);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--bg-secondary) 25%, transparent);
+  border-radius: 12px;
+  outline: none;
+  appearance: none;
+  box-shadow: none;
+  transition: border-color .3s var(--xula-contact-ease), box-shadow .3s var(--xula-contact-ease), background-color .3s;
+}
+
+.xula-contact-premium__input:hover {
+  border-color: color-mix(in srgb, var(--bg-secondary) 55%, transparent);
+}
+
+.xula-contact-premium__input:focus-visible {
+  border-color: var(--xula-gold-solid);
+  background: color-mix(in srgb, var(--bg-tertiary) 8%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--xula-gold-solid) 25%, transparent);
+}
+
+.xula-contact-premium__input[aria-invalid="true"] {
+  border-color: var(--xula-contact-error);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--xula-contact-error) 15%, transparent);
+}
+
+.xula-contact-premium__input.is-valid {
+  border-color: color-mix(in srgb, var(--xula-contact-success) 70%, transparent);
+}
+
+.xula-contact-premium__textarea {
+  min-height: 160px;
+  resize: none;
+  line-height: 1.6;
+}
+
+/* ---------- Custom select (combobox + listbox) ---------- */
+
+.xula-contact-premium__select {
+  --xula-select-surface: var(--accent);
+  --xula-select-ink: #FFFFFF;
+  --xula-select-line: color-mix(in srgb, var(--xula-gold-solid) 22%, transparent);
+  position: relative;
+}
+
+.xula-contact-premium__select-native {
+  min-height: 64px;
+  padding-right: 60px;
+  cursor: pointer;
+}
+
+.xula-contact-premium__select.is-enhanced .xula-contact-premium__select-native {
+  display: none;
+}
+
+/* Trigger */
+
+.xula-contact-premium__select-trigger {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 10px 60px 10px 12px;
+  border-radius: 14px;
+  border-color: color-mix(in srgb, var(--xula-gold-solid) 45%, transparent);
+  background:
+    linear-gradient(120deg,
+      color-mix(in srgb, var(--bg-tertiary) 14%, var(--bg)) 0%,
+      var(--bg) 70%);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  transition:
+    border-color .3s var(--xula-contact-ease),
+    box-shadow .3s var(--xula-contact-ease),
+    transform .45s var(--xula-contact-ease);
+}
+
+.xula-contact-premium__select-trigger[hidden] {
+  display: none;
+}
+
+/* Gold line that draws in on hover / focus / open */
+.xula-contact-premium__select-trigger::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 0;
+  height: 2px;
+  background: var(--xula-gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .6s var(--xula-contact-ease);
+}
+
+.xula-contact-premium__select-trigger:focus-visible::after,
+.xula-contact-premium__select-trigger[aria-expanded="true"]::after {
+  transform: scaleX(1);
+}
+
+.xula-contact-premium__select-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--xula-gold);
+  color: var(--bg-secondary);
+  transition: transform .6s var(--xula-contact-ease);
+}
+
+.xula-contact-premium__select-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.xula-contact-premium__select-trigger[aria-expanded="true"] .xula-contact-premium__select-icon {
+  transform: rotate(-35deg);
+}
+
+.xula-contact-premium__select-stack {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.xula-contact-premium__select-kicker {
+  font-family: var(--font-code-family);
+  font-size: 1.05rem;
+  letter-spacing: .14em;
+  color: var(--xula-gold-solid);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.xula-contact-premium__select-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.6rem;
+  line-height: 1.3;
+  color: var(--bg-secondary);
+}
+
+.xula-contact-premium__select-trigger:not(.has-value) .xula-contact-premium__select-value {
+  font-weight: var(--font-body-weight);
+  color: color-mix(in srgb, var(--bg-secondary) 60%, transparent);
+}
+
+.xula-contact-premium__select-trigger[aria-expanded="true"],
+.xula-contact-premium__select-trigger:focus-visible {
+  border-color: var(--xula-gold-solid);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--xula-gold-solid) 22%, transparent);
+}
+
+.xula-contact-premium__select-trigger[aria-invalid="true"] {
+  border-color: var(--xula-contact-error);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--xula-contact-error) 15%, transparent);
+}
+
+.xula-contact-premium__select-trigger[aria-invalid="true"] .xula-contact-premium__select-icon {
+  background: color-mix(in srgb, var(--xula-contact-error) 12%, transparent);
+  color: var(--xula-contact-error);
+}
+
+.xula-contact-premium__chevron {
+  position: absolute;
+  right: 14px;
+  top: 32px;
+  width: 32px;
+  height: 32px;
+  padding: 11px 10px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--bg-secondary) 15%, transparent);
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--bg-secondary);
+  transition: transform .45s var(--xula-contact-ease), background-color .3s, border-color .3s, color .3s;
+}
+
+.xula-contact-premium__select.is-open .xula-contact-premium__chevron {
+  transform: translateY(-50%) rotate(180deg);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--xula-gold-solid);
+}
+
+@media (hover: hover) {
+  .xula-contact-premium__select-trigger:hover {
+    border-color: var(--xula-gold-solid);
+    transform: translateY(-1px);
+  }
+
+  .xula-contact-premium__select-trigger:hover::after {
+    transform: scaleX(1);
+  }
+
+  .xula-contact-premium__select-trigger:hover .xula-contact-premium__select-icon {
+    transform: rotate(-35deg);
+  }
+}
+
+/* Panel */
+
+.xula-contact-premium__select-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 10px);
+  z-index: 20;
+  overflow: hidden;
+  background: var(--xula-select-surface);
+  color: var(--xula-select-ink);
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--xula-gold-solid) 45%, transparent);
+  box-shadow:
+    0 30px 60px -20px color-mix(in srgb, var(--accent) 55%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--xula-gold-solid) 35%, transparent);
+  opacity: 0;
+  transform: translateY(-8px);
+  clip-path: inset(0 0 100% 0 round 18px);
+  transition:
+    opacity .3s var(--xula-contact-ease),
+    transform .45s var(--xula-contact-ease),
+    clip-path .5s var(--xula-contact-ease);
+}
+
+.xula-contact-premium__select-panel[hidden] {
+  display: none;
+}
+
+.xula-contact-premium__select.is-open .xula-contact-premium__select-panel {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 0 0 round 18px);
+}
+
+.xula-contact-premium__select.is-flipped .xula-contact-premium__select-panel {
+  top: auto;
+  bottom: calc(100% + 10px);
+  transform: translateY(8px);
+  clip-path: inset(100% 0 0 0 round 18px);
+}
+
+.xula-contact-premium__select.is-flipped.is-open .xula-contact-premium__select-panel {
+  transform: none;
+  clip-path: inset(0 0 0 0 round 18px);
+}
+
+/* Gold hairline accent across the top */
+.xula-contact-premium__select-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: var(--xula-gold);
+}
+
+.xula-contact-premium__select-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--xula-select-line);
+  font-family: var(--font-code-family);
+  font-size: 1.05rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--bg-tertiary);
+}
+
+.xula-contact-premium__select-count {
+  font-variant-numeric: tabular-nums;
+  opacity: .7;
+}
+
+.xula-contact-premium__select-list {
+  max-height: min(300px, 45vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  outline: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--xula-gold-solid) transparent;
+}
+
+/* Options */
+
+.xula-contact-premium__select-option {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  padding: 12px 20px;
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-body-weight);
+  font-size: 1.55rem;
+  color: color-mix(in srgb, var(--xula-select-ink) 82%, transparent);
+  cursor: pointer;
+  transition: background-color .3s, color .3s;
+}
+
+.xula-contact-premium__select-option + .xula-contact-premium__select-option {
+  border-top: 1px solid var(--xula-select-line);
+}
+
+/* Gold bar that grows on the active option */
+.xula-contact-premium__select-option::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  background: var(--xula-gold);
+  transform: scaleY(0);
+  transition: transform .4s var(--xula-contact-ease);
+}
+
+.xula-contact-premium__select-index {
+  font-family: var(--font-code-family);
+  font-size: 1.1rem;
+  letter-spacing: .08em;
+  color: var(--bg-tertiary);
+  font-variant-numeric: tabular-nums;
+  transition: color .3s;
+}
+
+.xula-contact-premium__select-text {
+  transition: transform .4s var(--xula-contact-ease);
+}
+
+.xula-contact-premium__select-check {
+  width: 16px;
+  height: 16px;
+  color: var(--bg-tertiary);
+  opacity: 0;
+  transform: scale(.5) rotate(-20deg);
+  transition: opacity .25s, transform .4s var(--xula-contact-ease);
+}
+
+.xula-contact-premium__select-option.is-active {
+  background: color-mix(in srgb, #FFFFFF 14%, transparent);
+  color: var(--xula-select-ink);
+}
+
+.xula-contact-premium__select-option.is-active::before {
+  transform: scaleY(1);
+}
+
+.xula-contact-premium__select-option.is-active .xula-contact-premium__select-index {
+  color: #FFFFFF;
+}
+
+.xula-contact-premium__select-option.is-active .xula-contact-premium__select-text {
+  transform: translateX(4px);
+}
+
+.xula-contact-premium__select-option[aria-selected="true"] {
+  color: var(--xula-select-ink);
+  font-weight: var(--font-heading-weight);
+}
+
+.xula-contact-premium__select-option[aria-selected="true"] .xula-contact-premium__select-check {
+  opacity: 1;
+  transform: none;
+}
+
+
+@media (forced-colors: active) {
+  .xula-contact-premium__select-option.is-active {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}
+
+.xula-contact-premium__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.xula-contact-premium__hint,
+.xula-contact-premium__counter {
+  font-family: var(--font-body-family);
+  font-size: 1.25rem;
+  color: color-mix(in srgb, var(--bg-secondary) 65%, transparent);
+  margin: 0;
+}
+
+.xula-contact-premium__counter {
+  font-family: var(--font-code-family);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.xula-contact-premium__error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-size: 1.3rem;
+  color: var(--xula-contact-error);
+}
+
+.xula-contact-premium__error::before {
+  content: "!";
+  flex: 0 0 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--xula-contact-error);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.xula-contact-premium__error[hidden] {
+  display: none;
+}
+
+/* ---------- Submit ---------- */
+
+.xula-contact-premium__submit {
+  width: 100%;
+  min-height: 56px;
+  font-family: var(--font-heading-family);
+  font-size: 1.6rem;
+  letter-spacing: .02em;
+}
+
+.xula-contact-premium__submit:focus-visible {
+  outline: 2px solid var(--xula-gold-solid);
+  outline-offset: 3px;
+}
+
+.xula-contact-premium__submit[aria-disabled="true"] {
+  cursor: progress;
+  opacity: .75;
+}
+
+.xula-contact-premium__privacy {
+  font-family: var(--font-body-family);
+  font-size: 1.25rem;
+  color: color-mix(in srgb, var(--bg-secondary) 65%, transparent);
+  text-align: center;
+}
+
+.xula-contact-premium__privacy p {
+  margin: 0;
+}
+
+/* ---------- Status alerts ---------- */
+
+.xula-contact-premium__status:empty {
+  display: none;
+}
+
+.xula-contact-premium__status:focus {
+  outline: none;
+}
+
+.xula-contact-premium__status:focus-visible .xula-contact-premium__alert {
+  outline: 2px solid var(--xula-gold-solid);
+  outline-offset: 3px;
+}
+
+.xula-contact-premium__alert {
+  display: grid;
+  gap: 4px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border-left: 4px solid;
+  font-family: var(--font-body-family);
+  font-size: 1.4rem;
+  line-height: 1.5;
+}
+
+.xula-contact-premium__alert--success {
+  border-color: var(--xula-contact-success);
+  background: color-mix(in srgb, var(--xula-contact-success) 10%, transparent);
+}
+
+.xula-contact-premium__alert--error {
+  border-color: var(--xula-contact-error);
+  background: color-mix(in srgb, var(--xula-contact-error) 8%, transparent);
+}
+
+.xula-contact-premium__alert-title {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.6rem;
+}
+
+.xula-contact-premium__alert-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+/* ---------- Tablet ---------- */
+
+@media screen and (min-width: 750px) {
+  .xula-contact-premium__panel {
+    padding: 44px 40px;
+  }
+
+  .xula-contact-premium__trust {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---------- Desktop: editorial asymmetric ---------- */
+
+@media screen and (min-width: 990px) {
+  .xula-contact-premium {
+    padding: var(--xula-contact-pt) 0 var(--xula-contact-pb);
+  }
+
+  .xula-contact-premium__grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(48px, 7vw, 120px);
+    align-items: start;
+  }
+
+  .xula-contact-premium__info {
+    position: sticky;
+    top: 120px;
+    padding-top: 24px;
+  }
+
+  .xula-contact-premium__panel {
+    padding: 56px 56px 48px;
+    margin-top: 72px; /* editorial offset */
+  }
+
+  .xula-contact-premium__trust {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .xula-contact-premium__trust {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---------- Motion preferences ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-contact-premium *,
+  .xula-contact-premium *::before {
+    transition-duration: .01ms !important;
+  }
+}
