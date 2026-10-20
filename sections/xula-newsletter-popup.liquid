@@ -1,0 +1,482 @@
+{%- liquid
+  assign heading_id = 'XulaPopupHeading-' | append: section.id
+  assign text_id = 'XulaPopupText-' | append: section.id
+  assign form_id = 'XulaPopupForm-' | append: section.id
+  assign email_id = 'XulaPopupEmail-' | append: section.id
+  assign status_id = 'XulaPopupStatus-' | append: section.id
+  assign hp_id = 'XulaPopupCompany-' | append: section.id
+  assign has_image = false
+  if section.settings.image != blank
+    assign has_image = true
+  endif
+  assign img_alt = section.settings.image_alt | default: section.settings.heading | default: 'XULA specialty coffee'
+
+  assign is_subscriber = false
+  if customer and customer.accepts_marketing
+    assign is_subscriber = true
+  endif
+
+  assign should_render = section.settings.enabled
+  if is_subscriber and request.design_mode == false
+    assign should_render = false
+  endif
+-%}
+
+{%- if should_render or request.design_mode -%}
+  {{ 'xula-newsletter-popup.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'xula-newsletter-popup.js' | asset_url }}" defer="defer"></script>
+
+  <div
+    class="xula-popup"
+    data-xula-popup
+    data-section-id="{{ section.id }}"
+    data-delay="{{ section.settings.delay }}"
+    data-scroll="{{ section.settings.scroll_depth }}"
+    data-exit-intent="{{ section.settings.exit_intent }}"
+    data-frequency="{{ section.settings.frequency }}"
+    data-version="{{ section.settings.version | handleize | default: 'v1' }}"
+    data-design-mode="{{ request.design_mode }}"
+    data-enabled="{{ section.settings.enabled }}"
+    data-invalid-text="{{ section.settings.invalid_text | escape }}"
+    data-error-text="{{ section.settings.error_text | escape }}"
+    data-copied-text="{{ section.settings.copied_label | escape }}"
+  >
+    <dialog
+      class="xula-popup__dialog{% unless has_image %} xula-popup__dialog--no-image{% endunless %}"
+      aria-labelledby="{{ heading_id }}"
+      aria-describedby="{{ text_id }}"
+      data-xula-popup-dialog
+    >
+      <div class="xula-popup__card" tabindex="-1" data-xula-popup-card>
+        <span class="xula-popup__handle" aria-hidden="true"></span>
+
+        <button type="button" class="xula-popup__close" aria-label="{{ 'accessibility.close' | t | default: 'Close' }}" data-xula-popup-close>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        {%- if has_image -%}
+          <div class="xula-popup__media">
+            <img
+              class="xula-popup__image"
+              src="{{ section.settings.image | image_url: width: 1000 }}"
+              srcset="
+                {{ section.settings.image | image_url: width: 600 }} 600w,
+                {{ section.settings.image | image_url: width: 800 }} 800w,
+                {{ section.settings.image | image_url: width: 1000 }} 1000w
+              "
+              sizes="(min-width: 750px) 400px, 100vw"
+              alt="{{ img_alt | escape }}"
+              width="{{ section.settings.image.width }}"
+              height="{{ section.settings.image.height }}"
+              loading="lazy"
+              decoding="async"
+            >
+            {%- if section.settings.media_caption != blank -%}
+              <span class="xula-popup__media-caption xula-type--code">{{ section.settings.media_caption }}</span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <div class="xula-popup__body">
+
+          {%- if section.settings.eyebrow != blank -%}
+            <p class="xula-popup__eyebrow xula-type--code">{{ section.settings.eyebrow }}</p>
+          {%- endif -%}
+
+          <div class="xula-popup__step xula-popup__step--form" data-xula-popup-step="form">
+
+            {%- if section.settings.offer_value != blank -%}
+              <p class="xula-popup__offer">
+                <span class="xula-popup__offer-value">
+                  {%- if section.settings.offer_value contains '%' -%}
+                    {{- section.settings.offer_value | remove: '%' | strip -}}
+                    <span class="xula-popup__offer-unit">%</span>
+                  {%- else -%}
+                    {{- section.settings.offer_value -}}
+                  {%- endif -%}
+                </span>
+                {%- if section.settings.offer_label != blank -%}
+                  <span class="xula-popup__offer-label xula-type--code">{{ section.settings.offer_label }}</span>
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+
+            <h2 class="xula-popup__heading" id="{{ heading_id }}">{{ section.settings.heading }}</h2>
+
+            {%- if section.settings.text != blank -%}
+              <p class="xula-popup__text" id="{{ text_id }}">{{ section.settings.text }}</p>
+            {%- endif -%}
+
+            {%- if section.blocks.size > 0 -%}
+              <ul class="xula-popup__perks" role="list">
+                {%- for block in section.blocks -%}
+                  <li class="xula-popup__perk" {{ block.shopify_attributes }}>
+                    <svg class="xula-popup__perk-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                      <path d="M4.5 10.5 8 14l7.5-8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>{{ block.settings.label }}</span>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+
+            {%- form 'customer', id: form_id, class: 'xula-popup__form', data-xula-popup-form: true, novalidate: 'novalidate' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter,xula-popup">
+
+              <div class="xula-popup__hp-field" aria-hidden="true">
+                <label for="{{ hp_id }}">Company</label>
+                <input type="text" id="{{ hp_id }}" name="contact[company]" tabindex="-1" autocomplete="off">
+              </div>
+
+              <div class="xula-popup__field">
+                <label class="visually-hidden" for="{{ email_id }}">{{ 'newsletter.label' | t | default: 'Email address' }}</label>
+                <input
+                  type="email"
+                  id="{{ email_id }}"
+                  name="contact[email]"
+                  class="xula-popup__input"
+                  placeholder="{{ section.settings.email_placeholder }}"
+                  autocomplete="email"
+                  inputmode="email"
+                  enterkeyhint="send"
+                  required
+                  aria-required="true"
+                  aria-describedby="{{ status_id }}"
+                  data-xula-popup-input
+                >
+                <button type="submit" class="xula-btn xula-popup__submit" data-xula-popup-submit>
+                  <span data-xula-popup-submit-label>{{ section.settings.button_label }}</span>
+                  <span class="xula-popup__spinner" aria-hidden="true"></span>
+                </button>
+              </div>
+
+              <div class="xula-popup__status" id="{{ status_id }}" aria-live="polite" data-xula-popup-status>
+                {%- if form.errors -%}
+                  <p class="xula-popup__error" role="alert">{{ form.errors.messages['email'] | default: section.settings.error_text }}</p>
+                {%- endif -%}
+              </div>
+
+              {%- if form.posted_successfully? -%}
+                <span hidden data-xula-popup-posted></span>
+              {%- endif -%}
+            {%- endform -%}
+
+            {%- if section.settings.decline_label != blank -%}
+              <button type="button" class="xula-popup__decline" data-xula-popup-close>{{ section.settings.decline_label }}</button>
+            {%- endif -%}
+
+            {%- if section.settings.consent_text != blank -%}
+              <p class="xula-popup__consent">{{ section.settings.consent_text }}</p>
+            {%- endif -%}
+          </div>
+
+          <div class="xula-popup__step xula-popup__step--success" data-xula-popup-step="success" hidden>
+            <span class="xula-popup__success-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false"><path d="M5 12.5 10 17l9-10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+
+            <h2 class="xula-popup__heading" tabindex="-1" data-xula-popup-success-heading>{{ section.settings.success_heading }}</h2>
+
+            {%- if section.settings.success_text != blank -%}
+              <p class="xula-popup__text">{{ section.settings.success_text }}</p>
+            {%- endif -%}
+
+            {%- if section.settings.discount_code != blank -%}
+              <div class="xula-popup__code">
+                <span class="xula-popup__code-label xula-type--code">{{ section.settings.code_label }}</span>
+                <span class="xula-popup__code-value" data-xula-popup-code>{{ section.settings.discount_code }}</span>
+                <button type="button" class="xula-popup__code-copy" data-xula-popup-copy>
+                  <span data-xula-popup-copy-label>{{ section.settings.copy_label }}</span>
+                </button>
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.success_cta_label != blank -%}
+              <a
+                href="{{ section.settings.success_cta_link | default: routes.all_products_collection_url }}"
+                class="xula-btn xula-popup__submit xula-popup__success-cta"
+              >
+                <span>{{ section.settings.success_cta_label }}</span>
+              </a>
+            {%- endif -%}
+          </div>
+
+        </div>
+      </div>
+    </dialog>
+
+    {%- if section.settings.show_teaser and section.settings.teaser_label != blank -%}
+      <div class="xula-popup__teaser" data-xula-popup-teaser hidden>
+        <button type="button" class="xula-popup__teaser-open" data-xula-popup-reopen>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M4 11h16v9H4zM3 7h18v4H3zM12 7v13M12 7c-1.5-3-5-3.5-5-1.2C7 7 9.5 7 12 7zm0 0c1.5-3 5-3.5 5-1.2C17 7 14.5 7 12 7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+          <span>{{ section.settings.teaser_label }}</span>
+        </button>
+        <button type="button" class="xula-popup__teaser-dismiss" aria-label="{{ 'accessibility.close' | t | default: 'Close' }}" data-xula-popup-teaser-dismiss>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M7 7l10 10M17 7 7 17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Xula Newsletter Popup",
+  "class": "xula-popup-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Enable popup",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "In the theme editor the popup opens when this section is selected."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The XULA Circle"
+    },
+    {
+      "type": "text",
+      "id": "offer_value",
+      "label": "Offer value",
+      "default": "15%"
+    },
+    {
+      "type": "text",
+      "id": "offer_label",
+      "label": "Offer label",
+      "default": "Off your first bag"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join the Origin of Your Coffee"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Be first in line for micro-lots from Veracruz and Chiapas, roasted to order and shipped fresh."
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Portrait images work best (4:5). On mobile it shows as a short banner."
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text"
+    },
+    {
+      "type": "text",
+      "id": "media_caption",
+      "label": "Image caption",
+      "default": "Lot 07 · Coatepec, Veracruz"
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Your email address"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Unlock 15% Off"
+    },
+    {
+      "type": "text",
+      "id": "decline_label",
+      "label": "Decline link",
+      "default": "No thanks, I'll pay full price"
+    },
+    {
+      "type": "text",
+      "id": "consent_text",
+      "label": "Consent text",
+      "default": "One email a week, at most. Unsubscribe anytime."
+    },
+    {
+      "type": "text",
+      "id": "invalid_text",
+      "label": "Invalid email text",
+      "default": "Please enter a valid email address."
+    },
+    {
+      "type": "text",
+      "id": "error_text",
+      "label": "Generic error text",
+      "default": "Something went wrong. Please try again."
+    },
+    {
+      "type": "header",
+      "content": "Success"
+    },
+    {
+      "type": "text",
+      "id": "success_heading",
+      "label": "Success heading",
+      "default": "Welcome to the Circle."
+    },
+    {
+      "type": "textarea",
+      "id": "success_text",
+      "label": "Success text",
+      "default": "Your welcome code is ready. Use it at checkout on your first bag."
+    },
+    {
+      "type": "text",
+      "id": "discount_code",
+      "label": "Discount code",
+      "info": "Create it first in Shopify admin → Discounts. Leave empty to hide the code box.",
+      "default": "WELCOME15"
+    },
+    {
+      "type": "text",
+      "id": "code_label",
+      "label": "Code label",
+      "default": "Your code"
+    },
+    {
+      "type": "text",
+      "id": "copy_label",
+      "label": "Copy button",
+      "default": "Copy"
+    },
+    {
+      "type": "text",
+      "id": "copied_label",
+      "label": "Copied confirmation",
+      "default": "Copied"
+    },
+    {
+      "type": "text",
+      "id": "success_cta_label",
+      "label": "Success button label",
+      "default": "Shop the Coffee"
+    },
+    {
+      "type": "url",
+      "id": "success_cta_link",
+      "label": "Success button link"
+    },
+    {
+      "type": "header",
+      "content": "Behavior"
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "label": "Open after",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "s",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "scroll_depth",
+      "label": "Or after scrolling",
+      "info": "0 disables the scroll trigger.",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "checkbox",
+      "id": "exit_intent",
+      "label": "Open on exit intent (desktop)",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "frequency",
+      "label": "Show again after dismissing",
+      "info": "0 shows it once per browser session.",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "d",
+      "default": 7
+    },
+    {
+      "type": "text",
+      "id": "version",
+      "label": "Campaign ID",
+      "info": "Change it to show the popup again to everyone who already dismissed it.",
+      "default": "v1"
+    },
+    {
+      "type": "header",
+      "content": "Floating reminder"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_teaser",
+      "label": "Show reminder after closing",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "teaser_label",
+      "label": "Reminder label",
+      "default": "Get 15% off"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "perk",
+      "name": "Perk",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Text",
+          "default": "Early access to limited lots"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula Newsletter Popup",
+      "blocks": [
+        { "type": "perk", "settings": { "label": "Early access to limited lots" } },
+        { "type": "perk", "settings": { "label": "Brew guides from our roasters" } },
+        { "type": "perk", "settings": { "label": "Members-only tastings" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

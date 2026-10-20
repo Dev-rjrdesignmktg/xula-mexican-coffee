@@ -1,0 +1,792 @@
+/* ==========================================================================
+   Xula Newsletter Popup — accent pink + gold signup modal.
+   Mobile: bottom sheet. Desktop (750+): centered split card. BEM (.xula-popup)
+   ========================================================================== */
+
+.xula-popup {
+  --xp-bg: var(--accent);
+  --xp-on-gold: var(--bg-secondary);
+  --xp-alert: #fff2b2;
+  --xp-ink: #ffffff;
+  --xp-muted: color-mix(in srgb, var(--xp-ink) 82%, transparent);
+  --xp-line: color-mix(in srgb, var(--xula-gold-solid) 60%, transparent);
+  --xp-gold: var(--xula-gold-solid);
+  --xp-ease: cubic-bezier(.16, 1, .3, 1);
+  --xp-radius: 24px;
+}
+
+html.xula-popup-lock {
+  overflow: hidden;
+}
+
+/* ---------- Dialog shell ---------- */
+
+.xula-popup__dialog {
+  position: fixed;
+  inset: auto 0 0;
+  width: 100%;
+  max-width: none;
+  max-height: 92svh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--xp-ink);
+  overflow: visible;
+}
+
+.xula-popup__dialog:not([open]) {
+  display: none;
+}
+
+.xula-popup__dialog::backdrop {
+  background: rgba(18, 11, 7, .62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+
+.xula-popup__dialog.is-open::backdrop {
+  opacity: 1;
+}
+
+/* ---------- Card ---------- */
+
+.xula-popup__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 92svh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: var(--xp-radius) var(--xp-radius) 0 0;
+  border: 1px solid var(--xp-line);
+  border-bottom: 0;
+  background:
+    radial-gradient(120% 70% at 100% 0%, color-mix(in srgb, var(--xp-gold) 22%, transparent) 0%, transparent 60%),
+    radial-gradient(90% 60% at 0% 100%, color-mix(in srgb, #000 12%, transparent) 0%, transparent 65%),
+    var(--xp-bg);
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, .35);
+  transform: translateY(100%);
+  transition: transform .55s var(--xp-ease);
+  outline: none;
+}
+
+.xula-popup__dialog.is-open .xula-popup__card {
+  transform: translateY(0);
+}
+
+.xula-popup__card.is-dragging {
+  transition: none;
+}
+
+/* thin gold hairline along the top edge */
+.xula-popup__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: var(--xula-gold);
+  opacity: .8;
+  z-index: 2;
+}
+
+.xula-popup__handle {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 40px;
+  height: 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--xp-ink) 35%, transparent);
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.xula-popup__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--xp-ink) 22%, transparent);
+  background: color-mix(in srgb, var(--xp-bg) 55%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--xp-ink);
+  cursor: pointer;
+  transition: transform .4s var(--xp-ease), border-color .3s ease, background .3s ease;
+}
+
+.xula-popup__close svg {
+  width: 18px;
+  height: 18px;
+}
+
+.xula-popup__close:hover {
+  transform: rotate(90deg);
+  border-color: var(--xp-gold);
+  background: var(--xp-bg);
+}
+
+.xula-popup__close:focus-visible,
+.xula-popup__decline:focus-visible,
+.xula-popup__code-copy:focus-visible,
+.xula-popup__teaser button:focus-visible {
+  outline: 2px solid var(--xp-gold);
+  outline-offset: 3px;
+}
+
+/* ---------- Media ---------- */
+
+.xula-popup__media {
+  position: relative;
+  flex-shrink: 0;
+  height: 150px;
+  overflow: hidden;
+}
+
+.xula-popup__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.06);
+  transition: transform 1.4s var(--xp-ease);
+}
+
+.xula-popup__dialog.is-open .xula-popup__image {
+  transform: scale(1);
+}
+
+.xula-popup__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 35%, var(--xp-bg) 100%);
+}
+
+.xula-popup__media-caption {
+  position: absolute;
+  left: 20px;
+  bottom: 14px;
+  z-index: 1;
+  font-size: 1.05rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--xp-ink) 85%, transparent);
+}
+
+/* ---------- Body ---------- */
+
+.xula-popup__body {
+  position: relative;
+  padding: 28px 22px calc(24px + env(safe-area-inset-bottom));
+}
+
+.xula-popup__dialog--no-image .xula-popup__body {
+  padding-top: 44px;
+}
+
+.xula-popup__step > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .6s ease, transform .7s var(--xp-ease);
+}
+
+.xula-popup__dialog.is-open .xula-popup__step > * {
+  opacity: 1;
+  transform: none;
+}
+
+.xula-popup__dialog.is-open .xula-popup__step > *:nth-child(1) { transition-delay: .12s; }
+.xula-popup__dialog.is-open .xula-popup__step > *:nth-child(2) { transition-delay: .18s; }
+.xula-popup__dialog.is-open .xula-popup__step > *:nth-child(3) { transition-delay: .24s; }
+.xula-popup__dialog.is-open .xula-popup__step > *:nth-child(4) { transition-delay: .30s; }
+.xula-popup__dialog.is-open .xula-popup__step > *:nth-child(5) { transition-delay: .36s; }
+.xula-popup__dialog.is-open .xula-popup__step > *:nth-child(n+6) { transition-delay: .42s; }
+
+.xula-popup__step[hidden] {
+  display: none;
+}
+
+.xula-popup__eyebrow {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  width: fit-content;
+  margin: 0 auto 16px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--xp-gold);
+  background: var(--xula-gold);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--xp-on-gold);
+}
+
+/* ---------- Offer ---------- */
+
+.xula-popup__offer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  text-align: center;
+}
+
+.xula-popup__offer-value {
+  display: inline-flex;
+  align-items: flex-start;
+  font-family: var(--font-heading-family);
+  font-weight: 700;
+  font-size: clamp(6rem, 17vw, 8.4rem);
+  line-height: .85;
+  letter-spacing: -.04em;
+  color: var(--xp-ink);
+  text-shadow: 0 6px 24px color-mix(in srgb, #000 18%, transparent);
+}
+
+.xula-popup__offer-unit {
+  margin: .08em 0 0 .04em;
+  font-size: .5em;
+  line-height: 1;
+  letter-spacing: 0;
+  background: var(--xula-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+}
+
+/* label framed by gold hairlines: —— OFF YOUR FIRST BAG —— */
+.xula-popup__offer-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--xp-ink);
+}
+
+.xula-popup__offer-label::before,
+.xula-popup__offer-label::after {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--xula-gold);
+}
+
+.xula-popup__heading {
+  margin: 0 0 10px;
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(2.2rem, 6vw, 2.9rem);
+  line-height: 1.1;
+  color: var(--xp-ink);
+  outline: none;
+}
+
+.xula-popup__text {
+  margin: 0 0 18px;
+  max-width: 40ch;
+  font-family: var(--font-body-family);
+  font-size: 1.45rem;
+  line-height: 1.55;
+  color: var(--xp-muted);
+}
+
+/* ---------- Perks ---------- */
+
+.xula-popup__perks {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 22px;
+  text-align: left;
+  padding: 0;
+  list-style: none;
+}
+
+.xula-popup__perk {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body-family);
+  font-size: 1.35rem;
+  color: var(--xp-ink);
+}
+
+.xula-popup__perk-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  padding: 4px;
+  border-radius: 50%;
+  background: var(--xula-gold);
+  color: var(--xp-on-gold);
+}
+
+/* ---------- Form ---------- */
+
+.xula-popup__hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.xula-popup__field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.xula-popup__input {
+  width: 100%;
+  height: 54px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--xp-ink) 22%, transparent);
+  background: color-mix(in srgb, var(--xp-ink) 7%, transparent);
+  color: var(--xp-ink);
+  font-family: var(--font-body-family);
+  font-size: 1.6rem; /* ≥16px prevents iOS zoom on focus */
+  transition: border-color .3s ease, background .3s ease, box-shadow .3s ease;
+}
+
+.xula-popup__input::placeholder {
+  color: color-mix(in srgb, var(--xp-ink) 50%, transparent);
+}
+
+.xula-popup__input:focus,
+.xula-popup__input:focus-visible {
+  outline: none;
+  border-color: var(--xp-gold);
+  background: color-mix(in srgb, var(--xp-ink) 11%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--xp-gold) 22%, transparent);
+}
+
+.xula-popup__input[aria-invalid="true"] {
+  border-color: var(--xp-alert);
+}
+
+.xula-popup__submit {
+  gap: 10px;
+  width: 100%;
+  min-height: 54px;
+  background: var(--xula-gold);
+  border-color: var(--xp-gold);
+  color: var(--xp-on-gold);
+  font-family: var(--font-heading-family);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+
+.xula-popup__submit::before {
+  background: var(--xp-ink);
+}
+
+.xula-popup__submit:hover {
+  color: var(--xp-on-gold);
+  border-color: var(--xp-ink);
+}
+
+.xula-popup__submit:focus-visible {
+  outline: 2px solid var(--xp-gold);
+  outline-offset: 4px;
+}
+
+.xula-popup__spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: xula-popup-spin .7s linear infinite;
+}
+
+.xula-popup__submit[aria-busy="true"] {
+  cursor: progress;
+}
+
+.xula-popup__submit[aria-busy="true"] .xula-popup__spinner {
+  display: inline-block;
+}
+
+@keyframes xula-popup-spin {
+  to { transform: rotate(360deg); }
+}
+
+.xula-popup__status:not(:empty) {
+  margin-top: 10px;
+}
+
+.xula-popup__error {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-body-family);
+  font-size: 1.25rem;
+  color: var(--xp-alert);
+}
+
+.xula-popup__decline {
+  display: block;
+  margin: 14px auto 0;
+  padding: 6px 4px;
+  border: 0;
+  background: none;
+  font-family: var(--font-body-family);
+  font-size: 1.25rem;
+  color: var(--xp-muted);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: color-mix(in srgb, var(--xp-ink) 30%, transparent);
+  cursor: pointer;
+  transition: color .3s ease;
+}
+
+.xula-popup__decline:hover {
+  color: var(--xp-ink);
+}
+
+.xula-popup__consent {
+  margin: 10px 0 0;
+  font-family: var(--font-body-family);
+  font-size: 1.1rem;
+  line-height: 1.5;
+  text-align: center;
+  color: color-mix(in srgb, var(--xp-ink) 48%, transparent);
+}
+
+/* ---------- Success ---------- */
+
+.xula-popup__step {
+  text-align: center;
+}
+
+.xula-popup__step--success .xula-popup__text {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.xula-popup__step--form .xula-popup__text {
+  text-align: left;
+}
+
+.xula-popup__success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 16px;
+  border-radius: 50%;
+  background: var(--xula-gold);
+  color: var(--xp-on-gold);
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--xp-gold) 16%, transparent);
+}
+
+.xula-popup__success-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.xula-popup__code {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2px 12px;
+  margin: 0 0 18px;
+  padding: 14px 14px 14px 20px;
+  border-radius: 16px;
+  border: 1px dashed var(--xp-gold);
+  background: color-mix(in srgb, var(--xp-gold) 9%, transparent);
+  text-align: left;
+}
+
+.xula-popup__code-label {
+  grid-column: 1;
+  font-size: 1rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--xp-muted);
+}
+
+.xula-popup__code-value {
+  grid-column: 1;
+  font-family: var(--font-code-family, monospace);
+  font-size: 2.2rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  color: var(--xp-ink);
+  word-break: break-all;
+}
+
+.xula-popup__code-copy {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--xp-gold);
+  background: transparent;
+  color: var(--xp-gold);
+  font-family: var(--font-heading-family);
+  font-weight: 600;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: background .3s ease, color .3s ease;
+}
+
+.xula-popup__code-copy:hover,
+.xula-popup__code-copy.is-copied {
+  background: var(--xp-gold);
+  color: var(--xp-on-gold);
+}
+
+.xula-popup__success-cta {
+  text-decoration: none;
+}
+
+/* ---------- Floating reminder ---------- */
+
+.xula-popup__teaser {
+  position: fixed;
+  left: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--xp-line);
+  background: var(--xp-bg);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .28);
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform .5s var(--xp-ease), opacity .4s ease;
+}
+
+.xula-popup__teaser[hidden] {
+  display: none;
+}
+
+.xula-popup__teaser.is-entering {
+  transform: translateY(calc(100% + 24px));
+  opacity: 0;
+}
+
+.xula-popup__teaser-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 6px 11px 16px;
+  border: 0;
+  background: none;
+  color: var(--xp-ink);
+  font-family: var(--font-heading-family);
+  font-weight: 600;
+  font-size: 1.35rem;
+  cursor: pointer;
+}
+
+.xula-popup__teaser-open svg {
+  width: 20px;
+  height: 20px;
+  color: var(--xp-gold);
+}
+
+.xula-popup__teaser-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin-right: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--xp-ink) 10%, transparent);
+  color: var(--xp-muted);
+  cursor: pointer;
+}
+
+.xula-popup__teaser-dismiss svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ---------- Small phones ---------- */
+
+@media (max-width: 374px) {
+  .xula-popup__media {
+    height: 110px;
+  }
+
+  .xula-popup__body {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .xula-popup__perks {
+    display: none;
+  }
+}
+
+/* Short landscape phones: drop the image so the form fits */
+@media (max-height: 560px) and (max-width: 989px) {
+  .xula-popup__media,
+  .xula-popup__perks {
+    display: none;
+  }
+
+  .xula-popup__dialog .xula-popup__body {
+    padding-top: 40px;
+  }
+}
+
+/* ---------- Tablet / desktop: centered split card ---------- */
+
+@media (min-width: 750px) {
+  .xula-popup__dialog {
+    inset: 0;
+    width: min(880px, calc(100% - 48px));
+    max-height: min(640px, calc(100svh - 48px));
+    margin: auto;
+  }
+
+  .xula-popup__dialog--no-image {
+    width: min(520px, calc(100% - 48px));
+  }
+
+  .xula-popup__card {
+    flex-direction: row;
+    max-height: min(640px, calc(100svh - 48px));
+    border-radius: var(--xp-radius);
+    border-bottom: 1px solid var(--xp-line);
+    box-shadow: 0 40px 90px rgba(0, 0, 0, .45);
+    transform: translateY(24px) scale(.96);
+    opacity: 0;
+    transition: transform .6s var(--xp-ease), opacity .4s ease;
+  }
+
+  .xula-popup__dialog.is-open .xula-popup__card {
+    transform: none;
+    opacity: 1;
+  }
+
+  .xula-popup__handle {
+    display: none;
+  }
+
+  .xula-popup__media {
+    width: 44%;
+    height: auto;
+    min-height: 100%;
+  }
+
+  .xula-popup__media::after {
+    background: linear-gradient(90deg, transparent 60%, color-mix(in srgb, var(--xp-bg) 70%, transparent) 100%);
+  }
+
+  .xula-popup__media-caption {
+    left: 24px;
+    bottom: 22px;
+  }
+
+  .xula-popup__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 52px 48px 40px;
+    overflow-y: auto;
+  }
+
+  .xula-popup__dialog--no-image .xula-popup__body {
+    padding-top: 56px;
+  }
+
+  .xula-popup__field {
+    position: relative;
+    flex-direction: row;
+    gap: 0;
+    padding: 5px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--xp-ink) 22%, transparent);
+    background: color-mix(in srgb, var(--xp-ink) 7%, transparent);
+    transition: border-color .3s ease, box-shadow .3s ease;
+  }
+
+  .xula-popup__field:focus-within {
+    border-color: var(--xp-gold);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--xp-gold) 22%, transparent);
+  }
+
+  .xula-popup__field:has([aria-invalid="true"]) {
+    border-color: var(--xp-alert);
+  }
+
+  .xula-popup__input,
+  .xula-popup__input:focus,
+  .xula-popup__input:focus-visible {
+    height: 48px;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    font-size: 1.5rem;
+  }
+
+  .xula-popup__submit {
+    width: auto;
+    min-height: 48px;
+    flex-shrink: 0;
+    padding-left: 2.4rem;
+    padding-right: 2.4rem;
+  }
+
+  .xula-popup__teaser {
+    left: 24px;
+    bottom: 24px;
+  }
+}
+
+@media (min-width: 990px) {
+  .xula-popup__body {
+    padding: 56px 56px 44px;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-popup__card,
+  .xula-popup__image,
+  .xula-popup__step > *,
+  .xula-popup__teaser,
+  .xula-popup__dialog::backdrop {
+    transition: none !important;
+  }
+
+  .xula-popup__close:hover {
+    transform: none;
+  }
+}
