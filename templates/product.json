@@ -95,7 +95,7 @@
           "type": "text",
           "settings": {
             "text": "Text block{{ product.metafields.shopify[\"care-instructions\"] | metafield_text: field: 'label' }}",
-            "text_style": "body"
+            "text_style": "uppercase"
           }
         },
         "xula_social_share_TUA4ab": {
