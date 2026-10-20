@@ -51,7 +51,23 @@
         "enable_customer_avatar": true,
         "margin_bottom": 0,
         "padding_top": 0,
-        "padding_bottom": 0
+        "padding_bottom": 0,
+        "xula_dropdown_enable": true,
+        "xula_dropdown_collections": [
+          "artisan-chocolate",
+          "muffins",
+          "roasted-cacao",
+          "coffee"
+        ],
+        "xula_dropdown_link_handle": "our-products",
+        "xula_dropdown_collection": "",
+        "xula_dropdown_eyebrow": "Specialty coffee",
+        "xula_dropdown_heading": "Find your roast",
+        "xula_dropdown_view_all_label": "View all products",
+        "xula_dropdown_cta_label": "Shop now",
+        "xula_dropdown_toggle_label": "Show collections",
+        "xula_dropdown_auto_badge": true,
+        "xula_dropdown_subscription_label": "Subscription available"
       }
     }
   },
