@@ -62,6 +62,13 @@
             "heading": "Coffee profile"
           }
         },
+        "text_8decqb": {
+          "type": "text",
+          "settings": {
+            "text": "Text block{{ product.metafields.shopify[\"care-instructions\"] | metafield_text: field: 'label' }}",
+            "text_style": "uppercase"
+          }
+        },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
@@ -91,13 +98,6 @@
             "badge_3_text": "Secure checkout"
           }
         },
-        "text_8decqb": {
-          "type": "text",
-          "settings": {
-            "text": "Text block{{ product.metafields.shopify[\"care-instructions\"] | metafield_text: field: 'label' }}",
-            "text_style": "uppercase"
-          }
-        },
         "xula_social_share_TUA4ab": {
           "type": "xula_social_share",
           "settings": {
@@ -120,11 +120,11 @@
         "price",
         "text_HTUQPp",
         "xula_product_meta_n8XbNK",
+        "text_8decqb",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
         "xula_trust_badges_JbcqBw",
-        "text_8decqb",
         "xula_social_share_TUA4ab"
       ],
       "settings": {
