@@ -11,6 +11,66 @@
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
+    "xula_newsletter_popup_HQBRJb": {
+      "type": "xula-newsletter-popup",
+      "blocks": {
+        "perk_P8xbbN": {
+          "type": "perk",
+          "settings": {
+            "label": "Early access to limited lots"
+          }
+        },
+        "perk_P4UN9B": {
+          "type": "perk",
+          "settings": {
+            "label": "Brew guides from our roasters"
+          }
+        },
+        "perk_gDnTHf": {
+          "type": "perk",
+          "settings": {
+            "label": "Members-only tastings"
+          }
+        }
+      },
+      "block_order": [
+        "perk_P8xbbN",
+        "perk_P4UN9B",
+        "perk_gDnTHf"
+      ],
+      "name": "Xula Newsletter Popup",
+      "settings": {
+        "enabled": true,
+        "eyebrow": "The XULA Circle",
+        "offer_value": "15%",
+        "offer_label": "Off your first bag",
+        "heading": "Join the Origin of Your Coffee",
+        "text": "Be first in line for micro-lots from Veracruz and Chiapas, roasted to order and shipped fresh.",
+        "image_alt": "",
+        "media_caption": "Lot 07 · Coatepec, Veracruz",
+        "email_placeholder": "Your email address",
+        "button_label": "Unlock 15% Off",
+        "decline_label": "No thanks, I'll pay full price",
+        "consent_text": "One email a week, at most. Unsubscribe anytime.",
+        "invalid_text": "Please enter a valid email address.",
+        "error_text": "Something went wrong. Please try again.",
+        "success_heading": "Welcome to the Circle.",
+        "success_text": "Your welcome code is ready. Use it at checkout on your first bag.",
+        "discount_code": "WELCOME15",
+        "code_label": "Your code",
+        "copy_label": "Copy",
+        "copied_label": "Copied",
+        "success_cta_label": "Shop the Coffee",
+        "success_cta_link": "",
+        "delay": 8,
+        "scroll_depth": 40,
+        "exit_intent": true,
+        "frequency": 7,
+        "version": "v1",
+        "show_teaser": true,
+        "teaser_label": "Get 15% off"
+      }
+    },
     "xula_footer_xBMwTy": {
       "type": "xula-footer",
       "blocks": {
@@ -79,6 +139,7 @@
     }
   },
   "order": [
+    "xula_newsletter_popup_HQBRJb",
     "xula_footer_xBMwTy",
     "footer"
   ]
