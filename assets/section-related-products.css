@@ -5,3 +5,20 @@
 .related-products__heading {
   margin: 0 0 3rem;
 }
+
+/* Equal-height cards in the "You may also like" carousel */
+.related-products .xula-product-catalog__track {
+  align-items: stretch;
+}
+
+.related-products .xula-product-catalog__slide {
+  display: flex;
+}
+
+.related-products .xula-product-catalog__card {
+  flex: 1 1 auto;
+}
+
+.related-products .xula-product-catalog__add-form {
+  margin-top: auto;
+}
