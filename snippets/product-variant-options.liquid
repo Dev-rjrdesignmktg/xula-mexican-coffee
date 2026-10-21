@@ -18,6 +18,9 @@
 {% endcomment %}
 {%- liquid
   assign product_form_id = 'product-form-' | append: section.id
+
+  # Only show per-value prices on pills when they actually differ (e.g. 250 g vs 1 kg)
+  assign option_price_count = option.values | map: 'variant' | compact | map: 'price' | uniq | size
 -%}
 
 {%- for value in option.values -%}
@@ -96,7 +99,13 @@
       {{ input_dataset }}
     >
     <label for="{{ input_id }}">
-      {{ value -}}
+      <span class="product-form__pill-value">{{ value }}</span>
+      {%- if option_price_count > 1 and value.variant -%}
+        <span class="product-form__pill-price">{{ value.variant.price | money }}</span>
+      {%- endif -%}
+      {%- if option_disabled -%}
+        <span class="product-form__pill-tag" aria-hidden="true">{{ 'products.product.sold_out' | t }}</span>
+      {%- endif -%}
       {{ label_unavailable }}
     </label>
   {%- elsif picker_type == 'dropdown' or picker_type == 'swatch_dropdown' -%}

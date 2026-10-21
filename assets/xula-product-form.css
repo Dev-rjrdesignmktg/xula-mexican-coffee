@@ -1,0 +1,474 @@
+/* =========================================================
+   Xula Product Form — brand styling for the PDP variant
+   picker, quantity stepper, Add to cart and dynamic checkout
+   buttons.
+   Scoped to .product__info-container; overrides Dawn defaults
+   (base.css / section-main-product.css).
+   ========================================================= */
+
+.product__info-container {
+  --xpf-ink: var(--bg-secondary);
+  --xpf-accent: var(--accent);
+  --xpf-accent-hover: var(--accent-secondary);
+  --xpf-border: color-mix(in srgb, var(--bg-secondary) 16%, transparent);
+  --xpf-ease: cubic-bezier(.16, 1, .3, 1);
+  --xpf-height: 5.4rem;
+}
+
+/* ---------------------------------------------------------
+   Variant picker — option label + selected value
+   --------------------------------------------------------- */
+
+.product__info-container .product-form__input {
+  margin-bottom: 2rem;
+}
+
+.product__info-container .product-form__input .form__label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .6rem;
+  margin-bottom: 1rem;
+  font-family: var(--secondary-font);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--text-secondary);
+}
+
+.product__info-container .product-form__input .form__label [data-selected-value] {
+  font-size: 1.3rem;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--xpf-ink);
+}
+
+/* ---------------------------------------------------------
+   Variant picker — pills become selectable cards
+   --------------------------------------------------------- */
+
+.product__info-container .product-form__input--pill {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .8rem;
+}
+
+.product__info-container .product-form__input--pill input[type='radio'] + label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .3rem;
+  min-height: var(--xpf-height);
+  margin: 0;
+  padding: 1rem 1.2rem;
+  border: 1.5px solid var(--xpf-border);
+  border-radius: calc(var(--radius-sm) * 1.25);
+  background: var(--bg);
+  color: var(--xpf-ink);
+  font-family: var(--secondary-font);
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    border-color .25s ease,
+    background-color .25s ease,
+    box-shadow .25s ease,
+    transform .35s var(--xpf-ease);
+}
+
+/* Dawn draws the pill shadow with ::before — not needed on cards */
+.product__info-container .product-form__input--pill input[type='radio'] + label::before {
+  display: none;
+}
+
+.product__info-container .product-form__input--pill input[type='radio'] + label:hover {
+  border-color: color-mix(in srgb, var(--xpf-accent) 45%, transparent);
+  transform: translateY(-1px);
+}
+
+.product__info-container .product-form__input--pill input[type='radio']:checked + label {
+  border-color: var(--xpf-accent);
+  background: color-mix(in srgb, var(--xpf-accent) 6%, var(--bg));
+  color: var(--xpf-ink);
+  box-shadow: 0 0 0 1px var(--xpf-accent);
+}
+
+.product__info-container .product-form__input--pill input[type='radio']:focus-visible + label,
+.product__info-container .product-form__input--pill input[type='radio'].focused + label {
+  outline: 2px solid var(--xpf-accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 1px var(--xpf-accent);
+}
+
+.product__info-container .product-form__pill-value {
+  overflow-wrap: anywhere;
+}
+
+.product__info-container .product-form__pill-price {
+  font-family: var(--font-code-family);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--xpf-ink) 65%, transparent);
+  transition: color .25s ease;
+}
+
+.product__info-container .product-form__input--pill input[type='radio']:checked + label .product-form__pill-price {
+  color: var(--xpf-accent);
+}
+
+.product__info-container .product-form__pill-tag {
+  font-family: var(--font-code-family);
+  font-size: .95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+/* Sold out / unavailable combination — still selectable (Dawn behaviour) */
+.product__info-container .product-form__input--pill input[type='radio'].disabled + label,
+.product__info-container .product-form__input--pill input[type='radio']:disabled + label {
+  border-style: dashed;
+  background: color-mix(in srgb, var(--xpf-ink) 3%, var(--bg));
+  color: color-mix(in srgb, var(--xpf-ink) 45%, transparent);
+}
+
+.product__info-container .product-form__input--pill input[type='radio'].disabled + label .product-form__pill-value,
+.product__info-container .product-form__input--pill input[type='radio']:disabled + label .product-form__pill-value {
+  text-decoration: line-through;
+}
+
+.product__info-container .product-form__input--pill input[type='radio'].disabled:checked + label,
+.product__info-container .product-form__input--pill input[type='radio']:disabled:checked + label {
+  border-color: color-mix(in srgb, var(--xpf-ink) 35%, transparent);
+  background: color-mix(in srgb, var(--xpf-ink) 5%, var(--bg));
+  color: color-mix(in srgb, var(--xpf-ink) 60%, transparent);
+  box-shadow: none;
+}
+
+.product__info-container .product-form__input--pill input[type='radio'].disabled:checked + label .product-form__pill-price {
+  color: inherit;
+}
+
+/* ---------------------------------------------------------
+   Variant picker — dropdown
+   --------------------------------------------------------- */
+
+.product__info-container .product-form__input--dropdown .select::before,
+.product__info-container .product-form__input--dropdown .select::after {
+  display: none;
+}
+
+.product__info-container .product-form__input--dropdown .select__select {
+  height: var(--xpf-height);
+  padding: 0 4.4rem 0 1.8rem;
+  border: 1.5px solid var(--xpf-border);
+  border-radius: calc(var(--radius-sm) * 1.25);
+  background: var(--bg);
+  color: var(--xpf-ink);
+  font-family: var(--secondary-font);
+  font-size: 1.4rem;
+  font-weight: 600;
+  box-shadow: none;
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+
+.product__info-container .product-form__input--dropdown .select__select:hover {
+  border-color: color-mix(in srgb, var(--xpf-accent) 45%, transparent);
+}
+
+.product__info-container .product-form__input--dropdown .select__select:focus,
+.product__info-container .product-form__input--dropdown .select__select:focus-visible {
+  outline: none;
+  border-color: var(--xpf-accent);
+  box-shadow: 0 0 0 1px var(--xpf-accent);
+}
+
+.product__info-container .product-form__input--dropdown .dropdown-swatch + .select__select {
+  padding-left: calc(2.6rem + var(--swatch-input--size));
+}
+
+.product__info-container .product-form__input--dropdown .svg-wrapper {
+  right: 1.8rem;
+  color: var(--xpf-accent);
+}
+
+/* ---------------------------------------------------------
+   Variant picker — swatches
+   --------------------------------------------------------- */
+
+.product__info-container .product-form__input--swatch {
+  gap: .4rem;
+}
+
+.product__info-container .product-form__input--swatch .swatch-input__input + .swatch-input__label {
+  margin: 0 .8rem 0 0;
+}
+
+/* ---------------------------------------------------------
+   Quantity
+   --------------------------------------------------------- */
+
+.product__info-container .product-form__quantity .quantity__label {
+  margin-bottom: .8rem;
+  font-family: var(--secondary-font);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--text-secondary);
+}
+
+.product__info-container .quantity {
+  width: 14.4rem;
+  min-height: var(--xpf-height);
+  padding: .5rem;
+  gap: .4rem;
+  border: 1.5px solid var(--xpf-border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--xpf-ink);
+  transition: border-color .3s ease, box-shadow .3s ease;
+}
+
+.product__info-container .quantity::before,
+.product__info-container .quantity::after {
+  display: none;
+}
+
+.product__info-container .quantity:hover {
+  border-color: color-mix(in srgb, var(--xpf-accent) 45%, transparent);
+}
+
+.product__info-container .quantity:focus-within {
+  border-color: var(--xpf-accent);
+  box-shadow: 0 0 0 1px var(--xpf-accent);
+}
+
+.product__info-container .quantity__button {
+  width: 4.2rem;
+  height: 4.2rem;
+  margin: 0;
+  align-self: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--xpf-ink) 6%, transparent);
+  color: var(--xpf-ink);
+  transition: background-color .3s ease, color .3s ease, transform .3s var(--xpf-ease);
+}
+
+.product__info-container .quantity__button:not(:focus-visible):not(.focused) {
+  background-color: color-mix(in srgb, var(--xpf-ink) 6%, transparent);
+}
+
+.product__info-container .quantity__button:hover:not(.disabled) {
+  background-color: var(--xpf-accent);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.product__info-container .quantity__button:focus-visible {
+  outline: 2px solid var(--xpf-accent);
+  outline-offset: 2px;
+}
+
+.product__info-container .quantity__button .svg-wrapper {
+  width: 1.1rem;
+}
+
+.product__info-container .quantity__input {
+  font-family: var(--font-code-family);
+  font-size: 1.6rem;
+  font-weight: 500;
+  opacity: 1;
+  color: var(--xpf-ink);
+}
+
+.product__info-container .quantity__input:focus,
+.product__info-container .quantity__input:focus-visible {
+  outline: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ---------------------------------------------------------
+   Add to cart — same language as .xula-btn (pill + sliding fill)
+   --------------------------------------------------------- */
+
+.product__info-container .product-form__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.product__info-container .product-form__submit {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  gap: 1rem;
+  min-height: var(--xpf-height);
+  margin-bottom: 0;
+  padding: 0 2.4rem;
+  border: 1px solid var(--xpf-accent);
+  border-radius: 999px;
+  background: var(--xpf-accent);
+  color: #fff;
+  font-family: var(--font-heading-family);
+  font-weight: 600;
+  font-size: 1.6rem;
+  letter-spacing: .02em;
+  transition:
+    color .55s var(--xpf-ease),
+    border-color .55s var(--xpf-ease),
+    transform .55s var(--xpf-ease),
+    box-shadow .55s var(--xpf-ease);
+}
+
+/* Dawn uses ::after for the border ring — hide it; ::before becomes the fill */
+.product__info-container .product-form__submit::after {
+  display: none;
+}
+
+.product__info-container .product-form__submit::before {
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: none;
+  background: var(--xpf-accent-hover);
+  transform: translateY(100%);
+  transition: transform .65s var(--xpf-ease);
+}
+
+.product__info-container .product-form__submit > span,
+.product__info-container .product-form__submit .xula-atc-icon {
+  position: relative;
+  z-index: 2;
+}
+
+/* Unscoped so the icon is sized wherever buy-buttons renders (e.g. featured-product) */
+.xula-atc-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  margin-left: .8rem;
+}
+
+.product__info-container .product-form__submit .xula-atc-icon {
+  margin-left: 0;
+  transition: transform .55s var(--xpf-ease);
+}
+
+.xula-atc-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.product__info-container .product-form__submit:not([disabled]):not([aria-disabled='true']):hover {
+  border-color: var(--xpf-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--xpf-accent-hover) 70%, transparent);
+}
+
+.product__info-container .product-form__submit:not([disabled]):not([aria-disabled='true']):hover::before {
+  transform: translateY(0);
+}
+
+.product__info-container .product-form__submit:not([disabled]):not([aria-disabled='true']):hover .xula-atc-icon {
+  transform: translateX(3px) rotate(-8deg);
+}
+
+.product__info-container .product-form__submit:focus-visible {
+  outline: 2px solid var(--xpf-accent);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+/* Sold out / unavailable */
+.product__info-container .product-form__submit[disabled] {
+  border-color: var(--xpf-border);
+  background: color-mix(in srgb, var(--xpf-ink) 8%, var(--bg));
+  color: color-mix(in srgb, var(--xpf-ink) 55%, transparent);
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.product__info-container .product-form__submit[disabled] .xula-atc-icon {
+  display: none;
+}
+
+/* Loading */
+.product__info-container .product-form__submit.loading {
+  color: transparent;
+}
+
+.product__info-container .product-form__submit.loading .loading__spinner .path {
+  stroke: #fff;
+}
+
+/* ---------------------------------------------------------
+   Dynamic checkout (Buy it now) — dark ink pill
+   --------------------------------------------------------- */
+
+.product__info-container .shopify-payment-button__button {
+  min-height: var(--xpf-height);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.product__info-container .shopify-payment-button__button--unbranded {
+  background: var(--xpf-ink);
+  color: #fff;
+  font-family: var(--font-heading-family);
+  font-weight: 600;
+  font-size: 1.6rem;
+  letter-spacing: .02em;
+  transition: background-color .3s ease, transform .3s var(--xpf-ease);
+}
+
+.product__info-container .shopify-payment-button__button--unbranded::before,
+.product__info-container .shopify-payment-button__button--unbranded::after {
+  display: none;
+}
+
+.product__info-container .shopify-payment-button__button--unbranded:hover:not([disabled]) {
+  background: color-mix(in srgb, var(--xpf-ink) 85%, var(--xpf-accent));
+  transform: translateY(-1px);
+}
+
+.product__info-container .shopify-payment-button__more-options {
+  margin: .4rem 0 0;
+  font-family: var(--secondary-font);
+  font-size: 1.2rem;
+  color: color-mix(in srgb, var(--xpf-ink) 70%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--xpf-ink) 30%, transparent);
+  transition: color .3s ease;
+}
+
+.product__info-container .shopify-payment-button__more-options:hover {
+  color: var(--xpf-accent);
+}
+
+/* ---------------------------------------------------------
+   Reduced motion
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .product__info-container .product-form__input--pill input[type='radio'] + label,
+  .product__info-container .product-form__pill-price,
+  .product__info-container .quantity__button,
+  .product__info-container .product-form__submit,
+  .product__info-container .product-form__submit::before,
+  .product__info-container .product-form__submit .xula-atc-icon,
+  .product__info-container .shopify-payment-button__button--unbranded {
+    transition: none;
+  }
+
+  .product__info-container .product-form__input--pill input[type='radio'] + label:hover,
+  .product__info-container .product-form__submit:hover,
+  .product__info-container .quantity__button:hover {
+    transform: none;
+  }
+}
