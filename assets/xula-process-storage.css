@@ -1,0 +1,269 @@
+/* =========================================================
+   Xula Process & Storage — processing method (Washed / Honey /
+   Natural) + storage instructions for the PDP buy box.
+   Mobile-first, BEM (.xula-process-storage)
+   ========================================================= */
+
+.xula-process-storage {
+  /* Overridable from the block's color settings (inline style) */
+  --xps-bg: #fff;
+  --xps-border: color-mix(in srgb, var(--bg-secondary) 10%, transparent);
+  --xps-heading: var(--text-secondary);
+  --xps-text: var(--bg-secondary);
+  --xps-eyebrow: var(--xula-gold-solid);
+  --xps-accent: var(--accent);
+  --xps-washed: var(--info);
+  --xps-honey: var(--xula-gold-solid);
+  --xps-natural: var(--accent-secondary);
+  --xps-tip-bg: color-mix(in srgb, var(--bg-tertiary) 18%, transparent);
+  --xps-icon: var(--accent);
+  --xps-active-icon: #fff;
+
+  display: flex;
+  flex-direction: column;
+  background: var(--xps-bg);
+  border: 1px solid var(--xps-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.xula-process-storage__heading {
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--xps-heading);
+  margin: 0;
+}
+
+/* ---------------------------------------------------------
+   Process
+   --------------------------------------------------------- */
+
+.xula-process-storage__process {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+.xula-process-storage__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.xula-process-storage__eyebrow {
+  font-family: var(--secondary-font);
+  font-size: .9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--xps-eyebrow);
+}
+
+.xula-process-storage__scale {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xula-process-storage__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border: 1.5px solid var(--xps-border);
+  border-radius: calc(var(--radius-sm) * 1.25);
+  color: color-mix(in srgb, var(--xps-text) 45%, transparent);
+  transition: border-color .25s ease, background-color .25s ease, color .25s ease;
+}
+
+.xula-process-storage__step-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--xps-text) 6%, transparent);
+}
+
+.xula-process-storage__step-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.xula-process-storage__step-label {
+  font-family: var(--secondary-font);
+  font-size: .95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  text-align: center;
+}
+
+.xula-process-storage__step.is-active {
+  border-color: var(--xps-accent);
+  background: color-mix(in srgb, var(--xps-accent) 6%, var(--xps-bg));
+  box-shadow: 0 0 0 1px var(--xps-accent);
+  color: var(--xps-text);
+}
+
+.xula-process-storage__step.is-active .xula-process-storage__step-icon {
+  background: var(--xps-accent);
+  color: var(--xps-active-icon);
+}
+
+/* Detail panel — accent stripe varies by method */
+
+.xula-process-storage__detail {
+  padding: 2px 0 2px 12px;
+  border-left: 3px solid var(--xps-accent);
+}
+
+.xula-process-storage__detail--washed { border-left-color: var(--xps-washed); }
+.xula-process-storage__detail--honey { border-left-color: var(--xps-honey); }
+.xula-process-storage__detail--natural { border-left-color: var(--xps-natural); }
+
+.xula-process-storage__detail-title {
+  margin: 0 0 4px;
+  font-family: var(--secondary-font);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--xps-text);
+}
+
+.xula-process-storage__detail-text {
+  margin: 0;
+  font-family: var(--secondary-font);
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--xps-text);
+  opacity: .85;
+}
+
+/* ---------------------------------------------------------
+   Storage (collapsible)
+   --------------------------------------------------------- */
+
+.xula-process-storage__process + .xula-process-storage__storage {
+  border-top: 1px solid var(--xps-border);
+}
+
+.xula-process-storage__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.xula-process-storage__summary::-webkit-details-marker {
+  display: none;
+}
+
+.xula-process-storage__summary:focus-visible {
+  outline: 2px solid var(--xps-accent);
+  outline-offset: -2px;
+}
+
+.xula-process-storage__chevron {
+  display: inline-flex;
+  color: var(--xps-text);
+  transition: transform .25s ease;
+}
+
+.xula-process-storage__chevron svg {
+  width: 18px;
+  height: 18px;
+}
+
+.xula-process-storage__storage[open] .xula-process-storage__chevron {
+  transform: rotate(180deg);
+}
+
+.xula-process-storage__tips {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0 16px 16px;
+  list-style: none;
+}
+
+.xula-process-storage__tip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--xps-tip-bg);
+  border-radius: var(--radius-sm);
+}
+
+.xula-process-storage__tip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--xps-bg);
+  color: var(--xps-icon);
+}
+
+.xula-process-storage__tip-icon:empty {
+  display: none;
+}
+
+.xula-process-storage__tip-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.xula-process-storage__tip-text {
+  font-family: var(--secondary-font);
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--xps-text);
+}
+
+/* ---------------------------------------------------------
+   Responsive — tablet / desktop
+   --------------------------------------------------------- */
+
+@media (min-width: 700px) {
+  .xula-process-storage__process {
+    padding: 18px;
+  }
+
+  .xula-process-storage__summary {
+    padding: 16px 18px;
+  }
+
+  .xula-process-storage__tips {
+    padding: 0 18px 18px;
+  }
+
+  .xula-process-storage__step-label,
+  .xula-process-storage__tip-text {
+    font-size: 1.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-process-storage__step,
+  .xula-process-storage__chevron {
+    transition: none;
+  }
+}

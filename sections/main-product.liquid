@@ -18,7 +18,9 @@
   {{ 'xula-product-meta.css' | asset_url | stylesheet_tag }}
   <script src="{{ 'xula-product-meta.js' | asset_url }}" defer="defer"></script>
   {{ 'xula-trust-badges.css' | asset_url | stylesheet_tag }}
+  {{ 'xula-process-storage.css' | asset_url | stylesheet_tag }}
   {{ 'xula-product-form.css' | asset_url | stylesheet_tag }}
+  {{ 'xula-product-gallery.css' | asset_url | stylesheet_tag }}
   {{ 'xula-social-share.css' | asset_url | stylesheet_tag }}
   <script src="{{ 'xula-social-share.js' | asset_url }}" defer="defer"></script>
 
@@ -713,6 +715,8 @@
                       badge_3_text: block.settings.badge_3_text
                     -%}
                   </div>
+                {%- when 'xula_process_storage' -%}
+                  {%- render 'xula-process-storage', product: product, block: block -%}
                 {%- when 'xula_social_share' -%}
                   {%- assign xss_heading = block.settings.heading -%}
                   {%- unless block.settings.show_heading -%}
@@ -943,6 +947,250 @@
           "id": "badge_3_text",
           "label": "Text",
           "default": "Worldwide shipping"
+        }
+      ]
+    },
+    {
+      "type": "xula_process_storage",
+      "name": "Xula Process & Storage",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Process"
+        },
+        {
+          "type": "paragraph",
+          "content": "Detected from the product metafield custom.process or a tag like process:Washed / proceso:Lavado."
+        },
+        {
+          "type": "text",
+          "id": "process_heading",
+          "label": "Heading",
+          "default": "Process"
+        },
+        {
+          "type": "text",
+          "id": "process_eyebrow",
+          "label": "Eyebrow",
+          "default": "From farm to cup"
+        },
+        {
+          "type": "select",
+          "id": "process_fallback",
+          "label": "Fallback process",
+          "info": "Used when the product has no process metafield or tag.",
+          "options": [
+            { "value": "none", "label": "Hide process" },
+            { "value": "washed", "label": "Washed" },
+            { "value": "honey", "label": "Honey" },
+            { "value": "natural", "label": "Natural" }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "washed_label",
+          "label": "Washed label",
+          "default": "Washed"
+        },
+        {
+          "type": "textarea",
+          "id": "washed_text",
+          "label": "Washed description",
+          "default": "The fruit is removed and the beans are fermented and washed before drying. Expect a clean, bright cup with crisp acidity."
+        },
+        {
+          "type": "text",
+          "id": "honey_label",
+          "label": "Honey label",
+          "default": "Honey"
+        },
+        {
+          "type": "textarea",
+          "id": "honey_text",
+          "label": "Honey description",
+          "default": "The beans dry with part of the sticky fruit mucilage still attached. Expect natural sweetness, a round body and balanced acidity."
+        },
+        {
+          "type": "text",
+          "id": "natural_label",
+          "label": "Natural label",
+          "default": "Natural"
+        },
+        {
+          "type": "textarea",
+          "id": "natural_text",
+          "label": "Natural description",
+          "default": "Whole coffee cherries sun-dry before hulling. Expect intense fruit, winey sweetness and a heavy body."
+        },
+        {
+          "type": "header",
+          "content": "Storage"
+        },
+        {
+          "type": "paragraph",
+          "content": "A multi-line metafield custom.storage_instructions (one tip per line) overrides the tips below."
+        },
+        {
+          "type": "text",
+          "id": "storage_heading",
+          "label": "Heading",
+          "default": "Storage instructions"
+        },
+        {
+          "type": "checkbox",
+          "id": "storage_open",
+          "label": "Expanded by default",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "tip_1_icon",
+          "label": "Tip 1 icon",
+          "options": [
+            { "value": "seal", "label": "Airtight container" },
+            { "value": "dark", "label": "Cool & dark (moon)" },
+            { "value": "no_fridge", "label": "No fridge (snowflake)" },
+            { "value": "clock", "label": "Freshness (clock)" },
+            { "value": "grind", "label": "Grind (grinder)" },
+            { "value": "none", "label": "No icon" }
+          ],
+          "default": "seal"
+        },
+        {
+          "type": "text",
+          "id": "tip_1_text",
+          "label": "Tip 1 text",
+          "default": "Store in an airtight container or keep the valve bag tightly sealed."
+        },
+        {
+          "type": "select",
+          "id": "tip_2_icon",
+          "label": "Tip 2 icon",
+          "options": [
+            { "value": "seal", "label": "Airtight container" },
+            { "value": "dark", "label": "Cool & dark (moon)" },
+            { "value": "no_fridge", "label": "No fridge (snowflake)" },
+            { "value": "clock", "label": "Freshness (clock)" },
+            { "value": "grind", "label": "Grind (grinder)" },
+            { "value": "none", "label": "No icon" }
+          ],
+          "default": "dark"
+        },
+        {
+          "type": "text",
+          "id": "tip_2_text",
+          "label": "Tip 2 text",
+          "default": "Keep in a cool, dark, dry place away from heat and sunlight."
+        },
+        {
+          "type": "select",
+          "id": "tip_3_icon",
+          "label": "Tip 3 icon",
+          "options": [
+            { "value": "seal", "label": "Airtight container" },
+            { "value": "dark", "label": "Cool & dark (moon)" },
+            { "value": "no_fridge", "label": "No fridge (snowflake)" },
+            { "value": "clock", "label": "Freshness (clock)" },
+            { "value": "grind", "label": "Grind (grinder)" },
+            { "value": "none", "label": "No icon" }
+          ],
+          "default": "no_fridge"
+        },
+        {
+          "type": "text",
+          "id": "tip_3_text",
+          "label": "Tip 3 text",
+          "default": "Avoid the fridge — moisture and odors dull the flavor."
+        },
+        {
+          "type": "select",
+          "id": "tip_4_icon",
+          "label": "Tip 4 icon",
+          "options": [
+            { "value": "seal", "label": "Airtight container" },
+            { "value": "dark", "label": "Cool & dark (moon)" },
+            { "value": "no_fridge", "label": "No fridge (snowflake)" },
+            { "value": "clock", "label": "Freshness (clock)" },
+            { "value": "grind", "label": "Grind (grinder)" },
+            { "value": "none", "label": "No icon" }
+          ],
+          "default": "clock"
+        },
+        {
+          "type": "text",
+          "id": "tip_4_text",
+          "label": "Tip 4 text",
+          "default": "Enjoy within 4–6 weeks of opening; grind just before brewing."
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "paragraph",
+          "content": "Leave a color empty to use the theme default."
+        },
+        {
+          "type": "color",
+          "id": "color_bg",
+          "label": "Background"
+        },
+        {
+          "type": "color",
+          "id": "color_border",
+          "label": "Border"
+        },
+        {
+          "type": "color",
+          "id": "color_heading",
+          "label": "Headings"
+        },
+        {
+          "type": "color",
+          "id": "color_text",
+          "label": "Text"
+        },
+        {
+          "type": "color",
+          "id": "color_eyebrow",
+          "label": "Eyebrow"
+        },
+        {
+          "type": "color",
+          "id": "color_accent",
+          "label": "Active process"
+        },
+        {
+          "type": "color",
+          "id": "color_active_icon",
+          "label": "Active process icon"
+        },
+        {
+          "type": "color",
+          "id": "color_washed",
+          "label": "Washed stripe"
+        },
+        {
+          "type": "color",
+          "id": "color_honey",
+          "label": "Honey stripe"
+        },
+        {
+          "type": "color",
+          "id": "color_natural",
+          "label": "Natural stripe"
+        },
+        {
+          "type": "color",
+          "id": "color_tip_bg",
+          "label": "Storage tip background"
+        },
+        {
+          "type": "color",
+          "id": "color_icon",
+          "label": "Storage tip icon"
         }
       ]
     },

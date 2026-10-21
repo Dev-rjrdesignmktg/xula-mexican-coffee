@@ -1,0 +1,208 @@
+{%- comment -%}
+  Xula Process & Storage — premium PDP card that shows the coffee's
+  processing method (Washed / Honey / Natural) and storage instructions.
+  Usage:
+    {% render 'xula-process-storage', product: product, block: block %}
+
+  Data source (in order of precedence):
+    Process: custom.process (text, e.g. "Washed", "Red Honey", "Natural")
+             | tags "process:Washed" / "proceso:Lavado"
+             | block setting "process_fallback"
+             Matching: honey/miel → honey, natural/seco/dry → natural, wash/lavado → washed.
+             The raw value (e.g. "Red Honey") is used as the panel title.
+    Storage: custom.storage_instructions (multi-line text, one tip per line)
+             | block settings tip_1..tip_4 (icon + text)
+  Colors: each block color setting left blank falls back to the theme tokens
+          defined on .xula-process-storage in xula-process-storage.css.
+{%- endcomment -%}
+
+{%- liquid
+  assign bs = block.settings
+
+  assign process_raw = product.metafields.custom.process.value
+  if process_raw == blank
+    for tag in product.tags
+      assign tag_down = tag | downcase
+      if tag_down contains 'process:' or tag_down contains 'proceso:'
+        assign process_raw = tag | split: ':' | last | strip
+        break
+      endif
+    endfor
+  endif
+
+  assign process_key = blank
+  if process_raw != blank
+    assign process_lower = process_raw | downcase
+    if process_lower contains 'honey' or process_lower contains 'miel'
+      assign process_key = 'honey'
+    elsif process_lower contains 'natural' or process_lower contains 'seco' or process_lower contains 'dry'
+      assign process_key = 'natural'
+    elsif process_lower contains 'wash' or process_lower contains 'lavado'
+      assign process_key = 'washed'
+    endif
+  endif
+  if process_key == blank and bs.process_fallback != 'none'
+    assign process_key = bs.process_fallback
+    assign process_raw = blank
+  endif
+
+  case process_key
+    when 'washed'
+      assign process_title = bs.washed_label
+      assign process_text = bs.washed_text
+    when 'honey'
+      assign process_title = bs.honey_label
+      assign process_text = bs.honey_text
+    when 'natural'
+      assign process_title = bs.natural_label
+      assign process_text = bs.natural_text
+  endcase
+  if process_raw != blank
+    assign process_title = process_raw | strip
+  endif
+
+  assign storage_mf = product.metafields.custom.storage_instructions.value
+  assign tip_lines = blank
+  if storage_mf != blank
+    assign tip_lines = storage_mf | newline_to_br | split: '<br />'
+  endif
+
+  assign has_storage = false
+  if tip_lines != blank
+    assign has_storage = true
+  elsif bs.tip_1_text != blank or bs.tip_2_text != blank or bs.tip_3_text != blank or bs.tip_4_text != blank
+    assign has_storage = true
+  endif
+
+  assign tip_icons = bs.tip_1_icon | append: ',' | append: bs.tip_2_icon | append: ',' | append: bs.tip_3_icon | append: ',' | append: bs.tip_4_icon | split: ','
+  assign style_vars = ''
+  if bs.color_bg != blank
+    assign style_vars = style_vars | append: '--xps-bg:' | append: bs.color_bg | append: ';'
+  endif
+  if bs.color_border != blank
+    assign style_vars = style_vars | append: '--xps-border:' | append: bs.color_border | append: ';'
+  endif
+  if bs.color_heading != blank
+    assign style_vars = style_vars | append: '--xps-heading:' | append: bs.color_heading | append: ';'
+  endif
+  if bs.color_text != blank
+    assign style_vars = style_vars | append: '--xps-text:' | append: bs.color_text | append: ';'
+  endif
+  if bs.color_eyebrow != blank
+    assign style_vars = style_vars | append: '--xps-eyebrow:' | append: bs.color_eyebrow | append: ';'
+  endif
+  if bs.color_accent != blank
+    assign style_vars = style_vars | append: '--xps-accent:' | append: bs.color_accent | append: ';'
+  endif
+  if bs.color_active_icon != blank
+    assign style_vars = style_vars | append: '--xps-active-icon:' | append: bs.color_active_icon | append: ';'
+  endif
+  if bs.color_washed != blank
+    assign style_vars = style_vars | append: '--xps-washed:' | append: bs.color_washed | append: ';'
+  endif
+  if bs.color_honey != blank
+    assign style_vars = style_vars | append: '--xps-honey:' | append: bs.color_honey | append: ';'
+  endif
+  if bs.color_natural != blank
+    assign style_vars = style_vars | append: '--xps-natural:' | append: bs.color_natural | append: ';'
+  endif
+  if bs.color_tip_bg != blank
+    assign style_vars = style_vars | append: '--xps-tip-bg:' | append: bs.color_tip_bg | append: ';'
+  endif
+  if bs.color_icon != blank
+    assign style_vars = style_vars | append: '--xps-icon:' | append: bs.color_icon | append: ';'
+  endif
+
+  assign process_steps = 'washed,honey,natural' | split: ','
+  assign root_id = 'XulaPS-' | append: block.id
+-%}
+
+{%- if process_key != blank or has_storage -%}
+  <div
+    class="xula-process-storage"
+    id="{{ root_id }}"
+    {% if style_vars != blank %}style="{{ style_vars }}"{% endif %}
+    {{ block.shopify_attributes }}
+  >
+    {%- if process_key != blank -%}
+      <div class="xula-process-storage__process" role="group" aria-labelledby="{{ root_id }}-process">
+        <div class="xula-process-storage__head">
+          <p class="xula-process-storage__heading" id="{{ root_id }}-process">{{ bs.process_heading }}</p>
+          {%- if bs.process_eyebrow != blank -%}
+            <span class="xula-process-storage__eyebrow">{{ bs.process_eyebrow }}</span>
+          {%- endif -%}
+        </div>
+
+        <ol class="xula-process-storage__scale" role="list">
+          {%- for key in process_steps -%}
+            {%- liquid
+              case key
+                when 'washed'
+                  assign step_label = bs.washed_label
+                when 'honey'
+                  assign step_label = bs.honey_label
+                when 'natural'
+                  assign step_label = bs.natural_label
+              endcase
+            -%}
+            <li
+              class="xula-process-storage__step xula-process-storage__step--{{ key }}{% if key == process_key %} is-active{% endif %}"
+              {% if key == process_key %}aria-current="true"{% endif %}
+            >
+              <span class="xula-process-storage__step-icon">
+                {%- render 'xula-process-storage-icon', icon: key -%}
+              </span>
+              <span class="xula-process-storage__step-label">{{ step_label }}</span>
+            </li>
+          {%- endfor -%}
+        </ol>
+
+        <div class="xula-process-storage__detail xula-process-storage__detail--{{ process_key }}">
+          <p class="xula-process-storage__detail-title">{{ process_title }}</p>
+          {%- if process_text != blank -%}
+            <p class="xula-process-storage__detail-text">{{ process_text }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if has_storage -%}
+      <details class="xula-process-storage__storage"{% if bs.storage_open %} open{% endif %}>
+        <summary class="xula-process-storage__summary">
+          <span class="xula-process-storage__heading">{{ bs.storage_heading }}</span>
+          <span class="xula-process-storage__chevron">
+            {%- render 'xula-process-storage-icon', icon: 'chevron' -%}
+          </span>
+        </summary>
+
+        <ul class="xula-process-storage__tips" role="list">
+          {%- if tip_lines != blank -%}
+            {%- for line in tip_lines -%}
+              {%- assign tip_text = line | strip -%}
+              {%- if tip_text == blank -%}{%- continue -%}{%- endif -%}
+              {%- assign icon_index = forloop.index0 | modulo: 4 -%}
+              <li class="xula-process-storage__tip">
+                <span class="xula-process-storage__tip-icon">
+                  {%- render 'xula-process-storage-icon', icon: tip_icons[icon_index] -%}
+                </span>
+                <span class="xula-process-storage__tip-text">{{ tip_text }}</span>
+              </li>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..4) -%}
+              {%- assign text_key = 'tip_' | append: i | append: '_text' -%}
+              {%- assign tip_text = bs[text_key] -%}
+              {%- if tip_text == blank -%}{%- continue -%}{%- endif -%}
+              <li class="xula-process-storage__tip">
+                <span class="xula-process-storage__tip-icon">
+                  {%- render 'xula-process-storage-icon', icon: tip_icons[forloop.index0] -%}
+                </span>
+                <span class="xula-process-storage__tip-text">{{ tip_text }}</span>
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+      </details>
+    {%- endif -%}
+  </div>
+{%- endif -%}
