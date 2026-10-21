@@ -168,8 +168,15 @@
       "name": "Xula Trust Cards",
       "settings": {
         "eyebrow": "Trust you can taste",
-        "heading": "Numbers behind every cup",
-        "text": "Mexican tradition, verified quality, and customers who keep coming back."
+        "heading": "Numbers Behind Every cup",
+        "text": "Mexican tradition, verified quality, and customers who keep coming back.",
+        "background_color": "#E95028",
+        "card_background_color": "",
+        "eyebrow_color": "#FFFFFF",
+        "heading_color": "#FFFFFF",
+        "subheading_color": "#FFFFFF",
+        "label_color": "",
+        "description_color": ""
       }
     },
     "banner": {
