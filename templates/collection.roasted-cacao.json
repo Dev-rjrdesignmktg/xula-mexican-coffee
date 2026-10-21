@@ -209,32 +209,6 @@
         "padding_bottom": 36
       }
     },
-    "xula_product_catalog_CMtr4b": {
-      "type": "xula-product-catalog",
-      "blocks": {
-        "category_DnPqF7": {
-          "type": "category",
-          "settings": {
-            "collection": "roasted-cacao",
-            "label": "",
-            "products_to_show": 12
-          }
-        }
-      },
-      "block_order": [
-        "category_DnPqF7"
-      ],
-      "name": "Xula Product Catalog",
-      "settings": {
-        "eyebrow": "Catalog",
-        "heading": "Explore Xula Collection",
-        "subheading": "Filter by category and discover the intensity, roast, and flavor notes of every batch.",
-        "all_label": "All",
-        "all_products_limit": 48,
-        "items_per_page": 8,
-        "enable_structured_data": true
-      }
-    },
     "xula_coffee_quiz_trRm3J": {
       "type": "xula-coffee-quiz",
       "blocks": {
@@ -401,7 +375,6 @@
     "xula_trust_cards_K8NBhF",
     "banner",
     "product-grid",
-    "xula_product_catalog_CMtr4b",
     "xula_coffee_quiz_trRm3J"
   ]
 }
