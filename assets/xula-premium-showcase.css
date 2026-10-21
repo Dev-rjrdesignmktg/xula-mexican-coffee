@@ -1,0 +1,1248 @@
+/* =========================================================
+   Xula Premium Showcase — editorial highlight for short
+   collections (1–6 SKUs). Layout adapts to product count via
+   .xula-premium-showcase--count-{n}.
+   Mobile-first, BEM (.xula-premium-showcase), vanilla JS hooks.
+   ========================================================= */
+
+.xula-premium-showcase {
+  --xps-surface: var(--bg);
+  --xps-card: var(--bg);
+  --xps-ink: var(--bg-secondary);
+  --xps-text: color-mix(in srgb, var(--bg-secondary) 82%, transparent);
+  --xps-muted: color-mix(in srgb, var(--bg-secondary) 58%, transparent);
+  --xps-line: color-mix(in srgb, var(--bg-secondary) 12%, transparent);
+  --xps-accent: var(--accent);
+  --xps-gold: var(--xula-gold-solid);
+  --xps-radius: calc(var(--radius-sm) * 2);
+  --xps-ease: cubic-bezier(.16, 1, .3, 1);
+
+  position: relative;
+  background: var(--xps-surface);
+  color: var(--xps-text);
+  padding-block: calc(var(--xps-pad-top, 80px) * .6) calc(var(--xps-pad-bottom, 80px) * .6);
+}
+
+@media screen and (min-width: 750px) {
+  .xula-premium-showcase {
+    padding-block: var(--xps-pad-top, 80px) var(--xps-pad-bottom, 80px);
+  }
+}
+
+/* ---------------------------------------------------------
+   Background styles
+   --------------------------------------------------------- */
+
+.xula-premium-showcase--bg-cream {
+  --xps-surface: color-mix(in srgb, var(--bg-tertiary) 14%, var(--bg));
+}
+
+.xula-premium-showcase--bg-gold {
+  --xps-surface:
+    radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--bg-tertiary) 38%, transparent) 0%, transparent 60%),
+    radial-gradient(90% 70% at 0% 100%, color-mix(in srgb, var(--bg-tertiary) 22%, transparent) 0%, transparent 55%),
+    color-mix(in srgb, var(--bg-tertiary) 8%, var(--bg));
+}
+
+.xula-premium-showcase--bg-espresso {
+  --xps-surface: var(--bg-secondary);
+  --xps-card: color-mix(in srgb, #fff 5%, var(--bg-secondary));
+  --xps-ink: #fbf3e8;
+  --xps-text: color-mix(in srgb, #fbf3e8 86%, transparent);
+  --xps-muted: color-mix(in srgb, #fbf3e8 62%, transparent);
+  --xps-line: color-mix(in srgb, #fbf3e8 14%, transparent);
+  --xps-gold: var(--bg-tertiary);
+}
+
+/* ---------------------------------------------------------
+   Card colors — theme color scheme (inline custom colors on
+   the card override these through the same variables)
+   --------------------------------------------------------- */
+
+.xula-premium-showcase__card--scheme {
+  --xps-card: rgb(var(--color-background));
+  --xps-ink: rgb(var(--color-foreground));
+  --xps-text: rgba(var(--color-foreground), .82);
+  --xps-muted: rgba(var(--color-foreground), .62);
+  --xps-line: rgba(var(--color-foreground), .14);
+  --xps-accent: rgb(var(--color-button));
+  --accent: rgb(var(--color-button));
+  --accent-secondary: rgba(var(--color-button), .85);
+  --xps-button-text: rgb(var(--color-button-text));
+}
+
+
+.xula-premium-showcase__card--scheme .xula-premium-showcase__details {
+  color: rgb(var(--color-link));
+}
+
+/* ---------------------------------------------------------
+   Intro
+   --------------------------------------------------------- */
+
+.xula-premium-showcase__intro {
+  text-align: center;
+  max-width: 68rem;
+  margin: 0 auto 3.2rem;
+}
+
+.xula-premium-showcase__eyebrow {
+  display: inline-block;
+  font-size: 1.1rem;
+  color: var(--xps-gold);
+  margin-bottom: 1.4rem;
+}
+
+.xula-premium-showcase__heading {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
+  line-height: 1.05;
+  letter-spacing: -.01em;
+  color: var(--xps-ink);
+  margin: 0;
+}
+
+.xula-premium-showcase__subheading {
+  font-family: var(--font-body-family);
+  font-weight: var(--font-body-weight);
+  font-size: clamp(1.5rem, 1.6vw, 1.8rem);
+  line-height: 1.6;
+  color: var(--xps-muted);
+  margin-top: 1.4rem;
+}
+
+.xula-premium-showcase__subheading > *:last-child {
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .xula-premium-showcase__intro {
+    margin-bottom: 5.6rem;
+  }
+}
+
+/* ---------------------------------------------------------
+   Grid (mobile: single column stack)
+   --------------------------------------------------------- */
+
+.xula-premium-showcase__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.xula-premium-showcase__item {
+  display: flex;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------
+   Card
+   --------------------------------------------------------- */
+
+.xula-premium-showcase__card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--xps-card);
+  border-radius: var(--xps-radius);
+  border: 1px solid var(--xps-line);
+  transition: box-shadow .5s var(--xps-ease), transform .5s var(--xps-ease);
+}
+
+.xula-premium-showcase--accent-border .xula-premium-showcase__card {
+  border-color: color-mix(in srgb, var(--xps-gold) 55%, transparent);
+  box-shadow: inset 0 3px 0 0 var(--xps-gold);
+}
+
+@media (hover: hover) {
+  .xula-premium-showcase__card:hover {
+    box-shadow: 0 24px 48px -28px color-mix(in srgb, var(--bg-secondary) 45%, transparent);
+  }
+
+  .xula-premium-showcase--accent-border .xula-premium-showcase__card:hover {
+    box-shadow:
+      inset 0 3px 0 0 var(--xps-gold),
+      0 24px 48px -28px color-mix(in srgb, var(--bg-secondary) 45%, transparent);
+  }
+}
+
+/* ---------------------------------------------------------
+   Media
+   --------------------------------------------------------- */
+
+.xula-premium-showcase__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: calc(var(--xps-radius) - 1px) calc(var(--xps-radius) - 1px) 0 0;
+  background: color-mix(in srgb, var(--bg-tertiary) 18%, var(--bg));
+}
+
+.xula-premium-showcase__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity .6s var(--xps-ease), transform 1.2s var(--xps-ease);
+}
+
+.xula-premium-showcase__image--placeholder {
+  fill: color-mix(in srgb, var(--bg-secondary) 25%, transparent);
+}
+
+.xula-premium-showcase__image--secondary {
+  opacity: 0;
+}
+
+@media (hover: hover) {
+  .xula-premium-showcase__card:hover .xula-premium-showcase__image--primary {
+    transform: scale(1.04);
+  }
+
+  .xula-premium-showcase__card:hover .xula-premium-showcase__media--has-hover .xula-premium-showcase__image--primary {
+    opacity: 0;
+  }
+
+  .xula-premium-showcase__card:hover .xula-premium-showcase__image--secondary {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+.xula-premium-showcase__tag {
+  position: absolute;
+  top: 1.4rem;
+  left: 1.4rem;
+  z-index: 1;
+  padding: .6rem 1.1rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--bg-secondary);
+  background: color-mix(in srgb, #fff 88%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.xula-premium-showcase__tag--sale {
+  left: auto;
+  right: 1.4rem;
+  color: var(--xps-button-text, #fff);
+  background: var(--accent-secondary);
+}
+
+/* ---------------------------------------------------------
+   Content
+   --------------------------------------------------------- */
+
+.xula-premium-showcase__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 1.4rem;
+  padding: 2.4rem 2rem 2.8rem;
+}
+
+.xula-premium-showcase__kicker {
+  font-size: 1.1rem;
+  color: var(--xps-gold);
+  margin: 0;
+}
+
+.xula-premium-showcase__title {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(2.2rem, 2.4vw, 2.8rem);
+  line-height: 1.1;
+  color: var(--xps-ink);
+  margin: 0;
+}
+
+.xula-premium-showcase__title-link {
+  color: inherit;
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size .5s var(--xps-ease);
+}
+
+.xula-premium-showcase__title-link:hover {
+  background-size: 100% 1px;
+}
+
+.xula-premium-showcase__title-link:focus-visible {
+  outline: 2px solid var(--xps-accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.xula-premium-showcase__excerpt {
+  font-family: var(--font-body-family);
+  font-weight: var(--font-body-weight);
+  font-size: 1.5rem;
+  line-height: 1.65;
+  color: var(--xps-text);
+  margin: 0;
+}
+
+.xula-premium-showcase__excerpt--custom {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.xula-premium-showcase__excerpt--custom p {
+  margin: 0;
+}
+
+.xula-premium-showcase__excerpt--custom strong {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  color: var(--xps-ink);
+}
+
+.xula-premium-showcase__excerpt--custom a {
+  color: var(--xps-accent);
+  text-underline-offset: .3rem;
+}
+
+/* ---------------------------------------------------------
+   Spec sheet (cup profile, tasting notes, origin)
+   --------------------------------------------------------- */
+
+.xula-premium-showcase__sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  margin-top: .4rem;
+  padding: 1.6rem 1.6rem 1.8rem;
+  border: 1px solid var(--xps-line);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--bg-tertiary) 6%, var(--xps-card));
+}
+
+.xula-premium-showcase__sheet-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.1rem;
+  color: var(--xps-gold);
+  margin: 0;
+}
+
+.xula-premium-showcase__sheet-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--xps-gold) 40%, transparent);
+}
+
+.xula-premium-showcase__specs {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.xula-premium-showcase__spec {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: .9rem 0;
+  border-bottom: 1px dashed var(--xps-line);
+}
+
+.xula-premium-showcase__spec:first-child {
+  padding-top: 0;
+}
+
+.xula-premium-showcase__spec:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.xula-premium-showcase__spec-label {
+  font-size: 1rem;
+  color: var(--xps-muted);
+  margin: 0;
+}
+
+.xula-premium-showcase__spec-value {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+  text-align: right;
+}
+
+.xula-premium-showcase__spec-text {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.4rem;
+  color: var(--xps-ink);
+}
+
+.xula-premium-showcase__flavor {
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--xps-line);
+}
+
+.xula-premium-showcase__specs + .xula-premium-showcase__flavor {
+  margin-top: .2rem;
+}
+
+.xula-premium-showcase__sheet-title + .xula-premium-showcase__flavor {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.xula-premium-showcase__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.xula-premium-showcase__chip {
+  padding: .5rem 1.1rem;
+  border-radius: 999px;
+  font-size: 1.3rem;
+  line-height: 1.3;
+  color: var(--xps-ink);
+  background: color-mix(in srgb, var(--bg-tertiary) 24%, transparent);
+  border: 1px solid color-mix(in srgb, var(--xps-gold) 35%, transparent);
+}
+
+.xula-premium-showcase__origin {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem 1.6rem;
+  margin: 0;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--xps-line);
+}
+
+.xula-premium-showcase__sheet-title + .xula-premium-showcase__origin {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.xula-premium-showcase__origin-item {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  min-width: 0;
+}
+
+.xula-premium-showcase__origin-value {
+  font-size: 1.4rem;
+  color: var(--xps-ink);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.xula-premium-showcase__meter {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: .5rem;
+}
+
+.xula-premium-showcase__meter-dot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--xps-gold);
+}
+
+.xula-premium-showcase__meter-dot.is-filled {
+  background: var(--xps-gold);
+}
+
+/* ---------------------------------------------------------
+   Buy box
+   --------------------------------------------------------- */
+
+.xula-premium-showcase__buybox {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  margin-top: auto;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--xps-line);
+}
+
+.xula-premium-showcase__price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.xula-premium-showcase__price-current {
+  font-size: 2rem;
+  color: var(--xps-ink);
+}
+
+.xula-premium-showcase__price-compare {
+  font-size: 1.4rem;
+  color: var(--xps-muted);
+}
+
+.xula-premium-showcase__field {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+.xula-premium-showcase__field-label {
+  font-size: 1rem;
+  color: var(--xps-muted);
+  padding: 0;
+  margin-bottom: .6rem;
+}
+
+.xula-premium-showcase__select-wrap {
+  position: relative;
+}
+
+.xula-premium-showcase__select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  min-height: 4.4rem;
+  padding: 1rem 4rem 1rem 1.4rem;
+  font: inherit;
+  font-size: 1.5rem;
+  color: var(--xps-ink);
+  background: var(--xps-card);
+  border: 1.5px solid var(--xps-line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color .25s ease;
+}
+
+.xula-premium-showcase__select:hover {
+  border-color: color-mix(in srgb, var(--xps-accent) 45%, transparent);
+}
+
+.xula-premium-showcase__select:focus-visible {
+  outline: 2px solid var(--xps-accent);
+  outline-offset: 2px;
+}
+
+.xula-premium-showcase__select-icon {
+  position: absolute;
+  right: 1.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--xps-muted);
+}
+
+/* Custom dropdown — <xula-showcase-select>. The styled native select
+   shows until the element upgrades, then the custom listbox takes over. */
+
+xula-showcase-select {
+  display: block;
+}
+
+.xula-premium-showcase__select-wrap:not(.is-enhanced) .xula-premium-showcase__dropdown-toggle,
+.xula-premium-showcase__select-wrap:not(.is-enhanced) .xula-premium-showcase__dropdown-list {
+  display: none;
+}
+
+.xula-premium-showcase__select-wrap.is-enhanced .xula-premium-showcase__select,
+.xula-premium-showcase__select-wrap.is-enhanced .xula-premium-showcase__select-icon {
+  display: none;
+}
+
+/* Native fallback: brand-styled picker where customizable select is supported */
+@supports (appearance: base-select) {
+  .xula-premium-showcase__select,
+  .xula-premium-showcase__select::picker(select) {
+    appearance: base-select;
+  }
+
+  .xula-premium-showcase__select::picker-icon {
+    display: none;
+  }
+
+  .xula-premium-showcase__select::picker(select) {
+    margin-block: .6rem;
+    padding: .6rem;
+    background: var(--xps-card);
+    border: 1px solid color-mix(in srgb, var(--xps-gold) 45%, transparent);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 24px 48px -20px color-mix(in srgb, var(--bg-secondary) 45%, transparent);
+  }
+
+  .xula-premium-showcase__select::picker(select) {
+    /* open upward, flip down when there is no room */
+    position-area: block-start span-inline-end;
+    position-try-fallbacks: flip-block;
+  }
+
+  .xula-premium-showcase__select option {
+    padding: .9rem 1.2rem;
+    border-radius: calc(var(--radius-sm) * .7);
+    font-size: 1.4rem;
+    color: var(--xps-ink);
+  }
+
+  .xula-premium-showcase__select option:hover,
+  .xula-premium-showcase__select option:focus-visible {
+    background: color-mix(in srgb, var(--bg-tertiary) 20%, transparent);
+  }
+
+  .xula-premium-showcase__select option:checked {
+    font-weight: var(--font-heading-weight);
+  }
+
+  .xula-premium-showcase__select option::checkmark {
+    color: var(--xps-accent);
+  }
+
+  .xula-premium-showcase__select option:disabled {
+    color: var(--xps-muted);
+    text-decoration: line-through;
+  }
+}
+
+.xula-premium-showcase__dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  min-height: 4.8rem;
+  padding: 1rem 1.4rem 1rem 1.6rem;
+  font: inherit;
+  text-align: left;
+  color: var(--xps-ink);
+  background: var(--xps-card);
+  border: 1.5px solid var(--xps-line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color .25s ease, box-shadow .25s ease, background-color .25s ease;
+}
+
+.xula-premium-showcase__dropdown-toggle:hover {
+  border-color: color-mix(in srgb, var(--xps-accent) 45%, transparent);
+}
+
+.xula-premium-showcase__dropdown-toggle:focus-visible {
+  outline: 2px solid var(--xps-accent);
+  outline-offset: 2px;
+}
+
+.xula-premium-showcase__dropdown-toggle[aria-expanded="true"] {
+  border-color: var(--xps-accent);
+  box-shadow: 0 0 0 1px var(--xps-accent);
+}
+
+.xula-premium-showcase__dropdown-value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.5rem;
+}
+
+.xula-premium-showcase__dropdown-price {
+  font-size: 1.3rem;
+  color: var(--xps-muted);
+}
+
+.xula-premium-showcase__dropdown-chevron {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  color: var(--xps-ink);
+  background: color-mix(in srgb, var(--bg-tertiary) 22%, transparent);
+  transition: transform .4s var(--xps-ease), background-color .25s ease, color .25s ease;
+}
+
+.xula-premium-showcase__dropdown-toggle[aria-expanded="true"] .xula-premium-showcase__dropdown-chevron {
+  transform: rotate(180deg);
+  color: var(--xps-button-text, #fff);
+  background: var(--xps-accent);
+}
+
+.xula-premium-showcase__dropdown-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + .6rem);
+  z-index: 20;
+  max-height: 28rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 0;
+  padding: .6rem;
+  list-style: none;
+  background: var(--xps-card);
+  border: 1px solid color-mix(in srgb, var(--xps-gold) 45%, transparent);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 24px 48px -20px color-mix(in srgb, var(--bg-secondary) 45%, transparent);
+  transform-origin: top center;
+  animation: xula-premium-showcase-dropdown .28s var(--xps-ease);
+}
+
+.xula-premium-showcase__dropdown-list.is-above {
+  top: auto;
+  bottom: calc(100% + .6rem);
+  transform-origin: bottom center;
+}
+
+.xula-premium-showcase__dropdown-list:focus {
+  outline: none;
+}
+
+.xula-premium-showcase__dropdown-list:focus-visible {
+  outline: 2px solid var(--xps-accent);
+  outline-offset: 2px;
+}
+
+.xula-premium-showcase--bg-espresso .xula-premium-showcase__dropdown-list {
+  background: color-mix(in srgb, #fff 9%, var(--bg-secondary));
+}
+
+@keyframes xula-premium-showcase-dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(.98);
+  }
+}
+
+.xula-premium-showcase__dropdown-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 4.4rem;
+  padding: .9rem 1.2rem;
+  border-radius: calc(var(--radius-sm) * .7);
+  font-size: 1.4rem;
+  color: var(--xps-ink);
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.xula-premium-showcase__dropdown-option::before {
+  content: "";
+  flex-shrink: 0;
+  width: .8rem;
+  height: .8rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--xps-gold);
+  transition: background-color .2s ease, border-color .2s ease;
+}
+
+.xula-premium-showcase__dropdown-option-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.xula-premium-showcase__dropdown-option-price {
+  font-size: 1.3rem;
+  color: var(--xps-muted);
+}
+
+.xula-premium-showcase__dropdown-option.is-active {
+  background: color-mix(in srgb, var(--bg-tertiary) 20%, transparent);
+}
+
+.xula-premium-showcase__dropdown-option[aria-selected="true"] {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+}
+
+.xula-premium-showcase__dropdown-option[aria-selected="true"]::before {
+  border-color: var(--xps-accent);
+  background: var(--xps-accent);
+}
+
+.xula-premium-showcase__dropdown-option[aria-disabled="true"] {
+  cursor: not-allowed;
+  color: var(--xps-muted);
+}
+
+.xula-premium-showcase__dropdown-option[aria-disabled="true"] .xula-premium-showcase__dropdown-option-title {
+  text-decoration: line-through;
+}
+
+.xula-premium-showcase__dropdown-option[aria-disabled="true"]::before {
+  border-color: var(--xps-line);
+}
+
+/* Purchase option (one-time vs subscription) */
+
+.xula-premium-showcase__plans {
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.xula-premium-showcase__plan {
+  position: relative;
+}
+
+.xula-premium-showcase__plan-input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.xula-premium-showcase__plan-label {
+  display: grid;
+  grid-template-columns: 1.8rem minmax(0, 1fr) auto;
+  grid-template-areas:
+    "radio name price"
+    ". meta meta";
+  align-items: center;
+  column-gap: 1rem;
+  row-gap: .2rem;
+  min-height: 4.8rem;
+  padding: 1.1rem 1.4rem;
+  border: 1.5px solid var(--xps-line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color .25s ease, background-color .25s ease, box-shadow .25s ease;
+}
+
+.xula-premium-showcase__plan-label::before {
+  content: "";
+  grid-area: radio;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--xps-muted);
+  box-shadow: inset 0 0 0 3px var(--xps-card);
+  transition: background-color .25s ease, border-color .25s ease;
+}
+
+.xula-premium-showcase__plan-name {
+  grid-area: name;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .6rem;
+  font-size: 1.4rem;
+  color: var(--xps-ink);
+}
+
+.xula-premium-showcase__plan-meta {
+  grid-area: meta;
+  font-size: 1.2rem;
+  color: var(--xps-muted);
+}
+
+.xula-premium-showcase__plan-price {
+  grid-area: price;
+  font-size: 1.4rem;
+  color: var(--xps-ink);
+}
+
+.xula-premium-showcase__plan-badge {
+  padding: .3rem .7rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--xps-button-text, #fff);
+  background: var(--xps-accent);
+}
+
+.xula-premium-showcase__plan--subscribe .xula-premium-showcase__plan-label {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--xps-gold) 70%, transparent);
+  background: color-mix(in srgb, var(--bg-tertiary) 8%, transparent);
+}
+
+.xula-premium-showcase__plan-label:hover {
+  border-color: color-mix(in srgb, var(--xps-accent) 45%, transparent);
+}
+
+.xula-premium-showcase__plan-input:checked + .xula-premium-showcase__plan-label {
+  border-style: solid;
+  border-color: var(--xps-accent);
+  background: color-mix(in srgb, var(--xps-accent) 7%, transparent);
+  box-shadow: 0 0 0 1px var(--xps-accent);
+}
+
+.xula-premium-showcase__plan-input:checked + .xula-premium-showcase__plan-label::before {
+  border-color: var(--xps-accent);
+  background: var(--xps-accent);
+}
+
+.xula-premium-showcase__plan-input:focus-visible + .xula-premium-showcase__plan-label {
+  outline: 2px solid var(--xps-accent);
+  outline-offset: 2px;
+}
+
+.xula-premium-showcase__plan-input:disabled + .xula-premium-showcase__plan-label {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+/* Actions */
+
+.xula-premium-showcase__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.4rem;
+}
+
+.xula-premium-showcase__submit,
+.xula-premium-showcase__submit:hover {
+  color: var(--xps-button-text, #fff);
+}
+
+.xula-premium-showcase__submit {
+  width: 100%;
+  min-height: 5rem;
+  gap: 1rem;
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: 1.5rem;
+}
+
+.xula-premium-showcase__submit:focus-visible {
+  outline: 2px solid var(--xps-ink);
+  outline-offset: 3px;
+}
+
+.xula-premium-showcase__submit[aria-disabled="true"] {
+  background: var(--xps-line);
+  border-color: transparent;
+  color: var(--xps-muted);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.xula-premium-showcase__submit[aria-disabled="true"]::before {
+  display: none;
+}
+
+.xula-premium-showcase__spinner {
+  display: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, currentColor 40%, transparent);
+  border-top-color: currentColor;
+  animation: xula-premium-showcase-spin .8s linear infinite;
+}
+
+.xula-premium-showcase__submit.is-loading .xula-premium-showcase__spinner {
+  display: inline-block;
+}
+
+.xula-premium-showcase__submit.is-loading {
+  pointer-events: none;
+}
+
+@keyframes xula-premium-showcase-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.xula-premium-showcase__details {
+  align-self: center;
+  font-size: 1.4rem;
+}
+
+.xula-premium-showcase__details:focus-visible {
+  outline: 2px solid var(--xps-accent);
+  outline-offset: 4px;
+}
+
+.xula-premium-showcase--bg-espresso .xula-premium-showcase__details {
+  color: var(--bg-tertiary);
+}
+
+.xula-premium-showcase__message {
+  font-size: 1.3rem;
+  color: var(--xps-muted);
+  margin: 0;
+}
+
+.xula-premium-showcase__message:empty {
+  display: none;
+}
+
+.xula-premium-showcase__message.is-error {
+  color: var(--accent-secondary);
+}
+
+.xula-premium-showcase__footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+}
+
+.xula-premium-showcase__empty p {
+  text-align: center;
+  color: var(--xps-muted);
+  padding: 4rem 2rem;
+  border: 1px dashed var(--xps-line);
+  border-radius: var(--xps-radius);
+}
+
+.is-sold-out .xula-premium-showcase__image {
+  filter: grayscale(.35);
+}
+
+/* =========================================================
+   Adaptive layouts — tablet & up
+   ========================================================= */
+
+@media screen and (min-width: 750px) {
+  .xula-premium-showcase__actions {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .xula-premium-showcase__submit {
+    width: auto;
+    flex: 1;
+  }
+
+  /* ---------- 1 product: hero / feature banner ---------- */
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    min-height: 60rem;
+  }
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__media {
+    border-radius: calc(var(--xps-radius) - 1px) 0 0 calc(var(--xps-radius) - 1px);
+    aspect-ratio: auto;
+    height: 100%;
+    min-height: 100%;
+  }
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__content {
+    justify-content: center;
+    gap: 1.8rem;
+    padding: 4.8rem 4rem;
+  }
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__title {
+    font-size: clamp(3.2rem, 4vw, 5.2rem);
+    line-height: 1;
+  }
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__excerpt {
+    font-size: 1.6rem;
+    max-width: 52ch;
+  }
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__specs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2.4rem;
+  }
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__spec,
+  .xula-premium-showcase--count-1 .xula-premium-showcase__spec:first-child,
+  .xula-premium-showcase--count-1 .xula-premium-showcase__spec:last-child {
+    padding: .9rem 0;
+    border-bottom: 1px dashed var(--xps-line);
+  }
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__origin {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__buybox {
+    margin-top: .8rem;
+    padding: 2.4rem;
+    border: 1px solid var(--xps-line);
+    border-radius: var(--xps-radius);
+    background: color-mix(in srgb, var(--bg-tertiary) 7%, var(--xps-card));
+  }
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__price-current {
+    font-size: 2.6rem;
+  }
+
+  /* ---------- 2 products: double spotlight ---------- */
+
+  .xula-premium-showcase--count-2 .xula-premium-showcase__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3.2rem;
+  }
+
+  .xula-premium-showcase--count-2 .xula-premium-showcase__content {
+    padding: 3.2rem 3.2rem 3.6rem;
+  }
+
+  .xula-premium-showcase--count-2 .xula-premium-showcase__title {
+    font-size: clamp(2.6rem, 3vw, 3.6rem);
+  }
+
+  /* ---------- 3–6 products: 2-column editorial grid ----------
+     3 and 5 open with a wide horizontal lead card. */
+
+  .xula-premium-showcase--count-3 .xula-premium-showcase__grid,
+  .xula-premium-showcase--count-4 .xula-premium-showcase__grid,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__grid,
+  .xula-premium-showcase--count-6 .xula-premium-showcase__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.4rem;
+  }
+
+  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__card,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+
+  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__media,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__media {
+    border-radius: calc(var(--xps-radius) - 1px) 0 0 calc(var(--xps-radius) - 1px);
+    aspect-ratio: auto;
+    min-height: 44rem;
+  }
+
+  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__content,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__content {
+    justify-content: center;
+    padding: 3.6rem;
+  }
+
+  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__title,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__title {
+    font-size: clamp(2.8rem, 3.2vw, 4rem);
+  }
+
+  .xula-premium-showcase--count-3 .xula-premium-showcase__media,
+  .xula-premium-showcase--count-4 .xula-premium-showcase__media,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__media,
+  .xula-premium-showcase--count-6 .xula-premium-showcase__media {
+    aspect-ratio: 5 / 4;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .xula-premium-showcase--count-1 .xula-premium-showcase__card {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    min-height: 68rem;
+  }
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__content {
+    padding: 6.4rem 5.6rem;
+  }
+
+  .xula-premium-showcase--count-2 .xula-premium-showcase__grid {
+    gap: 4rem;
+  }
+
+  .xula-premium-showcase--count-3 .xula-premium-showcase__grid,
+  .xula-premium-showcase--count-4 .xula-premium-showcase__grid,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__grid,
+  .xula-premium-showcase--count-6 .xula-premium-showcase__grid {
+    gap: 3.2rem;
+  }
+
+  /* ---------- 5 products: 2 large on top + 3 below ---------- */
+
+  .xula-premium-showcase--count-5 .xula-premium-showcase__grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item {
+    grid-column: span 2;
+  }
+
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(-n + 2) {
+    grid-column: span 3;
+  }
+
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__card {
+    display: flex;
+  }
+
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__media {
+    border-radius: calc(var(--xps-radius) - 1px) calc(var(--xps-radius) - 1px) 0 0;
+    aspect-ratio: 5 / 4;
+    min-height: 0;
+  }
+
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__content {
+    justify-content: flex-start;
+    padding: 2.4rem 2rem 2.8rem;
+  }
+
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__title {
+    font-size: clamp(2.2rem, 2.4vw, 2.8rem);
+  }
+
+  /* ---------- 6 products: 3 × 2 grid ---------- */
+
+  .xula-premium-showcase--count-6 .xula-premium-showcase__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* Narrow 3-up cards: stack the add-to-cart and details link */
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__actions,
+  .xula-premium-showcase--count-6 .xula-premium-showcase__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__submit,
+  .xula-premium-showcase--count-6 .xula-premium-showcase__submit {
+    width: 100%;
+    flex: none;
+  }
+}
+
+/* ---------------------------------------------------------
+   Reduced motion
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-premium-showcase *,
+  .xula-premium-showcase *::before,
+  .xula-premium-showcase *::after {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+
+  .xula-premium-showcase__card:hover .xula-premium-showcase__image {
+    transform: none;
+  }
+}

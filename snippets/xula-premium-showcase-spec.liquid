@@ -1,0 +1,32 @@
+{%- comment -%}
+  Renders one row of the Xula Premium Showcase spec sheet.
+  Accepts:
+  - label: {String} row label.
+  - text: {String} optional value text (e.g. "Medium").
+  - scale: {Number} optional 1–5 level rendered as a dot meter (0 hides it).
+
+  Usage:
+  {% render 'xula-premium-showcase-spec', label: 'Roast', text: 'Medium', scale: 3 %}
+{%- endcomment -%}
+
+{%- liquid
+  assign level = scale | default: 0 | at_least: 0 | at_most: 5
+-%}
+
+{%- if text != blank or level > 0 -%}
+  <div class="xula-premium-showcase__spec">
+    <dt class="xula-premium-showcase__spec-label xula-type--code xula-type--lot">{{ label }}</dt>
+    <dd class="xula-premium-showcase__spec-value">
+      {%- if text != blank -%}
+        <span class="xula-premium-showcase__spec-text">{{ text }}</span>
+      {%- endif -%}
+      {%- if level > 0 -%}
+        <span class="xula-premium-showcase__meter" role="img" aria-label="{{ label | escape }}: {{ level }} / 5">
+          {%- for i in (1..5) -%}
+            <span class="xula-premium-showcase__meter-dot{% if i <= level %} is-filled{% endif %}"></span>
+          {%- endfor -%}
+        </span>
+      {%- endif -%}
+    </dd>
+  </div>
+{%- endif -%}

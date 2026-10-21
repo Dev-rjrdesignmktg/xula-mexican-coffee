@@ -1,0 +1,28 @@
+{%- comment -%}
+  Outputs CSS custom properties that recolor a Xula Premium Showcase card.
+  Every color is optional; empty ones are skipped so the scheme/default applies.
+  Accepts:
+  - background: {Color} card background.
+  - text: {Color} card text (muted text and divider lines are derived from it).
+  - accent: {Color} details accent (meters, borders, chips, labels).
+  - button: {Color} button and selection color.
+  - button_text: {Color} button label color.
+
+  Usage:
+  {% capture style %}{% render 'xula-premium-showcase-card-style', background: bg, button: btn %}{% endcapture %}
+{%- endcomment -%}
+
+{%- if background != blank -%}--xps-card: {{ background }};{%- endif -%}
+{%- if text != blank -%}
+  --xps-ink: {{ text }};
+  --xps-text: {{ text | color_modify: 'alpha', 0.82 }};
+  --xps-muted: {{ text | color_modify: 'alpha', 0.62 }};
+  --xps-line: {{ text | color_modify: 'alpha', 0.14 }};
+{%- endif -%}
+{%- if accent != blank -%}--xps-gold: {{ accent }};{%- endif -%}
+{%- if button != blank -%}
+  --accent: {{ button }};
+  --accent-secondary: {{ button | color_darken: 8 }};
+  --xps-accent: {{ button }};
+{%- endif -%}
+{%- if button_text != blank -%}--xps-button-text: {{ button_text }};{%- endif -%}
