@@ -62,11 +62,40 @@
             "heading": "Coffee profile"
           }
         },
-        "text_8decqb": {
-          "type": "text",
+        "xula_process_storage_gtkBBk": {
+          "type": "xula_process_storage",
           "settings": {
-            "text": "Text block{{ product.metafields.shopify[\"care-instructions\"] | metafield_text: field: 'label' }}",
-            "text_style": "uppercase"
+            "process_heading": "Process",
+            "process_eyebrow": "From farm to cup",
+            "process_fallback": "none",
+            "washed_label": "Washed",
+            "washed_text": "The fruit is removed and the beans are fermented and washed before drying. Expect a clean, bright cup with crisp acidity.",
+            "honey_label": "Honey",
+            "honey_text": "The beans dry with part of the sticky fruit mucilage still attached. Expect natural sweetness, a round body and balanced acidity.",
+            "natural_label": "Natural",
+            "natural_text": "Whole coffee cherries sun-dry before hulling. Expect intense fruit, winey sweetness and a heavy body.",
+            "storage_heading": "Storage instructions",
+            "storage_open": false,
+            "tip_1_icon": "seal",
+            "tip_1_text": "Store in an airtight container or keep the valve bag tightly sealed.",
+            "tip_2_icon": "dark",
+            "tip_2_text": "Keep in a cool, dark, dry place away from heat and sunlight.",
+            "tip_3_icon": "no_fridge",
+            "tip_3_text": "Avoid the fridge — moisture and odors dull the flavor.",
+            "tip_4_icon": "clock",
+            "tip_4_text": "Enjoy within 4–6 weeks of opening; grind just before brewing.",
+            "color_bg": "",
+            "color_border": "",
+            "color_heading": "",
+            "color_text": "",
+            "color_eyebrow": "",
+            "color_accent": "",
+            "color_active_icon": "",
+            "color_washed": "",
+            "color_honey": "",
+            "color_natural": "",
+            "color_tip_bg": "",
+            "color_icon": ""
           }
         },
         "variant_picker": {
@@ -120,7 +149,7 @@
         "price",
         "text_HTUQPp",
         "xula_product_meta_n8XbNK",
-        "text_8decqb",
+        "xula_process_storage_gtkBBk",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
