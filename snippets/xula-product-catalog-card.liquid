@@ -29,8 +29,18 @@
   assign roast_display = roast_level
   assign roast_class = 'unspecified'
   if roast_level != blank
-    assign roast_class = roast_level | handleize
     assign roast_lower_check = roast_level | downcase
+    if roast_lower_check contains 'medium' and roast_lower_check contains 'dark'
+      assign roast_class = 'medium-dark'
+    elsif roast_lower_check contains 'medio' and roast_lower_check contains 'oscuro'
+      assign roast_class = 'medium-dark'
+    elsif roast_lower_check contains 'light' or roast_lower_check contains 'claro'
+      assign roast_class = 'light'
+    elsif roast_lower_check contains 'medium' or roast_lower_check contains 'medio'
+      assign roast_class = 'medium'
+    elsif roast_lower_check contains 'dark' or roast_lower_check contains 'oscuro'
+      assign roast_class = 'dark'
+    endif
     unless roast_lower_check contains 'roast'
       assign roast_display = roast_level | append: ' Roast'
     endunless
@@ -265,7 +275,13 @@
             data-xpc-variant-select
           >
             {%- for v in product.variants -%}
-              <option value="{{ v.id }}" {% if v.id == variant.id %}selected{% endif %} {% unless v.available %}disabled{% endunless %}>
+              <option
+                value="{{ v.id }}"
+                data-title="{{ v.title | escape }}"
+                data-price="{{ v.price | money | escape }}"
+                {% if v.id == variant.id %}selected{% endif %}
+                {% unless v.available %}disabled{% endunless %}
+              >
                 {{ v.title }} — {{ v.price | money }}{% unless v.available %} (Sold out){% endunless %}
               </option>
             {%- endfor -%}

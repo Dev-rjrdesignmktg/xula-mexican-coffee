@@ -26,7 +26,217 @@
     initGrid(root);
     root.querySelectorAll('[data-xpc-carousel]').forEach(initCarousel);
     root.querySelectorAll('[data-xpc-card]').forEach(initDetailsToggle);
+    root.querySelectorAll('[data-xpc-variant-select]').forEach(initVariantDropdown);
     root.querySelectorAll('[data-xpc-add-form]').forEach(initAddToCartForm);
+  }
+
+  /* -----------------------------------------------------
+     Variant dropdown — replaces the native <select> UI with
+     a branded listbox. The native select stays in the DOM
+     (visually hidden) as the source of truth, so the add to
+     cart logic keeps listening to its `change` event. The
+     panel is portalled to <body> because cards and the
+     carousel viewport clip overflow.
+     ----------------------------------------------------- */
+  function initVariantDropdown(select) {
+    if (select.dataset.xpcEnhanced) return;
+    select.dataset.xpcEnhanced = 'true';
+
+    const uid = select.id || `xpc-select-${Math.random().toString(36).slice(2, 8)}`;
+    const label = select.id ? document.querySelector(`label[for="${select.id}"]`) : null;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'xula-product-catalog__dropdown';
+    select.parentNode.insertBefore(wrapper, select);
+    wrapper.appendChild(select);
+    select.classList.add('is-enhanced');
+    select.tabIndex = -1;
+    select.setAttribute('aria-hidden', 'true');
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'xula-product-catalog__dropdown-trigger';
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.setAttribute('aria-controls', `${uid}-listbox`);
+    if (label) trigger.setAttribute('aria-label', label.textContent.trim());
+    trigger.innerHTML = `
+      <span class="xula-product-catalog__dropdown-value">
+        <span class="xula-product-catalog__dropdown-title"></span>
+        <span class="xula-product-catalog__dropdown-price"></span>
+      </span>
+      <svg class="xula-product-catalog__dropdown-chevron" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">
+        <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`;
+    wrapper.appendChild(trigger);
+
+    const list = document.createElement('ul');
+    list.className = 'xula-product-catalog__dropdown-list';
+    list.id = `${uid}-listbox`;
+    list.setAttribute('role', 'listbox');
+    list.tabIndex = -1;
+    list.hidden = true;
+    if (label) list.setAttribute('aria-label', label.textContent.trim());
+
+    const optionEls = Array.from(select.options).map((opt, i) => {
+      const title = opt.dataset.title || opt.textContent.trim();
+      const price = opt.dataset.price || '';
+      const li = document.createElement('li');
+      li.id = `${uid}-opt-${i}`;
+      li.className = 'xula-product-catalog__dropdown-option';
+      li.setAttribute('role', 'option');
+      li.dataset.index = String(i);
+      if (opt.disabled) li.setAttribute('aria-disabled', 'true');
+      li.innerHTML = `
+        <span class="xula-product-catalog__dropdown-check" aria-hidden="true"></span>
+        <span class="xula-product-catalog__dropdown-option-title"></span>
+        <span class="xula-product-catalog__dropdown-option-meta"></span>`;
+      li.querySelector('.xula-product-catalog__dropdown-option-title').textContent = title;
+      li.querySelector('.xula-product-catalog__dropdown-option-meta').textContent = opt.disabled
+        ? 'Sold out'
+        : price;
+      list.appendChild(li);
+      return li;
+    });
+
+    let activeIndex = select.selectedIndex;
+
+    const isEnabled = (i) => !select.options[i].disabled;
+
+    const render = () => {
+      const opt = select.options[select.selectedIndex];
+      trigger.querySelector('.xula-product-catalog__dropdown-title').textContent =
+        opt.dataset.title || opt.textContent.trim();
+      trigger.querySelector('.xula-product-catalog__dropdown-price').textContent =
+        opt.dataset.price || '';
+      optionEls.forEach((li, i) => {
+        li.setAttribute('aria-selected', String(i === select.selectedIndex));
+      });
+    };
+
+    const setActive = (i) => {
+      activeIndex = i;
+      optionEls.forEach((li, j) => li.classList.toggle('is-active', j === i));
+      list.setAttribute('aria-activedescendant', optionEls[i].id);
+      optionEls[i].scrollIntoView({ block: 'nearest' });
+    };
+
+    const position = () => {
+      const rect = trigger.getBoundingClientRect();
+      const gap = 6;
+      list.style.width = `${rect.width}px`;
+      list.style.left = `${rect.left}px`;
+      const listHeight = list.offsetHeight;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const openUp = spaceBelow < listHeight + gap && rect.top > spaceBelow;
+      list.classList.toggle('is-up', openUp);
+      list.style.top = openUp ? `${rect.top - listHeight - gap}px` : `${rect.bottom + gap}px`;
+    };
+
+    const onOutside = (event) => {
+      if (!wrapper.contains(event.target) && !list.contains(event.target)) close(false);
+    };
+    const onViewportChange = (event) => {
+      if (event && event.target === list) return;
+      close(false);
+    };
+
+    function open() {
+      if (!list.hidden) return;
+      document.body.appendChild(list);
+      list.hidden = false;
+      position();
+      requestAnimationFrame(() => list.classList.add('is-open'));
+      trigger.setAttribute('aria-expanded', 'true');
+      wrapper.classList.add('is-open');
+      setActive(select.selectedIndex);
+      list.focus({ preventScroll: true });
+      document.addEventListener('pointerdown', onOutside, true);
+      window.addEventListener('resize', onViewportChange);
+      window.addEventListener('scroll', onViewportChange, true);
+    }
+
+    function close(returnFocus) {
+      if (list.hidden) return;
+      list.classList.remove('is-open');
+      list.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      wrapper.classList.remove('is-open');
+      document.removeEventListener('pointerdown', onOutside, true);
+      window.removeEventListener('resize', onViewportChange);
+      window.removeEventListener('scroll', onViewportChange, true);
+      if (returnFocus) trigger.focus();
+    }
+
+    const choose = (i) => {
+      if (!isEnabled(i)) return;
+      if (select.selectedIndex !== i) {
+        select.selectedIndex = i;
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      render();
+      close(true);
+    };
+
+    const step = (from, dir) => {
+      let i = from;
+      for (let n = 0; n < optionEls.length; n++) {
+        i = (i + dir + optionEls.length) % optionEls.length;
+        if (isEnabled(i)) return i;
+      }
+      return from;
+    };
+
+    trigger.addEventListener('click', () => (list.hidden ? open() : close(true)));
+    trigger.addEventListener('keydown', (event) => {
+      if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) {
+        event.preventDefault();
+        open();
+      }
+    });
+
+    list.addEventListener('keydown', (event) => {
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault();
+          setActive(step(activeIndex, 1));
+          break;
+        case 'ArrowUp':
+          event.preventDefault();
+          setActive(step(activeIndex, -1));
+          break;
+        case 'Home':
+          event.preventDefault();
+          setActive(step(optionEls.length - 1, 1));
+          break;
+        case 'End':
+          event.preventDefault();
+          setActive(step(0, -1));
+          break;
+        case 'Enter':
+        case ' ':
+          event.preventDefault();
+          choose(activeIndex);
+          break;
+        case 'Escape':
+          event.preventDefault();
+          close(true);
+          break;
+        case 'Tab':
+          close(false);
+          break;
+      }
+    });
+
+    optionEls.forEach((li, i) => {
+      li.addEventListener('pointermove', () => {
+        if (isEnabled(i) && activeIndex !== i) setActive(i);
+      });
+      li.addEventListener('click', () => choose(i));
+    });
+
+    select.addEventListener('change', render);
+    render();
   }
 
   /* -----------------------------------------------------
