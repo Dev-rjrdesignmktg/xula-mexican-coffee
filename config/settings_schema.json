@@ -1445,6 +1445,12 @@
         "info": "t:settings_schema.cart.settings.cart_drawer.collection.info"
       },
       {
+        "type": "number",
+        "id": "xula_free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "info": "Shows a progress bar in the cart drawer. Amount in the store's currency. Leave empty or 0 to hide it."
+      },
+      {
         "type": "color_scheme",
         "id": "cart_color_scheme",
         "label": "t:sections.all.colors.label",
