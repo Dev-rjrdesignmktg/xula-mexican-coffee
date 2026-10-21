@@ -127,6 +127,7 @@
 }
 
 .xula-catalog__slide {
+  display: flex;
   flex: 0 0 auto;
   width: calc((100% - (var(--xula-per-view) - 1) * var(--xula-gap)) / var(--xula-per-view));
 }
@@ -214,6 +215,7 @@
 .xula-catalog__card {
   position: relative;
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   border-radius: var(--radius-sm);
   overflow: hidden;
@@ -411,22 +413,96 @@
   gap: 10px;
 }
 
+.xula-catalog__glass-options {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
 .xula-catalog__glass-select-label {
-  font-size: .95rem;
+  padding: 0;
+  margin-bottom: 8px;
+  font-size: 1.15rem;
   text-transform: uppercase;
   letter-spacing: .06em;
   color: var(--bg-tertiary);
 }
 
-.xula-catalog__glass-select {
+/* Variant pills — branded replacement for the native select */
+
+.xula-catalog__glass-pills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 6px;
+}
+
+.xula-catalog__glass-pill {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.xula-catalog__glass-pill-input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.xula-catalog__glass-pill-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   font-family: var(--secondary-font);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  line-height: 1.2;
+  color: #fff;
+  background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .28);
+  border-radius: 1.4rem;
+  padding: .55rem .9rem;
+  text-align: center;
+  overflow-wrap: anywhere;
+  transition: background-color .25s ease, border-color .25s ease, color .25s ease, box-shadow .25s ease;
+}
+
+.xula-catalog__glass-pill:hover .xula-catalog__glass-pill-text {
+  border-color: var(--bg-tertiary);
+  background: rgba(226, 181, 130, .16);
+}
+
+.xula-catalog__glass-pill-input:checked + .xula-catalog__glass-pill-text {
   color: var(--bg-secondary);
-  background: rgba(255, 255, 255, .92);
-  border: none;
-  border-radius: .6rem;
-  padding: .6rem .7rem;
+  background: var(--bg-tertiary);
+  border-color: var(--bg-tertiary);
+  box-shadow: 0 4px 14px rgba(226, 181, 130, .28);
+}
+
+.xula-catalog__glass-pill-input:focus-visible + .xula-catalog__glass-pill-text {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.xula-catalog__glass-pill.is-sold-out {
+  cursor: not-allowed;
+}
+
+.xula-catalog__glass-pill.is-sold-out .xula-catalog__glass-pill-text {
+  opacity: .4;
+  text-decoration: line-through;
+  background: transparent;
+  border-style: dashed;
+}
+
+.xula-catalog__glass-compare[hidden] {
+  display: none;
 }
 
 .xula-catalog__glass-submit {
@@ -462,6 +538,9 @@
    --------------------------------------------------------- */
 
 .xula-catalog__info {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
   padding: 14px 4px 4px;
 }
 
@@ -493,6 +572,7 @@
 .xula-catalog__price {
   display: flex;
   align-items: baseline;
+  margin-top: auto;
   gap: 8px;
   font-family: var(--font-code-family);
   font-size: 1.7rem;

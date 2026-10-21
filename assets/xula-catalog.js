@@ -215,8 +215,19 @@
 
     if (!form || !submitBtn) return;
 
-    variantSelect?.addEventListener('change', () => {
-      if (variantInput) variantInput.value = variantSelect.value;
+    const priceEl = glass.querySelector('[data-xula-glass-price]');
+    const compareEl = glass.querySelector('[data-xula-glass-compare]');
+
+    // Pill radios drive the hidden `id` input and the panel price.
+    variantSelect?.addEventListener('change', (event) => {
+      const radio = event.target;
+      if (!radio.matches('input[type="radio"]')) return;
+      if (variantInput) variantInput.value = radio.value;
+      if (priceEl && radio.dataset.price) priceEl.textContent = radio.dataset.price;
+      if (compareEl) {
+        compareEl.textContent = radio.dataset.compare || '';
+        compareEl.hidden = !radio.dataset.compare;
+      }
     });
 
     form.addEventListener('submit', (event) => {
@@ -231,6 +242,9 @@
 
       const formData = new FormData(form);
       formData.set('id', variantInput ? variantInput.value : formData.get('id'));
+      variantSelect
+        ?.querySelectorAll('input[type="radio"]')
+        .forEach((radio) => formData.delete(radio.name));
 
       if (cart && typeof cart.getSectionsToRender === 'function') {
         formData.append('sections', cart.getSectionsToRender().map((section) => section.id));

@@ -220,19 +220,14 @@
                                   {%- endif -%}
                                 </dd>
                               </div>
-                            {%- elsif product.variants.size > 1 -%}
-                              <div class="xula-catalog__glass-spec">
-                                <dt>Presentations</dt>
-                                <dd>{{ product.options_with_values.first.values | join: ', ' }}</dd>
-                              </div>
                             {%- endif -%}
                           </dl>
 
                           <div class="xula-catalog__glass-price">
-                            {{ variant.price | money }}
-                            {%- if product.compare_at_price > variant.price -%}
-                              <s class="xula-catalog__glass-compare">{{ product.compare_at_price | money }}</s>
-                            {%- endif -%}
+                            <span data-xula-glass-price>{{ variant.price | money }}</span>
+                            <s class="xula-catalog__glass-compare" data-xula-glass-compare{% unless variant.compare_at_price > variant.price %} hidden{% endunless %}>
+                              {%- if variant.compare_at_price > variant.price -%}{{ variant.compare_at_price | money }}{%- endif -%}
+                            </s>
                           </div>
 
                           <form
@@ -245,20 +240,31 @@
                             <input type="hidden" name="quantity" value="1">
 
                             {%- if product.variants.size > 1 -%}
-                              <label class="xula-catalog__glass-select-label" for="{{ catalog_id }}-select-{{ product.id }}">
-                                Choose option
-                              </label>
-                              <select
-                                id="{{ catalog_id }}-select-{{ product.id }}"
-                                class="xula-catalog__glass-select"
-                                data-xula-variant-select
-                              >
-                                {%- for v in product.variants -%}
-                                  <option value="{{ v.id }}" {% if v.id == variant.id %}selected{% endif %} {% unless v.available %}disabled{% endunless %}>
-                                    {{ v.title }} — {{ v.price | money }}{% unless v.available %} (Sold out){% endunless %}
-                                  </option>
-                                {%- endfor -%}
-                              </select>
+                              <fieldset class="xula-catalog__glass-options" data-xula-variant-select>
+                                <legend class="xula-catalog__glass-select-label">
+                                  {%- if product.options.size == 1 -%}{{ product.options.first }}{%- else -%}Choose option{%- endif -%}
+                                </legend>
+                                <div class="xula-catalog__glass-pills">
+                                  {%- for v in product.variants -%}
+                                    <label class="xula-catalog__glass-pill{% unless v.available %} is-sold-out{% endunless %}">
+                                      <input
+                                        type="radio"
+                                        class="xula-catalog__glass-pill-input"
+                                        name="{{ catalog_id }}-variant-{{ product.id }}"
+                                        value="{{ v.id }}"
+                                        data-price="{{ v.price | money | escape }}"
+                                        {%- if v.compare_at_price > v.price %} data-compare="{{ v.compare_at_price | money | escape }}"{% endif %}
+                                        {% if v.id == variant.id %}checked{% endif %}
+                                        {% unless v.available %}disabled{% endunless %}
+                                      >
+                                      <span class="xula-catalog__glass-pill-text">
+                                        {{- v.title -}}
+                                        {%- unless v.available %}<span class="visually-hidden"> (Sold out)</span>{% endunless -%}
+                                      </span>
+                                    </label>
+                                  {%- endfor -%}
+                                </div>
+                              </fieldset>
                             {%- endif -%}
 
                             <button
