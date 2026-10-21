@@ -1,0 +1,962 @@
+{{ 'xula-premium-showcase.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-premium-showcase.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign showcase_id = 'XulaPremiumShowcase-' | append: section.id
+  assign collection = section.settings.collection
+  assign max_products = section.settings.max_products | default: 6
+
+  assign product_count = 0
+  if collection != blank
+    assign product_count = collection.products.size
+  endif
+  if product_count > max_products
+    assign product_count = max_products
+  endif
+
+  case product_count
+    when 1
+      assign image_sizes = '(min-width: 990px) 55vw, (min-width: 750px) 50vw, calc(100vw - 32px)'
+      assign excerpt_words = 48
+    when 2
+      assign image_sizes = '(min-width: 750px) 45vw, calc(100vw - 32px)'
+      assign excerpt_words = 26
+    else
+      assign image_sizes = '(min-width: 990px) 30vw, (min-width: 750px) 45vw, calc(100vw - 32px)'
+      assign excerpt_words = 18
+  endcase
+
+  assign ld_items = ''
+
+  assign card_scheme_class = ''
+  if section.settings.use_card_color_scheme and section.settings.card_color_scheme != blank
+    assign card_scheme_class = ' xula-premium-showcase__card--scheme color-' | append: section.settings.card_color_scheme.id
+  endif
+-%}
+
+{%- capture section_card_style -%}
+  {%- render 'xula-premium-showcase-card-style',
+    background: section.settings.card_background,
+    text: section.settings.card_text,
+    accent: section.settings.card_accent,
+    button: section.settings.card_button,
+    button_text: section.settings.card_button_text
+  -%}
+{%- endcapture -%}
+
+<section
+  id="{{ showcase_id }}"
+  class="xula-premium-showcase xula-premium-showcase--count-{{ product_count }} xula-premium-showcase--bg-{{ section.settings.background_style }}{% if section.settings.accent_border %} xula-premium-showcase--accent-border{% endif %}"
+  aria-labelledby="{{ showcase_id }}-heading"
+  data-xula-premium-showcase
+  style="--xps-pad-top: {{ section.settings.padding_top }}px; --xps-pad-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="xula-premium-showcase__inner page-width">
+    <header class="xula-premium-showcase__intro">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="xula-premium-showcase__eyebrow xula-type--code xula-type--lot">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+
+      <h2 id="{{ showcase_id }}-heading" class="xula-premium-showcase__heading">
+        {{- section.settings.heading | default: collection.title | default: 'Premium collection' -}}
+      </h2>
+
+      {%- if section.settings.subheading != blank -%}
+        <div class="xula-premium-showcase__subheading">{{ section.settings.subheading }}</div>
+      {%- endif -%}
+    </header>
+
+    {%- if product_count > 0 -%}
+      <ul class="xula-premium-showcase__grid" role="list">
+        {%- for product in collection.products limit: product_count -%}
+          {%- liquid
+            assign card_id = showcase_id | append: '-' | append: product.id
+            assign form_id = card_id | append: '-form'
+            assign current_variant = product.selected_or_first_available_variant
+            assign featured_media = product.featured_media
+            assign secondary_media = product.media[1]
+
+            assign sheet = blank
+            for block in section.blocks
+              if block.type == 'spec_sheet' and block.settings.product.id == product.id
+                assign sheet = block
+                break
+              endif
+            endfor
+
+            assign card_class = card_scheme_class
+            if sheet.settings.use_color_scheme and sheet.settings.color_scheme != blank
+              assign card_class = ' xula-premium-showcase__card--scheme color-' | append: sheet.settings.color_scheme.id
+            endif
+          -%}
+          {%- capture card_style -%}
+            {{- section_card_style -}}
+            {%- if sheet != blank -%}
+              {%- render 'xula-premium-showcase-card-style',
+                background: sheet.settings.card_background,
+                text: sheet.settings.card_text,
+                accent: sheet.settings.card_accent,
+                button: sheet.settings.card_button,
+                button_text: sheet.settings.card_button_text
+              -%}
+            {%- endif -%}
+          {%- endcapture -%}
+          {%- liquid
+            assign roast_level = sheet.settings.roast_text | default: product.metafields.custom.roast_level.value
+            assign roast_scale = sheet.settings.roast_scale | default: 0
+            assign intensity = sheet.settings.intensity | default: 0
+            if intensity == 0
+              assign intensity = product.metafields.custom.intensity.value | default: 0
+            endif
+            assign body = sheet.settings.body_text | default: product.metafields.custom.body.value
+            assign body_scale = sheet.settings.body_scale | default: 0
+            assign acidity = sheet.settings.acidity_text | default: product.metafields.custom.acidity.value
+            assign acidity_scale = sheet.settings.acidity_scale | default: 0
+            assign tasting_notes = sheet.settings.notes | default: product.metafields.custom.note.value | default: product.metafields.custom.tasting_notes.value
+            assign origin = sheet.settings.origin
+            assign altitude = sheet.settings.altitude
+            assign process = sheet.settings.process
+            assign variety = sheet.settings.variety
+            assign sheet_title = sheet.settings.title | default: section.settings.sheet_title
+
+            assign has_profile = false
+            if roast_level != blank or roast_scale > 0 or intensity > 0 or body != blank or body_scale > 0 or acidity != blank or acidity_scale > 0
+              assign has_profile = true
+            endif
+            assign has_origin = false
+            if origin != blank or altitude != blank or process != blank or variety != blank
+              assign has_origin = true
+            endif
+
+            assign selling_plan_group = product.selling_plan_groups.first
+            assign selling_plan = selling_plan_group.selling_plans.first
+            assign show_subscription = false
+            if section.settings.show_subscription and selling_plan != blank
+              assign show_subscription = true
+            endif
+
+            assign current_allocation = blank
+            if show_subscription
+              for allocation in current_variant.selling_plan_allocations
+                if allocation.selling_plan.id == selling_plan.id
+                  assign current_allocation = allocation
+                  break
+                endif
+              endfor
+            endif
+
+            assign discount_percent = 0
+            if current_allocation != blank and current_variant.price > 0
+              assign discount_percent = current_variant.price | minus: current_allocation.price | times: 100.0 | divided_by: current_variant.price | round
+            endif
+
+            assign image_alt = featured_media.alt | default: product.title
+          -%}
+
+          {%- capture ld_item -%}
+            {
+              "@type": "ListItem",
+              "position": {{ forloop.index }},
+              "item": {
+                "@type": "Product",
+                "name": {{ product.title | json }},
+                "url": {{ shop.url | append: product.url | json }},
+                {%- if featured_media -%}
+                  "image": {{ featured_media | image_url: width: 1200 | prepend: 'https:' | json }},
+                {%- endif -%}
+                "description": {{ product.description | strip_html | truncatewords: 40 | json }},
+                "sku": {{ current_variant.sku | json }},
+                "brand": { "@type": "Brand", "name": {{ product.vendor | default: shop.name | json }} },
+                "offers": {
+                  "@type": "Offer",
+                  "priceCurrency": {{ cart.currency.iso_code | json }},
+                  "price": {{ current_variant.price | divided_by: 100.0 | json }},
+                  "availability": "https://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}",
+                  "url": {{ shop.url | append: product.url | json }}
+                }
+              }
+            }
+          {%- endcapture -%}
+          {%- liquid
+            unless forloop.first
+              assign ld_items = ld_items | append: ','
+            endunless
+            assign ld_items = ld_items | append: ld_item
+          -%}
+
+          <li class="xula-premium-showcase__item">
+            <article
+              id="{{ card_id }}"
+              class="xula-premium-showcase__card{{ card_class }}{% unless current_variant.available %} is-sold-out{% endunless %}"
+              {% if card_style != blank %}style="{{ card_style | strip_newlines | strip }}"{% endif %}
+              aria-labelledby="{{ card_id }}-title"
+              data-xula-showcase-card
+            >
+              <a
+                href="{{ product.url }}"
+                class="xula-premium-showcase__media{% if secondary_media and product_count > 1 %} xula-premium-showcase__media--has-hover{% endif %}"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                {%- if featured_media -%}
+                  {{
+                    featured_media
+                    | image_url: width: 1600
+                    | image_tag:
+                      class: 'xula-premium-showcase__image xula-premium-showcase__image--primary',
+                      widths: '400, 600, 800, 1000, 1200, 1600',
+                      sizes: image_sizes,
+                      loading: 'lazy',
+                      alt: image_alt
+                  }}
+                {%- else -%}
+                  {{ 'product-apparel-1' | placeholder_svg_tag: 'xula-premium-showcase__image xula-premium-showcase__image--placeholder' }}
+                {%- endif -%}
+
+                {%- if secondary_media and product_count > 1 -%}
+                  {{
+                    secondary_media
+                    | image_url: width: 1200
+                    | image_tag:
+                      class: 'xula-premium-showcase__image xula-premium-showcase__image--secondary',
+                      widths: '400, 600, 800, 1200',
+                      sizes: image_sizes,
+                      loading: 'lazy',
+                      alt: ''
+                  }}
+                {%- endif -%}
+
+                {%- if roast_level != blank -%}
+                  <span class="xula-premium-showcase__tag xula-type--code xula-type--lot">{{ roast_level }}</span>
+                {%- endif -%}
+
+                {%- if product.compare_at_price > product.price -%}
+                  <span class="xula-premium-showcase__tag xula-premium-showcase__tag--sale xula-type--code xula-type--lot">
+                    {{- section.settings.sale_label -}}
+                  </span>
+                {%- endif -%}
+              </a>
+
+              <div class="xula-premium-showcase__content">
+                {%- if product_count == 1 and product.vendor != blank -%}
+                  <p class="xula-premium-showcase__kicker xula-type--code xula-type--lot">{{ product.vendor }}</p>
+                {%- endif -%}
+
+                <h3 id="{{ card_id }}-title" class="xula-premium-showcase__title">
+                  <a href="{{ product.url }}" class="xula-premium-showcase__title-link">{{ product.title }}</a>
+                </h3>
+
+                {%- if sheet.settings.description != blank -%}
+                  <div class="xula-premium-showcase__excerpt xula-premium-showcase__excerpt--custom">
+                    {{- sheet.settings.description -}}
+                  </div>
+                {%- elsif section.settings.show_excerpt and product.description != blank -%}
+                  <p class="xula-premium-showcase__excerpt">
+                    {{- product.description | strip_html | truncatewords: excerpt_words -}}
+                  </p>
+                {%- endif -%}
+
+                {%- if section.settings.show_metrics -%}
+                  {%- if has_profile or has_origin or tasting_notes != blank -%}
+                    <div
+                      class="xula-premium-showcase__sheet"
+                      role="group"
+                      aria-labelledby="{{ card_id }}-sheet-title"
+                      {% if sheet != blank %}{{ sheet.shopify_attributes }}{% endif %}
+                    >
+                      <p id="{{ card_id }}-sheet-title" class="xula-premium-showcase__sheet-title xula-type--code xula-type--lot">
+                        {{- sheet_title -}}
+                      </p>
+
+                      {%- if has_profile -%}
+                        <dl class="xula-premium-showcase__specs">
+                          {%- render 'xula-premium-showcase-spec', label: section.settings.intensity_label, scale: intensity -%}
+                          {%- render 'xula-premium-showcase-spec', label: section.settings.roast_label, text: roast_level, scale: roast_scale -%}
+                          {%- render 'xula-premium-showcase-spec', label: section.settings.body_label, text: body, scale: body_scale -%}
+                          {%- render 'xula-premium-showcase-spec', label: section.settings.acidity_label, text: acidity, scale: acidity_scale -%}
+                        </dl>
+                      {%- endif -%}
+
+                      {%- if tasting_notes != blank -%}
+                        <div class="xula-premium-showcase__flavor">
+                          <p class="xula-premium-showcase__spec-label xula-type--code xula-type--lot" id="{{ card_id }}-notes-label">
+                            {{- section.settings.notes_label -}}
+                          </p>
+                          <ul class="xula-premium-showcase__chips" role="list" aria-labelledby="{{ card_id }}-notes-label">
+                            {%- assign note_list = tasting_notes | split: ',' -%}
+                            {%- for note in note_list -%}
+                              {%- assign note_clean = note | strip -%}
+                              {%- if note_clean != blank -%}
+                                <li class="xula-premium-showcase__chip">{{ note_clean }}</li>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                      {%- endif -%}
+
+                      {%- if has_origin -%}
+                        <dl class="xula-premium-showcase__origin">
+                          {%- if origin != blank -%}
+                            <div class="xula-premium-showcase__origin-item">
+                              <dt class="xula-premium-showcase__spec-label xula-type--code xula-type--lot">{{ section.settings.origin_label }}</dt>
+                              <dd class="xula-premium-showcase__origin-value">{{ origin }}</dd>
+                            </div>
+                          {%- endif -%}
+                          {%- if altitude != blank -%}
+                            <div class="xula-premium-showcase__origin-item">
+                              <dt class="xula-premium-showcase__spec-label xula-type--code xula-type--lot">{{ section.settings.altitude_label }}</dt>
+                              <dd class="xula-premium-showcase__origin-value xula-type--code">{{ altitude }}</dd>
+                            </div>
+                          {%- endif -%}
+                          {%- if process != blank -%}
+                            <div class="xula-premium-showcase__origin-item">
+                              <dt class="xula-premium-showcase__spec-label xula-type--code xula-type--lot">{{ section.settings.process_label }}</dt>
+                              <dd class="xula-premium-showcase__origin-value">{{ process }}</dd>
+                            </div>
+                          {%- endif -%}
+                          {%- if variety != blank -%}
+                            <div class="xula-premium-showcase__origin-item">
+                              <dt class="xula-premium-showcase__spec-label xula-type--code xula-type--lot">{{ section.settings.variety_label }}</dt>
+                              <dd class="xula-premium-showcase__origin-value">{{ variety }}</dd>
+                            </div>
+                          {%- endif -%}
+                        </dl>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                {%- endif -%}
+
+                <form
+                  id="{{ form_id }}"
+                  class="xula-premium-showcase__buybox"
+                  method="post"
+                  action="{{ routes.cart_add_url }}"
+                  accept-charset="UTF-8"
+                  enctype="multipart/form-data"
+                  novalidate
+                  data-xula-showcase-form
+                >
+                  <input type="hidden" name="form_type" value="product">
+                  <input type="hidden" name="utf8" value="✓">
+
+                  <div class="xula-premium-showcase__price" data-xula-showcase-price-wrap>
+                    <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+                    <span class="xula-premium-showcase__price-current xula-type--code" data-xula-showcase-price>
+                      {{- current_variant.price | money -}}
+                    </span>
+                    <s
+                      class="xula-premium-showcase__price-compare xula-type--code"
+                      data-xula-showcase-compare
+                      {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}
+                    >
+                      {{- current_variant.compare_at_price | money -}}
+                    </s>
+                  </div>
+
+                  {%- if product.has_only_default_variant -%}
+                    <input type="hidden" name="id" value="{{ current_variant.id }}" data-xula-showcase-variant>
+                  {%- else -%}
+                    <div class="xula-premium-showcase__field">
+                      <label id="{{ card_id }}-variant-label" class="xula-premium-showcase__field-label xula-type--code xula-type--lot" for="{{ card_id }}-variant">
+                        {{- product.options | join: ' / ' -}}
+                      </label>
+                      <xula-showcase-select class="xula-premium-showcase__select-wrap">
+                        <select id="{{ card_id }}-variant" class="xula-premium-showcase__select" name="id" data-xula-showcase-variant>
+                          {%- for variant in product.variants -%}
+                            <option
+                              value="{{ variant.id }}"
+                              data-title="{{ variant.title | escape }}"
+                              {% if variant.id == current_variant.id %}selected{% endif %}
+                              {% unless variant.available %}disabled{% endunless %}
+                            >
+                              {{ variant.title }} — {% if variant.available %}{{ variant.price | money }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}
+                            </option>
+                          {%- endfor -%}
+                        </select>
+                        <svg class="xula-premium-showcase__select-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">
+                          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                        <button
+                          type="button"
+                          id="{{ card_id }}-variant-toggle"
+                          class="xula-premium-showcase__dropdown-toggle"
+                          aria-haspopup="listbox"
+                          aria-expanded="false"
+                          aria-controls="{{ card_id }}-variant-listbox"
+                          aria-labelledby="{{ card_id }}-variant-label {{ card_id }}-variant-toggle"
+                          data-dropdown-toggle
+                        >
+                          <span class="xula-premium-showcase__dropdown-value" data-dropdown-value>{{ current_variant.title }}</span>
+                          <span class="xula-premium-showcase__dropdown-price xula-type--code" data-dropdown-price>
+                            {{- current_variant.price | money -}}
+                          </span>
+                          <span class="xula-premium-showcase__dropdown-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="14" height="14" focusable="false">
+                              <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </span>
+                        </button>
+
+                        <ul
+                          id="{{ card_id }}-variant-listbox"
+                          class="xula-premium-showcase__dropdown-list"
+                          role="listbox"
+                          tabindex="-1"
+                          aria-labelledby="{{ card_id }}-variant-label"
+                          hidden
+                          data-dropdown-list
+                        >
+                          {%- for variant in product.variants -%}
+                            <li
+                              id="{{ card_id }}-variant-option-{{ forloop.index0 }}"
+                              class="xula-premium-showcase__dropdown-option"
+                              role="option"
+                              aria-selected="{% if variant.id == current_variant.id %}true{% else %}false{% endif %}"
+                              {% unless variant.available %}aria-disabled="true"{% endunless %}
+                              data-dropdown-option
+                            >
+                              <span class="xula-premium-showcase__dropdown-option-title">{{ variant.title }}</span>
+                              <span class="xula-premium-showcase__dropdown-option-price xula-type--code">
+                                {%- if variant.available -%}
+                                  {{- variant.price | money -}}
+                                {%- else -%}
+                                  {{- 'products.product.sold_out' | t -}}
+                                {%- endif -%}
+                              </span>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </xula-showcase-select>
+                    </div>
+                  {%- endif -%}
+
+                  {%- if show_subscription -%}
+                    <fieldset class="xula-premium-showcase__plans" data-xula-showcase-plans>
+                      <legend class="xula-premium-showcase__field-label xula-type--code xula-type--lot">
+                        {{- section.settings.plan_legend -}}
+                      </legend>
+
+                      <div class="xula-premium-showcase__plan">
+                        <input
+                          type="radio"
+                          id="{{ card_id }}-plan-onetime"
+                          class="xula-premium-showcase__plan-input"
+                          name="selling_plan"
+                          value=""
+                          {% unless section.settings.default_to_subscription %}checked{% endunless %}
+                          data-xula-showcase-plan="onetime"
+                        >
+                        <label class="xula-premium-showcase__plan-label" for="{{ card_id }}-plan-onetime">
+                          <span class="xula-premium-showcase__plan-name">{{ section.settings.onetime_label }}</span>
+                          <span class="xula-premium-showcase__plan-price xula-type--code" data-xula-showcase-plan-price="onetime">
+                            {{- current_variant.price | money -}}
+                          </span>
+                        </label>
+                      </div>
+
+                      <div class="xula-premium-showcase__plan xula-premium-showcase__plan--subscribe">
+                        <input
+                          type="radio"
+                          id="{{ card_id }}-plan-subscribe"
+                          class="xula-premium-showcase__plan-input"
+                          name="selling_plan"
+                          value="{{ selling_plan.id }}"
+                          {% if section.settings.default_to_subscription %}checked{% endif %}
+                          {% if current_allocation == blank %}disabled{% endif %}
+                          data-xula-showcase-plan="subscribe"
+                        >
+                        <label class="xula-premium-showcase__plan-label" for="{{ card_id }}-plan-subscribe">
+                          <span class="xula-premium-showcase__plan-name">
+                            {{ section.settings.subscribe_label }}
+                            <span
+                              class="xula-premium-showcase__plan-badge xula-type--code"
+                              data-xula-showcase-plan-badge
+                              {% if discount_percent <= 0 %}hidden{% endif %}
+                            >
+                              -{{ discount_percent }}%
+                            </span>
+                          </span>
+                          {%- if selling_plan.name != blank -%}
+                            <span class="xula-premium-showcase__plan-meta">{{ selling_plan.name }}</span>
+                          {%- endif -%}
+                          <span class="xula-premium-showcase__plan-price xula-type--code" data-xula-showcase-plan-price="subscribe">
+                            {{- current_allocation.price | default: current_variant.price | money -}}
+                          </span>
+                        </label>
+                      </div>
+                    </fieldset>
+                  {%- endif -%}
+
+                  <div class="xula-premium-showcase__actions">
+                    <button
+                      type="submit"
+                      name="add"
+                      class="xula-btn xula-premium-showcase__submit"
+                      data-xula-showcase-submit
+                      {% unless current_variant.available %}aria-disabled="true"{% endunless %}
+                      aria-describedby="{{ card_id }}-title"
+                    >
+                      <span class="xula-premium-showcase__submit-text" data-xula-showcase-submit-text>
+                        {%- if current_variant.available -%}
+                          {{- section.settings.add_label -}}
+                        {%- else -%}
+                          {{- 'products.product.sold_out' | t -}}
+                        {%- endif -%}
+                      </span>
+                      <span class="xula-premium-showcase__spinner" aria-hidden="true"></span>
+                    </button>
+
+                    {%- if section.settings.show_details_link -%}
+                      <a href="{{ product.url }}" class="xula-btn--secondary xula-premium-showcase__details">
+                        <span>{{ section.settings.details_label }}</span>
+                        <span class="visually-hidden">: {{ product.title }}</span>
+                        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+                          <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </a>
+                    {%- endif -%}
+                  </div>
+
+                  <p class="xula-premium-showcase__message" role="status" aria-live="polite" data-xula-showcase-message></p>
+
+                  <script type="application/json" data-xula-showcase-data>
+                    {
+                      "addLabel": {{ section.settings.add_label | json }},
+                      "addedLabel": {{ section.settings.added_label | json }},
+                      "soldOutLabel": {{ 'products.product.sold_out' | t | json }},
+                      "variants": {
+                        {%- for variant in product.variants -%}
+                          {%- liquid
+                            assign v_allocation = blank
+                            if show_subscription
+                              for allocation in variant.selling_plan_allocations
+                                if allocation.selling_plan.id == selling_plan.id
+                                  assign v_allocation = allocation
+                                  break
+                                endif
+                              endfor
+                            endif
+                            assign v_discount = 0
+                            if v_allocation != blank and variant.price > 0
+                              assign v_discount = variant.price | minus: v_allocation.price | times: 100.0 | divided_by: variant.price | round
+                            endif
+                          -%}
+                          "{{ variant.id }}": {
+                            "available": {{ variant.available | json }},
+                            "price": {{ variant.price | money | json }},
+                            "compare": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %},
+                            "subscribePrice": {% if v_allocation != blank %}{{ v_allocation.price | money | json }}{% else %}null{% endif %},
+                            "discount": {{ v_discount }}
+                          }{% unless forloop.last %},{% endunless %}
+                        {%- endfor -%}
+                      }
+                    }
+                  </script>
+                </form>
+              </div>
+            </article>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if section.settings.show_collection_link and collection.url != blank -%}
+        <div class="xula-premium-showcase__footer">
+          <a href="{{ collection.url }}" class="xula-btn--secondary">
+            <span>{{ section.settings.collection_link_label }}</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+              <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      {%- endif -%}
+
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": {{ section.settings.heading | default: collection.title | json }},
+          "url": {{ shop.url | append: collection.url | json }},
+          "numberOfItems": {{ product_count }},
+          "itemListElement": [{{ ld_items }}]
+        }
+      </script>
+    {%- else -%}
+      <div class="xula-premium-showcase__empty">
+        {%- if request.design_mode -%}
+          <p>Select a collection with 1 to 6 products to preview the showcase.</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Xula Premium Showcase",
+  "tag": "div",
+  "class": "section-xula-premium-showcase",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Designed for 1 to 6 products. Layout adapts automatically."
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Maximum products",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Limited edition"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Leave blank to use the collection title.",
+      "default": "Premium Collection"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Small-lot Mexican coffees, roasted to order and selected for their character.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "cream", "label": "Cream" },
+        { "value": "gold", "label": "Gold accent" },
+        { "value": "espresso", "label": "Espresso (dark)" }
+      ],
+      "default": "cream"
+    },
+    {
+      "type": "checkbox",
+      "id": "accent_border",
+      "label": "Show accent border on cards",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Card colors",
+      "info": "Pick a theme color scheme for the cards. Custom colors below override the scheme."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_card_color_scheme",
+      "label": "Use a color scheme for cards",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "card_color_scheme",
+      "label": "Card color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "info": "Leave empty to use the scheme or default."
+    },
+    {
+      "type": "color",
+      "id": "card_text",
+      "label": "Card text"
+    },
+    {
+      "type": "color",
+      "id": "card_accent",
+      "label": "Details accent",
+      "info": "Meters, borders, chips and labels."
+    },
+    {
+      "type": "color",
+      "id": "card_button",
+      "label": "Button and selection color"
+    },
+    {
+      "type": "color",
+      "id": "card_button_text",
+      "label": "Button text"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Product details"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_metrics",
+      "label": "Show spec sheet",
+      "info": "Add a \"Product card\" block per product. Empty fields fall back to metafields custom.roast_level, custom.intensity, custom.body, custom.acidity and custom.note.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show description excerpt",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subscription",
+      "label": "Show one-time / subscription selector",
+      "info": "Only shown for products with a selling plan.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "default_to_subscription",
+      "label": "Preselect subscription",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_details_link",
+      "label": "Show product details link",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_link",
+      "label": "Show collection link",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    { "type": "text", "id": "sheet_title", "label": "Spec sheet title", "default": "Spec sheet" },
+    { "type": "text", "id": "roast_label", "label": "Roast label", "default": "Roast" },
+    { "type": "text", "id": "intensity_label", "label": "Intensity label", "default": "Intensity" },
+    { "type": "text", "id": "body_label", "label": "Body label", "default": "Body" },
+    { "type": "text", "id": "acidity_label", "label": "Acidity label", "default": "Acidity" },
+    { "type": "text", "id": "notes_label", "label": "Tasting notes label", "default": "Tasting notes" },
+    { "type": "text", "id": "origin_label", "label": "Origin label", "default": "Origin" },
+    { "type": "text", "id": "altitude_label", "label": "Altitude label", "default": "Altitude" },
+    { "type": "text", "id": "process_label", "label": "Process label", "default": "Process" },
+    { "type": "text", "id": "variety_label", "label": "Variety label", "default": "Variety" },
+    { "type": "text", "id": "plan_legend", "label": "Purchase option legend", "default": "Purchase option" },
+    { "type": "text", "id": "onetime_label", "label": "One-time label", "default": "One-time purchase" },
+    { "type": "text", "id": "subscribe_label", "label": "Subscription label", "default": "Subscribe & Save" },
+    { "type": "text", "id": "add_label", "label": "Add to cart label", "default": "Add to cart" },
+    { "type": "text", "id": "added_label", "label": "Added label", "default": "Added ✓" },
+    { "type": "text", "id": "sale_label", "label": "Sale badge label", "default": "Sale" },
+    { "type": "text", "id": "details_label", "label": "Details link label", "default": "View details" },
+    { "type": "text", "id": "collection_link_label", "label": "Collection link label", "default": "Shop the collection" }
+  ],
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "spec_sheet",
+      "name": "Product card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "The card in this collection that uses this spec sheet."
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Custom description",
+          "info": "Replaces the product description on this card and is shown in full (not truncated)."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Sheet title",
+          "info": "Leave blank to use the section default."
+        },
+        {
+          "type": "header",
+          "content": "Card colors",
+          "info": "Override the section card colors for this product only. Empty colors keep the section setting."
+        },
+        {
+          "type": "checkbox",
+          "id": "use_color_scheme",
+          "label": "Use a color scheme for this card",
+          "default": false
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Color scheme",
+          "default": "scheme-2"
+        },
+        {
+          "type": "color",
+          "id": "card_background",
+          "label": "Card background"
+        },
+        {
+          "type": "color",
+          "id": "card_text",
+          "label": "Card text"
+        },
+        {
+          "type": "color",
+          "id": "card_accent",
+          "label": "Details accent",
+          "info": "Meters, borders, chips and labels."
+        },
+        {
+          "type": "color",
+          "id": "card_button",
+          "label": "Button and selection color"
+        },
+        {
+          "type": "color",
+          "id": "card_button_text",
+          "label": "Button text"
+        },
+        {
+          "type": "header",
+          "content": "Cup profile"
+        },
+        {
+          "type": "range",
+          "id": "intensity",
+          "label": "Intensity",
+          "info": "0 uses the metafield (or hides it).",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "roast_text",
+          "label": "Roast level",
+          "placeholder": "Medium"
+        },
+        {
+          "type": "range",
+          "id": "roast_scale",
+          "label": "Roast meter",
+          "info": "0 hides the meter.",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "body_text",
+          "label": "Body",
+          "placeholder": "Silky"
+        },
+        {
+          "type": "range",
+          "id": "body_scale",
+          "label": "Body meter",
+          "info": "0 hides the meter.",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "acidity_text",
+          "label": "Acidity",
+          "placeholder": "Bright"
+        },
+        {
+          "type": "range",
+          "id": "acidity_scale",
+          "label": "Acidity meter",
+          "info": "0 hides the meter.",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "notes",
+          "label": "Tasting notes",
+          "info": "Separate with commas.",
+          "placeholder": "Cacao, Panela, Red berries"
+        },
+        {
+          "type": "header",
+          "content": "Origin"
+        },
+        {
+          "type": "text",
+          "id": "origin",
+          "label": "Origin",
+          "placeholder": "Pluma Hidalgo, Oaxaca"
+        },
+        {
+          "type": "text",
+          "id": "altitude",
+          "label": "Altitude",
+          "placeholder": "1,400 masl"
+        },
+        {
+          "type": "text",
+          "id": "process",
+          "label": "Process",
+          "placeholder": "Washed"
+        },
+        {
+          "type": "text",
+          "id": "variety",
+          "label": "Variety",
+          "placeholder": "Typica, Bourbon"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula Premium Showcase"
+    }
+  ]
+}
+{% endschema %}
