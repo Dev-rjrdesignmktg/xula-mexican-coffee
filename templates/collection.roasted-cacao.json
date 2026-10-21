@@ -170,11 +170,11 @@
         "eyebrow": "Trust you can taste",
         "heading": "Numbers Behind Every cup",
         "text": "Mexican tradition, verified quality, and customers who keep coming back.",
-        "background_color": "#345DA8",
+        "background_color": "#345da8",
         "card_background_color": "",
-        "eyebrow_color": "#FFFFFF",
-        "heading_color": "#FFFFFF",
-        "subheading_color": "#FFFFFF",
+        "eyebrow_color": "#ffffff",
+        "heading_color": "#ffffff",
+        "subheading_color": "#ffffff",
         "label_color": "",
         "description_color": ""
       }
@@ -207,6 +207,52 @@
         "enable_sorting": true,
         "padding_top": 36,
         "padding_bottom": 36
+      }
+    },
+    "xula_premium_showcase_gWaUmV": {
+      "type": "xula-premium-showcase",
+      "name": "Xula Premium Showcase",
+      "settings": {
+        "collection": "roasted-cacao",
+        "max_products": 6,
+        "eyebrow": "Limited edition",
+        "heading": "Premium Collection",
+        "subheading": "<p>Small-lot Mexican coffees, roasted to order and selected for their character.</p>",
+        "background_style": "cream",
+        "accent_border": true,
+        "use_card_color_scheme": false,
+        "card_color_scheme": "",
+        "card_background": "",
+        "card_text": "",
+        "card_accent": "#345DA8",
+        "card_button": "#345DA8",
+        "card_button_text": "",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "show_metrics": true,
+        "show_excerpt": true,
+        "show_subscription": true,
+        "default_to_subscription": false,
+        "show_details_link": true,
+        "show_collection_link": false,
+        "sheet_title": "Spec sheet",
+        "roast_label": "Roast",
+        "intensity_label": "Intensity",
+        "body_label": "Body",
+        "acidity_label": "Acidity",
+        "notes_label": "Tasting notes",
+        "origin_label": "Origin",
+        "altitude_label": "Altitude",
+        "process_label": "Process",
+        "variety_label": "Variety",
+        "plan_legend": "Purchase option",
+        "onetime_label": "One-time purchase",
+        "subscribe_label": "Subscribe & Save",
+        "add_label": "Add to cart",
+        "added_label": "Added ✓",
+        "sale_label": "Sale",
+        "details_label": "View details",
+        "collection_link_label": "Shop the collection"
       }
     },
     "xula_coffee_quiz_trRm3J": {
@@ -375,6 +421,7 @@
     "xula_trust_cards_K8NBhF",
     "banner",
     "product-grid",
+    "xula_premium_showcase_gWaUmV",
     "xula_coffee_quiz_trRm3J"
   ]
 }
