@@ -169,7 +169,14 @@
       "settings": {
         "eyebrow": "Trust you can taste",
         "heading": "Numbers behind every cup",
-        "text": "Mexican tradition, verified quality, and customers who keep coming back."
+        "text": "Mexican tradition, verified quality, and customers who keep coming back.",
+        "background_color": "#439135",
+        "card_background_color": "",
+        "eyebrow_color": "#FFFFFF",
+        "heading_color": "#FFFFFF",
+        "subheading_color": "#FFFFFF",
+        "label_color": "",
+        "description_color": ""
       }
     },
     "banner": {
