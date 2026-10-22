@@ -413,27 +413,24 @@
     padding: 64px 0 32px;
   }
 
+  /* Tablet: brand stacks above the nav so the link columns get the full
+     container width instead of sharing it with the brand column. */
   .xula-footer__top {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 48px;
+    gap: 40px;
   }
 
   .xula-footer__brand {
-    flex: 0 0 32%;
-  }
-
-  .xula-footer__nav {
-    flex: 1;
+    max-width: 52ch;
   }
 
   .xula-footer__nav-columns {
-    flex-direction: row;
-    gap: 32px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 32px 40px;
   }
 
   .xula-footer__nav-group {
-    flex: 1;
+    min-width: 0;
     border: none;
   }
 
@@ -479,7 +476,24 @@
 }
 
 @media (min-width: 1200px) {
+  .xula-footer__top {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 64px;
+  }
+
   .xula-footer__brand {
-    flex: 0 0 28%;
+    flex: 0 0 30%;
+    max-width: none;
+  }
+
+  .xula-footer__nav {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .xula-footer__nav-columns {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 32px 48px;
   }
 }
