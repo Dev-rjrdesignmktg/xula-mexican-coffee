@@ -1,27 +1,4 @@
-{%- comment -%}
-  Xula Recipe Guide — "Recipes & Brewing Methods"
-  Standalone section for the Product template (PDP). Renders a tabbed brewing
-  guide (V60, French Press, Espresso, Chemex, AeroPress...) scoped to the
-  product currently being viewed, plus a HowTo JSON-LD graph. Each panel is a
-  two-column grid: recipe content on one side, a recipe image on the other.
 
-  Each brewing method is a repeatable "method" block (add/remove/reorder from
-  the theme editor) — that's the *global* default recipe for that method.
-
-  Data source (in order of precedence), per method:
-    1. product.metafields.custom.brew_recipe_overrides (json)
-       Partial override keyed by method id, e.g.:
-       {
-         "v60": { "ratio": "1:15", "temperature": "93°C", "time": "2:45 min", "grind": "Medium-fine",
-                   "steps": ["Step 1...", "Step 2..."] }
-       }
-       Any field left out falls back to the block's global default for that method.
-    2. The block's own settings — the global defaults, editable in the theme editor.
-
-  "Recommended method" badge (the smart product ↔ recipe relation):
-    product.metafields.custom.recommended_brew_method (single_line_text_field, value = a method id)
-    falls back to a product tag: "brew:v60"
-{%- endcomment -%}
 
 {{ 'xula-recipe-guide.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'xula-recipe-guide.js' | asset_url }}" defer="defer"></script>
@@ -167,7 +144,7 @@
                   {{ m_image | image_url: width: 900 | image_tag:
                       loading: 'lazy',
                       widths: '400, 600, 900',
-                      sizes: '(min-width: 700px) 320px, 100vw',
+                      sizes: '(min-width: 1024px) 320px, (min-width: 768px) 480px, 100vw',
                       alt: m_image_alt,
                       class: 'xula-recipe-guide__image'
                   }}
@@ -178,7 +155,7 @@
                 {%- endif -%}
               </div>
 
-              <div class="xula-recipe-guide__panel-content">
+              <div class="xula-recipe-guide__panel-specs">
                 {%- if is_recommended -%}
                   <p class="xula-recipe-guide__recommended">
                     <span class="xula-recipe-guide__recommended-icon" aria-hidden="true">★</span>
@@ -212,8 +189,10 @@
                     </div>
                   {%- endif -%}
                 </dl>
+              </div>
 
-                {%- if m_steps != blank -%}
+              {%- if m_steps != blank -%}
+                <div class="xula-recipe-guide__panel-steps">
                   <ol class="xula-recipe-guide__steps">
                     {%- for step in m_steps -%}
                       {%- assign step_clean = step | strip -%}
@@ -222,8 +201,8 @@
                       {%- endif -%}
                     {%- endfor -%}
                   </ol>
-                {%- endif -%}
-              </div>
+                </div>
+              {%- endif -%}
             </div>
           </div>
         {%- endcapture -%}
