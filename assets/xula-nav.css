@@ -642,3 +642,13 @@ xula-dropdown.xula-dropdown--desktop:not(:defined):focus-within .xula-dropdown__
     transform: none !important;
   }
 }
+
+/* ---------- Logo ----------
+   LOGOTIPO_02.png is a square canvas whose artwork only fills the middle
+   ~26% of its height. Crop the transparent band above/below it so the logo
+   doesn't inflate the header height. If the logo file is replaced with a
+   tightly-trimmed one, remove this block. */
+.header__heading-logo {
+  aspect-ratio: 1020 / 380;
+  object-fit: cover;
+}

@@ -38,7 +38,12 @@
   display: block;
   height: auto;
   max-width: 100%;
-  object-fit: contain;
+  /* Crop the transparent padding of the square logo canvas (artwork sits in
+     the middle ~26% of its height, ~12% inset on each side); the negative
+     margin lines the wordmark up with the manifesto text. */
+  aspect-ratio: 1020 / 380;
+  object-fit: cover;
+  margin-left: calc(var(--xula-footer-logo-width, 0px) * -0.11);
 }
 
 .xula-footer__wordmark {

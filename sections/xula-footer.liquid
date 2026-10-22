@@ -81,7 +81,7 @@
             alt="{{ section.settings.logo.alt | default: shop.name | escape }}"
             width="{{ section.settings.logo.width }}"
             height="{{ section.settings.logo.height }}"
-            style="width: {{ section.settings.logo_width }}px;"
+            style="width: {{ section.settings.logo_width }}px; --xula-footer-logo-width: {{ section.settings.logo_width }}px;"
             loading="lazy"
             decoding="async"
           >
