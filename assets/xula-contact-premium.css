@@ -830,33 +830,33 @@
   display: none;
 }
 
-.xula-contact-premium__status:focus {
+/* Focus is moved here programmatically after a POST (for screen readers);
+   the alert is already a live region, so no visible ring is needed. */
+.xula-contact-premium__status:focus,
+.xula-contact-premium__status:focus-visible {
   outline: none;
 }
 
-.xula-contact-premium__status:focus-visible .xula-contact-premium__alert {
-  outline: 2px solid var(--xula-gold-solid);
-  outline-offset: 3px;
-}
-
 .xula-contact-premium__alert {
+  --xula-alert-accent: currentColor;
   display: grid;
   gap: 4px;
-  padding: 16px 18px;
+  padding: 16px 18px 16px 22px;
   border-radius: 12px;
-  border-left: 4px solid;
+  border: 1px solid color-mix(in srgb, var(--xula-alert-accent) 30%, transparent);
+  box-shadow: inset 4px 0 0 var(--xula-alert-accent);
   font-family: var(--font-body-family);
   font-size: 1.4rem;
   line-height: 1.5;
 }
 
 .xula-contact-premium__alert--success {
-  border-color: var(--xula-contact-success);
+  --xula-alert-accent: var(--xula-contact-success);
   background: color-mix(in srgb, var(--xula-contact-success) 10%, transparent);
 }
 
 .xula-contact-premium__alert--error {
-  border-color: var(--xula-contact-error);
+  --xula-alert-accent: var(--xula-contact-error);
   background: color-mix(in srgb, var(--xula-contact-error) 8%, transparent);
 }
 
@@ -909,12 +909,6 @@
 
   .xula-contact-premium__trust {
     grid-template-columns: 1fr;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  .xula-contact-premium__trust {
-    grid-template-columns: repeat(2, 1fr);
   }
 }
 
