@@ -3,117 +3,174 @@
 
 {% liquid
   assign origin_slides = section.blocks | where: 'type', 'image'
+  assign origin_stats = section.blocks | where: 'type', 'stat'
 %}
 
-<section class="xula-origin color-{{ section.settings.color_scheme }} gradient">
+<section
+  class="xula-origin color-{{ section.settings.color_scheme }} gradient"
+  data-xula-origin
+>
   <div class="page-width">
     <div class="xula-origin__grid">
 
       <!-- LEFT MEDIA -->
       <div class="xula-origin__media">
-        <div class="xula-origin__slides" data-xula-origin-slides data-autoplay="{{ section.settings.autoplay_speed | times: 1000 }}">
-          {% assign slide_index = 0 %}
-          {% for image_block in origin_slides %}
-            {% if image_block.settings.image != blank %}
-              <div
-                class="xula-origin__slide{% if slide_index == 0 %} is-active{% endif %}"
-                {{ image_block.shopify_attributes }}
-              >
-                <img
-                  src="{{ image_block.settings.image | image_url: width: 1400 }}"
-                  srcset="{{ image_block.settings.image | image_url: width: 700 }} 700w, {{ image_block.settings.image | image_url: width: 1400 }} 1400w"
-                  sizes="(min-width: 990px) 45vw, 90vw"
-                  alt="{{ image_block.settings.image.alt | default: section.settings.heading | escape }}"
-                  width="1400"
-                  height="1600"
-                  loading="{% if slide_index == 0 %}eager{% else %}lazy{% endif %}"
+        <div class="xula-origin__frame">
+          <div
+            class="xula-origin__slides"
+            data-xula-origin-slides
+            data-autoplay="{{ section.settings.autoplay_speed | times: 1000 }}"
+            aria-roledescription="carousel"
+            aria-label="{{ section.settings.eyebrow | default: section.settings.heading | escape }}"
+          >
+            {% assign slide_index = 0 %}
+            {% for image_block in origin_slides %}
+              {% if image_block.settings.image != blank %}
+                {% liquid
+                  assign slide_loading = 'lazy'
+                  if slide_index == 0
+                    assign slide_loading = 'eager'
+                  endif
+                %}
+                <div
+                  class="xula-origin__slide{% if slide_index == 0 %} is-active{% endif %}"
+                  aria-roledescription="slide"
+                  {% if slide_index != 0 %}aria-hidden="true"{% endif %}
+                  {{ image_block.shopify_attributes }}
                 >
-              </div>
-              {% assign slide_index = slide_index | plus: 1 %}
-            {% endif %}
-          {% endfor %}
+                  {{
+                    image_block.settings.image
+                    | image_url: width: 1600
+                    | image_tag:
+                      widths: '600, 800, 1000, 1200, 1400, 1600',
+                      sizes: '(min-width: 990px) 46vw, 92vw',
+                      loading: slide_loading,
+                      alt: image_block.settings.image.alt | default: section.settings.heading
+                  }}
+                </div>
+                {% assign slide_index = slide_index | plus: 1 %}
+              {% endif %}
+            {% endfor %}
 
-          {% if slide_index == 0 and section.settings.image != blank %}
-            <div class="xula-origin__slide is-active">
-              <img
-                src="{{ section.settings.image | image_url: width: 1400 }}"
-                alt="{{ section.settings.heading | escape }}"
-                width="1400"
-                height="1600"
-                loading="eager"
-              >
+            {% if slide_index == 0 %}
+              <div class="xula-origin__slide is-active">
+                {% if section.settings.image != blank %}
+                  {{
+                    section.settings.image
+                    | image_url: width: 1600
+                    | image_tag:
+                      widths: '600, 800, 1000, 1200, 1400, 1600',
+                      sizes: '(min-width: 990px) 46vw, 92vw',
+                      loading: 'eager',
+                      alt: section.settings.heading
+                  }}
+                {% else %}
+                  {{ 'image' | placeholder_svg_tag: 'xula-origin__placeholder' }}
+                {% endif %}
+              </div>
+              {% assign slide_index = 1 %}
+            {% endif %}
+          </div>
+
+          <div class="xula-origin__shade" aria-hidden="true"></div>
+
+          {% if section.settings.location != blank %}
+            <span class="xula-origin__location">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/>
+                <circle cx="12" cy="9.5" r="2.5"/>
+              </svg>
+              <span>{{ section.settings.location }}</span>
+            </span>
+          {% endif %}
+
+          {% if slide_index > 1 %}
+            <div class="xula-origin__controls">
+              <span class="xula-origin__counter" aria-live="polite">
+                <span class="xula-origin__counter-current" data-origin-current>01</span>
+                <span class="xula-origin__counter-sep" aria-hidden="true"></span>
+                <span class="xula-origin__counter-total">{{ slide_index | prepend: '0' | slice: -2, 2 }}</span>
+              </span>
+
+              <div class="xula-origin__dots" role="tablist" aria-label="Gallery navigation">
+                {% for i in (1..slide_index) %}
+                  <button
+                    type="button"
+                    class="xula-origin__dot{% if forloop.first %} is-active{% endif %}"
+                    data-slide-dot="{{ forloop.index0 }}"
+                    role="tab"
+                    aria-label="Show image {{ forloop.index }}"
+                    aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                  >
+                    <span class="xula-origin__dot-fill"></span>
+                  </button>
+                {% endfor %}
+              </div>
             </div>
-            {% assign slide_index = 1 %}
           {% endif %}
         </div>
 
-        {% if section.settings.badge != blank %}
-          <div class="xula-origin__badge">{{ section.settings.badge }}</div>
-        {% endif %}
-
-        {% if slide_index > 1 %}
-          <div class="xula-origin__dots" role="tablist" aria-label="Gallery navigation">
-            {% for i in (1..slide_index) %}
-              <button
-                type="button"
-                class="xula-origin__dot{% if forloop.first %} is-active{% endif %}"
-                data-slide-dot="{{ forloop.index0 }}"
-                role="tab"
-                aria-label="Show image {{ forloop.index }}"
-                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
-              >
-                <span class="xula-origin__dot-fill"></span>
-              </button>
-            {% endfor %}
-          </div>
-        {% endif %}
       </div>
 
       <!-- RIGHT CONTENT -->
       <div class="xula-origin__content">
 
         {% if section.settings.eyebrow != blank %}
-          <span class="xula-eyebrow">
+          <span class="xula-eyebrow xula-origin__eyebrow xula-origin__reveal" style="--xula-origin-i: 0;">
             {{ section.settings.eyebrow }}
           </span>
         {% endif %}
 
         {% if section.settings.heading != blank %}
-          <h2 class="xula-heading">
+          <h2 class="xula-heading xula-origin__heading xula-origin__reveal" style="--xula-origin-i: 1;">
             {{ section.settings.heading }}
           </h2>
         {% endif %}
 
         {% if section.settings.text != blank %}
-          <p class="xula-text">
+          <p class="xula-origin__text xula-origin__reveal" style="--xula-origin-i: 2;">
             {{ section.settings.text }}
           </p>
         {% endif %}
 
-        {% if section.blocks.size > 0 %}
-          <div class="xula-origin__stats">
-            {% for block in section.blocks %}
-              {% if block.type == 'stat' %}
-                <div class="xula-origin__stat" {{ block.shopify_attributes }}>
-                  <span class="xula-origin__stat-top">
-                    {% if block.settings.icon != 'none' %}
-                      <span class="xula-origin__stat-icon">
-                        {% render 'xula-stat-icon', icon: block.settings.icon %}
-                      </span>
-                    {% endif %}
-                    <span class="xula-origin__stat-label">{{ block.settings.label }}</span>
-                  </span>
-                  <span class="xula-origin__stat-value">{{ block.settings.value }}</span>
+        {% if origin_stats.size > 0 %}
+          <dl class="xula-origin__stats xula-origin__stats--count-{{ origin_stats.size }}">
+            {% for block in origin_stats %}
+              <div
+                class="xula-origin__stat xula-origin__reveal"
+                style="--xula-origin-i: {{ forloop.index | plus: 2 }};"
+                {{ block.shopify_attributes }}
+              >
+                <div class="xula-origin__stat-head">
+                  {% if block.settings.icon != 'none' %}
+                    <span class="xula-origin__stat-icon" aria-hidden="true">
+                      {% render 'xula-stat-icon', icon: block.settings.icon %}
+                    </span>
+                  {% endif %}
+                  <dt class="xula-origin__stat-label">{{ block.settings.label }}</dt>
+                  <span class="xula-origin__stat-num" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
                 </div>
-              {% endif %}
+                <dd class="xula-origin__stat-value">{{ block.settings.value }}</dd>
+              </div>
             {% endfor %}
-          </div>
+          </dl>
         {% endif %}
 
-        {% if section.settings.button_label != blank %}
-          <a href="{{ section.settings.button_link }}" class="xula-btn">
-            {{ section.settings.button_label }}
-          </a>
+        {% if section.settings.button_label != blank or section.settings.secondary_button_label != blank %}
+          <div class="xula-origin__actions xula-origin__reveal" style="--xula-origin-i: {{ origin_stats.size | plus: 3 }};">
+            {% if section.settings.button_label != blank %}
+              <a href="{{ section.settings.button_link }}" class="xula-btn">
+                <span>{{ section.settings.button_label }}</span>
+              </a>
+            {% endif %}
+
+            {% if section.settings.secondary_button_label != blank %}
+              <a href="{{ section.settings.secondary_button_link }}" class="xula-btn--secondary">
+                <span>{{ section.settings.secondary_button_label }}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            {% endif %}
+          </div>
         {% endif %}
 
       </div>
@@ -136,9 +193,9 @@
     },
     {
       "type": "text",
-      "id": "badge",
-      "label": "Badge",
-      "default": "1,200masl"
+      "id": "location",
+      "label": "Location tag",
+      "default": "Veracruz · Chiapas, MX"
     },
     {
       "type": "header",
@@ -186,6 +243,16 @@
       "type": "url",
       "id": "button_link",
       "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "Secondary link label"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary link"
     },
     {
       "type": "header",
