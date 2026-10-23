@@ -1,24 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const cards = document.querySelectorAll(".xula-proof__card");
+  const sections = document.querySelectorAll("[data-xula-proof]");
 
-  if (!cards.length) return;
+  if (!sections.length) return;
+
+  if (!("IntersectionObserver" in window)) {
+    sections.forEach((section) => section.classList.add("is-visible"));
+    return;
+  }
 
   const observer = new IntersectionObserver(
     (entries, observer) => {
-      entries.forEach((entry, index) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.add("is-visible");
-          }, index * 220);
-
+          entry.target.classList.add("is-visible");
           observer.unobserve(entry.target);
         }
       });
     },
     {
-      threshold: 0.15
+      threshold: 0.2
     }
   );
 
-  cards.forEach((card) => observer.observe(card));
+  sections.forEach((section) => observer.observe(section));
 });

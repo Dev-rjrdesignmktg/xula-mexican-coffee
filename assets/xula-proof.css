@@ -1,145 +1,238 @@
 .xula-proof {
-    padding: 80px 0;
-    background: var(--bg);
+  --xula-proof-ease: cubic-bezier(.16, 1, .3, 1);
+  padding: 120px 0;
+  background: var(--bg);
+  overflow: hidden;
 }
+
+/* ---------- Intro ---------- */
 
 .xula-proof__intro {
-    text-align: center;
-    max-width: 760px;
-    margin: 0 auto 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 56px;
 }
 
+.xula-proof__heading {
+  margin: 0 auto;
+}
+
+.xula-proof__lead {
+  max-width: 38rem;
+  margin: 20px auto 0;
+  color: rgba(36, 23, 15, .72);
+}
+
+/* ---------- Grid ---------- */
 
 .xula-proof__grid {
-    display: grid;
-    gap: 24px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
 }
+
+/* ---------- Card ---------- */
 
 .xula-proof__card {
-    background-color: var(--xula-proof-bg);
-    color: var(--xula-proof-text);
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 
-        0 2px 4px rgba(23,28,36,0.02), 
-        0 12px 32px rgba(23,28,36,0.05),
-        0 32px 72px rgba(23,28,36,0.04);
-}
-
-.xula-proof__media img {
-    width: 100%;
-    display: block;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    opacity: 0;
-    transform: translateY(-18%) scale(1.12);
-    opacity: 0;
-    transition:
-        transform 1.4s cubic-bezier(.16,1,.3,1),
-        opacity .8s ease;
-}
-
-/* reveal mask */
-.xula-proof__media::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: var(--bg);
-    transform: translateY(0);
-    transition:
-        transform 1.25s cubic-bezier(.16,1,.3,1);
-    z-index: 3;
-}
-
-.xula-proof__content {
-    padding: 24px;
-    transform: translateY(20px);
-    opacity: 0;
-    transition:
-        transform .8s ease,
-        opacity .8s ease;
-    width: 100%;
-    max-width: none;
-    box-sizing: border-box;
-}
-
-.xula-proof__media {
-    overflow: hidden;
-    border-radius: 24px;
-}
-
-.xula-proof__card.is-visible .xula-proof__media img {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-}
-
-.xula-proof__card.is-visible .xula-proof__content {
-    transform: translateY(0);
-    opacity: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 28px;
+  background-color: var(--xula-proof-bg);
+  background-image: radial-gradient(120% 70% at 0% 0%, rgba(255, 255, 255, .14), transparent 60%);
+  color: var(--xula-proof-text);
+  box-shadow:
+    0 1px 2px rgba(23, 28, 36, .04),
+    0 16px 40px rgba(23, 28, 36, .08);
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity .9s ease,
+    transform 1.1s var(--xula-proof-ease),
+    box-shadow .5s ease;
+  transition-delay: calc(var(--xula-proof-i, 0) * 140ms);
 }
 
 .xula-proof__media {
   position: relative;
   overflow: hidden;
-  border-radius: 24px;
+  border-radius: 0;
+  aspect-ratio: 4 / 5;
+  background: rgba(0, 0, 0, .08);
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1.3s var(--xula-proof-ease);
+  transition-delay: calc(var(--xula-proof-i, 0) * 140ms + 120ms);
 }
 
-.xula-proof__card .xula-subheading {
-  color: var(--xula-proof-text);
-}
-
-.xula-proof__card .xula-text {
-  color: var(--xula-proof-text);
+.xula-proof__media img {
+  display: block;
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.15);
+  transition: transform 1.6s var(--xula-proof-ease);
 }
 
-.xula-proof__card.is-visible .xula-proof__media::after {
-  transform: translateY(100%);
+.xula-proof__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 28px 28px 32px;
+}
+
+.xula-proof__meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.xula-proof__index {
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  letter-spacing: .18em;
+  font-variant-numeric: tabular-nums;
+  opacity: .85;
+}
+
+.xula-proof__rule {
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: .35;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 1.2s var(--xula-proof-ease);
+  transition-delay: calc(var(--xula-proof-i, 0) * 140ms + 400ms);
+}
+
+.xula-proof__card .xula-proof__title {
+  margin: 0 0 12px;
+  font-size: clamp(2.2rem, 2vw, 2.8rem);
+  line-height: 1.1;
+  color: var(--xula-proof-text);
+}
+
+.xula-proof__card .xula-proof__text {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  font-size: 1.6rem;
+  line-height: 1.65;
+  color: var(--xula-proof-text);
+  opacity: .82;
+}
+
+/* ---------- Reveal ---------- */
+
+.xula-proof.is-visible .xula-proof__card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.xula-proof.is-visible .xula-proof__media {
+  clip-path: inset(0 0 0 0);
+}
+
+.xula-proof.is-visible .xula-proof__media img {
+  transform: scale(1);
+}
+
+.xula-proof.is-visible .xula-proof__rule {
+  transform: scaleX(1);
+}
+
+/* ---------- Hover (pointer devices) ---------- */
+
+@media (hover: hover) and (pointer: fine) {
+  .xula-proof.is-visible .xula-proof__card:hover {
+    transform: translateY(-6px);
+    transition-delay: 0s;
+    box-shadow:
+      0 2px 4px rgba(23, 28, 36, .05),
+      0 28px 60px rgba(23, 28, 36, .16);
+  }
+
+  .xula-proof.is-visible .xula-proof__card:hover .xula-proof__media img {
+    transform: scale(1.05);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .xula-proof__card.is-visible .xula-proof__media::after {
-    transform: translateY(100%);
+  .xula-proof__card,
+  .xula-proof__media,
+  .xula-proof__media img,
+  .xula-proof__rule {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
     transition: none;
   }
 }
 
-/* TABLET */
-@media screen and (min-width: 768px) and (max-width: 990px) {
+/* ---------- Tablet ---------- */
 
+@media screen and (max-width: 989px) {
   .xula-proof {
-    padding: 100px 0;
+    padding: 96px 0;
+  }
+
+  .xula-proof__intro {
+    margin-bottom: 40px;
+  }
+
+  /* Native swipe with a peek of the next card */
+  .xula-proof__grid {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    --xula-proof-gutter: 5rem;
+    margin: 0 calc(var(--xula-proof-gutter) * -1);
+    padding: 8px var(--xula-proof-gutter) 24px;
+    scroll-padding-inline: var(--xula-proof-gutter);
+  }
+
+  .xula-proof__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .xula-proof__card {
+    flex: 0 0 55%;
+    scroll-snap-align: start;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .xula-proof__grid {
+    --xula-proof-gutter: 1.5rem;
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media screen and (max-width: 767px) {
+  .xula-proof {
+    padding: 72px 0;
   }
 
   .xula-proof__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
+    gap: 12px;
   }
 
-  .xula-proof__card:last-child {
-    grid-column: 1 / -1;
+  .xula-proof__card {
+    flex-basis: 84%;
+    border-radius: 24px;
   }
 
-  .xula-proof__card:last-child .xula-proof__content {
-    width: 100%;
-    max-width: none;
+  .xula-proof__content {
+    padding: 24px 24px 28px;
   }
-
-  .xula-proof__card:last-child .xula-text {
-    width: 100%;
-    max-width: none;
-  }
-
-}
-
-@media (max-width: 767px){
-    .xula-proof__grid{
-        grid-template-columns: 1fr;
-        gap: 21px;
-    }
-
-    .xula-proof__card:last-child {
-        grid-column: auto;
-    }
 }

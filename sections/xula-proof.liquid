@@ -1,47 +1,62 @@
 {{ "xula-proof.css" | asset_url | stylesheet_tag }}
-<script src="{{ 'xula-proof.js' | asset_url }} " defer></script>
+<script src="{{ 'xula-proof.js' | asset_url }}" defer></script>
 
-<section class="xula-proof">
+<section class="xula-proof" data-xula-proof>
   <div class="page-width">
-<div class="xula-intro">
-  <span class="xula-eyebrow">
-    Rooted in tradition
-  </span>
 
-  <h2 class="xula-heading">
-    Crafted with purpose, from bean to ritual.
-  </h2>
-</div>
+    <header class="xula-proof__intro">
+      <div class="xula-proof__intro-main">
+        {% if section.settings.eyebrow != blank %}
+          <span class="xula-eyebrow xula-proof__eyebrow">{{ section.settings.eyebrow }}</span>
+        {% endif %}
 
-<div class="xula-proof__grid">
-
-  {% for block in section.blocks %}
-    <div class="xula-proof__card" style="
-        --xula-proof-bg: {{ block.settings.background_color }};
-        --xula-proof-text: {{ block.settings.text_color }};"
-      {{ block.shopify_attributes }}
-    >
-      <div class="xula-proof__media">
-        {% if block.settings.image != blank %}
-          <img
-            src="{{ block.settings.image | image_url: width: 900 }}"
-            alt="{{ block.settings.title }}"
-            loading="lazy"
-            width="900"
-            height="440"
-          >
+        {% if section.settings.heading != blank %}
+          <h2 class="xula-heading xula-proof__heading">{{ section.settings.heading }}</h2>
         {% endif %}
       </div>
 
-      <div class="xula-proof__content">
-        <h3 class="xula-subheading">{{ block.settings.title }}</h3>
-        <p class="xula-text">{{ block.settings.text }}</p>
-      </div>
+      {% if section.settings.text != blank %}
+        <p class="xula-text xula-proof__lead">{{ section.settings.text }}</p>
+      {% endif %}
+    </header>
 
+    <div class="xula-proof__grid" role="list">
+      {% for block in section.blocks %}
+        <article
+          class="xula-proof__card"
+          role="listitem"
+          style="
+            --xula-proof-bg: {{ block.settings.background_color }};
+            --xula-proof-text: {{ block.settings.text_color }};
+            --xula-proof-i: {{ forloop.index0 }};"
+          {{ block.shopify_attributes }}
+        >
+          <div class="xula-proof__media">
+            {% if block.settings.image != blank %}
+              {{
+                block.settings.image
+                | image_url: width: 1200
+                | image_tag:
+                  widths: '400, 600, 800, 1000, 1200',
+                  sizes: '(min-width: 990px) 33vw, (min-width: 768px) 55vw, 85vw',
+                  loading: 'lazy',
+                  alt: block.settings.title
+              }}
+            {% endif %}
+          </div>
+
+          <div class="xula-proof__content">
+            <div class="xula-proof__meta" aria-hidden="true">
+              <span class="xula-proof__index">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <span class="xula-proof__rule"></span>
+            </div>
+
+            <h3 class="xula-subheading xula-proof__title">{{ block.settings.title }}</h3>
+            <p class="xula-text xula-proof__text">{{ block.settings.text }}</p>
+          </div>
+        </article>
+      {% endfor %}
     </div>
-  {% endfor %}
-
-</div>
 
   </div>
 </section>
@@ -50,6 +65,26 @@
     {
         "name": "Xula Proof of Craft",
         "max_blocks": 3,
+        "settings": [
+            {
+              "type": "text",
+              "id": "eyebrow",
+              "label": "Eyebrow",
+              "default": "Rooted in tradition"
+            },
+            {
+              "type": "text",
+              "id": "heading",
+              "label": "Heading",
+              "default": "Crafted with purpose, from bean to ritual."
+            },
+            {
+              "type": "textarea",
+              "id": "text",
+              "label": "Intro text",
+              "default": "Three principles guide every bag we roast, from the Mexican highlands to your morning cup."
+            }
+        ],
         "blocks": [
             {
                 "type": "craft_item",
@@ -64,7 +99,7 @@
                     "type": "text",
                     "id": "title",
                     "label": "Title",
-                    "default": "Single-Origin Mexican Coffee hhghghg"
+                    "default": "Single-Origin Mexican Coffee"
                     },
                     {
                     "type": "textarea",
