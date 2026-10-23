@@ -114,7 +114,7 @@
         "craft_item_n3AUF8": {
           "type": "craft_item",
           "settings": {
-            "image": "shopify://shop_images/xula-32.jpg",
+            "image": "shopify://shop_images/xula-51-mr.jpg",
             "title": "Single-Origin Mexican Coffee",
             "text": "Sourced from the highlands of Mexico, where altitude, soil, and climate shape every cup.",
             "background_color": "#e95028",
@@ -124,7 +124,7 @@
         "craft_item_NxFR3d": {
           "type": "craft_item",
           "settings": {
-            "image": "shopify://shop_images/xula-56.jpg",
+            "image": "shopify://shop_images/IMG_5203.jpg",
             "title": "Small-Batch Roasted",
             "text": "Every batch is roasted with precision to preserve aroma, body, and depth.",
             "background_color": "#345da8",
