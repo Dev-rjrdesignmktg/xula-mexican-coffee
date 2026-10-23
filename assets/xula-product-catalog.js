@@ -258,6 +258,10 @@
     let current = 0;
     let totalPages = 1;
 
+    // Below 990px the viewport scrolls natively (swipe);
+    // above it, the track is paginated with a transform.
+    const NATIVE_SCROLL = matchMedia('(max-width: 989px)');
+
     const perView = () => {
       const value = parseInt(getComputedStyle(carousel).getPropertyValue('--xpc-per-view'), 10);
       return Number.isFinite(value) && value > 0 ? value : 1;
@@ -285,6 +289,7 @@
         dot.setAttribute('aria-selected', String(active));
       });
 
+      // Arrows (desktop only) show only when there are more products in that direction.
       if (prevBtn) prevBtn.disabled = current === 0;
       if (nextBtn) nextBtn.disabled = current === totalPages - 1;
       if (dotsContainer) dotsContainer.hidden = totalPages <= 1;
@@ -293,9 +298,17 @@
     const goTo = (index) => {
       current = Math.max(0, Math.min(index, totalPages - 1));
       const viewportWidth = viewport.clientWidth;
-      const maxOffset = Math.max(0, track.scrollWidth - viewportWidth);
-      const offset = Math.min(current * viewportWidth, maxOffset);
-      track.style.transform = `translateX(-${offset}px)`;
+
+      if (NATIVE_SCROLL.matches) {
+        track.style.transform = '';
+        const target = slides[current * perView()];
+        viewport.scrollTo({ left: target ? target.offsetLeft - slides[0].offsetLeft : 0, behavior: 'smooth' });
+      } else {
+        const maxOffset = Math.max(0, track.scrollWidth - viewportWidth);
+        const offset = Math.min(current * viewportWidth, maxOffset);
+        track.style.transform = `translateX(-${offset}px)`;
+      }
+
       updateControls();
     };
 
@@ -307,6 +320,27 @@
 
     prevBtn?.addEventListener('click', () => goTo(current - 1));
     nextBtn?.addEventListener('click', () => goTo(current + 1));
+
+    // Keep the dots in sync while the user swipes natively.
+    let scrollFrame;
+    viewport.addEventListener(
+      'scroll',
+      () => {
+        if (!NATIVE_SCROLL.matches) return;
+        cancelAnimationFrame(scrollFrame);
+        scrollFrame = requestAnimationFrame(() => {
+          const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+          const slideWidth = slides[0].getBoundingClientRect().width;
+          const index =
+            viewport.scrollLeft >= maxScroll - 2
+              ? totalPages - 1
+              : Math.round(viewport.scrollLeft / (slideWidth * perView()));
+          current = Math.max(0, Math.min(index, totalPages - 1));
+          updateControls();
+        });
+      },
+      { passive: true }
+    );
 
     let resizeTimer;
     window.addEventListener('resize', () => {
