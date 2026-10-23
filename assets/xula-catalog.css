@@ -591,9 +591,43 @@
    Responsive — tablet / desktop
    --------------------------------------------------------- */
 
+/* Mobile / tablet — native swipe scroll, same as the tabs */
+@media (max-width: 989px) {
+  .xula-catalog__viewport {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  .xula-catalog__viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .xula-catalog__track {
+    width: auto;
+    transform: none !important;
+    transition: none;
+  }
+
+  /* Show a peek of the next card so it reads as swipeable */
+  .xula-catalog__slide {
+    width: calc((100% - var(--xula-per-view) * var(--xula-gap)) / (var(--xula-per-view) + 0.2));
+    scroll-snap-align: start;
+  }
+}
+
 @media (min-width: 700px) {
   .xula-catalog__carousel {
     --xula-per-view: 2;
+  }
+}
+
+@media (min-width: 768px) {
+  .xula-catalog__tabs {
+    justify-content: center;
+    justify-content: safe center;
   }
 }
 
@@ -603,7 +637,6 @@
   }
 
   .xula-catalog__tabs {
-    justify-content: center;
     padding-bottom: 32px;
   }
 
