@@ -307,7 +307,10 @@
           "settings": {
             "image": "shopify://shop_images/39019510-6256-4DA2-AA7D-2D249816A6E8.PNG",
             "label": "Cold Brew Coffee",
-            "title": "Xula Mexican Coffee - Cold Brew Coffee"
+            "title": "Xula Mexican Coffee - Cold Brew Coffee",
+            "text": "",
+            "product": "xula-mexican-coffee-cold-brew-coffee",
+            "link": ""
           }
         },
         "ritual_WrihUy": {
@@ -315,7 +318,10 @@
           "settings": {
             "image": "shopify://shop_images/xula-37.jpg",
             "label": "Artisan Muffins",
-            "title": "Xula Mexican Coffee - Artisan Muffins"
+            "title": "Xula Mexican Coffee - Artisan Muffins",
+            "text": "",
+            "product": "muffins",
+            "link": ""
           }
         },
         "ritual_mqmzPJ": {
@@ -323,7 +329,10 @@
           "settings": {
             "image": "shopify://shop_images/65098527-EF24-488A-916E-5F6548DCAB6E.PNG",
             "label": "Café de olla",
-            "title": "Xula Mexican Coffee - Café de olla"
+            "title": "Xula Mexican Coffee - Café de olla",
+            "text": "",
+            "product": "cafe-de-olla",
+            "link": ""
           }
         }
       },
