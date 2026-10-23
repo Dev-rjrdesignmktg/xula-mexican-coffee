@@ -1,99 +1,369 @@
 .xula-signature {
-  padding: 120px 0;
-  background: var(--bg);
+  --xula-signature-ease: cubic-bezier(.16, 1, .3, 1);
+  --xula-signature-radius: 28px;
+  position: relative;
+  padding: 140px 0;
+  background:
+    radial-gradient(60% 50% at 100% 0%, rgba(226, 181, 130, .16), transparent 70%),
+    radial-gradient(50% 40% at 0% 100%, rgba(226, 181, 130, .10), transparent 70%),
+    var(--bg);
+  overflow: hidden;
 }
 
 .xula-signature__grid {
   display: grid;
-  grid-template-columns: .9fr 1.1fr;
-  gap: 80px;
-  align-items: center;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  gap: 96px;
+  align-items: start;
 }
 
-/* LEFT */
+/* ---------- Left content ---------- */
+
 .xula-signature__content {
   position: sticky;
   top: 120px;
 }
 
 .xula-signature__heading {
-  margin: 20px 0;
+  margin: 20px 0 0;
   max-width: 520px;
+  text-align: left;
 }
 
 .xula-signature__text {
   font-size: 1.6rem;
   line-height: 1.8;
-  max-width: 480px;
-  margin-bottom: 32px;
-  color: var(--bg-secondary)
+  max-width: 440px;
+  margin: 24px 0 0;
+  color: rgba(36, 23, 15, .72);
+}
+
+/* Ritual index */
+.xula-signature__index {
+  list-style: none;
+  margin: 40px 0 44px;
+  padding: 0;
+  max-width: 440px;
+  border-top: 1px solid rgba(36, 23, 15, .12);
+}
+
+.xula-signature__index-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(36, 23, 15, .12);
+  color: var(--bg-secondary);
+  cursor: default;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity .8s ease,
+    transform 1s var(--xula-signature-ease),
+    color .4s ease;
+  transition-delay: calc(var(--xula-signature-i, 0) * 100ms + 200ms);
+}
+
+.xula-signature__index-num {
+  font-size: 1.2rem;
+  letter-spacing: .18em;
+  font-variant-numeric: tabular-nums;
+  opacity: .55;
+  transition: opacity .4s ease;
+}
+
+.xula-signature__index-rule {
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+  opacity: .35;
+  transition:
+    width .6s var(--xula-signature-ease),
+    opacity .4s ease;
+}
+
+.xula-signature__index-label {
+  font-family: var(--font-heading-family);
+  font-size: 2rem;
+  line-height: 1.2;
+  transition: transform .6s var(--xula-signature-ease);
+}
+
+.xula-signature__index-item.is-active {
+  color: var(--xula-gold-solid);
+  transition-delay: 0s;
+}
+
+.xula-signature__index-item.is-active .xula-signature__index-num {
+  opacity: 1;
+}
+
+.xula-signature__index-item.is-active .xula-signature__index-rule {
+  width: 56px;
+  opacity: 1;
+}
+
+.xula-signature__index-item.is-active .xula-signature__index-label {
+  transform: translateX(4px);
 }
 
 .xula-signature__actions {
   display: flex;
-  gap: 16px;
+  align-items: center;
+  gap: 28px;
   flex-wrap: wrap;
 }
 
-/* RIGHT */
+/* ---------- Right visuals ---------- */
+
 .xula-signature__visuals {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  align-items: start;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
 }
+
+/* Editorial layout: one wide feature card on top + two below */
+.xula-signature__visuals--count-3 .xula-signature__card--1 {
+  grid-column: 1 / -1;
+}
+
+.xula-signature__visuals--count-3 .xula-signature__card--1 .xula-signature__media {
+  aspect-ratio: 16 / 9;
+}
+
+.xula-signature__visuals--count-3 .xula-signature__card:not(.xula-signature__card--1) .xula-signature__media {
+  aspect-ratio: 1 / 1;
+}
+
+.xula-signature__visuals--count-1 {
+  grid-template-columns: 1fr;
+}
+
+/* ---------- Card ---------- */
 
 .xula-signature__card {
   position: relative;
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity .9s ease,
+    transform 1.1s var(--xula-signature-ease);
+  transition-delay: calc(var(--xula-signature-i, 0) * 140ms);
 }
 
-.xula-signature__card--2 {
-  margin-top: 80px;
+.xula-signature__link {
+  position: relative;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: var(--xula-signature-radius);
+  color: #fff;
+  text-decoration: none;
+  box-shadow:
+    0 1px 2px rgba(23, 28, 36, .04),
+    0 16px 40px rgba(23, 28, 36, .10);
+  transition: box-shadow .5s ease;
 }
 
-.xula-signature__card--3 {
-  margin-top: -40px;
+.xula-signature__link:focus-visible {
+  outline: 2px solid var(--xula-gold-solid);
+  outline-offset: 4px;
 }
 
 .xula-signature__media {
-  border-radius: 24px;
-  overflow: hidden;
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: rgba(36, 23, 15, .08);
+  clip-path: inset(100% 0 0 0);
+  transition:
+    clip-path 1.3s var(--xula-signature-ease),
+    filter .6s ease;
+  transition-delay: calc(var(--xula-signature-i, 0) * 140ms + 120ms);
 }
 
-.xula-signature__media img {
+.xula-signature__media img,
+.xula-signature__placeholder {
+  position: absolute;
+  inset: 0;
+  display: block;
   width: 100%;
-  aspect-ratio: 1 / 1.2;
+  height: 100%;
   object-fit: cover;
-  transform: scale(1.03);
-  transition: transform .8s cubic-bezier(.22,.61,.36,1);
+  transform: scale(1.15);
+  transition: transform 1.6s var(--xula-signature-ease);
 }
 
-.xula-signature__card:hover img {
-  transform: scale(1);
+.xula-signature__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(20, 12, 7, .4) 0%, transparent 32%),
+    linear-gradient(0deg, rgba(20, 12, 7, .92) 0%, rgba(20, 12, 7, .6) 40%, rgba(20, 12, 7, .15) 75%, transparent 100%),
+    rgba(20, 12, 7, .12);
+  transition: opacity .6s ease;
+}
+
+.xula-signature__num {
+  position: absolute;
+  top: 22px;
+  left: 24px;
+  z-index: 2;
+  font-size: 1.2rem;
+  letter-spacing: .18em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, .85);
 }
 
 .xula-signature__meta {
-  padding-top: 16px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 28px 28px 30px;
 }
 
-.xula-signature__meta span {
-  font-size: 1.2rem;
-  opacity: .65;
+.xula-signature__label {
+  display: inline-flex;
+  align-items: center;
+  padding: .6rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .28);
+  background: rgba(255, 255, 255, .12);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  font-size: 1.1rem;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  letter-spacing: .08em;
-  color: var(--bg-secondary);
+  color: #fff;
 }
 
-.xula-signature__meta h3 {
-  font-size: 2rem;
-  margin-top: 8px;
+.xula-signature__title {
+  margin: 14px 0 0;
+  font-family: var(--font-heading-family);
+  font-size: clamp(2rem, 1.8vw, 2.6rem);
+  line-height: 1.15;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, .35);
+}
+
+.xula-signature__card--1 .xula-signature__title {
+  font-size: clamp(2.4rem, 2.4vw, 3.4rem);
+}
+
+.xula-signature__desc {
+  margin: 0;
+  max-width: 32rem;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, .82);
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(8px);
+  transition:
+    max-height .6s var(--xula-signature-ease),
+    opacity .5s ease,
+    transform .6s var(--xula-signature-ease),
+    margin .6s var(--xula-signature-ease);
+}
+
+.xula-signature__arrow {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .3);
+  background: rgba(255, 255, 255, .14);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  transition:
+    background .5s var(--xula-signature-ease),
+    color .5s var(--xula-signature-ease),
+    transform .6s var(--xula-signature-ease);
+}
+
+/* ---------- Reveal ---------- */
+
+.xula-signature.is-visible .xula-signature__card,
+.xula-signature.is-visible .xula-signature__index-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.xula-signature.is-visible .xula-signature__media {
+  clip-path: inset(0 0 0 0);
+}
+
+.xula-signature.is-visible .xula-signature__media img,
+.xula-signature.is-visible .xula-signature__placeholder {
+  transform: scale(1);
+}
+
+/* ---------- Hover / active (pointer devices) ---------- */
+
+@media (hover: hover) and (pointer: fine) {
+  .xula-signature.has-active .xula-signature__card:not(.is-active) .xula-signature__media {
+    filter: saturate(.7) brightness(.85);
+    transition-delay: 0s;
+  }
+
+  .xula-signature.is-visible .xula-signature__card.is-active {
+    transform: translateY(-6px);
+    transition-delay: 0s;
+  }
+
+  .xula-signature__card.is-active .xula-signature__link {
+    box-shadow:
+      0 2px 4px rgba(23, 28, 36, .05),
+      0 28px 60px rgba(23, 28, 36, .18);
+  }
+
+  .xula-signature.is-visible .xula-signature__card.is-active .xula-signature__media img {
+    transform: scale(1.06);
+  }
+
+  .xula-signature__card.is-active .xula-signature__desc {
+    max-height: 10rem;
+    margin-top: 10px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .xula-signature__card.is-active .xula-signature__arrow {
+    background: #fff;
     color: var(--bg-secondary);
+    transform: rotate(45deg);
+  }
 }
 
-/* MOBILE */
-@media (max-width: 989px) {
+@media (prefers-reduced-motion: reduce) {
+  .xula-signature__card,
+  .xula-signature__index-item,
+  .xula-signature__media,
+  .xula-signature__media img,
+  .xula-signature__placeholder {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+    transition: none;
+  }
+}
+
+/* ---------- Tablet ---------- */
+
+@media screen and (max-width: 989px) {
   .xula-signature {
-    padding: 80px 0;
+    padding: 96px 0;
   }
 
   .xula-signature__grid {
@@ -106,12 +376,77 @@
     top: auto;
   }
 
-  .xula-signature__visuals {
-    grid-template-columns: 1fr;
+  .xula-signature__index {
+    display: none;
   }
 
-  .xula-signature__card--2,
-  .xula-signature__card--3 {
-    margin-top: 0;
+  .xula-signature__actions {
+    margin-top: 32px;
+  }
+
+  /* Native swipe with a peek of the next card */
+  .xula-signature__visuals {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    --xula-signature-gutter: 5rem;
+    margin: 0 calc(var(--xula-signature-gutter) * -1);
+    padding: 8px var(--xula-signature-gutter) 24px;
+    scroll-padding-inline: var(--xula-signature-gutter);
+  }
+
+  .xula-signature__visuals::-webkit-scrollbar {
+    display: none;
+  }
+
+  .xula-signature__card {
+    flex: 0 0 55%;
+    scroll-snap-align: start;
+  }
+
+  .xula-signature__visuals--count-3 .xula-signature__card .xula-signature__media {
+    aspect-ratio: 4 / 5;
+  }
+
+  /* No hover on touch: keep description visible */
+  .xula-signature__desc {
+    max-height: none;
+    margin-top: 10px;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .xula-signature__visuals {
+    --xula-signature-gutter: 1.5rem;
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media screen and (max-width: 767px) {
+  .xula-signature {
+    padding: 72px 0;
+  }
+
+  .xula-signature__visuals {
+    gap: 12px;
+  }
+
+  .xula-signature__card {
+    flex-basis: 84%;
+  }
+
+  .xula-signature {
+    --xula-signature-radius: 24px;
+  }
+
+  .xula-signature__meta {
+    padding: 22px 22px 24px;
   }
 }

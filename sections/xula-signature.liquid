@@ -1,6 +1,7 @@
 {{ 'xula-signature.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-signature.js' | asset_url }}" defer></script>
 
-<section class="xula-signature">
+<section class="xula-signature" data-xula-signature>
   <div class="page-width">
     <div class="xula-signature__grid">
 
@@ -8,7 +9,7 @@
       <div class="xula-signature__content">
 
         {% if section.settings.eyebrow != blank %}
-          <span class="xula-eyebrow">
+          <span class="xula-eyebrow xula-signature__eyebrow">
             {{ section.settings.eyebrow }}
           </span>
         {% endif %}
@@ -17,14 +18,32 @@
           {{ section.settings.heading }}
         </h2>
 
-        <p class="xula-signature__text">
-          {{ section.settings.text }}
-        </p>
+        {% if section.settings.text != blank %}
+          <p class="xula-signature__text">
+            {{ section.settings.text }}
+          </p>
+        {% endif %}
+
+        {% if section.blocks.size > 0 %}
+          <ol class="xula-signature__index" aria-label="{{ section.settings.eyebrow | escape }}">
+            {% for block in section.blocks %}
+              <li
+                class="xula-signature__index-item"
+                data-signature-target="{{ forloop.index0 }}"
+                style="--xula-signature-i: {{ forloop.index0 }};"
+              >
+                <span class="xula-signature__index-num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+                <span class="xula-signature__index-rule" aria-hidden="true"></span>
+                <span class="xula-signature__index-label">{{ block.settings.label }}</span>
+              </li>
+            {% endfor %}
+          </ol>
+        {% endif %}
 
         <div class="xula-signature__actions">
           {% if section.settings.button_label != blank %}
             <a href="{{ section.settings.button_link }}" class="xula-btn">
-              {{ section.settings.button_label }}
+              <span>{{ section.settings.button_label }}</span>
             </a>
           {% endif %}
 
@@ -38,29 +57,82 @@
       </div>
 
       <!-- RIGHT VISUALS -->
-      <div class="xula-signature__visuals">
+      <div
+        class="xula-signature__visuals xula-signature__visuals--count-{{ section.blocks.size }}"
+        role="list"
+      >
 
         {% for block in section.blocks %}
+          {% liquid
+            assign card_url = block.settings.link
+            if block.settings.product != blank
+              assign card_url = block.settings.product.url
+            endif
+
+            assign card_image = block.settings.image
+            if card_image == blank and block.settings.product != blank
+              assign card_image = block.settings.product.featured_media.preview_image
+            endif
+
+            if card_url != blank
+              assign card_tag = 'a'
+            else
+              assign card_tag = 'div'
+            endif
+          %}
           <article
             class="xula-signature__card xula-signature__card--{{ forloop.index }}"
+            role="listitem"
+            data-signature-card="{{ forloop.index0 }}"
+            style="--xula-signature-i: {{ forloop.index0 }};"
             {{ block.shopify_attributes }}
           >
-            {% if block.settings.image != blank %}
+            <{{ card_tag }}
+              class="xula-signature__link"
+              {% if card_url != blank %}href="{{ card_url }}"{% endif %}
+            >
               <div class="xula-signature__media">
-                <img
-                  src="{{ block.settings.image | image_url: width: 1400 }}"
-                  alt="{{ block.settings.title }}"
-                  width="1400"
-                  height="350"
-                  loading="lazy"
-                >
+                {% if card_image != blank %}
+                  {{
+                    card_image
+                    | image_url: width: 1400
+                    | image_tag:
+                      widths: '400, 600, 800, 1000, 1200, 1400',
+                      sizes: '(min-width: 990px) 55vw, (min-width: 768px) 55vw, 84vw',
+                      loading: 'lazy',
+                      alt: block.settings.title
+                  }}
+                {% else %}
+                  {{ 'image' | placeholder_svg_tag: 'xula-signature__placeholder' }}
+                {% endif %}
               </div>
-            {% endif %}
 
-            <div class="xula-signature__meta">
-              <span>{{ block.settings.label }}</span>
-              <h3>{{ block.settings.title }}</h3>
-            </div>
+              <div class="xula-signature__overlay" aria-hidden="true"></div>
+
+              <span class="xula-signature__num" aria-hidden="true">
+                {{ forloop.index | prepend: '0' | slice: -2, 2 }}
+              </span>
+
+              <div class="xula-signature__meta">
+                {% if block.settings.label != blank %}
+                  <span class="xula-signature__label">{{ block.settings.label }}</span>
+                {% endif %}
+
+                <h3 class="xula-signature__title">{{ block.settings.title }}</h3>
+
+                {% if block.settings.text != blank %}
+                  <p class="xula-signature__desc">{{ block.settings.text }}</p>
+                {% endif %}
+              </div>
+
+              {% if card_url != blank %}
+                <span class="xula-signature__arrow" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17L17 7M9 7h8v8"/>
+                  </svg>
+                </span>
+              {% endif %}
+            </{{ card_tag }}>
           </article>
         {% endfor %}
 
@@ -137,6 +209,24 @@
           "id": "title",
           "label": "Title",
           "default": "Speciality Coffee"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Short description",
+          "info": "Shown on hover (desktop) and below the title (mobile)."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Clicking the card opens this product page. Its image is used if no image is set."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Card link",
+          "info": "Used only when no product is selected."
         }
       ]
     }
