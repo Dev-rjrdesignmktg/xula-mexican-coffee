@@ -28,6 +28,17 @@
 
 .xula-journey .journey--eyebrow {
   color: var(--xula-journey-eyebrow);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.xula-journey .journey--eyebrow::before {
+  content: "";
+  width: 40px;
+  height: 1px;
+  background: currentColor;
+  opacity: .6;
 }
 
 .xula-journey__copy {
@@ -39,11 +50,21 @@
   gap: 8px;
 }
 
+.xula-journey__num {
+  font-family: var(--font-heading-family);
+  font-size: 4.8rem;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--xula-journey-text) 55%, transparent);
+  letter-spacing: -.02em;
+}
+
 .xula-journey__copy small {
   color: var(--xula-journey-step);
   text-transform: uppercase;
-  letter-spacing: .1em;
-  opacity: .7;
+  letter-spacing: .22em;
+  font-size: 1.1rem;
+  opacity: .75;
 }
 
 .xula-journey .journey--heading {
@@ -52,8 +73,33 @@
 }
 
 .xula-journey__copy p {
-  color: color-mix(in srgb, var(--xula-journey-text) 85%, transparent);
+  color: color-mix(in srgb, var(--xula-journey-text) 82%, transparent);
   margin: 0;
+  max-width: 42ch;
+  font-size: 1.6rem;
+  line-height: 1.75;
+}
+
+/* progress only makes sense with the sticky desktop layout */
+.xula-journey__progress {
+  display: none;
+}
+
+.xula-journey__item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* soft vignette for depth */
+.xula-journey__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, .28));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+  pointer-events: none;
 }
 
 .xula-journey__item {
@@ -94,6 +140,10 @@
     gap: 40px;
   }
 
+  .xula-journey__item {
+    border-radius: 20px;
+  }
+
   .xula-journey__item img {
     height: 420px;
     border-radius: 20px;
@@ -120,39 +170,104 @@
   }
 
   /* LEFT */
+  /* sticky block starts at the first image and stops at the last one;
+     top aligns it with an image centered in the viewport (480px tall) */
   .xula-journey__content {
     position: sticky;
-    top: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
+    top: max(120px, calc(50vh - 240px));
+    align-self: start;
+    display: grid;
+    grid-template-areas:
+      "eyebrow"
+      "copy"
+      "progress";
+    align-content: start;
+    row-gap: 40px;
   }
 
   .journey--eyebrow {
     order: initial;
-    position: absolute;
-    top: 210px;
-    left: 0;
+    grid-area: eyebrow;
+    position: static;
     z-index: 5;
     margin-bottom: 0;
   }
 
+  /* stack all copies in the same cell so the block keeps the tallest height */
   .xula-journey__copy {
     order: initial;
-    position: absolute;
+    grid-area: copy;
+    position: relative;
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity .5s ease, transform .5s ease;
-    gap: 0;
+    pointer-events: none;
+    transition: opacity .6s cubic-bezier(.22, 1, .36, 1);
+    gap: 16px;
   }
 
   .xula-journey__copy.is-active {
     opacity: 1;
-    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* staggered reveal of each line */
+  .xula-journey__copy > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s cubic-bezier(.22, 1, .36, 1), transform .9s cubic-bezier(.22, 1, .36, 1);
+  }
+
+  .xula-journey__copy.is-active > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  .xula-journey__copy.is-active > :nth-child(2) { transition-delay: .08s; }
+  .xula-journey__copy.is-active > :nth-child(3) { transition-delay: .16s; }
+  .xula-journey__copy.is-active > :nth-child(4) { transition-delay: .24s; }
+
+  .xula-journey__num {
+    font-size: 8rem;
   }
 
   .xula-journey .journey--heading {
-    margin: 2rem 0;
+    margin: .5rem 0 1rem;
+    font-size: clamp(3.2rem, 3.4vw, 4.8rem);
+    line-height: 1.05;
+    letter-spacing: -.01em;
+  }
+
+  .xula-journey__progress {
+    grid-area: progress;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 320px;
+  }
+
+  .xula-journey__counter {
+    font-size: 1.2rem;
+    letter-spacing: .18em;
+    white-space: nowrap;
+  }
+
+  .xula-journey__counter-total {
+    opacity: .5;
+  }
+
+  .xula-journey__track {
+    position: relative;
+    flex: 1;
+    height: 1px;
+    background: color-mix(in srgb, var(--xula-journey-text) 25%, transparent);
+  }
+
+  .xula-journey__bar {
+    position: absolute;
+    inset: 0;
+    background: var(--xula-journey-text);
+    transform-origin: left;
+    transform: scaleX(calc(var(--xula-journey-active, 1) / var(--xula-journey-steps, 1)));
+    transition: transform .8s cubic-bezier(.22, 1, .36, 1);
   }
 
   /* RIGHT */
@@ -164,10 +279,24 @@
 
   .xula-journey__item {
     order: initial;
+    border-radius: 24px;
   }
 
   .xula-journey__item img {
     height: 480px;
     border-radius: 24px;
+    transform: scale(1.08);
+    transition: transform 1.6s cubic-bezier(.22, 1, .36, 1);
+  }
+
+  .xula-journey__item.is-active img {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-journey *,
+  .xula-journey *::after {
+    transition: none !important;
   }
 }

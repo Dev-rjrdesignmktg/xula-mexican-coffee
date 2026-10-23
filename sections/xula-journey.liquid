@@ -1,8 +1,9 @@
 {{ 'xula-journey.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'xula-journey.js' | asset_url }}" defer></script>
 
-<section class="xula-journey" 
+<section class="xula-journey"
       style="
+        --xula-journey-steps: {{ section.blocks.size }};
         --xula-journey-bg: {{ section.settings.background_color }};
         --xula-journey-text: {{ section.settings.text_color }};
         --xula-journey-eyebrow: {{ section.settings.eyebrow_color }};
@@ -24,18 +25,29 @@
             data-copy="{{ forloop.index0 }}"
             {{ block.shopify_attributes }}
           >
+            <span class="xula-journey__num" aria-hidden="true">{{ forloop.index | prepend: '0' }}</span>
             <small>{{ block.settings.step_label }}</small>
             <h2 class="xula-heading journey--heading">{{ block.settings.title }}</h2>
             <p>{{ block.settings.text }}</p>
           </div>
         {% endfor %}
+
+        {% if section.blocks.size > 1 %}
+          <div class="xula-journey__progress" aria-hidden="true">
+            <span class="xula-journey__counter">
+              <span class="xula-journey__counter-current">01</span>
+              <span class="xula-journey__counter-total">/ {{ section.blocks.size | prepend: '0' }}</span>
+            </span>
+            <span class="xula-journey__track"><span class="xula-journey__bar"></span></span>
+          </div>
+        {% endif %}
       </div>
 
       <!-- RIGHT SCROLL -->
       <div class="xula-journey__media">
         {% for block in section.blocks %}
           <div
-            class="xula-journey__item"
+            class="xula-journey__item {% if forloop.first %}is-active{% endif %}"
             data-step="{{ forloop.index0 }}"
           >
             {% if block.settings.image != blank %}
