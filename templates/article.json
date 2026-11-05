@@ -12,8 +12,8 @@
     "hero": {
       "type": "xula-article-hero",
       "settings": {
-        "banner_image": "shopify://shop_images/1920_X_1080_HORIZONTAL_PUMPKIN_SLIDE_LATTE_ICED.webp",
-        "banner_image_mobile": "shopify://shop_images/PUMPKIN.webp",
+        "banner_image": "shopify://shop_images/1920_X_1080_HORIZONTAL_ICED_BROWN_SUGAR_LATTE.webp",
+        "banner_image_mobile": "shopify://shop_images/ICED_BROWN_SUGAR_LATTE.webp",
         "image_position": "center center",
         "show_breadcrumb": true,
         "breadcrumb_home_label": "Home",
