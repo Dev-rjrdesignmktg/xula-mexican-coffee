@@ -18,7 +18,7 @@
         "heading": "Blog",
         "subheading": "Stories on Mexican specialty coffee, straight from our roastery.",
         "blog": "recipes",
-        "articles_to_show": 12,
+        "articles_to_show": 16,
         "show_category": true,
         "show_author": true,
         "show_date": true,
