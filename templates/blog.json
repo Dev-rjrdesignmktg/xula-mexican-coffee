@@ -28,26 +28,9 @@
         "initial_visible": 6,
         "load_more_label": "Load More"
       }
-    },
-    "more_articles": {
-      "type": "xula-blog-list",
-      "settings": {
-        "eyebrow": "Keep reading",
-        "heading": "More from the Blog",
-        "blog": "news",
-        "skip_articles": 8,
-        "articles_to_show": 12,
-        "show_category": true,
-        "show_author": true,
-        "alternate_sides": true,
-        "enable_load_more": true,
-        "initial_visible": 4,
-        "load_more_label": "Load More"
-      }
     }
   },
   "order": [
-    "main",
-    "more_articles"
+    "main"
   ]
 }

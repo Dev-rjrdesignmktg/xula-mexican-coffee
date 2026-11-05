@@ -98,12 +98,15 @@
       "name": "Xula Origin",
       "settings": {
         "image": "shopify://shop_images/xula-18.jpg",
+        "location": "Veracruz · Chiapas, MX",
         "autoplay_speed": 5,
         "eyebrow": "Our Terroir",
         "heading": "Grown in the Highlands of Mexico.",
         "text": "In the volcanic soil of Veracruz and Chiapas, small family farms nurture every cherry by hand, high above the clouds where the air is thin and the harvest is slow.",
         "button_label": "About Us",
         "button_link": "shopify://pages/about-xula-mexican-coffee",
+        "secondary_button_label": "",
+        "secondary_button_link": "",
         "color_scheme": "scheme-1"
       }
     },
