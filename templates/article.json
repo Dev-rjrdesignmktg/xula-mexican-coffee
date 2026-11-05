@@ -12,8 +12,8 @@
     "hero": {
       "type": "xula-article-hero",
       "settings": {
-        "banner_image": "shopify://shop_images/1920_X_1080_HORIZONTAL_COFFEE_TONIC.webp",
-        "banner_image_mobile": "shopify://shop_images/TONIC.webp",
+        "banner_image": "shopify://shop_images/1920_X_1080_HORIZONTAL_CLASSIC_CEMPASUCHIL_LATTE.webp",
+        "banner_image_mobile": "shopify://shop_images/CEMPASUCHIL.webp",
         "image_position": "center center",
         "show_breadcrumb": true,
         "breadcrumb_home_label": "Home",
