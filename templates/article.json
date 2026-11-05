@@ -12,8 +12,8 @@
     "hero": {
       "type": "xula-article-hero",
       "settings": {
-        "banner_image": "shopify://shop_images/1920_X_1080_HORIZONTAL_AFFOGATO.webp",
-        "banner_image_mobile": "shopify://shop_images/AFFOGATO.webp",
+        "banner_image": "shopify://shop_images/1920_X_1080_HORIZONTAL_BUTTER_ICED_COFFEE.webp",
+        "banner_image_mobile": "shopify://shop_images/BUTTER_ICED_COFFEE.webp",
         "image_position": "center center",
         "show_breadcrumb": true,
         "breadcrumb_home_label": "Home",
