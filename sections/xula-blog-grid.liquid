@@ -72,8 +72,6 @@
       <ul class="xula-blog-grid__grid" data-blog-grid-grid data-initial-visible="{{ initial_visible }}" role="list">
         {%- for article in articles -%}
           {%- assign category = article.tags.first -%}
-          {%- assign article_image = article.image -%}
-          {%- assign img_alt = article_image.alt | default: article.title | escape -%}
           {%- assign pattern_index = forloop.index | modulo: 4 -%}
           {%- case pattern_index -%}
             {%- when 1 or 0 -%}
@@ -81,6 +79,21 @@
             {%- else -%}
               {%- assign size_modifier = 'small' -%}
           {%- endcase -%}
+
+          {%- comment -%}
+            Per-article card images (optional metafields, fallback = featured image):
+            - custom.card_image_wide   → large horizontal card (tablet/desktop)
+            - custom.card_image_square → small card (tablet/desktop) and every card on mobile
+          {%- endcomment -%}
+          {%- assign card_wide = article.metafields.custom.card_image_wide.value | default: article.image -%}
+          {%- assign card_square = article.metafields.custom.card_image_square.value | default: article.image -%}
+          {%- if size_modifier == 'large' -%}
+            {%- assign article_image = card_wide -%}
+          {%- else -%}
+            {%- assign article_image = card_square -%}
+          {%- endif -%}
+          {%- assign mobile_image = card_square -%}
+          {%- assign img_alt = article_image.alt | default: article.title | escape -%}
 
           {%- comment -%} collect articles for JSON-LD {%- endcomment -%}
           {%- assign ld_count = ld_count | plus: 1 -%}
@@ -116,21 +129,37 @@
               >
                 <div class="xula-blog-grid__media">
                   {%- if article_image -%}
+                    <picture class="xula-blog-grid__picture">
+                    {%- if mobile_image != article_image -%}
+                      <source
+                        media="(max-width: 699px)"
+                        srcset="
+                          {{ mobile_image | image_url: width: 480 }} 480w,
+                          {{ mobile_image | image_url: width: 750 }} 750w,
+                          {{ mobile_image | image_url: width: 1100 }} 1100w"
+                        sizes="100vw"
+                        width="{{ mobile_image.width }}"
+                        height="{{ mobile_image.height }}"
+                      >
+                    {%- endif -%}
                     <img
                       class="xula-blog-grid__image"
-                      src="{{ article_image | image_url: width: 900 }}"
+                      src="{{ article_image | image_url: width: 1200 }}"
                       srcset="
                         {{ article_image | image_url: width: 480 }} 480w,
                         {{ article_image | image_url: width: 700 }} 700w,
                         {{ article_image | image_url: width: 900 }} 900w,
-                        {{ article_image | image_url: width: 1300 }} 1300w"
-                      sizes="(min-width: 990px) {% if size_modifier == 'large' %}55vw{% else %}30vw{% endif %}, 100vw"
+                        {{ article_image | image_url: width: 1300 }} 1300w,
+                        {{ article_image | image_url: width: 1800 }} 1800w,
+                        {{ article_image | image_url: width: 2400 }} 2400w"
+                      sizes="(min-width: 990px) {% if size_modifier == 'large' %}66vw{% else %}34vw{% endif %}, (min-width: 700px) {% if size_modifier == 'large' %}58vw{% else %}42vw{% endif %}, 100vw"
                       alt="{{ img_alt }}"
                       width="{{ article_image.width }}"
                       height="{{ article_image.height }}"
                       loading="{% if forloop.index <= 2 %}eager{% else %}lazy{% endif %}"
                       decoding="async"
                     >
+                    </picture>
                   {%- else -%}
                     {{ 'lifestyle-1' | placeholder_svg_tag: 'xula-blog-grid__image xula-blog-grid__image--placeholder' }}
                   {%- endif -%}

@@ -3,7 +3,8 @@
 
 {%- liquid
   assign hero_id = 'XulaArticleHero-' | append: section.id
-  assign hero_image = article.image
+  assign hero_image = section.settings.banner_image | default: article.image
+  assign hero_image_mobile = section.settings.banner_image_mobile
   assign img_alt = hero_image.alt | default: article.title | escape
   assign blog_label = section.settings.blog_label | default: blog.title | default: 'Blog'
   assign share_url = request.origin | append: article.url
@@ -12,6 +13,19 @@
 <section class="xula-article-hero" id="{{ hero_id }}" aria-labelledby="{{ hero_id }}-heading">
   <div class="xula-article-hero__media">
     {%- if hero_image -%}
+      <picture class="xula-article-hero__picture">
+        {%- if hero_image_mobile -%}
+          <source
+            media="(max-width: 749px)"
+            srcset="
+              {{ hero_image_mobile | image_url: width: 600 }} 600w,
+              {{ hero_image_mobile | image_url: width: 900 }} 900w,
+              {{ hero_image_mobile | image_url: width: 1200 }} 1200w"
+            sizes="100vw"
+            width="{{ hero_image_mobile.width }}"
+            height="{{ hero_image_mobile.height }}"
+          >
+        {%- endif -%}
       <img
         class="xula-article-hero__image"
         src="{{ hero_image | image_url: width: 2000 }}"
@@ -27,7 +41,9 @@
         loading="eager"
         fetchpriority="high"
         decoding="async"
+        style="object-position: {{ section.settings.image_position }};"
       >
+      </picture>
     {%- else -%}
       {{ 'lifestyle-1' | placeholder_svg_tag: 'xula-article-hero__image xula-article-hero__image--placeholder' }}
     {%- endif -%}
@@ -109,6 +125,39 @@
   "tag": "section",
   "class": "section-xula-article-hero",
   "settings": [
+    {
+      "type": "header",
+      "content": "Banner image"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Banner image",
+      "info": "Replaces the article's featured image. Leave empty to use the featured image. Tip: connect it to an article metafield (dynamic source) to set a different banner per post."
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image_mobile",
+      "label": "Mobile banner image (optional)",
+      "info": "Shown on screens under 750px."
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image focal point",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "center top", "label": "Top" },
+        { "value": "center bottom", "label": "Bottom" },
+        { "value": "left center", "label": "Left" },
+        { "value": "right center", "label": "Right" }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
     {
       "type": "checkbox",
       "id": "show_breadcrumb",
