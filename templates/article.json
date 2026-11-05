@@ -12,8 +12,8 @@
     "hero": {
       "type": "xula-article-hero",
       "settings": {
-        "banner_image": "shopify://shop_images/1920_X_1080_HORIZONTAL_VAINILLA_LATTE.webp",
-        "banner_image_mobile": "shopify://shop_images/VAINILLA.webp",
+        "banner_image": "shopify://shop_images/1920_X_1080_HORIZONTAL_PUMPKIN_SLIDE_LATTE_ICED.webp",
+        "banner_image_mobile": "shopify://shop_images/PUMPKIN.webp",
         "image_position": "center center",
         "show_breadcrumb": true,
         "breadcrumb_home_label": "Home",
