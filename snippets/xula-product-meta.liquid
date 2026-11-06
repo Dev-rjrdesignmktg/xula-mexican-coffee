@@ -52,13 +52,11 @@
     assign roast_lower = roast_level | downcase
     if roast_lower contains 'medium' and roast_lower contains 'dark'
       assign roast_class = 'medium-dark'
-    elsif roast_lower contains 'medio' and roast_lower contains 'oscuro'
-      assign roast_class = 'medium-dark'
-    elsif roast_lower contains 'light' or roast_lower contains 'claro'
+    elsif roast_lower contains 'light'
       assign roast_class = 'light'
-    elsif roast_lower contains 'medium' or roast_lower contains 'medio'
+    elsif roast_lower contains 'medium'
       assign roast_class = 'medium'
-    elsif roast_lower contains 'dark' or roast_lower contains 'oscuro'
+    elsif roast_lower contains 'dark'
       assign roast_class = 'dark'
     endif
 

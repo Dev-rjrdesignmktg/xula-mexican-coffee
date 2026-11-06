@@ -16,45 +16,14 @@
     assign is_subscriber = true
   endif
 
-  # Only listed page types; cart, 404, password, search and customers/* never qualify.
-  assign page_allowed = false
-  case template.name
-    when 'index'
-      assign page_allowed = section.settings.show_on_home
-    when 'product'
-      assign page_allowed = section.settings.show_on_product
-    when 'collection'
-      assign page_allowed = section.settings.show_on_collection
-    when 'page'
-      assign page_allowed = section.settings.show_on_page
-    when 'blog', 'article'
-      assign page_allowed = section.settings.show_on_blog
-  endcase
-  if template.directory == 'customers'
-    assign page_allowed = false
-  endif
-
-  assign should_render = false
-  if section.settings.enabled and page_allowed
-    assign should_render = true
-  endif
-  if is_subscriber
+  assign should_render = section.settings.enabled
+  if is_subscriber and request.design_mode == false
     assign should_render = false
-  endif
-  if request.design_mode
-    assign should_render = true
-  endif
-
-  assign list_id = section.settings.klaviyo_list_id | strip
-  assign public_key = section.settings.klaviyo_public_key | strip
-  assign unique_mode = false
-  if section.settings.discount_mode == 'unique_email'
-    assign unique_mode = true
   endif
 -%}
 
-{%- if should_render -%}
-  <link rel="stylesheet" href="{{ 'xula-newsletter-popup.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- if should_render or request.design_mode -%}
+  {{ 'xula-newsletter-popup.css' | asset_url | stylesheet_tag }}
   <script src="{{ 'xula-newsletter-popup.js' | asset_url }}" defer="defer"></script>
 
   <div
@@ -62,30 +31,18 @@
     data-xula-popup
     data-section-id="{{ section.id }}"
     data-delay="{{ section.settings.delay }}"
-    data-mobile-delay="{{ section.settings.mobile_delay }}"
     data-scroll="{{ section.settings.scroll_depth }}"
     data-exit-intent="{{ section.settings.exit_intent }}"
-    data-show-desktop="{{ section.settings.show_desktop }}"
-    data-show-mobile="{{ section.settings.show_mobile }}"
     data-frequency="{{ section.settings.frequency }}"
     data-version="{{ section.settings.version | handleize | default: 'v1' }}"
-    data-page-type="{{ template.name }}"
     data-design-mode="{{ request.design_mode }}"
     data-enabled="{{ section.settings.enabled }}"
-    data-klaviyo-key="{{ public_key | escape }}"
-    data-klaviyo-list="{{ list_id | escape }}"
-    data-ab-split="{{ section.settings.ab_split }}"
-    data-b-heading="{{ section.settings.b_heading | escape }}"
-    data-b-text="{{ section.settings.b_text | escape }}"
-    data-b-button="{{ section.settings.b_button_label | escape }}"
     data-invalid-text="{{ section.settings.invalid_text | escape }}"
     data-error-text="{{ section.settings.error_text | escape }}"
     data-copied-text="{{ section.settings.copied_label | escape }}"
   >
     <dialog
       class="xula-popup__dialog{% unless has_image %} xula-popup__dialog--no-image{% endunless %}"
-      role="dialog"
-      aria-modal="true"
       aria-labelledby="{{ heading_id }}"
       aria-describedby="{{ text_id }}"
       data-xula-popup-dialog
@@ -146,10 +103,10 @@
               </p>
             {%- endif -%}
 
-            <h2 class="xula-popup__heading" id="{{ heading_id }}" data-xula-popup-heading>{{ section.settings.heading }}</h2>
+            <h2 class="xula-popup__heading" id="{{ heading_id }}">{{ section.settings.heading }}</h2>
 
             {%- if section.settings.text != blank -%}
-              <p class="xula-popup__text" id="{{ text_id }}" data-xula-popup-text>{{ section.settings.text }}</p>
+              <p class="xula-popup__text" id="{{ text_id }}">{{ section.settings.text }}</p>
             {%- endif -%}
 
             {%- if section.blocks.size > 0 -%}
@@ -165,17 +122,12 @@
               </ul>
             {%- endif -%}
 
-            {%- if request.design_mode and list_id == blank -%}
-              <p class="xula-popup__notice" role="note">
-                Klaviyo list ID missing — signups are disabled. Add it under “Klaviyo” in this section’s settings.
-              </p>
-            {%- endif -%}
+            {%- form 'customer', id: form_id, class: 'xula-popup__form', data-xula-popup-form: true, novalidate: 'novalidate' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter,xula-popup">
 
-            {%- comment -%} Submitted to Klaviyo by xula-newsletter-popup.js; never posts to Shopify. {%- endcomment -%}
-            <form id="{{ form_id }}" class="xula-popup__form" action="#" method="post" novalidate data-xula-popup-form>
               <div class="xula-popup__hp-field" aria-hidden="true">
                 <label for="{{ hp_id }}">Company</label>
-                <input type="text" id="{{ hp_id }}" name="company" tabindex="-1" autocomplete="off" data-xula-popup-hp>
+                <input type="text" id="{{ hp_id }}" name="contact[company]" tabindex="-1" autocomplete="off">
               </div>
 
               <div class="xula-popup__field">
@@ -183,7 +135,7 @@
                 <input
                   type="email"
                   id="{{ email_id }}"
-                  name="email"
+                  name="contact[email]"
                   class="xula-popup__input"
                   placeholder="{{ section.settings.email_placeholder }}"
                   autocomplete="email"
@@ -200,8 +152,16 @@
                 </button>
               </div>
 
-              <div class="xula-popup__status" id="{{ status_id }}" aria-live="polite" data-xula-popup-status></div>
-            </form>
+              <div class="xula-popup__status" id="{{ status_id }}" aria-live="polite" data-xula-popup-status>
+                {%- if form.errors -%}
+                  <p class="xula-popup__error" role="alert">{{ form.errors.messages['email'] | default: section.settings.error_text }}</p>
+                {%- endif -%}
+              </div>
+
+              {%- if form.posted_successfully? -%}
+                <span hidden data-xula-popup-posted></span>
+              {%- endif -%}
+            {%- endform -%}
 
             {%- if section.settings.decline_label != blank -%}
               <button type="button" class="xula-popup__decline" data-xula-popup-close>{{ section.settings.decline_label }}</button>
@@ -217,23 +177,13 @@
               <svg viewBox="0 0 24 24" focusable="false"><path d="M5 12.5 10 17l9-10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </span>
 
-            {%- liquid
-              if unique_mode
-                assign success_heading = section.settings.unique_success_heading
-                assign success_text = section.settings.unique_success_text
-              else
-                assign success_heading = section.settings.success_heading
-                assign success_text = section.settings.success_text
-              endif
-            -%}
+            <h2 class="xula-popup__heading" tabindex="-1" data-xula-popup-success-heading>{{ section.settings.success_heading }}</h2>
 
-            <h2 class="xula-popup__heading" tabindex="-1" data-xula-popup-success-heading>{{ success_heading }}</h2>
-
-            {%- if success_text != blank -%}
-              <p class="xula-popup__text">{{ success_text }}</p>
+            {%- if section.settings.success_text != blank -%}
+              <p class="xula-popup__text">{{ section.settings.success_text }}</p>
             {%- endif -%}
 
-            {%- if unique_mode == false and section.settings.discount_code != blank -%}
+            {%- if section.settings.discount_code != blank -%}
               <div class="xula-popup__code">
                 <span class="xula-popup__code-label xula-type--code">{{ section.settings.code_label }}</span>
                 <span class="xula-popup__code-value" data-xula-popup-code>{{ section.settings.discount_code }}</span>
@@ -259,7 +209,7 @@
 
     {%- if section.settings.show_teaser and section.settings.teaser_label != blank -%}
       <div class="xula-popup__teaser" data-xula-popup-teaser hidden>
-        <button type="button" class="xula-popup__teaser-open" aria-haspopup="dialog" data-xula-popup-reopen>
+        <button type="button" class="xula-popup__teaser-open" data-xula-popup-reopen>
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <path d="M4 11h16v9H4zM3 7h18v4H3zM12 7v13M12 7c-1.5-3-5-3.5-5-1.2C7 7 9.5 7 12 7zm0 0c1.5-3 5-3.5 5-1.2C17 7 14.5 7 12 7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
           </svg>
@@ -289,22 +239,6 @@
     {
       "type": "paragraph",
       "content": "In the theme editor the popup opens when this section is selected."
-    },
-    {
-      "type": "header",
-      "content": "Klaviyo"
-    },
-    {
-      "type": "text",
-      "id": "klaviyo_public_key",
-      "label": "Klaviyo public API key (site ID)",
-      "default": "VT6Yep"
-    },
-    {
-      "type": "text",
-      "id": "klaviyo_list_id",
-      "label": "Klaviyo list ID",
-      "info": "Klaviyo → Lists & segments → your list → Settings. Signups are disabled until this is set."
     },
     {
       "type": "header",
@@ -406,51 +340,22 @@
       "content": "Success"
     },
     {
-      "type": "select",
-      "id": "discount_mode",
-      "label": "Discount mode",
-      "options": [
-        {
-          "value": "unique_email",
-          "label": "Unique code sent by Klaviyo email"
-        },
-        {
-          "value": "static_onscreen",
-          "label": "Static code shown on screen"
-        }
-      ],
-      "default": "unique_email",
-      "info": "Unique: send the code from a Klaviyo flow triggered by this list."
-    },
-    {
-      "type": "text",
-      "id": "unique_success_heading",
-      "label": "Success heading (unique code)",
-      "default": "Check your inbox"
-    },
-    {
-      "type": "textarea",
-      "id": "unique_success_text",
-      "label": "Success text (unique code)",
-      "default": "Your unique 15% code is on its way. Use it at checkout on your first bag."
-    },
-    {
       "type": "text",
       "id": "success_heading",
-      "label": "Success heading (static code)",
+      "label": "Success heading",
       "default": "Welcome to the Circle."
     },
     {
       "type": "textarea",
       "id": "success_text",
-      "label": "Success text (static code)",
+      "label": "Success text",
       "default": "Your welcome code is ready. Use it at checkout on your first bag."
     },
     {
       "type": "text",
       "id": "discount_code",
       "label": "Discount code",
-      "info": "Only used in static mode. Create it first in Shopify admin → Discounts.",
+      "info": "Create it first in Shopify admin → Discounts. Leave empty to hide the code box.",
       "default": "WELCOME15"
     },
     {
@@ -489,22 +394,12 @@
     {
       "type": "range",
       "id": "delay",
-      "label": "Open after (desktop)",
+      "label": "Open after",
       "min": 0,
       "max": 60,
       "step": 1,
       "unit": "s",
       "default": 8
-    },
-    {
-      "type": "range",
-      "id": "mobile_delay",
-      "label": "Open after (mobile)",
-      "min": 0,
-      "max": 60,
-      "step": 1,
-      "unit": "s",
-      "default": 12
     },
     {
       "type": "range",
@@ -543,56 +438,6 @@
     },
     {
       "type": "header",
-      "content": "Where to show"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_desktop",
-      "label": "Show on desktop",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_mobile",
-      "label": "Show on mobile",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_on_home",
-      "label": "Home page",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_on_product",
-      "label": "Product pages",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_on_collection",
-      "label": "Collection pages",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_on_page",
-      "label": "Pages",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_on_blog",
-      "label": "Blog and articles",
-      "default": true
-    },
-    {
-      "type": "paragraph",
-      "content": "Never shown on cart, checkout, password, 404 or account pages, to subscribed customers, or to visitors arriving from a Klaviyo email."
-    },
-    {
-      "type": "header",
       "content": "Floating reminder"
     },
     {
@@ -606,39 +451,6 @@
       "id": "teaser_label",
       "label": "Reminder label",
       "default": "Get 15% off"
-    },
-    {
-      "type": "header",
-      "content": "A/B test (variant B)"
-    },
-    {
-      "type": "paragraph",
-      "content": "Leave all three fields empty to run without a test. Empty fields fall back to variant A."
-    },
-    {
-      "type": "text",
-      "id": "b_heading",
-      "label": "Heading (B)"
-    },
-    {
-      "type": "textarea",
-      "id": "b_text",
-      "label": "Text (B)"
-    },
-    {
-      "type": "text",
-      "id": "b_button_label",
-      "label": "Button label (B)"
-    },
-    {
-      "type": "range",
-      "id": "ab_split",
-      "label": "Visitors who see B",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "default": 50
     }
   ],
   "blocks": [
@@ -660,24 +472,9 @@
     {
       "name": "Xula Newsletter Popup",
       "blocks": [
-        {
-          "type": "perk",
-          "settings": {
-            "label": "Early access to limited lots"
-          }
-        },
-        {
-          "type": "perk",
-          "settings": {
-            "label": "Brew guides from our roasters"
-          }
-        },
-        {
-          "type": "perk",
-          "settings": {
-            "label": "Members-only tastings"
-          }
-        }
+        { "type": "perk", "settings": { "label": "Early access to limited lots" } },
+        { "type": "perk", "settings": { "label": "Brew guides from our roasters" } },
+        { "type": "perk", "settings": { "label": "Members-only tastings" } }
       ]
     }
   ]

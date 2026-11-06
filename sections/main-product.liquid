@@ -499,19 +499,6 @@
                     block: block,
                     product_form_id: product_form_id
                   %}
-                {%- when 'xula_subscription_toggle' -%}
-                  {%- render 'xula-subscription-toggle',
-                    product: product,
-                    product_form_id: product_form_id,
-                    block: block,
-                    heading: block.settings.heading,
-                    onetime_label: block.settings.onetime_label,
-                    subscribe_label: block.settings.subscribe_label,
-                    badge_template: block.settings.badge_template,
-                    perk_1: block.settings.perk_1,
-                    perk_2: block.settings.perk_2,
-                    default_to_subscription: block.settings.default_to_subscription
-                  -%}
                 {%- when 'buy_buttons' -%}
                   {%- render 'buy-buttons',
                     block: block,
@@ -881,56 +868,6 @@
           "id": "heading",
           "label": "Heading",
           "default": "Coffee profile"
-        }
-      ]
-    },
-    {
-      "type": "xula_subscription_toggle",
-      "name": "Xula Subscription Toggle",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "heading",
-          "label": "Heading",
-          "default": "How would you like to receive it?"
-        },
-        {
-          "type": "text",
-          "id": "onetime_label",
-          "label": "One-time purchase label",
-          "default": "One-time purchase"
-        },
-        {
-          "type": "text",
-          "id": "subscribe_label",
-          "label": "Subscription label",
-          "default": "Subscribe & Save"
-        },
-        {
-          "type": "text",
-          "id": "badge_template",
-          "label": "Savings badge",
-          "info": "Use {percent} as a placeholder for the discount percentage.",
-          "default": "Save {percent}%"
-        },
-        {
-          "type": "text",
-          "id": "perk_1",
-          "label": "Subscription perk 1",
-          "default": "Free shipping on every subscription order"
-        },
-        {
-          "type": "text",
-          "id": "perk_2",
-          "label": "Subscription perk 2",
-          "default": "Skip, pause, or cancel anytime"
-        },
-        {
-          "type": "checkbox",
-          "id": "default_to_subscription",
-          "label": "Preselect Subscribe & Save",
-          "default": false
         }
       ]
     },
