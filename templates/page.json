@@ -119,15 +119,15 @@
         "eyebrow": "Our Story",
         "heading": "Every Cup Carries a Story.",
         "intro": "<p>The humble beginnings of Xula started in Garcia’s own kitchen with her homemade muffins. After years of hard work and collaboration, the business has since expanded to provide a variety of products including specialty Mexican coffees, artisan chocolates and baked goods.</p>",
+        "show_chapter_numbers": true,
         "founding_year": "2020",
         "location": "Veracruz, México",
         "cta_heading": "Taste Where We Come From.",
         "cta_text": "Please Note: We are currently only offering online sales and catering services. Join our mailing list to stay up to date on our upcoming mobile cart and physical location!\n#xulamexicancoffee",
         "cta_button_label": "Shop the Collection",
-        "cta_button_link": "",
+        "cta_button_link": "shopify://collections",
         "cta_tagline": "Est. 2017 · Veracruz, México",
-        "show_structured_data": true,
-        "show_chapter_numbers": true
+        "show_structured_data": true
       }
     },
     "main": {
