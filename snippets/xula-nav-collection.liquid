@@ -1,6 +1,14 @@
 
+{% comment %}
+  One collection of the "Our Products" mega menu.
+  Featured product: the block's pick, else the first available non-gift-card product
+  in the collection's sort order (gift cards never represent a collection).
+  Accessibility: plain links (disclosure navigation pattern, no role="menu").
+  Performance: images are decorative (alt="") and only load when the menu opens
+  (data-xula-src / data-xula-srcset, hydrated by xula-nav.js).
+{% endcomment %}
+
 {%- liquid
-  # Featured product: the block's pick, else the first available non-gift-card product.
   assign product = featured_product
   if product == blank
     for candidate in collection.products limit: 12
@@ -46,15 +54,19 @@
       assign product_count = product_count | plus: 1
     endunless
   endfor
+  if product_count == 1
+    assign count_sr = '1 product'
+  else
+    assign count_sr = product_count | append: ' products'
+  endif
 -%}
 
 {%- case part -%}
   {%- when 'link' -%}
-    <li class="xula-dropdown__collection" role="none" data-collection="{{ collection.handle }}" {% if block %}{{ block.shopify_attributes }}{% endif %}>
+    <li class="xula-dropdown__collection" data-collection="{{ collection.handle }}" {% if block %}{{ block.shopify_attributes }}{% endif %}>
       <a
         href="{{ collection.url }}"
         class="xula-dropdown__collection-link{% if position == 1 %} is-active{% endif %}"
-        role="menuitem"
         data-xula-dropdown-item
         data-xula-preview-target="{{ position }}"
         {% if is_current %}
@@ -62,7 +74,10 @@
         {% endif %}
       >
         <span class="xula-dropdown__collection-title">{{ collection.title | escape }}</span>
-        <span class="xula-dropdown__collection-count xula-type--code">{{ product_count }}</span>
+        <span class="xula-dropdown__collection-count xula-type--code">
+          <span aria-hidden="true">{{ product_count }}</span>
+          <span class="visually-hidden">({{ count_sr }})</span>
+        </span>
         <svg class="xula-dropdown__collection-arrow" aria-hidden="true" focusable="false" viewBox="0 0 14 10" width="14" height="10">
           <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 5h12M9 1l4 4-4 4"/>
         </svg>
@@ -87,16 +102,20 @@
     >
       <span class="xula-dropdown__feature-media">
         {%- if media != blank -%}
+          {%- capture feature_img -%}
           {{
             media
             | image_url: width: 1200
             | image_tag:
               loading: 'lazy',
+                decoding: 'async',
               sizes: '(min-width: 1200px) 560px, 50vw',
               widths: '400, 560, 800, 1120',
               alt: '',
               class: 'xula-dropdown__feature-image'
           }}
+          {%- endcapture -%}
+          {{ feature_img | replace: ' srcset="', ' data-xula-srcset="' | replace: ' src="', ' data-xula-src="' | replace: '<img ', '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" ' }}
         {%- else -%}
           {{ 'product-1' | placeholder_svg_tag: 'xula-dropdown__feature-image xula-dropdown__feature-image--placeholder' }}
         {%- endif -%}
@@ -146,18 +165,22 @@
           aria-current="page"
         {% endif %}
       >
-        <span class="xula-dropdown__row-media">
+        <span class="xula-dropdown__row-media" aria-hidden="true">
           {%- if media != blank -%}
+            {%- capture row_img -%}
             {{
               media
               | image_url: width: 192
               | image_tag:
                 loading: 'lazy',
+                decoding: 'async',
                 sizes: '64px',
                 widths: '64, 128, 192',
                 alt: '',
                 class: 'xula-dropdown__row-image'
             }}
+            {%- endcapture -%}
+            {{ row_img | replace: ' srcset="', ' data-xula-srcset="' | replace: ' src="', ' data-xula-src="' | replace: '<img ', '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" ' }}
           {%- else -%}
             {{ 'collection-1' | placeholder_svg_tag: 'xula-dropdown__row-image xula-dropdown__feature-image--placeholder' }}
           {%- endif -%}

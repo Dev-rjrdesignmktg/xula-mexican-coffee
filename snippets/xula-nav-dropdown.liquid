@@ -98,7 +98,6 @@
         id="{{ toggle_id }}"
         class="xula-dropdown__toggle focus-inset"
         aria-expanded="false"
-        aria-haspopup="true"
         aria-controls="{{ panel_id }}"
         data-xula-dropdown-toggle
       >
@@ -121,7 +120,7 @@
             <p class="xula-dropdown__heading">{{ s.xula_dropdown_heading | escape }}</p>
           {%- endif -%}
 
-          <ul class="xula-dropdown__collections" role="menu" aria-labelledby="HeaderMenu-{{ link.handle }}">
+          <ul class="xula-dropdown__collections" role="list" aria-labelledby="HeaderMenu-{{ link.handle }}">
             {{ collection_links }}
           </ul>
 
