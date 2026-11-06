@@ -3,10 +3,34 @@
 
 {%- liquid
   assign blog_grid_id = 'XulaBlogGrid-' | append: section.id
-  assign blog = section.settings.blog | default: blog
+  # On a blog page always list the blog in the URL (/blogs/news must show News, not the
+  # blog picked in the settings). The picked blog is used elsewhere (e.g. homepage).
+  assign configured_blog = section.settings.blog
+  if request.page_type == 'blog' and blog != blank
+    assign blog = blog
+  else
+    assign blog = configured_blog | default: blog
+  endif
+
+  # Custom eyebrow/heading/subheading belong to the configured blog; any other blog gets
+  # its own title as the H1 so each blog page has a unique heading.
+  assign use_custom_copy = true
+  if configured_blog != blank and blog.handle != configured_blog.handle
+    assign use_custom_copy = false
+  endif
+
+  if use_custom_copy
+    assign heading = section.settings.heading | default: blog.title | default: 'Blog'
+    assign eyebrow = section.settings.eyebrow
+    assign subheading = section.settings.subheading
+  else
+    assign heading = blog.title
+    assign eyebrow = section.settings.eyebrow
+    assign subheading = page_description
+  endif
+
   assign articles_to_show = section.settings.articles_to_show | default: 8
   assign initial_visible = section.settings.initial_visible | default: 4
-  assign heading = section.settings.heading | default: 'Blog'
   assign enable_filters = section.settings.enable_filters
   assign enable_load_more = section.settings.enable_load_more
   assign ld_articles = ''
@@ -39,19 +63,19 @@
       <nav class="xula-blog-grid__breadcrumb" aria-label="Breadcrumb">
         <a href="{{ routes.root_url }}">{{ section.settings.breadcrumb_home_label | default: 'Home' }}</a>
         <span class="xula-blog-grid__breadcrumb-sep" aria-hidden="true">&mdash;</span>
-        <span aria-current="page">{{ heading }}</span>
+        <span aria-current="page">{{ heading | escape }}</span>
       </nav>
     {%- endif -%}
 
     <div class="xula-blog-grid__header">
-      {%- if section.settings.eyebrow != blank -%}
-        <span class="xula-eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- if eyebrow != blank -%}
+        <span class="xula-eyebrow">{{ eyebrow }}</span>
       {%- endif -%}
 
-      <h1 class="xula-blog-grid__heading" id="{{ blog_grid_id }}-heading">{{ heading }}</h1>
+      <h1 class="xula-blog-grid__heading" id="{{ blog_grid_id }}-heading">{{ heading | escape }}</h1>
 
-      {%- if section.settings.subheading != blank -%}
-        <p class="xula-blog-grid__subheading">{{ section.settings.subheading }}</p>
+      {%- if subheading != blank -%}
+        <p class="xula-blog-grid__subheading">{{ subheading | escape }}</p>
       {%- endif -%}
     </div>
 
@@ -225,6 +249,7 @@
       "@context": "https://schema.org",
       "@type": "Blog",
       "name": {{ blog.title | default: shop.name | json }},
+      "url": {{ shop.url | append: blog.url | json }},
       "blogPost": [{{ ld_articles | split: '|XULA_LD_SPLIT|' | join: ',' }}]
     }
   </script>
@@ -276,7 +301,7 @@
       "type": "blog",
       "id": "blog",
       "label": "Blog",
-      "info": "Leave blank to automatically use the current blog when this section is placed on a blog page."
+      "info": "On blog pages the blog in the URL is always shown. This blog's page uses the eyebrow, heading and subheading below; other blogs use their own title as the heading."
     },
     {
       "type": "range",
