@@ -3,8 +3,9 @@
 
 {%- liquid
   assign hero_id = 'XulaArticleHero-' | append: section.id
-  assign hero_image = section.settings.banner_image | default: article.image
-  assign hero_image_mobile = section.settings.banner_image_mobile
+  # Priority: per-article metafield > section image (fallback for all posts) > featured image
+  assign hero_image = article.metafields.custom.banner.value | default: section.settings.banner_image | default: article.image
+  assign hero_image_mobile = article.metafields.custom.banner_mobile.value | default: section.settings.banner_image_mobile
   assign img_alt = hero_image.alt | default: article.title | escape
   # The label override only applies to its own blog; other blogs (e.g. News) show their title.
   assign blog_label = blog.title | default: 'Blog'
@@ -138,7 +139,7 @@
       "type": "image_picker",
       "id": "banner_image",
       "label": "Banner image",
-      "info": "Replaces the article's featured image. Leave empty to use the featured image. Tip: connect it to an article metafield (dynamic source) to set a different banner per post."
+      "info": "Fallback for posts without their own banner. Set a per-post banner in the blog post metafield custom.banner (and custom.banner_mobile). Leave empty to use the featured image."
     },
     {
       "type": "image_picker",
