@@ -304,8 +304,8 @@
 
 .xula-ci__chip.is-active,
 .xula-ci__chip[aria-current] {
-  border-color: color-mix(in srgb, var(--xula-ci-accent) 70%, #000);
-  background: color-mix(in srgb, var(--xula-ci-accent) 70%, #000);
+  border-color: color-mix(in srgb, var(--xula-ci-accent) 80%, #000);
+  background: color-mix(in srgb, var(--xula-ci-accent) 80%, #000);
   color: #fff;
 }
 
@@ -342,7 +342,7 @@
 
 .xula-ci__card {
   /* per-collection accent (set inline from the block); ink = darkened for AA text */
-  --xula-ci-accent-ink: color-mix(in srgb, var(--xula-ci-accent) 70%, #000);
+  --xula-ci-accent-ink: color-mix(in srgb, var(--xula-ci-accent) 80%, #000);
   --xula-ci-surface: color-mix(in srgb, var(--xula-ci-accent) 6%, #fff);
   position: relative;
   display: flex;
