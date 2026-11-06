@@ -1,0 +1,583 @@
+/* =========================================================
+   Xula Subscribe Banner — premium editorial "Subscribe & Save"
+   panel. Mobile-first, BEM (.xula-subscribe-banner).
+   Styles: --dark (espresso + gold) and --light (cream + gold).
+   ========================================================= */
+
+.xula-subscribe-banner {
+  --xula-sb-ease: cubic-bezier(.16, 1, .3, 1);
+  --xula-sb-radius: 28px;
+  --xula-sb-gold: #E2B582;
+  --xula-sb-gold-deep: var(--xula-gold-solid, #C99354);
+  padding: 48px 0;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.xula-subscribe-banner--dark {
+  --xula-sb-panel: var(--bg-secondary);
+  --xula-sb-ink: #F6EFE6;
+  --xula-sb-muted: rgba(246, 239, 230, .7);
+  --xula-sb-line: rgba(226, 181, 130, .22);
+  --xula-sb-accent: var(--xula-sb-gold);
+  --xula-sb-glow-a: rgba(226, 181, 130, .22);
+  --xula-sb-glow-b: rgba(201, 147, 84, .14);
+  --xula-sb-shadow: 0 2px 4px rgba(20, 12, 7, .08), 0 40px 80px -24px rgba(20, 12, 7, .45);
+}
+
+.xula-subscribe-banner--light {
+  --xula-sb-panel: #FAF5EE;
+  --xula-sb-ink: var(--bg-secondary);
+  --xula-sb-muted: rgba(36, 23, 15, .7);
+  --xula-sb-line: rgba(36, 23, 15, .12);
+  --xula-sb-accent: var(--xula-sb-gold-deep);
+  --xula-sb-glow-a: rgba(226, 181, 130, .28);
+  --xula-sb-glow-b: rgba(226, 181, 130, .16);
+  --xula-sb-shadow: 0 1px 2px rgba(23, 28, 36, .04), 0 24px 60px -20px rgba(36, 23, 15, .18);
+}
+
+.xula-subscribe-banner__frame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  align-items: center;
+  padding: 36px 22px 28px;
+  color: var(--xula-sb-ink);
+  background:
+    radial-gradient(70% 60% at 100% 0%, var(--xula-sb-glow-a), transparent 70%),
+    radial-gradient(60% 50% at 0% 100%, var(--xula-sb-glow-b), transparent 70%),
+    var(--xula-sb-panel);
+  border-radius: var(--xula-sb-radius);
+  box-shadow: var(--xula-sb-shadow);
+}
+
+/* Fine gold hairline inset from the panel edge */
+.xula-subscribe-banner__frame::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  z-index: -1;
+  border: 1px solid var(--xula-sb-line);
+  border-radius: calc(var(--xula-sb-radius) - 8px);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------
+   Content column
+   --------------------------------------------------------- */
+
+.xula-subscribe-banner__content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.xula-subscribe-banner__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--xula-sb-accent);
+  text-transform: uppercase;
+  letter-spacing: .22em;
+}
+
+.xula-subscribe-banner__eyebrow-rule {
+  width: 32px;
+  height: 1px;
+  background: currentColor;
+  opacity: .7;
+}
+
+.xula-subscribe-banner__heading {
+  margin: 0;
+  max-width: 14ch;
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(3rem, 5.4vw, 5.4rem);
+  line-height: 1.02;
+  letter-spacing: -.015em;
+  color: var(--xula-sb-ink);
+  text-wrap: balance;
+}
+
+.xula-subscribe-banner__description {
+  margin: 0;
+  max-width: 44rem;
+}
+
+.xula-subscribe-banner__description p {
+  margin: 0;
+  font-family: var(--font-body-family);
+  font-weight: var(--font-body-weight);
+  font-size: clamp(1.5rem, 1.8vw, 1.7rem);
+  line-height: 1.7;
+  color: var(--xula-sb-muted);
+}
+
+/* ---------------------------------------------------------
+   Numbered steps — vertical timeline with gold connector
+   --------------------------------------------------------- */
+
+.xula-subscribe-banner__steps {
+  display: flex;
+  flex-direction: column;
+  margin: 8px 0 0;
+  padding: 24px 0 0;
+  list-style: none;
+  border-top: 1px solid var(--xula-sb-line);
+}
+
+.xula-subscribe-banner__step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding-bottom: 22px;
+  opacity: 1;
+  transform: none;
+  transition: opacity .7s ease, transform .9s var(--xula-sb-ease);
+}
+
+.xula-subscribe-banner__step:last-child {
+  padding-bottom: 0;
+}
+
+.xula-subscribe-banner__step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 44px;
+  bottom: 4px;
+  left: 19.5px;
+  width: 1px;
+  background: linear-gradient(180deg, var(--xula-sb-accent), transparent);
+  opacity: .45;
+}
+
+[data-xula-subscribe-reveal] .xula-subscribe-banner__step {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+[data-xula-subscribe-reveal].is-visible .xula-subscribe-banner__step {
+  opacity: 1;
+  transform: none;
+}
+
+[data-xula-subscribe-reveal].is-visible .xula-subscribe-banner__step:nth-child(1) { transition-delay: .1s; }
+[data-xula-subscribe-reveal].is-visible .xula-subscribe-banner__step:nth-child(2) { transition-delay: .22s; }
+[data-xula-subscribe-reveal].is-visible .xula-subscribe-banner__step:nth-child(3) { transition-delay: .34s; }
+[data-xula-subscribe-reveal].is-visible .xula-subscribe-banner__step:nth-child(4) { transition-delay: .46s; }
+
+.xula-subscribe-banner__step-number {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  letter-spacing: .08em;
+  color: var(--xula-sb-accent);
+  background: transparent;
+  border: 1px solid var(--xula-sb-accent);
+  border-radius: 50%;
+  transition: color .5s ease, background-color .5s ease;
+}
+
+.xula-subscribe-banner__step:hover .xula-subscribe-banner__step-number {
+  color: var(--xula-sb-panel);
+  background: var(--xula-sb-accent);
+}
+
+.xula-subscribe-banner__step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+}
+
+.xula-subscribe-banner__step-title {
+  font-family: var(--font-heading-family);
+  font-weight: 600;
+  font-size: 1.7rem;
+  line-height: 1.25;
+  color: var(--xula-sb-ink);
+}
+
+.xula-subscribe-banner__step-description {
+  font-family: var(--font-body-family);
+  font-weight: var(--font-body-weight);
+  font-size: 1.4rem;
+  line-height: 1.55;
+  color: var(--xula-sb-muted);
+}
+
+/* ---------------------------------------------------------
+   CTA
+   --------------------------------------------------------- */
+
+.xula-subscribe-banner__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.xula-subscribe-banner__cta {
+  gap: 12px;
+  width: 100%;
+  padding: 1.7rem 3rem;
+  font-family: var(--font-heading-family);
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: .02em;
+  box-shadow: 0 12px 28px -12px rgba(232, 49, 138, .55);
+}
+
+.xula-subscribe-banner--dark .xula-subscribe-banner__cta {
+  color: var(--bg-secondary);
+  background: var(--xula-gold);
+  border-color: transparent;
+  box-shadow: 0 14px 32px -12px rgba(226, 181, 130, .5);
+}
+
+.xula-subscribe-banner--dark .xula-subscribe-banner__cta::before {
+  background: #F6EFE6;
+}
+
+.xula-subscribe-banner--dark .xula-subscribe-banner__cta:hover {
+  color: var(--bg-secondary);
+  border-color: transparent;
+}
+
+.xula-subscribe-banner__cta-icon {
+  position: relative;
+  z-index: 2;
+  width: 18px;
+  height: 18px;
+  transition: transform .55s var(--xula-sb-ease);
+}
+
+.xula-subscribe-banner__cta:hover .xula-subscribe-banner__cta-icon {
+  transform: translateX(4px);
+}
+
+.xula-subscribe-banner__cta:focus-visible {
+  outline: 2px solid var(--xula-sb-accent);
+  outline-offset: 4px;
+}
+
+.xula-subscribe-banner__cta-note {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--xula-sb-muted);
+}
+
+/* ---------------------------------------------------------
+   Trust bullets
+   --------------------------------------------------------- */
+
+.xula-subscribe-banner__benefits {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin: 12px 0 0;
+  padding: 22px 0 0;
+  list-style: none;
+  border-top: 1px solid var(--xula-sb-line);
+}
+
+.xula-subscribe-banner__benefit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.xula-subscribe-banner__benefit-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: var(--xula-sb-accent);
+  background: color-mix(in srgb, var(--xula-sb-accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--xula-sb-accent) 40%, transparent);
+  border-radius: 50%;
+}
+
+.xula-subscribe-banner__benefit-icon svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.xula-subscribe-banner__benefit-text {
+  font-family: var(--font-code-family);
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: .02em;
+  color: var(--xula-sb-ink);
+}
+
+/* ---------------------------------------------------------
+   Media column
+   --------------------------------------------------------- */
+
+.xula-subscribe-banner__media {
+  position: relative;
+  width: 100%;
+}
+
+.xula-subscribe-banner__media-frame {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: rgba(20, 12, 7, .35);
+  border-radius: calc(var(--xula-sb-radius) - 8px);
+  box-shadow: 0 30px 60px -30px rgba(20, 12, 7, .6);
+}
+
+.xula-subscribe-banner__image,
+.xula-subscribe-banner__video,
+.xula-subscribe-banner__poster,
+.xula-subscribe-banner__placeholder-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.xula-subscribe-banner__placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.xula-subscribe-banner__media-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(0deg, rgba(20, 12, 7, .45) 0%, rgba(20, 12, 7, .08) 40%, transparent 65%);
+}
+
+/* Inner gold hairline over the media */
+.xula-subscribe-banner__media-frame::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  z-index: 2;
+  border: 1px solid rgba(226, 181, 130, .35);
+  border-radius: calc(var(--xula-sb-radius) - 16px);
+  pointer-events: none;
+}
+
+.xula-subscribe-banner__video--desktop-only {
+  display: none;
+}
+
+/* Savings seal */
+.xula-subscribe-banner__seal {
+  position: absolute;
+  top: -18px;
+  right: 14px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 104px;
+  height: 104px;
+  padding: 14px;
+  text-align: center;
+  color: var(--bg-secondary);
+  background: var(--xula-gold);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 6px var(--xula-sb-panel),
+    0 18px 36px -12px rgba(20, 12, 7, .45);
+}
+
+.xula-subscribe-banner__seal::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px dashed rgba(36, 23, 15, .35);
+  border-radius: 50%;
+}
+
+.xula-subscribe-banner__seal-value {
+  font-family: var(--font-heading-family);
+  font-weight: 700;
+  font-size: 2.8rem;
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+
+.xula-subscribe-banner__seal-label {
+  max-width: 9ch;
+  font-size: .9rem;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+/* ---------------------------------------------------------
+   Scroll reveal (armed by JS so content is visible without it)
+   --------------------------------------------------------- */
+
+.xula-subscribe-banner.is-armed .xula-subscribe-banner__content > :not(.xula-subscribe-banner__steps) {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .8s ease, transform 1s var(--xula-sb-ease);
+}
+
+.xula-subscribe-banner.is-armed .xula-subscribe-banner__media-frame {
+  clip-path: inset(12% 12% 12% 12% round calc(var(--xula-sb-radius) - 8px));
+  transition: clip-path 1.4s var(--xula-sb-ease);
+}
+
+.xula-subscribe-banner.is-armed .xula-subscribe-banner__media-frame > img,
+.xula-subscribe-banner.is-armed .xula-subscribe-banner__media-frame > video {
+  transform: scale(1.12);
+  transition: transform 1.8s var(--xula-sb-ease);
+}
+
+.xula-subscribe-banner.is-armed .xula-subscribe-banner__seal {
+  opacity: 0;
+  transform: scale(.7) rotate(-12deg);
+  transition: opacity .6s ease .7s, transform 1s var(--xula-sb-ease) .7s;
+}
+
+.xula-subscribe-banner.is-armed.is-inview .xula-subscribe-banner__content > * {
+  opacity: 1;
+  transform: none;
+}
+
+.xula-subscribe-banner.is-armed.is-inview .xula-subscribe-banner__content > :nth-child(2) { transition-delay: .08s; }
+.xula-subscribe-banner.is-armed.is-inview .xula-subscribe-banner__content > :nth-child(3) { transition-delay: .16s; }
+.xula-subscribe-banner.is-armed.is-inview .xula-subscribe-banner__content > :nth-child(n+5) { transition-delay: .5s; }
+
+.xula-subscribe-banner.is-armed.is-inview .xula-subscribe-banner__media-frame {
+  clip-path: inset(0 0 0 0 round calc(var(--xula-sb-radius) - 8px));
+}
+
+.xula-subscribe-banner.is-armed.is-inview .xula-subscribe-banner__media-frame > img,
+.xula-subscribe-banner.is-armed.is-inview .xula-subscribe-banner__media-frame > video {
+  transform: none;
+}
+
+.xula-subscribe-banner.is-armed.is-inview .xula-subscribe-banner__seal {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------------------------------------------------------
+   Breakpoints
+   --------------------------------------------------------- */
+
+@media screen and (min-width: 750px) {
+  .xula-subscribe-banner {
+    padding: 72px 0;
+  }
+
+  .xula-subscribe-banner__frame {
+    padding: 56px 48px 48px;
+  }
+
+  .xula-subscribe-banner__benefits {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .xula-subscribe-banner__benefit {
+    padding: 0 18px;
+    border-left: 1px solid var(--xula-sb-line);
+  }
+
+  .xula-subscribe-banner__benefit:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .xula-subscribe-banner__cta {
+    width: auto;
+  }
+
+  .xula-subscribe-banner__seal {
+    top: auto;
+    right: auto;
+    bottom: 32px;
+    left: -28px;
+    width: 128px;
+    height: 128px;
+  }
+
+  .xula-subscribe-banner__seal-value {
+    font-size: 3.4rem;
+  }
+
+  .xula-subscribe-banner__seal-label {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .xula-subscribe-banner {
+    padding: 96px 0;
+  }
+
+  .xula-subscribe-banner__frame {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: 72px;
+    padding: 72px 72px 72px 80px;
+  }
+
+  .xula-subscribe-banner__content {
+    gap: 24px;
+  }
+
+  .xula-subscribe-banner__media-frame {
+    aspect-ratio: 4 / 5;
+  }
+
+  .xula-subscribe-banner__video--desktop-only {
+    display: block;
+  }
+
+  .xula-subscribe-banner__poster--mobile-only {
+    display: none;
+  }
+
+  .xula-subscribe-banner__seal {
+    left: -56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-subscribe-banner__step,
+  .xula-subscribe-banner.is-armed .xula-subscribe-banner__content > *,
+  .xula-subscribe-banner.is-armed .xula-subscribe-banner__media-frame,
+  .xula-subscribe-banner.is-armed .xula-subscribe-banner__media-frame > img,
+  .xula-subscribe-banner.is-armed .xula-subscribe-banner__media-frame > video,
+  .xula-subscribe-banner.is-armed .xula-subscribe-banner__seal {
+    transition: none;
+  }
+
+  [data-xula-subscribe-reveal] .xula-subscribe-banner__step {
+    opacity: 1;
+    transform: none;
+  }
+}
