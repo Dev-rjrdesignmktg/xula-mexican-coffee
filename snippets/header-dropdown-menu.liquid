@@ -7,6 +7,21 @@
 
 <nav class="header__inline-menu">
   <ul class="list-menu list-menu--inline" role="list">
+    {%- liquid
+      assign xula_resources_blog = section.settings.xula_resources_blog | default: blogs.recipes | default: blogs.news
+      assign xula_resources_found = false
+      assign xula_resources_by_handle = false
+      if section.settings.xula_resources_enable
+        for link in section.settings.menu.links
+          if link.handle == section.settings.xula_resources_link_handle
+            assign xula_resources_found = true
+            assign xula_resources_by_handle = true
+          elsif xula_resources_blog != blank and link.url == xula_resources_blog.url
+            assign xula_resources_found = true
+          endif
+        endfor
+      endif
+    -%}
     {%- for link in section.settings.menu.links -%}
       {%- liquid
         assign is_xula_dropdown = false
@@ -17,10 +32,21 @@
             assign is_xula_dropdown = true
           endif
         endif
+
+        assign is_xula_resources = false
+        if section.settings.xula_resources_enable and is_xula_dropdown == false
+          if link.handle == section.settings.xula_resources_link_handle
+            assign is_xula_resources = true
+          elsif xula_resources_by_handle == false and xula_resources_blog != blank and link.url == xula_resources_blog.url
+            assign is_xula_resources = true
+          endif
+        endif
       -%}
-      <li{% if is_xula_dropdown %} class="xula-nav__item"{% endif %}>
+      <li{% if is_xula_dropdown or is_xula_resources %} class="xula-nav__item"{% endif %}>
         {%- if is_xula_dropdown -%}
           {%- render 'xula-nav-dropdown', link: link, mode: 'desktop', index: forloop.index -%}
+        {%- elsif is_xula_resources -%}
+          {%- render 'xula-nav-resources', link: link, mode: 'desktop', index: forloop.index -%}
         {%- elsif link.links != blank -%}
           <header-menu>
             <details id="Details-HeaderMenu-{{ forloop.index }}">
@@ -111,5 +137,10 @@
         {%- endif -%}
       </li>
     {%- endfor -%}
+    {%- if section.settings.xula_resources_enable and section.settings.xula_resources_auto_append and xula_resources_found == false -%}
+      <li class="xula-nav__item">
+        {%- render 'xula-nav-resources', mode: 'desktop', index: 'auto' -%}
+      </li>
+    {%- endif -%}
   </ul>
 </nav>

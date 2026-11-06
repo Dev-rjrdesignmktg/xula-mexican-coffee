@@ -1,0 +1,279 @@
+{% comment %}
+  "Resources" mega menu (blog + articles). Same component as "Our Products"
+  (<xula-dropdown>, xula-nav.css / xula-nav.js), different content source.
+
+  Accessibility: disclosure navigation pattern (button + aria-expanded/aria-controls
+  revealing a plain list of links), entries nested under their blog.
+  SEO: every destination is a real, server-rendered <a href>; "#" parent links fall
+  back to the blog URL so the top-level label never points nowhere.
+
+  Accepts:
+  - mode: 'desktop' | 'mobile'
+  - index: unique id suffix
+  - link: {Object} menu link (optional — when omitted the item is auto-appended)
+{% endcomment %}
+
+{%- liquid
+  assign s = section.settings
+  assign uid = 'resources-' | append: mode | append: '-' | append: index
+  assign panel_id = 'XulaDropdown-' | append: uid
+  assign toggle_id = 'XulaDropdownToggle-' | append: uid
+
+  assign resources_blog = s.xula_resources_blog | default: blogs.recipes | default: blogs.news
+  assign blog_2_handle = s.xula_resources_blog_2_handle | default: 'news' | strip
+  assign resources_blog_2 = blogs[blog_2_handle] | default: blogs.news | default: blogs.articles
+  if resources_blog_2.handle == resources_blog.handle
+    assign resources_blog_2 = nil
+  endif
+  assign resource_blocks = section.blocks | where: 'type', 'xula_nav_resource'
+  assign article_limit = s.xula_resources_article_count | default: 2
+
+  assign menu_title = s.xula_resources_label | default: link.title | default: 'Resources'
+  assign menu_handle = link.handle | default: 'resources'
+  assign menu_url = link.url
+  if menu_url == blank or menu_url == '#'
+    assign menu_url = resources_blog.url | default: '/blogs'
+  endif
+
+  assign view_all_url = resources_blog.url | default: menu_url
+  # With two blogs each group header already links to its blog, so "View all" is only shown for a single blog.
+  assign show_view_all = true
+  if resources_blog_2 != blank or link.links.size > 0
+    assign show_view_all = false
+  endif
+  assign view_all_label = s.xula_resources_view_all_label | default: 'View all articles'
+  assign cta_blog = s.xula_resources_cta_blog | default: 'See all'
+  assign cta_article = s.xula_resources_cta_article | default: 'Read article'
+
+  assign is_active = false
+  if link.active or link.child_active or request.page_type == 'blog' or request.page_type == 'article'
+    assign is_active = true
+  endif
+
+  if mode == 'desktop'
+    assign parts = 'link,preview' | split: ','
+  else
+    assign parts = 'mobile' | split: ','
+  endif
+-%}
+
+{%- for part in parts -%}
+  {%- capture rendered -%}
+    {%- assign position = 0 -%}
+    {%- if resource_blocks.size > 0 -%}
+      {%- for block in resource_blocks -%}
+        {%- assign b = block.settings -%}
+        {%- if b.article != blank or b.blog != blank or b.url != blank -%}
+          {%- assign position = position | plus: 1 -%}
+          {%- render 'xula-nav-resource',
+            part: part,
+            position: position,
+            blog: b.blog,
+            article: b.article,
+            title: b.title,
+            url: b.url,
+            text: b.text,
+            image: b.image,
+            badge: b.badge,
+            badge_style: b.badge_style,
+            block: block,
+            cta_blog: cta_blog,
+            cta_article: cta_article
+          -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- elsif link.links.size > 0 -%}
+      {%- comment -%} Sub-items of the "Resources" link in Navigation (e.g. Blog, Articles) {%- endcomment -%}
+      {%- for childlink in link.links -%}
+        {%- liquid
+          assign child_blog = nil
+          assign child_article = nil
+          case childlink.type
+            when 'blog_link'
+              assign child_blog = childlink.object
+            when 'article_link'
+              assign child_article = childlink.object
+          endcase
+          assign position = position | plus: 1
+        -%}
+        {%- render 'xula-nav-resource',
+          part: part,
+          position: position,
+          blog: child_blog,
+          article: child_article,
+          title: childlink.title,
+          url: childlink.url,
+          cta_blog: cta_blog,
+          cta_article: cta_article
+        -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for slot in (1..2) -%}
+        {%- liquid
+          if slot == 1
+            assign group_blog = resources_blog
+            assign group_label = s.xula_resources_blog_title
+          else
+            assign group_blog = resources_blog_2
+            assign group_label = s.xula_resources_blog_2_title
+          endif
+          assign group_eyebrow = group_label | default: group_blog.title
+        -%}
+        {%- if group_blog != blank -%}
+          {%- assign position = position | plus: 1 -%}
+          {%- assign group_position = position -%}
+          {%- capture group_children -%}
+            {%- for article in group_blog.articles limit: article_limit -%}
+              {%- assign position = position | plus: 1 -%}
+              {%- render 'xula-nav-resource',
+                part: part,
+                position: position,
+                blog: group_blog,
+                article: article,
+                eyebrow: group_eyebrow,
+                sub: true,
+                cta_blog: cta_blog,
+                cta_article: cta_article
+              -%}
+            {%- endfor -%}
+          {%- endcapture -%}
+          {%- comment -%} Previews are a flat set of cards; lists nest entries under their blog. {%- endcomment -%}
+          {%- if part == 'preview' -%}
+            {%- render 'xula-nav-resource',
+              part: part,
+              position: group_position,
+              blog: group_blog,
+              title: group_label,
+              cta_blog: cta_blog,
+              cta_article: cta_article
+            -%}
+            {{- group_children -}}
+          {%- else -%}
+            {%- render 'xula-nav-resource',
+              part: part,
+              position: group_position,
+              blog: group_blog,
+              title: group_label,
+              children: group_children,
+              cta_blog: cta_blog,
+              cta_article: cta_article
+            -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endcapture -%}
+  {%- case part -%}
+    {%- when 'link' -%}
+      {%- assign resource_links = rendered -%}
+    {%- when 'preview' -%}
+      {%- assign resource_previews = rendered -%}
+    {%- when 'mobile' -%}
+      {%- assign resource_rows = rendered -%}
+  {%- endcase -%}
+{%- endfor -%}
+
+{%- if mode == 'desktop' -%}
+  <xula-dropdown class="xula-dropdown xula-dropdown--desktop xula-dropdown--resources" data-mode="desktop">
+    <div class="xula-dropdown__trigger">
+      <a
+        id="HeaderMenu-{{ menu_handle }}"
+        href="{{ menu_url }}"
+        class="header__menu-item list-menu__item link focus-inset xula-dropdown__label"
+        data-xula-dropdown-label
+        {% if link.current %}
+          aria-current="page"
+        {% endif %}
+      >
+        <span{% if is_active %} class="header__active-menu-item"{% endif %}>
+          {{- menu_title | escape -}}
+        </span>
+      </a>
+      <button
+        type="button"
+        id="{{ toggle_id }}"
+        class="xula-dropdown__toggle focus-inset"
+        aria-expanded="false"
+        aria-controls="{{ panel_id }}"
+        data-xula-dropdown-toggle
+      >
+        <span class="visually-hidden">
+          {{- menu_title | escape }}: {{ 'Show submenu' -}}
+        </span>
+        <svg class="xula-dropdown__caret" aria-hidden="true" focusable="false" viewBox="0 0 10 6" width="10" height="6">
+          <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 1l4 4 4-4"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="{{ panel_id }}" class="xula-dropdown__panel" data-xula-dropdown-panel>
+      <div class="xula-dropdown__inner page-width">
+        <div class="xula-dropdown__intro">
+          {%- if s.xula_resources_eyebrow != blank -%}
+            <p class="xula-dropdown__eyebrow xula-type--code">{{ s.xula_resources_eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if s.xula_resources_heading != blank -%}
+            <p class="xula-dropdown__heading">{{ s.xula_resources_heading | escape }}</p>
+          {%- endif -%}
+
+          <ul class="xula-dropdown__collections" role="list" aria-labelledby="HeaderMenu-{{ menu_handle }}">
+            {{ resource_links }}
+          </ul>
+
+          {%- if show_view_all -%}
+          <a href="{{ view_all_url }}" class="xula-dropdown__view-all" data-xula-dropdown-item>
+            {{- view_all_label | escape -}}
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 14 10" width="14" height="10">
+              <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 5h12M9 1l4 4-4 4"/>
+            </svg>
+          </a>
+          {%- endif -%}
+        </div>
+
+        {%- if resource_previews != blank -%}
+          <div class="xula-dropdown__preview">
+            {{ resource_previews }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </xula-dropdown>
+{%- else -%}
+  <xula-dropdown class="xula-dropdown xula-dropdown--mobile xula-dropdown--resources" data-mode="mobile">
+    <button
+      type="button"
+      id="{{ toggle_id }}"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset xula-dropdown__accordion-toggle{% if is_active %} menu-drawer__menu-item--active{% endif %}"
+      aria-expanded="false"
+      aria-controls="{{ panel_id }}"
+      data-xula-dropdown-toggle
+    >
+      <span>{{ menu_title | escape }}</span>
+      <svg class="xula-dropdown__caret" aria-hidden="true" focusable="false" viewBox="0 0 10 6" width="12" height="8">
+        <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 1l4 4 4-4"/>
+      </svg>
+    </button>
+
+    <div
+      id="{{ panel_id }}"
+      class="xula-dropdown__panel"
+      role="region"
+      aria-labelledby="{{ toggle_id }}"
+      data-xula-dropdown-panel
+    >
+      <div class="xula-dropdown__panel-clip">
+        <ul class="xula-dropdown__collections" role="list">
+          {{ resource_rows }}
+        </ul>
+        {%- if show_view_all -%}
+        <a href="{{ view_all_url }}" class="xula-dropdown__view-all">
+          {{- view_all_label | escape -}}
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 14 10" width="14" height="10">
+            <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 5h12M9 1l4 4-4 4"/>
+          </svg>
+        </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </xula-dropdown>
+{%- endif -%}

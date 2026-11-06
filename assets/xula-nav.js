@@ -52,8 +52,22 @@ if (!customElements.get('xula-dropdown')) {
       return Array.from(this.panel.querySelectorAll('[data-xula-dropdown-item]'));
     }
 
+    // Deferred images (data-xula-src/srcset): the hidden panel sits near the top of
+    // every page, so native lazy-loading would still fetch them on load.
+    hydrateMedia() {
+      if (this.mediaHydrated) return;
+      this.mediaHydrated = true;
+      this.querySelectorAll('img[data-xula-src]').forEach((img) => {
+        if (img.dataset.xulaSrcset) img.srcset = img.dataset.xulaSrcset;
+        img.src = img.dataset.xulaSrc;
+        img.removeAttribute('data-xula-srcset');
+        img.removeAttribute('data-xula-src');
+      });
+    }
+
     open() {
       if (this.isOpen) return;
+      this.hydrateMedia();
       if (this.mode === 'desktop') {
         XulaDropdown.closeOthers(this);
         document.addEventListener('click', this.onDocumentClick);
@@ -81,6 +95,11 @@ if (!customElements.get('xula-dropdown')) {
     /* ---------------- Desktop ---------------- */
 
     initDesktop() {
+      // Start loading preview images on hover/focus intent, before the panel opens.
+      const warm = () => this.hydrateMedia();
+      this.addEventListener('pointerenter', warm, { once: true });
+      this.addEventListener('focusin', warm, { once: true });
+
       this.addEventListener('mouseenter', () => this.scheduleHover(true));
       this.addEventListener('mouseleave', () => this.scheduleHover(false));
 

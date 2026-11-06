@@ -736,6 +736,106 @@
       "id": "xula_dropdown_subscription_label",
       "label": "Subscription badge text",
       "default": "Subscription available"
+    },
+    {
+      "type": "header",
+      "content": "XULA · Resources mega menu"
+    },
+    {
+      "type": "paragraph",
+      "content": "Shows the Recipes and News blogs below with their latest entries. Alternatively, give the \"Resources\" menu link sub-items in Navigation and they are shown as-is. \"Resources item\" blocks take priority over both."
+    },
+    {
+      "type": "checkbox",
+      "id": "xula_resources_enable",
+      "label": "Enable resources mega menu",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "xula_resources_label",
+      "label": "Menu label",
+      "default": "Resources"
+    },
+    {
+      "type": "text",
+      "id": "xula_resources_link_handle",
+      "label": "Menu link handle",
+      "default": "resources",
+      "info": "Handle of the menu link that opens this mega menu. A menu link pointing to the blog below also opens it."
+    },
+    {
+      "type": "checkbox",
+      "id": "xula_resources_auto_append",
+      "label": "Add to the end of the menu automatically",
+      "default": true,
+      "info": "Used when no menu link matches the handle or the blog."
+    },
+    {
+      "type": "blog",
+      "id": "xula_resources_blog",
+      "label": "Recipes blog",
+      "info": "Defaults to the blog with the handle \"recipes\"."
+    },
+    {
+      "type": "text",
+      "id": "xula_resources_blog_title",
+      "label": "Blog label",
+      "default": "Blog",
+      "info": "Leave empty to use the blog name."
+    },
+    {
+      "type": "text",
+      "id": "xula_resources_blog_2_handle",
+      "label": "News blog handle",
+      "default": "news",
+      "info": "Handle of the XULA news blog (the end of its URL, e.g. /blogs/news → news). Shopify allows only one blog picker per section."
+    },
+    {
+      "type": "text",
+      "id": "xula_resources_blog_2_title",
+      "label": "News label",
+      "default": "News",
+      "info": "Leave empty to use the blog name."
+    },
+    {
+      "type": "range",
+      "id": "xula_resources_article_count",
+      "label": "Latest entries per blog",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "xula_resources_eyebrow",
+      "label": "Eyebrow",
+      "default": "Resources"
+    },
+    {
+      "type": "text",
+      "id": "xula_resources_heading",
+      "label": "Heading",
+      "default": "Blog & XULA news"
+    },
+    {
+      "type": "text",
+      "id": "xula_resources_view_all_label",
+      "label": "\"View all\" label",
+      "default": "View all articles"
+    },
+    {
+      "type": "text",
+      "id": "xula_resources_cta_blog",
+      "label": "Blog button label",
+      "default": "See all"
+    },
+    {
+      "type": "text",
+      "id": "xula_resources_cta_article",
+      "label": "Article button label",
+      "default": "Read article"
     }
   ],
   "blocks": [
@@ -769,6 +869,65 @@
           "id": "badge",
           "label": "Badge",
           "info": "e.g. \"Best Seller\", \"New\". Leave empty for automatic."
+        },
+        {
+          "type": "select",
+          "id": "badge_style",
+          "label": "Badge style",
+          "options": [
+            { "value": "accent", "label": "XULA pink" },
+            { "value": "gold", "label": "Gold" },
+            { "value": "dark", "label": "Dark coffee" }
+          ],
+          "default": "accent"
+        }
+      ]
+    },
+    {
+      "type": "xula_nav_resource",
+      "name": "Resources item",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Article"
+        },
+        {
+          "type": "blog",
+          "id": "blog",
+          "label": "Blog",
+          "info": "Used when no article is selected."
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Custom link",
+          "info": "Used when neither an article nor a blog is selected (e.g. a brewing guide page)."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Label",
+          "info": "Defaults to the article or blog title. Required for custom links."
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Preview text",
+          "info": "Defaults to the article excerpt."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom image",
+          "info": "Overrides the article image."
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "info": "e.g. \"New\", \"Guide\"."
         },
         {
           "type": "select",
