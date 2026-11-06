@@ -39,11 +39,10 @@
       assign item_media = image | default: article.image
       assign item_eyebrow = blog.title | default: 'Article'
       assign item_date = article.published_at
-      if article.excerpt != blank
-        assign item_text = article.excerpt | strip_html | strip_newlines | truncatewords: 20
-      else
-        assign item_text = article.content | strip_html | strip_newlines | truncatewords: 20
-      endif
+      # Plain-text summary: keep a space where block tags and line breaks were
+      # ("<h3>Ingredients</h3><li>Milk" must not become "IngredientsMilk").
+      assign source_html = article.excerpt | default: article.content
+      assign item_text = source_html | newline_to_br | replace: '<br', ' <br' | replace: '</p>', ' </p>' | replace: '</li>', ' </li>' | replace: '</div>', ' </div>' | replace: '</h1>', ' </h1>' | replace: '</h2>', ' </h2>' | replace: '</h3>', ' </h3>' | replace: '</h4>', ' </h4>' | replace: '</h5>', ' </h5>' | replace: '</h6>', ' </h6>' | replace: '</blockquote>', ' </blockquote>' | strip_html | split: ' ' | join: ' ' | truncatewords: 20
       assign item_cta = cta_article
       assign item_handle = 'article-' | append: article.handle
     when 'blog'
@@ -59,7 +58,8 @@
         assign item_count_sr = item_count | append: ' articles'
       endif
       if latest != blank
-        assign item_text = 'Latest: ' | append: latest.title
+        assign latest_title = latest.title | escape
+        assign item_text = 'Latest: ' | append: latest_title
       endif
       assign item_cta = cta_blog
       assign item_handle = 'blog-' | append: blog.handle
@@ -73,7 +73,7 @@
   endcase
 
   if text != blank
-    assign item_text = text
+    assign item_text = text | escape
   endif
   if eyebrow != blank
     assign item_eyebrow = eyebrow
@@ -180,7 +180,8 @@
           {%- endif -%}
 
           {%- if item_text != blank -%}
-            <span class="xula-dropdown__feature-text">{{ item_text | escape }}</span>
+            {%- comment -%} Already plain text: escaped at the source; HTML-stripped text keeps its entities. {%- endcomment -%}
+            <span class="xula-dropdown__feature-text">{{ item_text }}</span>
           {%- endif -%}
 
           <span class="xula-dropdown__feature-cta">

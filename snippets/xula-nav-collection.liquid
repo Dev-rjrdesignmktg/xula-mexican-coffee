@@ -144,7 +144,10 @@
             {%- endif -%}
           </span>
         {%- elsif collection.description != blank -%}
-          <span class="xula-dropdown__feature-text">{{ collection.description | strip_html | truncatewords: 18 }}</span>
+          {%- liquid
+            assign collection_text = collection.description | newline_to_br | replace: '<br', ' <br' | replace: '</p>', ' </p>' | replace: '</li>', ' </li>' | replace: '</div>', ' </div>' | replace: '</h2>', ' </h2>' | replace: '</h3>', ' </h3>' | strip_html | split: ' ' | join: ' ' | truncatewords: 18
+          -%}
+          <span class="xula-dropdown__feature-text">{{ collection_text }}</span>
         {%- endif -%}
 
         <span class="xula-dropdown__feature-cta">
