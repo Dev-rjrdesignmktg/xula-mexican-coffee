@@ -1,0 +1,428 @@
+{{ 'xula-collections-index.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'xula-collections-index.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign s = section.settings
+  assign collection_blocks = section.blocks | where: 'type', 'collection'
+
+  comment
+    Source list: curated blocks first; otherwise every published collection
+    that has products (skipping the internal "frontpage" collection).
+  endcomment
+  assign use_blocks = false
+  if collection_blocks.size > 0
+    assign use_blocks = true
+  endif
+
+  assign total = 0
+  if use_blocks
+    for block in collection_blocks
+      if block.settings.collection != blank
+        assign total = total | plus: 1
+      endif
+    endfor
+  else
+    for c in collections
+      if c.handle != 'frontpage' and c.handle != 'all' and c.products_count > 0
+        assign total = total | plus: 1
+      endif
+    endfor
+  endif
+
+-%}
+
+{%- liquid
+  assign heading_id = 'XulaCiTitle-' | append: section.id
+  assign breadcrumb_home = s.breadcrumb_home | default: 'Home'
+  assign breadcrumb_current = s.breadcrumb_current | default: 'Collections'
+
+  comment
+    Above-the-fold image strategy:
+    - hero image → LCP: eager + high priority (preloaded only when there is
+      no separate mobile art, to avoid downloading the wrong file).
+    - no hero image → the first card image becomes the LCP candidate.
+  endcomment
+  assign hero_img = s.hero_image
+  assign hero_img_m = s.hero_image_mobile
+  assign hero_has_image = false
+  if hero_img != blank
+    assign hero_has_image = true
+  endif
+  comment
+    Decorative by default (empty alt); uses the image's own alt text when set in Files.
+  endcomment
+  assign hero_alt = hero_img.alt | default: ''
+  assign preload_hero = false
+  if hero_has_image and hero_img_m == blank
+    assign preload_hero = true
+  endif
+-%}
+
+<section
+  class="xula-ci"
+  id="XulaCollectionsIndex-{{ section.id }}"
+  aria-labelledby="{{ heading_id }}"
+  style="
+    --xula-ci-hero-bg: {{ s.hero_background | default: '#24170f' }};
+    --xula-ci-hero-ink: {{ s.hero_text | default: '#ffffff' }};
+    --xula-ci-bg: {{ s.background | default: '#ffffff' }};
+    --xula-ci-pt: {{ s.padding_top }}px;
+    --xula-ci-pb: {{ s.padding_bottom }}px;
+  "
+  data-xula-ci
+>
+  {%- comment -%} ===================== HERO ===================== {%- endcomment -%}
+  <div class="xula-ci__hero{% if hero_has_image %} xula-ci__hero--image{% endif %}{% if s.hero_full_height %} xula-ci__hero--full{% endif %}">
+    {%- if hero_has_image -%}
+      <div
+        class="xula-ci__hero-media"
+        style="
+          --xula-ci-focal: {{ hero_img.presentation.focal_point | default: 'center' }};
+          {%- if hero_img_m != blank %} --xula-ci-focal-m: {{ hero_img_m.presentation.focal_point | default: 'center' }};{% endif %}
+        "
+      >
+        <picture>
+          {%- if hero_img_m != blank -%}
+            <source
+              media="(max-width: 749px)"
+              srcset="
+                {%- for w in (1..3) -%}
+                  {%- assign size = w | times: 500 -%}
+                  {%- if hero_img_m.width >= size -%}{{ hero_img_m | image_url: width: size }} {{ size }}w,{%- endif -%}
+                {%- endfor -%}
+                {{ hero_img_m | image_url: width: 1800 }} 1800w
+              "
+              sizes="100vw"
+              width="{{ hero_img_m.width }}"
+              height="{{ hero_img_m.height }}"
+            >
+          {%- endif -%}
+          {{
+            hero_img
+            | image_url: width: 3000
+            | image_tag:
+              loading: 'eager',
+              fetchpriority: 'high',
+              preload: preload_hero,
+              decoding: 'async',
+              sizes: '100vw',
+              widths: '750, 1000, 1400, 1800, 2400, 3000',
+              alt: hero_alt,
+              class: 'xula-ci__hero-img'
+            }}
+        </picture>
+      </div>
+    {%- endif -%}
+    <div class="xula-ci__hero-grain" aria-hidden="true"></div>
+
+    <div class="page-width xula-ci__hero-inner">
+      {%- if s.show_breadcrumb -%}
+        <nav class="xula-ci__breadcrumb xula-type--code" aria-label="{{ s.breadcrumb_label | default: 'Breadcrumb' | escape }}">
+          <ol role="list">
+            <li><a href="{{ routes.root_url }}">{{ breadcrumb_home | escape }}</a></li>
+            <li><span aria-current="page">{{ breadcrumb_current | escape }}</span></li>
+          </ol>
+        </nav>
+      {%- endif -%}
+
+      {%- comment -%} No reveal animation here: the hero is above the fold and must paint immediately (LCP). {%- endcomment -%}
+      <div class="xula-ci__hero-copy">
+        {%- if s.eyebrow != blank -%}
+          <p class="xula-ci__eyebrow xula-type--code">{{ s.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h1 class="xula-ci__title" id="{{ heading_id }}">
+          {%- if s.heading != blank -%}{{ s.heading }}{%- else -%}{{ page_title | escape }}{%- endif -%}
+        </h1>
+        {%- if s.description != blank -%}
+          <div class="xula-ci__lead">{{ s.description }}</div>
+        {%- endif -%}
+      </div>
+
+      <dl class="xula-ci__hero-meta">
+        {%- if s.origin_label != blank and s.origin_value != blank -%}
+          <div class="xula-ci__stat xula-ci__stat--text">
+            <dt class="xula-ci__stat-label">{{ s.origin_label | escape }}</dt>
+            <dd class="xula-ci__stat-value xula-ci__stat-value--text">{{ s.origin_value | escape }}</dd>
+          </div>
+        {%- endif -%}
+        {%- if s.stat3_label != blank and s.stat3_value != blank -%}
+          <div class="xula-ci__stat xula-ci__stat--text">
+            <dt class="xula-ci__stat-label">{{ s.stat3_label | escape }}</dt>
+            <dd class="xula-ci__stat-value xula-ci__stat-value--text">{{ s.stat3_value | escape }}</dd>
+          </div>
+        {%- endif -%}
+        <div class="xula-ci__stat xula-ci__stat--count">
+          <dt class="xula-ci__stat-label">{{ s.stat_label | default: 'Collections' | escape }}</dt>
+          <dd class="xula-ci__stat-value xula-type--code">
+            <span aria-hidden="true">{{ total | prepend: '0' | slice: -2, 2 }}</span>
+            <span class="visually-hidden">{{ total }}</span>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  {%- comment -%} ===================== QUICK NAV ===================== {%- endcomment -%}
+  {%- if s.show_quick_nav and total > 1 -%}
+    <nav class="xula-ci__nav" aria-label="{{ s.quick_nav_label | default: 'Jump to collection' | escape }}">
+      <div class="page-width">
+        <ul class="xula-ci__nav-list" role="list">
+          {%- if use_blocks -%}
+            {%- for block in collection_blocks -%}
+              {%- assign c = block.settings.collection -%}
+              {%- if c != blank -%}
+                <li><a href="#xula-ci-{{ section.id }}-{{ c.handle }}" class="xula-ci__chip" style="--xula-ci-accent: {{ block.settings.accent | default: '#E8318A' }};">{{ c.title | escape }}</a></li>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- assign palette = '#E8318A,#E95028,#345DA8,#439135' | split: ',' -%}
+            {%- assign chip_pos = 0 -%}
+            {%- for c in collections -%}
+              {%- if c.handle != 'frontpage' and c.handle != 'all' and c.products_count > 0 -%}
+                {%- assign palette_index = chip_pos | modulo: 4 -%}
+                {%- assign chip_pos = chip_pos | plus: 1 -%}
+                <li><a href="#xula-ci-{{ section.id }}-{{ c.handle }}" class="xula-ci__chip" style="--xula-ci-accent: {{ palette[palette_index] }};">{{ c.title | escape }}</a></li>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+      </div>
+    </nav>
+  {%- endif -%}
+
+  {%- comment -%} ===================== GRID ===================== {%- endcomment -%}
+  <div class="xula-ci__body">
+    <div class="page-width">
+      {%- if total == 0 -%}
+        <p class="xula-ci__empty">{{ s.empty_text | default: 'New collections are being roasted. Check back soon.' | escape }}</p>
+      {%- else -%}
+        <ol class="xula-ci__grid" role="list">
+          {%- assign position = 0 -%}
+          {%- if use_blocks -%}
+            {%- for block in collection_blocks -%}
+              {%- if block.settings.collection != blank -%}
+                {%- assign position = position | plus: 1 -%}
+                {%- render 'xula-collection-index-card',
+                  collection: block.settings.collection,
+                  block: block,
+                  image: block.settings.image,
+                  tagline: block.settings.tagline,
+                  description: block.settings.description,
+                  badge: block.settings.badge,
+                  accent: block.settings.accent,
+                  position: position,
+                  total: total,
+                  hero_has_image: hero_has_image,
+                  section_id: section.id,
+                  settings: s
+                -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for c in collections -%}
+              {%- if c.handle != 'frontpage' and c.handle != 'all' and c.products_count > 0 -%}
+                {%- assign position = position | plus: 1 -%}
+                {%- render 'xula-collection-index-card',
+                  collection: c,
+                  position: position,
+                  total: total,
+                  hero_has_image: hero_has_image,
+                  section_id: section.id,
+                  settings: s
+                -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </ol>
+      {%- endif -%}
+
+      {%- comment -%} ===================== CLOSING CTA ===================== {%- endcomment -%}
+      {%- if s.cta_heading != blank -%}
+        <div class="xula-ci__cta" role="region" aria-labelledby="XulaCiCta-{{ section.id }}" data-xula-ci-reveal>
+          <div class="xula-ci__cta-copy">
+            {%- if s.cta_eyebrow != blank -%}
+              <p class="xula-ci__eyebrow xula-type--code">{{ s.cta_eyebrow | escape }}</p>
+            {%- endif -%}
+            <h2 class="xula-ci__cta-title" id="XulaCiCta-{{ section.id }}">{{ s.cta_heading | escape }}</h2>
+            {%- if s.cta_text != blank -%}
+              <p class="xula-ci__cta-text">{{ s.cta_text | escape }}</p>
+            {%- endif -%}
+          </div>
+          <div class="xula-ci__cta-actions">
+            {%- comment -%}
+              Opens the quiz modal. The quiz is the "Xula Coffee Quiz" section placed on
+              this same template; JS moves it into the dialog. Without a quiz on the page
+              the button navigates to the fallback link instead.
+            {%- endcomment -%}
+            <button
+              type="button"
+              class="xula-btn xula-ci__quiz-trigger"
+              aria-haspopup="dialog"
+              aria-controls="XulaCiQuizModal-{{ section.id }}"
+              data-xula-ci-quiz-open
+              {% if s.cta_fallback_link != blank %}data-fallback-url="{{ s.cta_fallback_link }}"{% endif %}
+            >
+              <span>{{ s.cta_button_label | default: 'Take the coffee quiz' | escape }}</span>
+            </button>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} ===================== QUIZ MODAL ===================== {%- endcomment -%}
+      <dialog
+        class="xula-ci-modal"
+        id="XulaCiQuizModal-{{ section.id }}"
+        aria-label="{{ s.quiz_modal_label | default: 'Coffee quiz' | escape }}"
+        data-xula-ci-quiz-modal
+      >
+        <div class="xula-ci-modal__panel">
+          <button type="button" class="xula-ci-modal__close" data-xula-ci-quiz-close>
+            <span class="visually-hidden">{{ s.quiz_close_label | default: 'Close quiz' | escape }}</span>
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M3 3l10 10M13 3L3 13"/></svg>
+          </button>
+          <div class="xula-ci-modal__body" data-xula-ci-quiz-slot></div>
+        </div>
+      </dialog>
+
+      {%- unless request.design_mode -%}
+        {%- comment -%} Keep the quiz section out of the page flow until it lives inside the modal. {%- endcomment -%}
+        <style>
+          .shopify-section:has(> [data-xula-quiz]):not(.xula-ci-modal .shopify-section) { display: none; }
+        </style>
+      {%- endunless -%}
+    </div>
+  </div>
+
+  {%- comment -%} ===================== STRUCTURED DATA (SEO) ===================== {%- endcomment -%}
+  {%- if total > 0 and request.page_type == 'list-collections' -%}
+    {%- capture ld_items -%}
+      {%- assign ld_pos = 0 -%}
+      {%- if use_blocks -%}
+        {%- for block in collection_blocks -%}
+          {%- assign c = block.settings.collection -%}
+          {%- if c != blank -%}
+            {%- assign ld_pos = ld_pos | plus: 1 -%}
+            {%- if ld_pos > 1 %},{% endif -%}
+            {"@type":"ListItem","position":{{ ld_pos }},"name":{{ c.title | json }},"url":{{ request.origin | append: c.url | json }}{% if c.featured_image %},"image":{{ c.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}{% endif %}}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for c in collections -%}
+          {%- if c.handle != 'frontpage' and c.handle != 'all' and c.products_count > 0 -%}
+            {%- assign ld_pos = ld_pos | plus: 1 -%}
+            {%- if ld_pos > 1 %},{% endif -%}
+            {"@type":"ListItem","position":{{ ld_pos }},"name":{{ c.title | json }},"url":{{ request.origin | append: c.url | json }}{% if c.featured_image %},"image":{{ c.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}{% endif %}}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endcapture -%}
+
+    {%- assign ld_title = s.heading | strip_html | default: page_title -%}
+    {%- assign ld_desc = s.description | strip_html | strip -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "CollectionPage",
+            "name": {{ ld_title | json }},
+            {%- if ld_desc != blank %}"description": {{ ld_desc | json }},{% endif %}
+            "url": {{ canonical_url | json }},
+            "isPartOf": { "@type": "WebSite", "name": {{ shop.name | json }}, "url": {{ request.origin | append: routes.root_url | json }} },
+            "mainEntity": { "@type": "ItemList", "numberOfItems": {{ total }}, "itemListElement": [{{ ld_items }}] }
+          }
+          {%- if s.show_breadcrumb -%},
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": {{ breadcrumb_home | json }}, "item": {{ request.origin | append: routes.root_url | json }} },
+              { "@type": "ListItem", "position": 2, "name": {{ breadcrumb_current | json }}, "item": {{ canonical_url | json }} }
+            ]
+          }
+          {%- endif %}
+        ]
+      }
+    </script>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Xula · Collections index",
+  "tag": "div",
+  "class": "xula-ci-section",
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "image_picker", "id": "hero_image", "label": "Background image", "info": "Optional. Shown behind a dark espresso overlay. Recommended 2400 × 1200 px. Set a focal point in Files to control cropping." },
+    { "type": "image_picker", "id": "hero_image_mobile", "label": "Background image (mobile)", "info": "Optional. Portrait art for screens under 750px. Recommended 900 × 1200 px." },
+    { "type": "color", "id": "hero_background", "label": "Hero background", "default": "#24170f" },
+    { "type": "color", "id": "hero_text", "label": "Hero text", "default": "#ffffff" },
+    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
+    { "type": "text", "id": "breadcrumb_label", "label": "Breadcrumb accessible label", "default": "Breadcrumb", "info": "Screen readers only." },
+    { "type": "text", "id": "breadcrumb_home", "label": "Breadcrumb home label", "default": "Home" },
+    { "type": "text", "id": "breadcrumb_current", "label": "Breadcrumb current label", "default": "Collections" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "From Veracruz to your cup" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Explore our <em>collections</em>" },
+    { "type": "richtext", "id": "description", "label": "Description", "default": "<p>Specialty coffee, roasted cacao, artisan chocolate and fresh-baked muffins — each crafted in small batches with the soul of Mexico.</p>" },
+    { "type": "text", "id": "stat_label", "label": "Collections counter label", "default": "Collections" },
+    { "type": "text", "id": "origin_value", "label": "Second stat value", "default": "100% Mexican" },
+    { "type": "text", "id": "origin_label", "label": "Second stat label", "default": "Origin", "info": "Leave blank to hide." },
+    { "type": "text", "id": "stat3_value", "label": "Third stat value", "default": "Small batch" },
+    { "type": "text", "id": "stat3_label", "label": "Third stat label", "default": "Roasted fresh", "info": "Leave blank to hide." },
+    { "type": "checkbox", "id": "hero_full_height", "label": "Full-height banner", "default": true, "info": "Fills the screen below the header." },
+
+    { "type": "header", "content": "Quick navigation" },
+    { "type": "checkbox", "id": "show_quick_nav", "label": "Show collection chips", "default": true },
+    { "type": "text", "id": "quick_nav_label", "label": "Accessible label", "default": "Jump to collection" },
+
+    { "type": "header", "content": "Cards" },
+    { "type": "checkbox", "id": "show_products", "label": "Show product preview", "default": true },
+    { "type": "range", "id": "products_preview", "label": "Products in preview", "min": 2, "max": 4, "step": 1, "default": 3 },
+    { "type": "checkbox", "id": "show_price", "label": "Show \"from\" price", "default": true },
+    { "type": "text", "id": "price_prefix", "label": "Price prefix", "default": "From" },
+    { "type": "text", "id": "products_label", "label": "Products count label", "default": "products" },
+    { "type": "text", "id": "card_cta", "label": "Card button label", "default": "Explore collection" },
+    { "type": "text", "id": "empty_text", "label": "Empty state text", "default": "New collections are being roasted. Check back soon." },
+
+
+    { "type": "header", "content": "Closing call to action" },
+    { "type": "text", "id": "cta_eyebrow", "label": "Eyebrow", "default": "Not sure where to start?" },
+    { "type": "text", "id": "cta_heading", "label": "Heading", "default": "Find the roast made for you", "info": "Leave blank to hide the block." },
+    { "type": "text", "id": "cta_text", "label": "Text", "default": "Answer a few quick questions and we'll match you with your ideal Xula roast." },
+    { "type": "text", "id": "cta_button_label", "label": "Button label", "default": "Take the coffee quiz" },
+    { "type": "paragraph", "content": "The button opens the \"Xula Coffee Quiz\" section added to this template inside a modal." },
+    { "type": "url", "id": "cta_fallback_link", "label": "Fallback link", "info": "Used only when there is no quiz section on the page." },
+    { "type": "text", "id": "quiz_modal_label", "label": "Modal accessible label", "default": "Coffee quiz", "info": "Screen readers only." },
+    { "type": "text", "id": "quiz_close_label", "label": "Close button accessible label", "default": "Close quiz", "info": "Screen readers only." },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "color", "id": "background", "label": "Body background", "default": "#ffffff" },
+    { "type": "range", "id": "padding_top", "label": "Body top padding", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "label": "Body bottom padding", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 112 }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "limit": 12,
+      "settings": [
+        { "type": "paragraph", "content": "Add blocks to curate order and copy. With no blocks, every collection with products is shown automatically." },
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "image_picker", "id": "image", "label": "Custom image", "info": "Defaults to the collection image, then the first product image." },
+        { "type": "text", "id": "tagline", "label": "Tagline", "info": "Small label above the title, e.g. \"Veracruz · Altura\"." },
+        { "type": "textarea", "id": "description", "label": "Short description", "info": "Defaults to the collection description." },
+        { "type": "text", "id": "badge", "label": "Badge", "info": "e.g. \"Best seller\" or \"New\"." },
+        { "type": "color", "id": "accent", "label": "Accent color", "default": "#E8318A" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula · Collections index"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["list-collections", "page", "index", "collection"]
+  }
+}
+{% endschema %}

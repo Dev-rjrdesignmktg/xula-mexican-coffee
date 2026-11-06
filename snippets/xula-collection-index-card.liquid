@@ -1,0 +1,180 @@
+{%- comment -%}
+  Xula · Collections index card
+
+  Params:
+    collection      (required) collection object
+    position        (required) 1-based index in the grid
+    total           number of cards (used to detect a wide last card)
+    hero_has_image  when false, card 1 is the LCP candidate and loads eagerly
+    section_id, settings
+    block?, image?, tagline?, description?, badge?, accent?
+{%- endcomment -%}
+{%- liquid
+  assign first_product = collection.products.first
+
+  assign media = image
+  if media == blank
+    assign media = collection.featured_image
+  endif
+  if media == blank and first_product != blank
+    assign media = first_product.featured_media.preview_image
+  endif
+
+  assign card_desc = description
+  if card_desc == blank
+    assign card_desc = collection.description | strip_html | strip | truncatewords: 26
+  endif
+
+  comment
+    Accent: block color, otherwise rotate through the Xula brand palette.
+  endcomment
+  assign palette = '#E8318A,#E95028,#345DA8,#439135' | split: ','
+  assign palette_index = position | minus: 1 | modulo: 4
+  assign accent_color = accent | default: palette[palette_index]
+  assign title_id = 'XulaCiCard-' | append: section_id | append: '-' | append: collection.handle
+
+  assign min_price = 999999999
+  assign has_price = false
+  for p in collection.products limit: 50
+    if p.available and p.price_min < min_price
+      assign min_price = p.price_min
+      assign has_price = true
+    endif
+  endfor
+
+  assign index_label = position | prepend: '0' | slice: -2, 2
+  assign preview_limit = settings.products_preview | default: 3
+  assign extra = collection.products_count | minus: preview_limit
+
+  comment
+    Wide cards: the first one, and the last one when it would sit alone
+    (total even). Must stay in sync with the CSS grid rules.
+  endcomment
+  assign is_wide = false
+  if position == 1
+    assign is_wide = true
+  else
+    assign total_mod = total | modulo: 2
+    if position == total and total_mod == 0
+      assign is_wide = true
+    endif
+  endif
+
+  comment
+    sizes mirrors the layout: page-width caps at 120rem (≈1200px).
+    Wide card on desktop → image column ≈ 59% of the container.
+  endcomment
+  if is_wide
+    assign sizes = '(min-width: 1200px) 710px, (min-width: 990px) 59vw, (min-width: 750px) calc(100vw - 10rem), calc(100vw - 3rem)'
+  else
+    assign sizes = '(min-width: 1200px) 580px, (min-width: 750px) calc(50vw - 6rem), calc(100vw - 3rem)'
+  endif
+
+  assign img_loading = 'lazy'
+  assign img_priority = 'auto'
+  if position == 1 and hero_has_image != true
+    assign img_loading = 'eager'
+    assign img_priority = 'high'
+  endif
+
+  assign img_alt = media.alt | default: collection.title
+-%}
+
+<li
+  class="xula-ci__card{% if position == 1 %} xula-ci__card--feature{% endif %}"
+  id="xula-ci-{{ section_id }}-{{ collection.handle }}"
+  style="--xula-ci-accent: {{ accent_color }};"
+  {% unless position == 1 %}data-xula-ci-reveal{% endunless %}
+  {% if block %}{{ block.shopify_attributes }}{% endif %}
+>
+  <article class="xula-ci__article" aria-labelledby="{{ title_id }}">
+    <div
+      class="xula-ci__media"
+      {% if media.presentation.focal_point %}style="--xula-ci-focal: {{ media.presentation.focal_point }};"{% endif %}
+    >
+      {%- if media != blank -%}
+        {{
+          media
+          | image_url: width: 1800
+          | image_tag:
+            loading: img_loading,
+            fetchpriority: img_priority,
+            decoding: 'async',
+            sizes: sizes,
+            widths: '400, 600, 800, 1000, 1200, 1500, 1800',
+            alt: img_alt,
+            class: 'xula-ci__img'
+        }}
+      {%- else -%}
+        <div class="xula-ci__img xula-ci__img--placeholder" aria-hidden="true">
+          {{ 'collection-1' | placeholder_svg_tag: 'xula-ci__placeholder' }}
+        </div>
+      {%- endif -%}
+      <span class="xula-ci__shade" aria-hidden="true"></span>
+      <span class="xula-ci__index xula-type--code" aria-hidden="true">{{ index_label }}</span>
+      {%- if badge != blank -%}
+        <span class="xula-ci__badge">{{ badge | escape }}</span>
+      {%- endif -%}
+    </div>
+
+    <div class="xula-ci__content">
+      {%- if tagline != blank -%}
+        <p class="xula-ci__tagline xula-type--code">{{ tagline | escape }}</p>
+      {%- endif -%}
+
+      <h2 class="xula-ci__card-title" id="{{ title_id }}">
+        <a href="{{ collection.url }}" class="xula-ci__stretch">{{ collection.title | escape }}</a>
+      </h2>
+
+      {%- if card_desc != blank -%}
+        <p class="xula-ci__desc">{{ card_desc | escape }}</p>
+      {%- endif -%}
+
+      <ul class="xula-ci__meta" role="list">
+        <li class="xula-type--code">{{ collection.products_count }} {{ settings.products_label | default: 'products' | escape }}</li>
+        {%- if settings.show_price and has_price -%}
+          <li class="xula-type--code">{{ settings.price_prefix | default: 'From' | escape }} {{ min_price | money }}</li>
+        {%- endif -%}
+      </ul>
+
+      {%- if settings.show_products and collection.products_count > 0 -%}
+        <ul class="xula-ci__products" role="list" aria-label="{{ collection.title | escape }}">
+          {%- for p in collection.products limit: preview_limit -%}
+            <li class="xula-ci__product">
+              <a href="{{ p.url }}" class="xula-ci__product-link">
+                {%- if p.featured_media -%}
+                  {{
+                    p.featured_media.preview_image
+                    | image_url: width: 160, height: 160, crop: 'center'
+                    | image_tag:
+                      loading: 'lazy',
+                      decoding: 'async',
+                      widths: '80, 120, 160',
+                      sizes: '52px',
+                      width: 80,
+                      height: 80,
+                      alt: p.title
+                  }}
+                {%- else -%}
+                  <span class="xula-ci__product-fallback" aria-hidden="true">{{ p.title | slice: 0 }}</span>
+                  <span class="visually-hidden">{{ p.title | escape }}</span>
+                {%- endif -%}
+              </a>
+            </li>
+          {%- endfor -%}
+          {%- if extra > 0 -%}
+            <li class="xula-ci__product xula-ci__product--more xula-type--code">
+              <span aria-hidden="true">+{{ extra }}</span>
+              <span class="visually-hidden">+{{ extra }} {{ settings.products_label | default: 'products' | escape }}</span>
+            </li>
+          {%- endif -%}
+        </ul>
+      {%- endif -%}
+
+      <span class="xula-ci__cta-link" aria-hidden="true">
+        <span>{{ settings.card_cta | default: 'Explore collection' | escape }}</span>
+        <svg focusable="false" viewBox="0 0 14 10" width="14" height="10"><path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1 5h12M9 1l4 4-4 4"/></svg>
+      </span>
+    </div>
+  </article>
+</li>

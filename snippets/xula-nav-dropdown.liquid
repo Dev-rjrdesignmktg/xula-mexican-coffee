@@ -12,6 +12,9 @@
   if s.xula_dropdown_collection != blank
     assign view_all_url = s.xula_dropdown_collection.url
   endif
+  if s.xula_dropdown_view_all_url != blank
+    assign view_all_url = s.xula_dropdown_view_all_url
+  endif
 
   assign view_all_label = s.xula_dropdown_view_all_label | default: 'Shop all products'
   assign subscription_label = s.xula_dropdown_subscription_label | default: 'Subscription available'
