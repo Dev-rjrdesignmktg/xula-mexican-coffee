@@ -38,10 +38,52 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "xula_collections_index_fxkQAN": {
+      "type": "xula-collections-index",
+      "name": "Xula · Collections index",
+      "settings": {
+        "hero_image": "shopify://shop_images/xula-51-mr.jpg",
+        "hero_background": "#24170f",
+        "hero_text": "#ffffff",
+        "show_breadcrumb": true,
+        "breadcrumb_label": "Breadcrumb",
+        "breadcrumb_home": "Home",
+        "breadcrumb_current": "Collections",
+        "eyebrow": "From Veracruz to your cup",
+        "heading": "Explore our <em>collections</em>",
+        "description": "<p>Specialty coffee, roasted cacao, artisan chocolate and fresh-baked muffins — each crafted in small batches with the soul of Mexico.</p>",
+        "stat_label": "Collections",
+        "origin_value": "100% Mexican",
+        "origin_label": "Origin",
+        "stat3_value": "Small batch",
+        "stat3_label": "Roasted fresh",
+        "hero_full_height": true,
+        "show_quick_nav": false,
+        "quick_nav_label": "Jump to collection",
+        "show_products": true,
+        "products_preview": 3,
+        "show_price": true,
+        "price_prefix": "From",
+        "products_label": "products",
+        "card_cta": "Explore collection",
+        "empty_text": "New collections are being roasted. Check back soon.",
+        "cta_eyebrow": "Not sure where to start?",
+        "cta_heading": "Find the roast made for you",
+        "cta_text": "Answer a few quick questions and we'll match you with your ideal Xula roast.",
+        "cta_button_label": "Take the coffee quiz",
+        "cta_fallback_link": "",
+        "quiz_modal_label": "Coffee quiz",
+        "quiz_close_label": "Close quiz",
+        "background": "#ffffff",
+        "padding_top": 72,
+        "padding_bottom": 112
+      }
     }
   },
   "order": [
     "banner",
-    "product-grid"
+    "product-grid",
+    "xula_collections_index_fxkQAN"
   ]
 }
