@@ -86,7 +86,8 @@
      Moves the page's "Xula Coffee Quiz" section into a native
      <dialog> (focus trap, Esc and inert background for free).
      Moving the node keeps the quiz's own event listeners.
-     In the theme editor the quiz stays inline so it can be edited.
+     In the theme editor the quiz lives inline (so it stays editable)
+     and is only moved into the dialog while it is open.
      ========================================================= */
   const initQuizModal = (root) => {
     const trigger = root.querySelector('[data-xula-ci-quiz-open]');
@@ -96,32 +97,57 @@
 
     const slot = modal.querySelector('[data-xula-ci-quiz-slot]');
     const closeBtn = modal.querySelector('[data-xula-ci-quiz-close]');
-    const quiz = document.querySelector('[data-xula-quiz]');
-    const quizSection = quiz ? quiz.closest('.shopify-section') || quiz : null;
     const designMode = Boolean(window.Shopify && window.Shopify.designMode);
-    const supportsDialog = typeof modal.showModal === 'function';
+    const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* No quiz on the page → behave like a link */
-    if (!quizSection) {
-      trigger.addEventListener('click', () => {
-        if (trigger.dataset.fallbackUrl) window.location.href = trigger.dataset.fallbackUrl;
-      });
-      return;
+    /* Resolved on demand: the editor can re-render the quiz section */
+    const findQuizSection = () => {
+      const quiz = document.querySelector('[data-xula-quiz]');
+      return quiz ? quiz.closest('.shopify-section') || quiz : null;
+    };
+
+    let placeholder = null;
+
+    const mount = (section) => {
+      if (slot.contains(section)) return;
+      if (designMode) {
+        placeholder = document.createComment('xula-quiz-placeholder');
+        section.before(placeholder);
+      }
+      slot.appendChild(section);
+    };
+
+    const unmount = () => {
+      if (!designMode || !placeholder) return;
+      const section = slot.querySelector('.shopify-section') || slot.firstElementChild;
+      if (section) placeholder.replaceWith(section);
+      else placeholder.remove();
+      placeholder = null;
+    };
+
+    /* Storefront: move the quiz into the dialog right away */
+    if (!designMode) {
+      const section = findQuizSection();
+      if (section) mount(section);
     }
-
-    /* Theme editor or very old browsers → scroll to the inline quiz */
-    if (designMode || !supportsDialog) {
-      trigger.removeAttribute('aria-haspopup');
-      trigger.addEventListener('click', () => {
-        quizSection.style.display = 'block';
-        quizSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-      return;
-    }
-
-    if (!slot.contains(quizSection)) slot.appendChild(quizSection);
 
     const open = () => {
+      const section = findQuizSection();
+
+      /* No quiz on the page → behave like a link */
+      if (!section) {
+        if (trigger.dataset.fallbackUrl) window.location.href = trigger.dataset.fallbackUrl;
+        return;
+      }
+
+      /* Very old browsers without <dialog> → scroll to the quiz */
+      if (typeof modal.showModal !== 'function') {
+        section.style.display = 'block';
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+
+      mount(section);
       modal.showModal();
       document.documentElement.classList.add('xula-ci-modal-open');
       const start = modal.querySelector('[data-xula-quiz-start]');
@@ -129,12 +155,13 @@
     };
 
     const close = () => {
+      if (!modal.open) return;
       modal.classList.add('is-closing');
       const done = () => {
         modal.classList.remove('is-closing');
         modal.close();
       };
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) done();
+      if (reduce()) done();
       else window.setTimeout(done, 250);
     };
 
@@ -154,8 +181,16 @@
 
     modal.addEventListener('close', () => {
       document.documentElement.classList.remove('xula-ci-modal-open');
+      unmount();
       trigger.focus({ preventScroll: true });
     });
+
+    /* Editor: selecting the quiz section closes the modal so it can be edited inline */
+    if (designMode) {
+      document.addEventListener('shopify:section:select', (event) => {
+        if (event.target.querySelector('[data-xula-quiz]') || slot.contains(event.target)) close();
+      });
+    }
   };
 
   const boot = () =>
