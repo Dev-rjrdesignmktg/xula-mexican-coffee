@@ -448,6 +448,23 @@ html.xula-popup-lock {
   color: var(--xp-alert);
 }
 
+/* theme-editor only: Klaviyo list missing */
+.xula-popup__notice {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px dashed var(--xp-alert);
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--xp-alert);
+}
+
+.xula-popup__submit:disabled {
+  cursor: not-allowed;
+}
+
 .xula-popup__decline {
   display: block;
   margin: 14px auto 0;
