@@ -12,8 +12,8 @@
     "hero": {
       "type": "xula-article-hero",
       "settings": {
-        "banner_image": "shopify://shop_images/1920_X_1080_HORIZONTAL_STRAWBERRY_ICED_LATTE.webp",
-        "banner_image_mobile": "shopify://shop_images/STRAWBERRY.webp",
+        "banner_image": "{{ article.metafields.custom.banner.value }}",
+        "banner_image_mobile": "{{ article.metafields.custom.banner_mobile.value }}",
         "image_position": "center center",
         "show_breadcrumb": true,
         "breadcrumb_home_label": "Home",
