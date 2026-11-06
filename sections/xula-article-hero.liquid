@@ -6,7 +6,12 @@
   assign hero_image = section.settings.banner_image | default: article.image
   assign hero_image_mobile = section.settings.banner_image_mobile
   assign img_alt = hero_image.alt | default: article.title | escape
-  assign blog_label = section.settings.blog_label | default: blog.title | default: 'Blog'
+  # The label override only applies to its own blog; other blogs (e.g. News) show their title.
+  assign blog_label = blog.title | default: 'Blog'
+  assign label_blog_handle = section.settings.blog_label_handle | default: 'recipes' | strip
+  if section.settings.blog_label != blank and blog.handle == label_blog_handle
+    assign blog_label = section.settings.blog_label
+  endif
   assign share_url = request.origin | append: article.url
 -%}
 
@@ -175,6 +180,13 @@
       "id": "blog_label",
       "label": "Blog label override",
       "info": "Defaults to the blog's title."
+    },
+    {
+      "type": "text",
+      "id": "blog_label_handle",
+      "label": "Apply label override to blog (handle)",
+      "default": "recipes",
+      "info": "Articles from other blogs (e.g. news) use their own blog title."
     },
     {
       "type": "checkbox",

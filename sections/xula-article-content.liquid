@@ -3,6 +3,13 @@
 {%- liquid
   assign share_url = request.origin | append: article.url
   assign pin_image_url = article.image | image_url: width: 1200 | prepend: 'https:'
+
+  # The custom back label only applies to its own blog; other blogs get "Back to <title>".
+  assign back_label = 'Back to ' | append: blog.title
+  assign label_blog_handle = section.settings.back_link_blog_handle | default: 'recipes' | strip
+  if blog.handle == label_blog_handle and section.settings.back_link_label != blank
+    assign back_label = section.settings.back_link_label
+  endif
 -%}
 
 <section class="xula-article-content">
@@ -35,7 +42,7 @@
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
             <path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span>{{ section.settings.back_link_label | default: 'Back to Blog' }}</span>
+          <span>{{ back_label | escape }}</span>
         </a>
       </div>
     {%- endif -%}
@@ -72,6 +79,13 @@
       "id": "back_link_label",
       "label": "Back link label",
       "default": "Back to Blog"
+    },
+    {
+      "type": "text",
+      "id": "back_link_blog_handle",
+      "label": "Apply back link label to blog (handle)",
+      "default": "recipes",
+      "info": "Articles from other blogs show \"Back to\" + their blog title."
     }
   ],
   "presets": [
