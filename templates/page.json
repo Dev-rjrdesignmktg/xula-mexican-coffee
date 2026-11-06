@@ -51,6 +51,27 @@
     "xula_about_bzTTFT": {
       "type": "xula-about",
       "blocks": {
+        "stat_founded": {
+          "type": "stat",
+          "settings": {
+            "value": "2017",
+            "label": "Founded"
+          }
+        },
+        "stat_roots": {
+          "type": "stat",
+          "settings": {
+            "value": "Michoacán",
+            "label": "Founder’s roots"
+          }
+        },
+        "stat_cacao": {
+          "type": "stat",
+          "settings": {
+            "value": "100%",
+            "label": "Tabasco cacao"
+          }
+        },
         "chapter_yRTCgc": {
           "type": "chapter",
           "settings": {
@@ -86,6 +107,9 @@
         }
       },
       "block_order": [
+        "stat_founded",
+        "stat_roots",
+        "stat_cacao",
         "chapter_yRTCgc",
         "chapter_TQEMPF",
         "chapter_DfigYp"
@@ -102,7 +126,8 @@
         "cta_button_label": "Shop the Collection",
         "cta_button_link": "",
         "cta_tagline": "Est. 2017 · Veracruz, México",
-        "show_structured_data": true
+        "show_structured_data": true,
+        "show_chapter_numbers": true
       }
     },
     "main": {

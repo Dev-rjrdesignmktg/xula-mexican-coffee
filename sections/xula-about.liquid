@@ -6,6 +6,8 @@
   assign intro_id = 'xula-about-intro-' | append: section.id
   assign section_dom_id = 'xula-about-' | append: section.id
   assign chapter_index = 0
+  assign chapter_blocks = section.blocks | where: 'type', 'chapter'
+  assign stat_blocks = section.blocks | where: 'type', 'stat'
 %}
 
 {% if section.settings.show_structured_data %}
@@ -43,8 +45,8 @@
         },
         {
           "@type": "AboutPage",
-          "@id": {{ request.origin | append: page_url | append: '#aboutpage' | json }},
-          "url": {{ request.origin | append: page_url | json }},
+          "@id": {{ request.origin | append: request.path | append: '#aboutpage' | json }},
+          "url": {{ request.origin | append: request.path | json }},
           "name": {{ section.settings.heading | strip_html | json }},
           "description": {{ section.settings.intro | strip_html | json }},
           "about": { "@id": {{ org_id | json }} },
@@ -65,7 +67,7 @@
     <!-- INTRO HEADER -->
     <header class="xula-about__intro xula-about__reveal">
       {% if section.settings.eyebrow != blank %}
-        <span class="xula-eyebrow">{{ section.settings.eyebrow }}</span>
+        <span class="xula-eyebrow xula-about__eyebrow">{{ section.settings.eyebrow }}</span>
       {% endif %}
 
       {% if section.settings.heading != blank %}
@@ -79,12 +81,23 @@
           {{ section.settings.intro }}
         </div>
       {% endif %}
+
+      {% if stat_blocks.size > 0 %}
+        <dl class="xula-about__stats">
+          {% for block in stat_blocks %}
+            <div class="xula-about__stat" {{ block.shopify_attributes }}>
+              <dt class="xula-about__stat-label">{{ block.settings.label }}</dt>
+              <dd class="xula-about__stat-value">{{ block.settings.value }}</dd>
+            </div>
+          {% endfor %}
+        </dl>
+      {% endif %}
     </header>
 
     <!-- ZIGZAG STORY CHAPTERS -->
-    {% if section.blocks.size > 0 %}
+    {% if chapter_blocks.size > 0 %}
       <div class="xula-about__chapters">
-        {% for block in section.blocks %}
+        {% for block in chapter_blocks %}
           {% liquid
             assign chapter_index = chapter_index | plus: 1
             assign chapter_remainder = chapter_index | modulo: 2
@@ -105,6 +118,7 @@
             {{ block.shopify_attributes }}
           >
             <div class="xula-about__chapter-media">
+              <div class="xula-about__chapter-frame">
               {% if block.settings.image != blank %}
                 <img
                   src="{{ block.settings.image | image_url: width: 1200 }}"
@@ -114,7 +128,7 @@
                     {{ block.settings.image | image_url: width: 1000 }} 1000w,
                     {{ block.settings.image | image_url: width: 1200 }} 1200w
                   "
-                  sizes="(min-width: 750px) 50vw, 100vw"
+                  sizes="(min-width: 1100px) 50vw, 100vw"
                   alt="{{ chapter_alt | escape }}"
                   width="{{ block.settings.image.width }}"
                   height="{{ block.settings.image.height }}"
@@ -126,9 +140,16 @@
                   {{ 'image' | placeholder_svg_tag: 'xula-about__chapter-placeholder-svg' }}
                 </div>
               {% endif %}
+              </div>
             </div>
 
             <div class="xula-about__chapter-content">
+              {% if section.settings.show_chapter_numbers %}
+                <span class="xula-about__chapter-number" aria-hidden="true">
+                  {%- if chapter_index < 10 -%}0{%- endif -%}{{- chapter_index -}}
+                </span>
+              {% endif %}
+
               {% if block.settings.label != blank %}
                 <span class="xula-about__chapter-label">{{ block.settings.label }}</span>
               {% endif %}
@@ -156,7 +177,7 @@
         {% endif %}
 
         {% if section.settings.cta_text != blank %}
-          <p class="xula-text xula-about__cta-text">{{ section.settings.cta_text }}</p>
+          <p class="xula-text xula-about__cta-text">{{ section.settings.cta_text | escape | newline_to_br }}</p>
         {% endif %}
 
         {% if section.settings.cta_button_label != blank %}
@@ -201,6 +222,12 @@
       "id": "intro",
       "label": "Intro / manifesto text",
       "default": "<p>XULA was born from a simple idea: that great coffee is a bridge between the hands that grow it and the hands that hold it. What started as a small family ritual in the highlands of Mexico has become a promise we keep with every batch we roast.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_chapter_numbers",
+      "label": "Show chapter numbers (01, 02, 03)",
+      "default": true
     },
     {
       "type": "header",
@@ -264,6 +291,25 @@
     }
   ],
   "blocks": [
+    {
+      "type": "stat",
+      "name": "Highlight",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value",
+          "default": "2017"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Founded"
+        }
+      ]
+    },
     {
       "type": "chapter",
       "name": "Story chapter",
