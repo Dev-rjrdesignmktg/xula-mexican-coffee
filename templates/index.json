@@ -18,7 +18,7 @@
         "text": "Small-batch roasted coffee rooted in Mexican tradition, designed for slow mornings and rich flavor.",
         "image_1": "shopify://shop_images/IMG_5236.jpg",
         "image_2": "shopify://shop_images/xula-50-mr.jpg",
-        "primary_label": "Shop Coffee",
+        "primary_label": "Shop Now",
         "primary_link": "shopify://collections/all",
         "secondary_label": "Our Story",
         "secondary_link": "shopify://pages/about-xula-mexican-coffee",
@@ -364,9 +364,9 @@
         "heading": "Crafted for every ritual.",
         "text": "From your first sip in the morning to your sweetest evening comfort, XULA creates moments worth slowing down for.",
         "button_label": "Shop Coffee",
-        "button_link": "shopify://products/specialty-dark-roast-coffee",
+        "button_link": "shopify://collections/coffee",
         "secondary_button_label": "Explore Collection →",
-        "secondary_button_link": "shopify://collections/all"
+        "secondary_button_link": "shopify://collections"
       }
     },
     "xula_testimonials_Miab8z": {
