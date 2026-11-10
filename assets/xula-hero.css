@@ -1,78 +1,166 @@
+/* =========================================================
+   XULA HERO — premium split hero (homepage)
+   Mobile first.
+   ========================================================= */
 
 .xula-hero {
-  background: var(--bg);
-  padding: 3rem 0;
+  --xula-hero-ease: cubic-bezier(.16, 1, .3, 1);
+  --xula-hero-radius: 28px;
+  --xula-hero-gold-deep: linear-gradient(120deg, #B9823F 0%, #8A5A26 45%, #C99354 100%);
+
   position: relative;
   overflow: hidden;
+  isolation: isolate;
+  padding: 3.2rem 0 5.6rem;
+  background:
+    radial-gradient(60% 50% at 0% 0%, rgba(226, 181, 130, .18), transparent 70%),
+    radial-gradient(50% 45% at 100% 100%, rgba(226, 181, 130, .14), transparent 70%),
+    var(--bg);
+}
+
+/* soft paper grain over the whole section */
+.xula-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: .035;
+  pointer-events: none;
+  background-image: url("paper-texture.png");
+  background-size: cover;
+}
+
+/* warm glow behind the media column */
+.xula-hero__glow {
+  position: absolute;
+  z-index: -1;
+  right: -10%;
+  top: 10%;
+  width: 70vw;
+  height: 70vw;
+  max-width: 900px;
+  max-height: 900px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(226, 181, 130, .28) 0%, rgba(226, 181, 130, 0) 65%);
+  filter: blur(20px);
+  pointer-events: none;
 }
 
 .xula-hero__grid {
   display: grid;
-  gap: 40px;
+  gap: 4.8rem;
   align-items: center;
 }
 
-/* LEFT */
+/* ---------- LEFT ---------- */
 
-.xula-hero__content{
+.xula-hero__content {
   width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.xula-hero__eyebrow {
+  margin-bottom: 2.4rem;
+  font-weight: 600;
 }
 
 .xula-hero__heading {
-   
-  font-size: clamp(3.5rem, 6vw, 5.3rem);
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-  margin-bottom: 20px;
-  color: var(--bg-secondary);
-  max-width: 53rem;
   font-family: var(--primary-font);
   font-weight: bold;
+  font-size: clamp(4.2rem, 7.2vw, 9.2rem);
+  line-height: .92;
+  letter-spacing: -.035em;
+  color: var(--bg-secondary);
+  max-width: 12ch;
+  margin: 0 0 2.8rem;
+  text-wrap: balance;
+}
+
+.xula-hero__heading-line {
+  display: block;
+}
+
+.xula-hero__heading-accent {
+  background: var(--xula-hero-gold-deep);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #8A5A26; /* fallback */
+  padding-bottom: .08em; /* keep descenders inside the clip */
+}
+
+.xula-hero__text {
+  max-width: 44rem;
+  margin-bottom: 3.6rem;
+  color: color-mix(in srgb, var(--bg-secondary) 78%, transparent);
 }
 
 .xula-hero__actions {
   display: flex;
-  gap: 14px;
+  align-items: center;
+  gap: 2.8rem;
   flex-wrap: wrap;
-  margin-bottom: 24px;
+  margin-bottom: 4rem;
 }
 
-/* META */
+.xula-hero__btn {
+  padding: 1.7rem 3.4rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  box-shadow:
+    0 1px 2px rgba(232, 49, 138, .2),
+    0 14px 34px -10px rgba(232, 49, 138, .55);
+}
+
+.xula-hero__btn:hover {
+  box-shadow:
+    0 1px 2px rgba(233, 80, 40, .2),
+    0 18px 40px -10px rgba(233, 80, 40, .55);
+}
+
+.xula-hero__link {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--bg-secondary);
+}
+
+/* ---------- META ---------- */
+
 .xula-hero__meta {
   display: flex;
-  gap: 18px;
-  font-size: 13px;
-  color: rgba(36,23,15,.65);
   flex-wrap: wrap;
+  gap: 1.2rem 2.4rem;
+  margin: 0;
+  padding: 2.4rem 0 0;
+  list-style: none;
+  border-top: 1px solid color-mix(in srgb, var(--bg-secondary) 12%, transparent);
+  font-size: 1.2rem;
   font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--bg-secondary) 65%, transparent);
 }
 
-/* RIGHT */
-.xula-hero__image-wrapper {
-  border-radius: 24px;
-  overflow: hidden;
+.xula-hero__meta li {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.xula-hero__image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  aspect-ratio: 4 / 5;
-  z-index: 1;
+.xula-hero__meta li::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  transform: rotate(45deg);
+  background: var(--xula-gold-solid);
 }
 
-/* BADGE */
-.xula-hero__badge {
-  position: absolute;
-  bottom: 8%;
-  right: 12%;
-  background: var(--bg-secondary);
-  padding: 10px 14px;
-  border-radius: 999px;
-  font-size: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.08);
-  z-index: 6;
-  color: var(--bg);
+/* ---------- RIGHT ---------- */
+
+.xula-hero__media {
+  position: relative;
 }
 
 .xula-hero__image-stack {
@@ -80,7 +168,12 @@
   width: 100%;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  border-radius: 24px;
+  border-radius: var(--xula-hero-radius);
+  background: color-mix(in srgb, var(--bg-secondary) 8%, transparent);
+  box-shadow:
+    0 1px 2px rgba(36, 23, 15, .06),
+    0 30px 70px -20px rgba(36, 23, 15, .35);
+  animation: xula-hero-reveal 1.4s var(--xula-hero-ease) both;
 }
 
 .xula-hero__image-stack::after {
@@ -89,14 +182,12 @@
   inset: 0;
   z-index: 3;
   pointer-events: none;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(36, 23, 15, 0.08) 0%,
-      rgba(36, 23, 15, 0.18) 45%,
-      rgba(36, 23, 15, 0.28) 100%
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(36, 23, 15, 0) 0%,
+    rgba(36, 23, 15, .08) 50%,
+    rgba(36, 23, 15, .32) 100%
+  );
 }
 
 .xula-hero__image-stack::before {
@@ -110,20 +201,24 @@
   background-size: cover;
 }
 
-/* ambas imágenes */
+/* both images */
 .xula-hero__img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 1.6s ease-in-out;
+  transform: scale(1.08);
+  transition:
+    opacity 1.6s ease-in-out,
+    transform 7s var(--xula-hero-ease);
 }
 
-/* estado base */
 .xula-hero__img--1 {
   opacity: 1;
   z-index: 2;
+  transform: scale(1);
+  animation: xula-hero-zoom 2.4s var(--xula-hero-ease) both;
 }
 
 .xula-hero__img--2 {
@@ -131,23 +226,138 @@
   z-index: 1;
 }
 
-/* active state */
+/* swapped state (toggled by xula-hero.js) */
 .xula-hero.is-swapped .xula-hero__img--1 {
   opacity: 0;
+  transform: scale(1.08);
 }
 
 .xula-hero.is-swapped .xula-hero__img--2 {
   opacity: 1;
+  transform: scale(1);
 }
 
-/* DESKTOP */
-@media (min-width: 768px) {
-  .xula-hero__grid {
-    grid-template-columns: 45% 55%;
+/* ---------- BADGE ---------- */
+
+.xula-hero__badge {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: .9rem;
+  padding: 1.1rem 1.8rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-secondary) 45%, transparent);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, .25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .12), inset 0 1px 0 rgba(255, 255, 255, .12);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--info);
+  animation: xula-hero-rise .9s var(--xula-hero-ease) 1s both;
+}
+
+.xula-hero__badge-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+}
+
+.xula-hero__badge-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: inherit;
+  animation: xula-hero-pulse 2.2s ease-out infinite;
+}
+
+/* ---------- ENTRANCE ---------- */
+
+.xula-hero__content > * {
+  animation: xula-hero-rise .9s var(--xula-hero-ease) both;
+}
+
+.xula-hero__content > :nth-child(1) { animation-delay: .1s; }
+.xula-hero__content > :nth-child(2) { animation-delay: .2s; }
+.xula-hero__content > :nth-child(3) { animation-delay: .32s; }
+.xula-hero__content > :nth-child(4) { animation-delay: .44s; }
+.xula-hero__content > :nth-child(5) { animation-delay: .56s; }
+
+@keyframes xula-hero-rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes xula-hero-reveal {
+  from { clip-path: inset(100% 0 0 0 round var(--xula-hero-radius)); }
+  to   { clip-path: inset(0 0 0 0 round var(--xula-hero-radius)); }
+}
+
+@keyframes xula-hero-zoom {
+  from { transform: scale(1.15); }
+  to   { transform: scale(1); }
+}
+
+@keyframes xula-hero-pulse {
+  0%   { transform: scale(1); opacity: .7; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xula-hero__content > *,
+  .xula-hero__image-stack,
+  .xula-hero__img,
+  .xula-hero__badge,
+  .xula-hero__badge-dot::after {
+    animation: none !important;
   }
 
-  .xula-hero__image {
-    min-height: 80vh;
+  .xula-hero__img {
+    transform: none !important;
+    transition: opacity 1.6s ease-in-out;
+  }
+}
+
+/* ---------- TABLET ---------- */
+@media (min-width: 750px) {
+  .xula-hero {
+    padding: 5.6rem 0 8rem;
+  }
+}
+
+/* ---------- DESKTOP ---------- */
+@media (min-width: 990px) {
+  .xula-hero {
+    display: flex;
+    align-items: center;
+    min-height: min(calc(100svh - 8rem), 96rem);
+    padding: 6.4rem 0 8.8rem;
+  }
+
+  .xula-hero > .page-width {
+    width: 100%;
+  }
+
+  .xula-hero__grid {
+    grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+    gap: clamp(5.6rem, 6vw, 11rem);
+  }
+
+  .xula-hero__image-stack {
     aspect-ratio: auto;
+    height: clamp(56rem, 76svh, 84rem);
+  }
+
+  .xula-hero__badge {
+    right: 3.2rem;
+    bottom: 3.2rem;
   }
 }
