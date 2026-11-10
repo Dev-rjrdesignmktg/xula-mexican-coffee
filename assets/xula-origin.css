@@ -173,7 +173,6 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, .3);
   cursor: pointer;
-  overflow: hidden;
   transition: background-color .35s ease;
 }
 
@@ -191,6 +190,7 @@
 .xula-origin__dot-fill {
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   background: #fff;
   transform-origin: left center;
   transform: scaleX(0);
