@@ -54,7 +54,7 @@
   font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: .03em;
-  margin-bottom: 16px;
+  margin: 0 0 16px;
 }
 
 .xula-newsletter__heading {
@@ -136,6 +136,7 @@
 }
 
 .xula-newsletter__incentive-text {
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -150,8 +151,8 @@
 }
 
 .xula-newsletter__incentive-text span {
-  font-size: 1.1rem;
-  opacity: .8;
+  font-size: 1.2rem;
+  opacity: .9;
 }
 
 /* ---------- Form ---------- */
@@ -195,7 +196,8 @@
   background: color-mix(in srgb, #ffffff 16%, transparent);
   color: var(--xula-newsletter-ink);
   font-family: var(--secondary-font);
-  font-size: 1.5rem;
+  /* 16px minimum stops iOS Safari from zooming in on focus */
+  font-size: max(1.6rem, 16px);
   transition: border-color .3s ease, background .3s ease;
 }
 
@@ -204,7 +206,8 @@
 }
 
 .xula-newsletter__input:focus-visible {
-  outline: none;
+  outline: 2px solid var(--xula-gold-solid);
+  outline-offset: 3px;
   border-color: var(--xula-gold-solid);
   background: color-mix(in srgb, #ffffff 22%, transparent);
 }
@@ -241,10 +244,10 @@
 
 .xula-newsletter__consent {
   font-family: var(--secondary-font);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   line-height: 1.5;
   color: var(--xula-newsletter-ink);
-  opacity: .7;
+  opacity: .85;
   max-width: 46ch;
   margin: 14px 0 0;
 }
@@ -256,15 +259,22 @@
 }
 
 .xula-newsletter__message {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
+  display: block;
   font-family: var(--secondary-font);
   font-size: 1.25rem;
   line-height: 1.5;
   padding: 12px 16px;
   border-radius: 12px;
   margin: 0;
+}
+
+.xula-newsletter__message:focus {
+  outline: none;
+}
+
+.xula-newsletter__message:focus-visible {
+  outline: 2px solid var(--xula-gold-solid);
+  outline-offset: 3px;
 }
 
 .xula-newsletter__message strong {
@@ -293,22 +303,28 @@
 
 /* ---------- Entrance animation ---------- */
 
-.xula-newsletter__panel {
+/* Only hidden once JS has opted in, so the content is always visible to
+   crawlers, no-JS visitors and reduced-motion users. */
+.xula-newsletter--animate .xula-newsletter__panel {
   opacity: 0;
   transform: translateY(24px);
   transition: transform .8s cubic-bezier(.16,1,.3,1), opacity .8s ease;
 }
 
-.xula-newsletter__panel.is-visible {
+.xula-newsletter--animate .xula-newsletter__panel.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .xula-newsletter__panel {
+  .xula-newsletter--animate .xula-newsletter__panel {
     transition: none;
     opacity: 1;
     transform: none;
+  }
+
+  .xula-newsletter__input {
+    transition: none;
   }
 }
 
@@ -401,6 +417,19 @@
   .xula-newsletter__incentive {
     width: 100%;
     justify-content: center;
+  }
+}
+
+.xula-newsletter__heading {
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .xula-newsletter__heading,
+  .xula-newsletter__text,
+  .xula-newsletter__consent {
+    text-align: center;
+    margin-inline: auto;
   }
 }
 
