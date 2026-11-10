@@ -1,143 +1,174 @@
 {{ 'xula-signature.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'xula-signature.js' | asset_url }}" defer></script>
+<script src="{{ 'xula-signature.js' | asset_url }}" defer="defer"></script>
 
-<section class="xula-signature" data-xula-signature>
+{%- liquid
+  assign heading_id = 'XulaSignatureHeading-' | append: section.id
+  assign list_label = section.settings.eyebrow | default: section.settings.heading | default: 'Featured products'
+-%}
+
+<section
+  id="XulaSignature-{{ section.id }}"
+  class="xula-signature"
+  data-xula-signature
+  {% if section.settings.heading != blank %}aria-labelledby="{{ heading_id }}"{% else %}aria-label="{{ list_label | escape }}"{% endif %}
+>
   <div class="page-width">
     <div class="xula-signature__grid">
-
-      <!-- LEFT CONTENT -->
       <div class="xula-signature__content">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="xula-eyebrow xula-signature__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
 
-        {% if section.settings.eyebrow != blank %}
-          <span class="xula-eyebrow xula-signature__eyebrow">
-            {{ section.settings.eyebrow }}
-          </span>
-        {% endif %}
+        {%- if section.settings.heading != blank -%}
+          <h2 id="{{ heading_id }}" class="xula-heading xula-signature__heading">
+            {{- section.settings.heading | escape -}}
+          </h2>
+        {%- endif -%}
 
-        <h2 class="xula-heading xula-signature__heading">
-          {{ section.settings.heading }}
-        </h2>
+        {%- if section.settings.text != blank -%}
+          <p class="xula-signature__text">{{ section.settings.text | escape | newline_to_br }}</p>
+        {%- endif -%}
 
-        {% if section.settings.text != blank %}
-          <p class="xula-signature__text">
-            {{ section.settings.text }}
-          </p>
-        {% endif %}
-
-        {% if section.blocks.size > 0 %}
-          <ol class="xula-signature__index" aria-label="{{ section.settings.eyebrow | escape }}">
-            {% for block in section.blocks %}
+        {%- comment -%} Visual index synced with the cards on hover; redundant for assistive tech. {%- endcomment -%}
+        {%- if section.blocks.size > 0 -%}
+          <ol class="xula-signature__index" aria-hidden="true">
+            {%- for block in section.blocks -%}
+              {%- liquid
+                assign index_label = block.settings.label
+                if index_label == blank and block.settings.product != blank
+                  assign index_label = block.settings.product.title
+                endif
+              -%}
               <li
                 class="xula-signature__index-item"
                 data-signature-target="{{ forloop.index0 }}"
                 style="--xula-signature-i: {{ forloop.index0 }};"
               >
                 <span class="xula-signature__index-num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
-                <span class="xula-signature__index-rule" aria-hidden="true"></span>
-                <span class="xula-signature__index-label">{{ block.settings.label }}</span>
+                <span class="xula-signature__index-rule"></span>
+                <span class="xula-signature__index-label">{{ index_label | escape }}</span>
               </li>
-            {% endfor %}
+            {%- endfor -%}
           </ol>
-        {% endif %}
+        {%- endif -%}
 
-        <div class="xula-signature__actions">
-          {% if section.settings.button_label != blank %}
-            <a href="{{ section.settings.button_link }}" class="xula-btn">
-              <span>{{ section.settings.button_label }}</span>
-            </a>
-          {% endif %}
+        {%- liquid
+          assign primary_link = section.settings.button_link | default: routes.all_products_collection_url
+          assign secondary_link = section.settings.secondary_button_link | default: routes.collections_url
+        -%}
+        {%- if section.settings.button_label != blank or section.settings.secondary_button_label != blank -%}
+          <div class="xula-signature__actions">
+            {%- if section.settings.button_label != blank -%}
+              <a href="{{ primary_link }}" class="xula-btn">
+                <span>{{ section.settings.button_label | escape }}</span>
+              </a>
+            {%- endif -%}
 
-          {% if section.settings.secondary_button_label != blank %}
-            <a href="{{ section.settings.secondary_button_link }}" class="xula-btn--secondary">
-              {{ section.settings.secondary_button_label }}
-            </a>
-          {% endif %}
-        </div>
-
+            {%- if section.settings.secondary_button_label != blank -%}
+              <a href="{{ secondary_link }}" class="xula-btn--secondary">
+                {{- section.settings.secondary_button_label | escape -}}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
       </div>
 
-      <!-- RIGHT VISUALS -->
-      <div
-        class="xula-signature__visuals xula-signature__visuals--count-{{ section.blocks.size }}"
-        role="list"
-      >
+      {%- if section.blocks.size > 0 -%}
+        <ul
+          class="xula-signature__visuals xula-signature__visuals--count-{{ section.blocks.size }}"
+          role="list"
+          aria-label="{{ list_label | escape }}"
+        >
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign card_product = block.settings.product
 
-        {% for block in section.blocks %}
-          {% liquid
-            assign card_url = block.settings.link
-            if block.settings.product != blank
-              assign card_url = block.settings.product.url
-            endif
+              assign card_url = block.settings.link
+              if card_product != blank
+                assign card_url = card_product.url
+              endif
 
-            assign card_image = block.settings.image
-            if card_image == blank and block.settings.product != blank
-              assign card_image = block.settings.product.featured_media.preview_image
-            endif
+              assign card_title = block.settings.title
+              if card_title == blank and card_product != blank
+                assign card_title = card_product.title
+              endif
 
-            if card_url != blank
-              assign card_tag = 'a'
-            else
-              assign card_tag = 'div'
-            endif
-          %}
-          <article
-            class="xula-signature__card xula-signature__card--{{ forloop.index }}"
-            role="listitem"
-            data-signature-card="{{ forloop.index0 }}"
-            style="--xula-signature-i: {{ forloop.index0 }};"
-            {{ block.shopify_attributes }}
-          >
-            <{{ card_tag }}
-              class="xula-signature__link"
-              {% if card_url != blank %}href="{{ card_url }}"{% endif %}
+              assign card_image = block.settings.image
+              if card_image == blank and card_product != blank
+                assign card_image = card_product.featured_media.preview_image
+              endif
+
+              assign card_alt = card_image.alt | default: card_title
+
+              if forloop.first
+                assign card_sizes = '(min-width: 990px) 55vw, (min-width: 768px) 46vw, 80vw'
+              else
+                assign card_sizes = '(min-width: 990px) 28vw, (min-width: 768px) 46vw, 80vw'
+              endif
+            -%}
+            <li
+              class="xula-signature__card xula-signature__card--{{ forloop.index }}"
+              data-signature-card="{{ forloop.index0 }}"
+              style="--xula-signature-i: {{ forloop.index0 }};"
+              {{ block.shopify_attributes }}
             >
+              {%- if card_url != blank -%}
+                <a class="xula-signature__link" href="{{ card_url }}">
+              {%- else -%}
+                <div class="xula-signature__link">
+              {%- endif -%}
+
               <div class="xula-signature__media">
-                {% if card_image != blank %}
+                {%- if card_image != blank -%}
                   {{
                     card_image
                     | image_url: width: 1400
                     | image_tag:
                       widths: '400, 600, 800, 1000, 1200, 1400',
-                      sizes: '(min-width: 990px) 55vw, (min-width: 768px) 55vw, 84vw',
+                      sizes: card_sizes,
                       loading: 'lazy',
-                      alt: block.settings.title
+                      decoding: 'async',
+                      alt: card_alt
                   }}
-                {% else %}
+                {%- else -%}
                   {{ 'image' | placeholder_svg_tag: 'xula-signature__placeholder' }}
-                {% endif %}
+                {%- endif -%}
               </div>
 
               <div class="xula-signature__overlay" aria-hidden="true"></div>
 
               <span class="xula-signature__num" aria-hidden="true">
-                {{ forloop.index | prepend: '0' | slice: -2, 2 }}
+                {{- forloop.index | prepend: '0' | slice: -2, 2 -}}
               </span>
 
               <div class="xula-signature__meta">
-                {% if block.settings.label != blank %}
-                  <span class="xula-signature__label">{{ block.settings.label }}</span>
-                {% endif %}
+                {%- if block.settings.label != blank -%}
+                  <span class="xula-signature__label">{{ block.settings.label | escape }}</span>
+                {%- endif -%}
 
-                <h3 class="xula-signature__title">{{ block.settings.title }}</h3>
+                {%- if card_title != blank -%}
+                  <h3 class="xula-signature__title">{{ card_title | escape }}</h3>
+                {%- endif -%}
 
-                {% if block.settings.text != blank %}
-                  <p class="xula-signature__desc">{{ block.settings.text }}</p>
-                {% endif %}
+                {%- if block.settings.text != blank -%}
+                  <p class="xula-signature__desc">{{ block.settings.text | escape }}</p>
+                {%- endif -%}
               </div>
 
-              {% if card_url != blank %}
+              {%- if card_url != blank -%}
                 <span class="xula-signature__arrow" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false">
                     <path d="M7 17L17 7M9 7h8v8"/>
                   </svg>
                 </span>
-              {% endif %}
-            </{{ card_tag }}>
-          </article>
-        {% endfor %}
-
-      </div>
-
+                </a>
+              {%- else -%}
+                </div>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -145,12 +176,17 @@
 {% schema %}
 {
   "name": "Xula Signature",
+  "tag": "div",
+  "class": "section-xula-signature",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
   "settings": [
     {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
-      "default": "Signature Rituals"
+      "default": "Featured Products"
     },
     {
       "type": "text",
@@ -173,7 +209,8 @@
     {
       "type": "url",
       "id": "button_link",
-      "label": "Primary button link"
+      "label": "Primary button link",
+      "info": "Defaults to all products if empty."
     },
     {
       "type": "text",
@@ -184,13 +221,14 @@
     {
       "type": "url",
       "id": "secondary_button_link",
-      "label": "Secondary button link"
+      "label": "Secondary button link",
+      "info": "Defaults to all collections if empty."
     }
   ],
   "blocks": [
     {
       "type": "ritual",
-      "name": "Ritual Card",
+      "name": "Featured product",
       "limit": 3,
       "settings": [
         {
