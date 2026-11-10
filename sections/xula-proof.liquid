@@ -1,142 +1,792 @@
-{{ "xula-proof.css" | asset_url | stylesheet_tag }}
-<script src="{{ 'xula-proof.js' | asset_url }}" defer></script>
+{%- comment -%} Below-the-fold section: load its CSS without blocking first paint {%- endcomment -%}
+<link rel="stylesheet" href="{{ 'xula-proof.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'xula-proof.css' | asset_url | stylesheet_tag }}</noscript>
+<script src="{{ 'xula-proof.js' | asset_url }}" defer="defer"></script>
 
-<section class="xula-proof" data-xula-proof>
+{%- liquid
+  assign grades = section.blocks | where: 'type', 'grade'
+  assign facts = section.blocks | where: 'type', 'fact'
+  assign profiles = section.blocks | where: 'type', 'profile'
+-%}
+
+<section
+  class="xula-proof"
+  data-xula-proof
+  style="
+    {% if section.settings.background_color != blank %}--xula-proof-bg: {{ section.settings.background_color }};{% endif %}
+    {% if section.settings.text_color != blank %}--xula-proof-ink: {{ section.settings.text_color }};{% endif %}
+    {% if section.settings.accent_color != blank %}--xula-proof-accent: {{ section.settings.accent_color }};{% endif %}
+    {% if section.settings.card_background_color != blank %}--xula-proof-card-bg: {{ section.settings.card_background_color }};{% endif %}
+    {% if section.settings.card_text_color != blank %}--xula-proof-card-ink: {{ section.settings.card_text_color }};{% endif %}
+    {% if section.settings.card_accent_color != blank %}--xula-proof-card-accent: {{ section.settings.card_accent_color }};{% endif %}
+  "
+  {% if section.settings.heading != blank %}aria-labelledby="XulaProofHeading-{{ section.id }}"{% endif %}
+>
+  <div class="xula-proof__glow" aria-hidden="true"></div>
+
   <div class="page-width">
 
-    <header class="xula-proof__intro">
-      <div class="xula-proof__intro-main">
+    {%- comment -%} 01 · What is specialty coffee {%- endcomment -%}
+    <div class="xula-proof__intro" data-proof-group>
+      <div class="xula-proof__intro-head">
         {% if section.settings.eyebrow != blank %}
-          <span class="xula-eyebrow xula-proof__eyebrow">{{ section.settings.eyebrow }}</span>
+          <span class="xula-eyebrow xula-proof__eyebrow xula-proof__reveal" style="--i: 0;">
+            {{ section.settings.eyebrow }}
+          </span>
         {% endif %}
 
         {% if section.settings.heading != blank %}
-          <h2 class="xula-heading xula-proof__heading">{{ section.settings.heading }}</h2>
+          <h2 id="XulaProofHeading-{{ section.id }}" class="xula-heading xula-proof__heading xula-proof__reveal" style="--i: 1;">
+            {{ section.settings.heading }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.milestone_year != blank %}
+          <p class="xula-proof__milestone xula-proof__reveal" style="--i: 2;">
+            <strong class="xula-proof__milestone-year">{{ section.settings.milestone_year }}</strong>
+            {% if section.settings.milestone_text != blank %}
+              <span class="xula-proof__milestone-text">{{ section.settings.milestone_text }}</span>
+            {% endif %}
+          </p>
         {% endif %}
       </div>
 
       {% if section.settings.text != blank %}
-        <p class="xula-text xula-proof__lead">{{ section.settings.text }}</p>
+        <div class="xula-proof__intro-body rte xula-proof__reveal" style="--i: 2;">
+          {{ section.settings.text }}
+        </div>
       {% endif %}
-    </header>
+    </div>
 
-    <div class="xula-proof__grid" role="list">
-      {% for block in section.blocks %}
-        <article
-          class="xula-proof__card"
-          role="listitem"
-          style="
-            --xula-proof-bg: {{ block.settings.background_color }};
-            --xula-proof-text: {{ block.settings.text_color }};
-            --xula-proof-i: {{ forloop.index0 }};"
-          {{ block.shopify_attributes }}
-        >
-          <div class="xula-proof__media">
-            {% if block.settings.image != blank %}
-              {{
-                block.settings.image
-                | image_url: width: 1200
-                | image_tag:
-                  widths: '400, 600, 800, 1000, 1200',
-                  sizes: '(min-width: 990px) 33vw, (min-width: 768px) 55vw, 85vw',
-                  loading: 'lazy',
-                  alt: block.settings.title
-              }}
+    {%- comment -%} 02 · The 100-point scale {%- endcomment -%}
+    {% if grades.size > 0 %}
+      {%- liquid
+        assign scale_min = section.settings.scale_min
+        assign scale_range = 100 | minus: scale_min
+        if scale_range <= 0
+          assign scale_range = 100
+          assign scale_min = 0
+        endif
+      -%}
+      <div
+        class="xula-proof__scale"
+        data-proof-group
+        style="
+          {% if section.settings.scale_background_color != blank %}--scale-bg: {{ section.settings.scale_background_color }};{% endif %}
+          {% if section.settings.scale_text_color != blank %}--scale-ink: {{ section.settings.scale_text_color }};{% endif %}
+        "
+      >
+        <div class="xula-proof__scale-intro">
+          {% if section.settings.scale_eyebrow != blank %}
+            <span class="xula-eyebrow xula-proof__eyebrow xula-proof__reveal" style="--i: 0;">{{ section.settings.scale_eyebrow }}</span>
+          {% endif %}
+          {% if section.settings.scale_heading != blank %}
+            <h3 class="xula-proof__title xula-proof__title--lg xula-proof__reveal" style="--i: 1;">{{ section.settings.scale_heading }}</h3>
+          {% endif %}
+          {% if section.settings.scale_text != blank %}
+            <p class="xula-proof__copy xula-proof__reveal" style="--i: 2;">{{ section.settings.scale_text }}</p>
+          {% endif %}
+          {% if section.settings.scale_note != blank %}
+            <div class="xula-proof__scale-note rte xula-proof__reveal" style="--i: 3;">
+              {{ section.settings.scale_note }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="xula-proof__ladder">
+          <ol class="xula-proof__grades" role="list">
+            {% for block in grades reversed %}
+              {% if block.settings.score_start == blank or block.settings.score_end == blank %}{% continue %}{% endif %}
+              {%- liquid
+                assign grade_from = block.settings.score_start | minus: scale_min | times: 100.0 | divided_by: scale_range
+                assign grade_size = block.settings.score_end | minus: block.settings.score_start | times: 100.0 | divided_by: scale_range
+                if grade_from < 0
+                  assign grade_from = 0
+                endif
+                if grade_size < 2
+                  assign grade_size = 2
+                endif
+              -%}
+              <li
+                class="xula-proof__grade xula-proof__reveal"
+                style="--i: {{ forloop.index | plus: 1 }}; --grade-color: {{ block.settings.color }}; --grade-from: {{ grade_from | round: 2 }}%; --grade-size: {{ grade_size | round: 2 }}%;"
+                {{ block.shopify_attributes }}
+              >
+                <div class="xula-proof__grade-head">
+                  <span class="xula-proof__grade-label">{{ block.settings.label }}</span>
+                  <span class="xula-proof__grade-range">
+                    {{ block.settings.score_start }}<span aria-hidden="true">–</span><span class="visually-hidden"> to </span>{{ block.settings.score_end }}
+                    <span class="xula-proof__grade-unit">pts</span>
+                  </span>
+                </div>
+                <span class="xula-proof__grade-track" aria-hidden="true">
+                  <span class="xula-proof__grade-fill"></span>
+                </span>
+              </li>
+            {% endfor %}
+          </ol>
+
+          <div class="xula-proof__axis" aria-hidden="true">
+            <span>{{ scale_min }}</span>
+            <span>100</span>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {%- comment -%} 03 · Our specialty coffee {%- endcomment -%}
+    <div class="xula-proof__feature" data-proof-group data-proof-feature>
+      <div class="xula-proof__feature-media">
+        <div class="xula-proof__frame">
+          {%- liquid
+            assign slide_total = 0
+            for i in (1..6)
+              if i == 1
+                assign slide_probe = section.settings.image
+              else
+                assign slide_probe_key = 'image_' | append: i
+                assign slide_probe = section.settings[slide_probe_key]
+              endif
+              if slide_probe != blank
+                assign slide_total = slide_total | plus: 1
+              endif
+            endfor
+          -%}
+          <div
+            class="xula-proof__slides"
+            data-proof-slides
+            data-autoplay="{{ section.settings.autoplay_speed | times: 1000 }}"
+            {% if slide_total > 1 %}
+              role="region"
+              aria-roledescription="carousel"
+              aria-label="{{ section.settings.feature_heading | default: section.settings.feature_eyebrow | default: 'Image gallery' | escape }}"
+            {% endif %}
+          >
+            {% assign slide_index = 0 %}
+            {% for i in (1..6) %}
+              {%- liquid
+                if i == 1
+                  assign slide_image = section.settings.image
+                else
+                  assign slide_key = 'image_' | append: i
+                  assign slide_image = section.settings[slide_key]
+                endif
+              -%}
+              {% if slide_image != blank %}
+                <div
+                  class="xula-proof__slide{% if slide_index == 0 %} is-active{% endif %}"
+                  {% if slide_total > 1 %}
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label="{{ slide_index | plus: 1 }} of {{ slide_total }}"
+                  {% endif %}
+                  {% if slide_index != 0 %}aria-hidden="true"{% endif %}
+                >
+                  {%- liquid
+                    assign slide_alt = slide_image.alt
+                    if slide_alt == blank
+                      assign slide_alt = section.settings.feature_heading | default: shop.name
+                    endif
+                    assign slide_priority = 'auto'
+                    if slide_index > 0
+                      assign slide_priority = 'low'
+                    endif
+                  -%}
+                  {{
+                    slide_image
+                    | image_url: width: 1600
+                    | image_tag:
+                      widths: '600, 800, 1000, 1200, 1400, 1600',
+                      sizes: '(min-width: 990px) 44vw, 92vw',
+                      loading: 'lazy',
+                      decoding: 'async',
+                      fetchpriority: slide_priority,
+                      alt: slide_alt
+                  }}
+                </div>
+                {% assign slide_index = slide_index | plus: 1 %}
+              {% endif %}
+            {% endfor %}
+
+            {% if slide_index == 0 %}
+              <div class="xula-proof__slide is-active">
+                {{ 'image' | placeholder_svg_tag: 'xula-proof__placeholder' }}
+              </div>
+              {% assign slide_index = 1 %}
             {% endif %}
           </div>
 
-          <div class="xula-proof__content">
-            <div class="xula-proof__meta" aria-hidden="true">
-              <span class="xula-proof__index">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
-              <span class="xula-proof__rule"></span>
-            </div>
+          <div class="xula-proof__shade" aria-hidden="true"></div>
 
-            <h3 class="xula-subheading xula-proof__title">{{ block.settings.title }}</h3>
-            <p class="xula-text xula-proof__text">{{ block.settings.text }}</p>
+          {% if section.settings.image_badge != blank %}
+            <span class="xula-proof__badge">
+              {% if section.settings.badge_icon == 'pin' %}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/>
+                  <circle cx="12" cy="9.5" r="2.5"/>
+                </svg>
+              {% elsif section.settings.badge_icon != 'none' %}
+                <span class="xula-proof__badge-icon" aria-hidden="true">{% render 'xula-stat-icon', icon: section.settings.badge_icon %}</span>
+              {% endif %}
+              <span>{{ section.settings.image_badge }}</span>
+            </span>
+          {% endif %}
+
+          {% if slide_index > 1 %}
+            <div class="xula-proof__controls">
+              <button
+                type="button"
+                class="xula-proof__toggle"
+                data-proof-toggle
+                aria-label="Pause slideshow"
+                data-label-pause="Pause slideshow"
+                data-label-play="Play slideshow"
+              >
+                <svg class="xula-proof__toggle-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="4" width="5" height="16" rx="1"/><rect x="14" y="4" width="5" height="16" rx="1"/></svg>
+                <svg class="xula-proof__toggle-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5Z"/></svg>
+              </button>
+
+              <span class="xula-proof__counter" aria-hidden="true">
+                <span class="xula-proof__counter-current" data-proof-current>01</span>
+                <span class="xula-proof__counter-sep"></span>
+                <span class="xula-proof__counter-total">{{ slide_index | prepend: '0' | slice: -2, 2 }}</span>
+              </span>
+
+              <div class="xula-proof__dots" role="group" aria-label="Choose image">
+                {% for i in (1..slide_index) %}
+                  <button
+                    type="button"
+                    class="xula-proof__dot{% if forloop.first %} is-active{% endif %}"
+                    data-proof-dot="{{ forloop.index0 }}"
+                    aria-label="Show image {{ forloop.index }} of {{ slide_index }}"
+                    {% if forloop.first %}aria-current="true"{% endif %}
+                  >
+                    <span class="xula-proof__dot-fill"></span>
+                  </button>
+                {% endfor %}
+              </div>
+
+              <span class="visually-hidden" data-proof-status aria-live="polite" aria-atomic="true"></span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="xula-proof__feature-content">
+        {% if section.settings.feature_eyebrow != blank %}
+          <span class="xula-eyebrow xula-proof__eyebrow xula-proof__reveal" style="--i: 0;">
+            {{ section.settings.feature_eyebrow }}
+          </span>
+        {% endif %}
+
+        {% if section.settings.feature_heading != blank %}
+          <h3 class="xula-heading xula-proof__feature-heading xula-proof__reveal" style="--i: 1;">
+            {{ section.settings.feature_heading }}
+          </h3>
+        {% endif %}
+
+        {% if section.settings.feature_text != blank %}
+          <div class="xula-proof__feature-text rte xula-proof__reveal" style="--i: 2;">
+            {{ section.settings.feature_text }}
           </div>
-        </article>
-      {% endfor %}
+        {% endif %}
+
+        {% if facts.size > 0 %}
+          <dl class="xula-proof__facts xula-proof__facts--count-{{ facts.size }}">
+            {% for block in facts %}
+              <div class="xula-proof__fact xula-proof__reveal" style="--i: {{ forloop.index | plus: 2 }};" {{ block.shopify_attributes }}>
+                <dt class="xula-proof__fact-head">
+                  {% if block.settings.icon != 'none' %}
+                    <span class="xula-proof__fact-icon" aria-hidden="true">
+                      {% render 'xula-stat-icon', icon: block.settings.icon %}
+                    </span>
+                  {% endif %}
+                  <span class="xula-proof__fact-label">{{ block.settings.label | escape }}</span>
+                  <span class="xula-proof__fact-num" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+                </dt>
+                <dd class="xula-proof__fact-value">{{ block.settings.value | escape }}</dd>
+              </div>
+            {% endfor %}
+          </dl>
+        {% endif %}
+
+        {%- liquid
+          assign show_primary = false
+          if section.settings.feature_button_label != blank and section.settings.feature_button_link != blank
+            assign show_primary = true
+          endif
+          assign show_secondary = false
+          if section.settings.feature_secondary_label != blank and section.settings.feature_secondary_link != blank
+            assign show_secondary = true
+          endif
+        -%}
+        {% if show_primary or show_secondary %}
+          <div class="xula-proof__actions xula-proof__reveal" style="--i: {{ facts.size | plus: 3 }};">
+            {% if show_primary %}
+              <a href="{{ section.settings.feature_button_link }}" class="xula-btn xula-proof__btn">
+                <span>{{ section.settings.feature_button_label }}</span>
+              </a>
+            {% endif %}
+
+            {% if show_secondary %}
+              <a href="{{ section.settings.feature_secondary_link }}" class="xula-btn--secondary xula-proof__link">
+                <span>{{ section.settings.feature_secondary_label }}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
     </div>
+
+    {%- comment -%} 04 · Cupping profile {%- endcomment -%}
+    {% if profiles.size > 0 %}
+      <div class="xula-proof__profile" data-proof-group>
+        {% if section.settings.profile_eyebrow != blank or section.settings.profile_heading != blank %}
+          <header class="xula-proof__profile-head xula-proof__reveal" style="--i: 0;">
+            {% if section.settings.profile_eyebrow != blank %}
+              <span class="xula-eyebrow xula-proof__eyebrow">{{ section.settings.profile_eyebrow }}</span>
+            {% endif %}
+            {% if section.settings.profile_heading != blank %}
+              <h3 class="xula-proof__title xula-proof__title--lg">{{ section.settings.profile_heading }}</h3>
+            {% endif %}
+          </header>
+        {% endif %}
+
+        <ul class="xula-proof__notes" role="list">
+          {% for block in profiles %}
+            <li
+              class="xula-proof__note xula-proof__reveal"
+              style="--i: {{ forloop.index }}; --level: {{ block.settings.level }};"
+              {{ block.shopify_attributes }}
+            >
+              <div class="xula-proof__note-meta" aria-hidden="true">
+                <span class="xula-proof__note-index">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+                <span class="xula-proof__note-rule"></span>
+              </div>
+
+              <h4 class="xula-proof__note-title">{{ block.settings.title }}</h4>
+
+              {% if block.settings.chips != blank %}
+                <ul class="xula-proof__chips" role="list">
+                  {% assign chips = block.settings.chips | split: ',' %}
+                  {% for chip in chips %}
+                    {% assign chip_text = chip | strip %}
+                    {% if chip_text != blank %}
+                      <li class="xula-proof__chip">{{ chip_text | escape }}</li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              {% endif %}
+
+              {% if block.settings.level > 0 %}
+                <div class="xula-proof__meter">
+                  <div
+                    class="xula-proof__meter-track"
+                    role="img"
+                    aria-label="{{ block.settings.title | escape }}: {{ block.settings.level_label | default: block.settings.level | escape }} ({{ block.settings.level }}/5)"
+                  >
+                    {% for i in (1..5) %}
+                      <span class="xula-proof__meter-step{% if i <= block.settings.level %} is-on{% endif %}" style="--s: {{ i }};"></span>
+                    {% endfor %}
+                  </div>
+                  {% if block.settings.level_label != blank %}
+                    <span class="xula-proof__meter-label" aria-hidden="true">{{ block.settings.level_label }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+              {% if block.settings.text != blank %}
+                <p class="xula-proof__note-text">{{ block.settings.text }}</p>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
 
   </div>
 </section>
 
 {% schema %}
+{
+  "name": "Xula Specialty Coffee",
+  "max_blocks": 25,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
     {
-        "name": "Xula Proof of Craft",
-        "max_blocks": 3,
-        "settings": [
-            {
-              "type": "text",
-              "id": "eyebrow",
-              "label": "Eyebrow",
-              "default": "Rooted in tradition"
-            },
-            {
-              "type": "text",
-              "id": "heading",
-              "label": "Heading",
-              "default": "Crafted with purpose, from bean to ritual."
-            },
-            {
-              "type": "textarea",
-              "id": "text",
-              "label": "Intro text",
-              "default": "Three principles guide every bag we roast, from the Mexican highlands to your morning cup."
-            }
-        ],
-        "blocks": [
-            {
-                "type": "craft_item",
-                "name": "Craft Item",
-                "settings": [
-                    {
-                    "type": "image_picker",
-                    "id": "image",
-                    "label": "Image"
-                    },
-                    {
-                    "type": "text",
-                    "id": "title",
-                    "label": "Title",
-                    "default": "Single-Origin Mexican Coffee"
-                    },
-                    {
-                    "type": "textarea",
-                    "id": "text",
-                    "label": "Description",
-                    "default": "Sourced from the highlands of Mexico, where altitude, soil, and climate shape every cup."
-                    },
-                    {
-                      "type": "color",
-                      "id": "background_color",
-                      "label": "Background color",
-                      "default": "#F4F0E8"
-                    },
-                    {
-                      "type": "color",
-                      "id": "text_color",
-                      "label": "Text color",
-                      "default": "#1C1C1C"
-                    }
-                ]
-            }
-        ],
-    "presets": [
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background color",
+      "default": "#24170f"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Section text color",
+      "default": "#f4f0e8"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Eyebrows, highlighted year, drop cap, fact labels, tags and intensity meters. On a light background, pick a darker accent so small text stays readable.",
+      "default": "#e2b582"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "info": "Cupping profile cards. Leave empty for automatic."
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card text color",
+      "info": "Leave empty to use the section text color."
+    },
+    {
+      "type": "color",
+      "id": "card_accent_color",
+      "label": "Card accent color",
+      "info": "Card numbers, lines, tag borders, intensity meters and hover border. Leave empty to use the accent color."
+    },
+    {
+      "type": "header",
+      "content": "01 · What is specialty coffee"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Rooted in tradition"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What is Specialty Coffee?"
+    },
+    {
+      "type": "text",
+      "id": "milestone_year",
+      "label": "Highlighted year",
+      "default": "1974"
+    },
+    {
+      "type": "text",
+      "id": "milestone_text",
+      "label": "Highlighted year text",
+      "default": "Erna Knutsen first uses the term “specialty coffee” in Tea & Coffee Trade Journal."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Specialty coffee is a term for the highest grade of coffee available, typically relating to the entire supply chain, using single origin or single estate coffee.</p>"
+    },
+    {
+      "type": "header",
+      "content": "02 · Grading scale",
+      "info": "Add \"Grade\" blocks to build the scale."
+    },
+    {
+      "type": "color",
+      "id": "scale_background_color",
+      "label": "Panel background color",
+      "default": "#2f2017"
+    },
+    {
+      "type": "color",
+      "id": "scale_text_color",
+      "label": "Panel text color",
+      "default": "#f4f0e8"
+    },
+    {
+      "type": "text",
+      "id": "scale_eyebrow",
+      "label": "Eyebrow",
+      "default": "How it's graded"
+    },
+    {
+      "type": "text",
+      "id": "scale_heading",
+      "label": "Heading",
+      "default": "The 100-point scale"
+    },
+    {
+      "type": "textarea",
+      "id": "scale_text",
+      "label": "Text",
+      "default": "The widely accepted definition of specialty coffee is coffee scoring 80 points or above on the 100-point Coffee Review scale."
+    },
+    {
+      "type": "richtext",
+      "id": "scale_note",
+      "label": "Note"
+    },
+    {
+      "type": "range",
+      "id": "scale_min",
+      "label": "Scale start",
+      "info": "Score where each grade bar begins.",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "03 · Our coffee"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add up to 6 images. With 2 or more, the images rotate automatically."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Image 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_4",
+      "label": "Image 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_5",
+      "label": "Image 5"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_6",
+      "label": "Image 6"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay speed",
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "image_badge",
+      "label": "Image tag",
+      "default": "Arabica Typica"
+    },
+    {
+      "type": "select",
+      "id": "badge_icon",
+      "label": "Image tag icon",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "pin", "label": "Location pin" },
+        { "value": "bean", "label": "Coffee bean" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "mountain", "label": "Mountain" },
+        { "value": "drop", "label": "Drop" }
+      ],
+      "default": "bean"
+    },
+    {
+      "type": "text",
+      "id": "feature_eyebrow",
+      "label": "Eyebrow",
+      "default": "From our highlands"
+    },
+    {
+      "type": "text",
+      "id": "feature_heading",
+      "label": "Heading",
+      "default": "Our Specialty Coffee"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_text",
+      "label": "Text",
+      "default": "<p>Our specialty coffee comes from the Arabica Typica variety and is grown under sustainable practices, in shaded coffee plantations.</p>"
+    },
+    {
+      "type": "text",
+      "id": "feature_button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "feature_button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "feature_secondary_label",
+      "label": "Secondary link label"
+    },
+    {
+      "type": "url",
+      "id": "feature_secondary_link",
+      "label": "Secondary link"
+    },
+    {
+      "type": "header",
+      "content": "04 · Cupping profile"
+    },
+    {
+      "type": "text",
+      "id": "profile_eyebrow",
+      "label": "Eyebrow",
+      "default": "Coffee cupping"
+    },
+    {
+      "type": "text",
+      "id": "profile_heading",
+      "label": "Heading",
+      "default": "Tasting profile"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "grade",
+      "name": "Grade",
+      "limit": 5,
+      "settings": [
         {
-            "name": "Xula Proof of Craft",
-            "blocks": [
-                {
-                "type": "craft_item"
-                },
-                {
-                "type": "craft_item"
-                },
-                {
-                "type": "craft_item"
-                }
-            ]
+          "type": "text",
+          "id": "score_start",
+          "label": "Score from",
+          "info": "Numbers only. E.g. 80",
+          "default": "80"
+        },
+        {
+          "type": "text",
+          "id": "score_end",
+          "label": "Score to",
+          "info": "Numbers only. E.g. 84.99",
+          "default": "84.99"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Grade name",
+          "default": "Very Good"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Color",
+          "default": "#439105"
         }
-    ]
+      ]
+    },
+    {
+      "type": "fact",
+      "name": "Fact",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "mountain", "label": "Mountain (altitude)" },
+            { "value": "leaf", "label": "Leaf (variety)" },
+            { "value": "calendar", "label": "Calendar (harvest)" },
+            { "value": "home", "label": "Home (family farms)" },
+            { "value": "bean", "label": "Coffee bean" },
+            { "value": "drop", "label": "Drop (process)" }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Variety"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value",
+          "default": "Arabica Typica"
+        }
+      ]
+    },
+    {
+      "type": "profile",
+      "name": "Profile",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Acidity"
+        },
+        {
+          "type": "text",
+          "id": "chips",
+          "label": "Tags",
+          "info": "Comma-separated. E.g. Lemon, Vanilla, Caramel"
+        },
+        {
+          "type": "range",
+          "id": "level",
+          "label": "Intensity",
+          "info": "0 hides the meter.",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "level_label",
+          "label": "Intensity label",
+          "info": "E.g. High"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Xula Specialty Coffee",
+      "blocks": [
+        { "type": "grade", "settings": { "score_start": "80", "score_end": "84.99", "label": "Very Good", "color": "#439105" } },
+        { "type": "grade", "settings": { "score_start": "85", "score_end": "89.99", "label": "Excellent", "color": "#345da8" } },
+        { "type": "grade", "settings": { "score_start": "90", "score_end": "100", "label": "Outstanding", "color": "#e95028" } },
+        { "type": "fact", "settings": { "label": "Variety", "value": "Arabica Typica" } },
+        { "type": "fact", "settings": { "label": "Altitude", "value": "1,000–1,350 m" } },
+        { "type": "profile", "settings": { "title": "Tasting Notes", "chips": "Fruits, Lemon, Vanilla, Caramel, Almonds" } },
+        { "type": "profile", "settings": { "title": "Acidity", "level": 4, "level_label": "High" } },
+        { "type": "profile", "settings": { "title": "Body", "level": 4, "level_label": "High" } }
+      ]
+    }
+  ]
 }
 {% endschema %}
