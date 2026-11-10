@@ -1,68 +1,91 @@
 {{ 'xula-journey.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'xula-journey.js' | asset_url }}" defer></script>
+{%- if section.blocks.size > 1 -%}
+  <script src="{{ 'xula-journey.js' | asset_url }}" defer></script>
+{%- endif -%}
 
-<section class="xula-journey"
-      style="
-        --xula-journey-steps: {{ section.blocks.size }};
-        --xula-journey-bg: {{ section.settings.background_color }};
-        --xula-journey-text: {{ section.settings.text_color }};
-        --xula-journey-eyebrow: {{ section.settings.eyebrow_color }};
-        --xula-journey-step: {{ section.settings.step_color }};
-      ">
+{%- liquid
+  assign heading_id = 'XulaJourneyHeading-' | append: section.id
+  assign image_sizes = '(min-width: 1200px) 560px, (min-width: 990px) calc(50vw - 60px), calc(100vw - 30px)'
+-%}
+
+<section
+  class="xula-journey"
+  {% if section.settings.eyebrow != blank %}aria-labelledby="{{ heading_id }}"{% endif %}
+  style="
+    --xula-journey-steps: {{ section.blocks.size }};
+    --xula-journey-bg: {{ section.settings.background_color }};
+    --xula-journey-text: {{ section.settings.text_color }};
+    --xula-journey-eyebrow: {{ section.settings.eyebrow_color }};
+    --xula-journey-step: {{ section.settings.step_color }};
+  "
+>
   <div class="page-width">
     <div class="xula-journey__grid">
-
-      <!-- LEFT STICKY -->
+      {%- comment -%} Left column: sticky copy on desktop {%- endcomment -%}
       <div class="xula-journey__content">
-         {% if section.settings.eyebrow != blank %}
-              <span class="xula-eyebrow journey--eyebrow">
-                {{ section.settings.eyebrow }}
-              </span>
-            {% endif %}
-        {% for block in section.blocks %}
+        {%- if section.settings.eyebrow != blank -%}
+          <h2 id="{{ heading_id }}" class="xula-eyebrow journey--eyebrow">
+            {{- section.settings.eyebrow | escape -}}
+          </h2>
+        {%- endif -%}
+
+        {%- for block in section.blocks -%}
           <div
-            class="xula-journey__copy {% if forloop.first %}is-active{% endif %}"
+            class="xula-journey__copy{% if forloop.first %} is-active{% endif %}"
             data-copy="{{ forloop.index0 }}"
             {{ block.shopify_attributes }}
           >
-            <span class="xula-journey__num" aria-hidden="true">{{ forloop.index | prepend: '0' }}</span>
-            <small>{{ block.settings.step_label }}</small>
-            <h2 class="xula-heading journey--heading">{{ block.settings.title }}</h2>
-            <p>{{ block.settings.text }}</p>
+            <span class="xula-journey__num" aria-hidden="true">
+              {{- forloop.index | prepend: '0' | slice: -2, 2 -}}
+            </span>
+            {%- if block.settings.step_label != blank -%}
+              <p class="xula-journey__step">{{ block.settings.step_label | escape }}</p>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <h3 class="xula-heading journey--heading">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p class="xula-journey__text">{{ block.settings.text | escape | newline_to_br }}</p>
+            {%- endif -%}
           </div>
-        {% endfor %}
+        {%- endfor -%}
 
-        {% if section.blocks.size > 1 %}
+        {%- if section.blocks.size > 1 -%}
           <div class="xula-journey__progress" aria-hidden="true">
             <span class="xula-journey__counter">
               <span class="xula-journey__counter-current">01</span>
-              <span class="xula-journey__counter-total">/ {{ section.blocks.size | prepend: '0' }}</span>
+              <span class="xula-journey__counter-total">/ {{ section.blocks.size | prepend: '0' | slice: -2, 2 }}</span>
             </span>
             <span class="xula-journey__track"><span class="xula-journey__bar"></span></span>
           </div>
-        {% endif %}
+        {%- endif -%}
       </div>
 
-      <!-- RIGHT SCROLL -->
+      {%- comment -%} Right column: scrolling images {%- endcomment -%}
       <div class="xula-journey__media">
-        {% for block in section.blocks %}
+        {%- for block in section.blocks -%}
           <div
-            class="xula-journey__item {% if forloop.first %}is-active{% endif %}"
+            class="xula-journey__item{% if forloop.first %} is-active{% endif %}"
             data-step="{{ forloop.index0 }}"
           >
-            {% if block.settings.image != blank %}
-              <img
-                src="{{ block.settings.image | image_url: width: 1600 }}"
-                width="1600"
-                height="480"
-                alt="{{ block.settings.title | escape }}"
-                loading="lazy"
-              >
-            {% endif %}
+            {%- if block.settings.image != blank -%}
+              {%- assign image_alt = block.settings.image.alt | default: block.settings.title -%}
+              {{
+                block.settings.image
+                | image_url: width: 1600
+                | image_tag:
+                  widths: '400, 600, 800, 1000, 1200, 1600',
+                  sizes: image_sizes,
+                  loading: 'lazy',
+                  decoding: 'async',
+                  alt: image_alt
+              }}
+            {%- elsif request.design_mode -%}
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'xula-journey__placeholder' }}
+            {%- endif -%}
           </div>
-        {% endfor %}
+        {%- endfor -%}
       </div>
-
     </div>
   </div>
 </section>
@@ -70,39 +93,40 @@
 {% schema %}
 {
   "name": "Xula Journey",
-  "tag": "section",
   "class": "section-xula-journey",
   "settings": [
     {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
+      "info": "Used as the section heading for search engines and screen readers.",
       "default": "The journey of Xula"
     },
     {
-          "type": "color",
-          "id": "background_color",
-          "label": "Background Color",
-          "default": "#439105"
-        },
-        {
-          "type": "color",
-          "id": "text_color",
-          "label": "Text Color",
-          "default": "#F4F0E8"
-        },
-        {
-          "type": "color",
-          "id" : "eyebrow_color",
-          "label": "Eyebrow Color",
-          "default": "#F4F0E8"
-        },
-        {
-          "type": "color",
-          "id": "step_color",
-          "label": "Step Color",
-          "default": "#F4F0E8"
-        },
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#439135"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Eyebrow Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "step_color",
+      "label": "Step Color",
+      "info": "Applies to the large number and the step label.",
+      "default": "#FFFFFF"
+    }
   ],
   "blocks": [
     {
@@ -113,7 +137,8 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
+          "label": "Image",
+          "info": "Set the image alt text in Files for better SEO. Falls back to the title."
         },
         {
           "type": "text",

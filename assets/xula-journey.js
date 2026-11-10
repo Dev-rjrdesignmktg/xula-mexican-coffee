@@ -1,13 +1,20 @@
 (() => {
+  const DESKTOP_QUERY = "(min-width: 990px)";
+  const instances = new WeakMap();
+
   const initJourney = (section) => {
-    if (section.dataset.journeyReady) return;
-    section.dataset.journeyReady = "true";
+    if (instances.has(section)) return;
 
     const items = Array.from(section.querySelectorAll(".xula-journey__item"));
-    const copies = section.querySelectorAll(".xula-journey__copy");
+    if (items.length < 2) return;
+
+    const copies = Array.from(section.querySelectorAll(".xula-journey__copy"));
     const current = section.querySelector(".xula-journey__counter-current");
+    const desktop = window.matchMedia(DESKTOP_QUERY);
     let activeIndex = null;
     let ticking = false;
+    let listening = false;
+    let inView = false;
 
     const setActive = (index) => {
       if (index === activeIndex) return;
@@ -35,9 +42,10 @@
       const center = window.innerHeight / 2;
       let index = 0;
 
-      items.forEach((item, i) => {
-        if (item.getBoundingClientRect().top <= center) index = i;
-      });
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].getBoundingClientRect().top <= center) index = i;
+        else break;
+      }
 
       setActive(index);
     };
@@ -48,21 +56,54 @@
       requestAnimationFrame(update);
     };
 
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-    update();
+    // only track scroll while the sticky desktop layout is active and the section is on screen
+    const sync = () => {
+      const shouldListen = desktop.matches && inView;
+      if (shouldListen === listening) return;
+      listening = shouldListen;
+
+      if (listening) {
+        window.addEventListener("scroll", requestUpdate, { passive: true });
+        window.addEventListener("resize", requestUpdate, { passive: true });
+        update();
+      } else {
+        window.removeEventListener("scroll", requestUpdate);
+        window.removeEventListener("resize", requestUpdate);
+      }
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      inView = entries.some((entry) => entry.isIntersecting);
+      sync();
+    });
+    observer.observe(section);
+    desktop.addEventListener("change", sync);
+
+    instances.set(section, () => {
+      observer.disconnect();
+      desktop.removeEventListener("change", sync);
+      inView = false;
+      sync();
+    });
   };
 
-  const initAll = () => {
-    document.querySelectorAll(".xula-journey").forEach(initJourney);
+  const initAll = (root = document) => {
+    root.querySelectorAll(".xula-journey").forEach(initJourney);
   };
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initAll);
+    document.addEventListener("DOMContentLoaded", () => initAll());
   } else {
     initAll();
   }
 
-  // re-init when the section is re-rendered in the theme editor
-  document.addEventListener("shopify:section:load", initAll);
+  // theme editor: re-init on re-render, clean up on removal
+  document.addEventListener("shopify:section:load", (event) => initAll(event.target));
+  document.addEventListener("shopify:section:unload", (event) => {
+    event.target.querySelectorAll(".xula-journey").forEach((section) => {
+      const destroy = instances.get(section);
+      if (destroy) destroy();
+      instances.delete(section);
+    });
+  });
 })();

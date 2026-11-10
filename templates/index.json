@@ -310,10 +310,10 @@
       "name": "Xula Journey",
       "settings": {
         "eyebrow": "The journey of Xula",
-        "background_color": "#439105",
+        "background_color": "#439135",
         "text_color": "#ffffff",
-        "eyebrow_color": "#f4f0e8",
-        "step_color": "#d7b791"
+        "eyebrow_color": "#ffffff",
+        "step_color": "#ffffff"
       }
     },
     "xula_signature_MVGPEy": {

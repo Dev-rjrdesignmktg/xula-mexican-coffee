@@ -27,18 +27,13 @@
 }
 
 .xula-journey .journey--eyebrow {
+  /* rendered as <h2> for document outline; reset theme heading styles */
   color: var(--xula-journey-eyebrow);
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.xula-journey .journey--eyebrow::before {
-  content: "";
-  width: 40px;
-  height: 1px;
-  background: currentColor;
-  opacity: .6;
+  font-family: inherit;
+  font-weight: inherit;
+  font-style: normal;
+  line-height: 1.4;
+  margin-top: 0;
 }
 
 .xula-journey__copy {
@@ -55,16 +50,19 @@
   font-size: 4.8rem;
   line-height: 1;
   color: transparent;
-  -webkit-text-stroke: 1px color-mix(in srgb, var(--xula-journey-text) 55%, transparent);
+  -webkit-text-stroke: 1px var(--xula-journey-step);
   letter-spacing: -.02em;
 }
 
-.xula-journey__copy small {
+.xula-journey__step {
+  margin: 0;
   color: var(--xula-journey-step);
   text-transform: uppercase;
   letter-spacing: .22em;
-  font-size: 1.1rem;
-  opacity: .75;
+  /* 19px bold = WCAG "large text" (3:1 min) so it holds on the brand green */
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .xula-journey .journey--heading {
@@ -72,8 +70,8 @@
   margin: 0;
 }
 
-.xula-journey__copy p {
-  color: color-mix(in srgb, var(--xula-journey-text) 82%, transparent);
+.xula-journey__text {
+  color: var(--xula-journey-text);
   margin: 0;
   max-width: 42ch;
   font-size: 1.6rem;
@@ -102,16 +100,18 @@
   pointer-events: none;
 }
 
-.xula-journey__item {
-  height: auto;
-}
-
-.xula-journey__item img {
+.xula-journey__item img,
+.xula-journey__placeholder {
   width: 100%;
   height: 260px;
   object-fit: cover;
   border-radius: 16px;
   display: block;
+}
+
+.xula-journey__placeholder {
+  background: color-mix(in srgb, var(--xula-journey-text) 12%, transparent);
+  fill: color-mix(in srgb, var(--xula-journey-text) 40%, transparent);
 }
 
 /* interleave copy[n] -> item[n] in scroll order, right after the eyebrow (order: 1) */
@@ -144,7 +144,8 @@
     border-radius: 20px;
   }
 
-  .xula-journey__item img {
+  .xula-journey__item img,
+  .xula-journey__placeholder {
     height: 420px;
     border-radius: 20px;
   }
@@ -282,9 +283,13 @@
     border-radius: 24px;
   }
 
-  .xula-journey__item img {
+  .xula-journey__item img,
+  .xula-journey__placeholder {
     height: 480px;
     border-radius: 24px;
+  }
+
+  .xula-journey__item img {
     transform: scale(1.08);
     transition: transform 1.6s cubic-bezier(.22, 1, .36, 1);
   }
@@ -298,5 +303,10 @@
   .xula-journey *,
   .xula-journey *::after {
     transition: none !important;
+  }
+
+  .xula-journey__item img,
+  .xula-journey__copy > * {
+    transform: none !important;
   }
 }
