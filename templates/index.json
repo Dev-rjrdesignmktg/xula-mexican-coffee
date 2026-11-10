@@ -140,36 +140,36 @@
             "color": "#e95028"
           }
         },
-        "fact_variety": {
-          "type": "fact",
-          "settings": {
-            "label": "Variety",
-            "value": "Arabica Typica",
-            "icon": "leaf"
-          }
-        },
         "fact_altitude": {
           "type": "fact",
           "settings": {
+            "icon": "mountain",
             "label": "Altitude",
-            "value": "1,000–1,350 masl",
-            "icon": "mountain"
+            "value": "1,000–1,350 masl"
           }
         },
-        "fact_farming": {
+        "fact_variety": {
           "type": "fact",
           "settings": {
-            "label": "Farming",
-            "value": "Shade-grown, sustainable",
-            "icon": "home"
+            "icon": "leaf",
+            "label": "Variety",
+            "value": "Arabica Typica"
           }
         },
         "fact_harvest": {
           "type": "fact",
           "settings": {
+            "icon": "calendar",
             "label": "Harvest",
-            "value": "Mid-harvest, 100% ripe",
-            "icon": "calendar"
+            "value": "Mid-harvest, 100% ripe"
+          }
+        },
+        "fact_farming": {
+          "type": "fact",
+          "settings": {
+            "icon": "home",
+            "label": "Farming",
+            "value": "Shade-grown, sustainable"
           }
         },
         "profile_notes": {
@@ -217,29 +217,39 @@
       ],
       "name": "Xula Specialty Coffee",
       "settings": {
-        "background_color": "#24170f",
-        "text_color": "#f4f0e8",
+        "background_color": "#FFFFFF",
+        "text_color": "#000000",
+        "accent_color": "#439135",
+        "card_background_color": "#439135",
+        "card_text_color": "#FFFFFF",
+        "card_accent_color": "#D7B791",
         "eyebrow": "Rooted in tradition",
         "heading": "What is Specialty Coffee?",
         "milestone_year": "1974",
         "milestone_text": "Erna Knutsen first uses the term “specialty coffee” in Tea & Coffee Trade Journal.",
         "text": "<p>Specialty coffee is a term for the highest grade of coffee available, typically relating to the entire supply chain, using single origin or single estate coffee. The term was first used in 1974 by Erna Knutsen in an issue of Tea & Coffee Trade Journal. Knutsen used specialty coffee to describe beans of the best flavor which are produced in special micro-climates.</p><p>Specialty coffee is related to what is known as the Third Wave of Coffee, especially throughout North America. This refers to a modern demand for exceptional quality coffee, both farmed and brewed to a significantly higher than average standard.</p>",
+        "scale_background_color": "#2f2017",
+        "scale_text_color": "#f4f0e8",
+        "scale_eyebrow": "How it's graded",
         "scale_heading": "The 100-point scale",
         "scale_text": "The widely accepted definition of specialty coffee is coffee scoring 80 points or above on the 100-point Coffee Review scale.",
         "scale_note": "<p>The <strong>Specialty Coffee Association</strong> has a series of more detailed specifications (SCA is the union of the Specialty Coffee Association of America (SCAA) and Europe (SCAE)). The SCA sets standards for specialty coffee at every stage of the coffee production, including allowable defects in green beans, water standards, and brew strength. The SCA also sets clear standards on the coffee grading process.</p>",
+        "scale_min": 80,
         "image": "shopify://shop_images/xula-51-mr.jpg",
+        "image_2": "shopify://shop_images/IMG_5203.jpg",
+        "image_3": "shopify://shop_images/IMG_5230.webp",
+        "autoplay_speed": 5,
         "image_badge": "Arabica Typica",
+        "badge_icon": "bean",
         "feature_eyebrow": "From our highlands",
         "feature_heading": "Our Specialty Coffee",
         "feature_text": "<p>Our specialty coffee comes from the Arabica Typica variety and is grown under sustainable practices, in shaded coffee plantations, at a height of 1,000 to 1,350 meters above sea level. The grain is collected in the middle of the harvest and from the central part of each plant, when the fruit reaches 100% maturity.</p><p>It is processed under totally ecological standards, which highlight in each cup characteristics so distinguished that they result in a coffee… that is simply extraordinary.</p>",
-        "profile_eyebrow": "Coffee cupping",
-        "profile_heading": "Tasting profile",
-        "autoplay_speed": 5,
-        "badge_icon": "bean",
         "feature_button_label": "Shop Coffee",
         "feature_button_link": "shopify://collections/all",
-        "image_2": "shopify://shop_images/IMG_5203.jpg",
-        "image_3": "shopify://shop_images/3055416C-A5AB-4D21-A368-0B5BA8F5D3FA.PNG"
+        "feature_secondary_label": "",
+        "feature_secondary_link": "",
+        "profile_eyebrow": "Coffee cupping",
+        "profile_heading": "Tasting profile"
       }
     },
     "xula_collections_RVJVdH": {
@@ -386,9 +396,9 @@
       "settings": {
         "eyebrow": "The journey of Xula",
         "background_color": "#439105",
-        "text_color": "#f4f0e8",
+        "text_color": "#FFFFFF",
         "eyebrow_color": "#f4f0e8",
-        "step_color": "#f4f0e8"
+        "step_color": "#D7B791"
       }
     },
     "xula_signature_MVGPEy": {
