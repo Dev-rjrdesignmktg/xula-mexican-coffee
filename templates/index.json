@@ -132,12 +132,12 @@
       ],
       "name": "Xula Specialty Coffee",
       "settings": {
-        "background_color": "#FFFFFF",
+        "background_color": "#ffffff",
         "text_color": "#000000",
         "accent_color": "#439135",
         "card_background_color": "#439135",
-        "card_text_color": "#FFFFFF",
-        "card_accent_color": "#D7B791",
+        "card_text_color": "#ffffff",
+        "card_accent_color": "#d7b791",
         "eyebrow": "Rooted in tradition",
         "heading": "What is Specialty Coffee?",
         "milestone_year": "1974",
@@ -311,9 +311,9 @@
       "settings": {
         "eyebrow": "The journey of Xula",
         "background_color": "#439105",
-        "text_color": "#FFFFFF",
+        "text_color": "#ffffff",
         "eyebrow_color": "#f4f0e8",
-        "step_color": "#D7B791"
+        "step_color": "#d7b791"
       }
     },
     "xula_signature_MVGPEy": {
@@ -452,12 +452,30 @@
         "eyebrow": "Trusted by Our Community",
         "heading": "The taste that keeps them coming back.",
         "text": "Thousands of cups poured, thousands of stories brewed. Here's what real XULA customers are saying.",
+        "background_color": "#FFFFFF",
+        "text_color": "#000000",
+        "accent_color": "#439135",
+        "badge_label": "Real customers",
+        "badge_background_color": "#D7B791",
+        "badge_text_color": "#000000",
+        "panel_background_color": "#CD3E87",
+        "panel_text_color": "#FFFFFF",
+        "panel_accent_color": "#D7B791",
+        "arrow_color": "#CD3E87",
+        "arrow_hover_color": "#439135",
+        "arrow_hover_icon_color": "#D7B791",
+        "autoplay": true,
+        "autoplay_speed": 8,
         "show_summary": true,
         "summary_rating": "4.5",
         "summary_count": "from 500+ verified reviews",
         "show_guarantee": true,
         "guarantee_heading": "30-Day Happiness Guarantee",
-        "guarantee_text": "Not the right roast for you? We'll make it right — refund or replace, no questions asked."
+        "guarantee_text": "Not the right roast for you? We'll make it right — refund or replace, no questions asked.",
+        "guarantee_background_color": "#CD3E87",
+        "guarantee_text_color": "#FFFFFF",
+        "guarantee_icon_color": "#D7B791",
+        "guarantee_border_color": "#D7B791"
       }
     },
     "xula_newsletter_7AjbJF": {
@@ -500,6 +518,7 @@
         "incentive_detail": "Code sent to your inbox instantly",
         "email_placeholder": "you@email.com",
         "button_label": "Get My Discount",
+        "loading_label": "Sending…",
         "consent_text": "By subscribing, you agree to receive marketing emails from XULA. You can unsubscribe anytime.",
         "success_heading": "You're in! Check your inbox.",
         "success_text": "We sent your welcome code. In the meantime, brew your favorite cup.",
