@@ -32,6 +32,8 @@
     const variantField = form.querySelector('[data-xula-showcase-variant]');
     const priceEl = form.querySelector('[data-xula-showcase-price]');
     const compareEl = form.querySelector('[data-xula-showcase-compare]');
+    const compareWrap = form.querySelector('[data-xula-showcase-compare-wrap]');
+    const priceLabel = form.querySelector('[data-xula-showcase-price-label]');
     const onetimeRadio = form.querySelector('[data-xula-showcase-plan="onetime"]');
     const subscribeRadio = form.querySelector('[data-xula-showcase-plan="subscribe"]');
     const onetimePriceEl = form.querySelector('[data-xula-showcase-plan-price="onetime"]');
@@ -65,10 +67,11 @@
       }
 
       if (priceEl) priceEl.textContent = isSubscribing() ? variant.subscribePrice : variant.price;
-      if (compareEl) {
-        const compare = isSubscribing() ? variant.price : variant.compare;
-        compareEl.hidden = !compare;
-        compareEl.textContent = compare || '';
+      const compare = isSubscribing() ? variant.price : variant.compare;
+      if (compareEl) compareEl.textContent = compare || '';
+      if (compareWrap) compareWrap.hidden = !compare;
+      if (priceLabel) {
+        priceLabel.textContent = compare ? priceLabel.dataset.labelSale : priceLabel.dataset.labelRegular;
       }
 
       if (submitBtn) {
@@ -83,9 +86,12 @@
     subscribeRadio?.addEventListener('change', render);
     render();
 
+    let addedTimer;
+
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       if (!submitBtn || submitBtn.getAttribute('aria-disabled') === 'true') return;
+      if (submitBtn.getAttribute('aria-busy') === 'true') return;
 
       submitBtn.classList.add('is-loading');
       submitBtn.setAttribute('aria-busy', 'true');
@@ -109,7 +115,11 @@
         headers: { Accept: 'application/javascript', 'X-Requested-With': 'XMLHttpRequest' },
         body: formData,
       })
-        .then((response) => response.json())
+        .then((response) =>
+          response.json().catch(() => {
+            throw new Error(`Unable to add to cart (${response.status})`);
+          })
+        )
         .then((response) => {
           if (response.status) {
             throw new Error(response.description || response.message || 'Unable to add to cart');
@@ -145,7 +155,8 @@
       submitText.textContent = data.addedLabel;
       setMessage(data.addedLabel);
 
-      setTimeout(() => {
+      clearTimeout(addedTimer);
+      addedTimer = setTimeout(() => {
         submitBtn.classList.remove('is-added');
         render();
         setMessage('');

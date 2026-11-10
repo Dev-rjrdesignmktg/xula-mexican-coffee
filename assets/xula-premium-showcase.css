@@ -10,7 +10,7 @@
   --xps-card: var(--bg);
   --xps-ink: var(--bg-secondary);
   --xps-text: color-mix(in srgb, var(--bg-secondary) 82%, transparent);
-  --xps-muted: color-mix(in srgb, var(--bg-secondary) 58%, transparent);
+  --xps-muted: color-mix(in srgb, var(--bg-secondary) 70%, transparent);
   --xps-line: color-mix(in srgb, var(--bg-secondary) 12%, transparent);
   --xps-accent: var(--accent);
   --xps-gold: var(--xula-gold-solid);
@@ -27,6 +27,14 @@
   .xula-premium-showcase {
     padding-block: var(--xps-pad-top, 80px) var(--xps-pad-bottom, 80px);
   }
+}
+
+/* Accent color used for TEXT (eyebrow, kicker, labels). Re-declared on the
+   card so per-card accent/ink overrides are picked up. Mixing with the ink
+   keeps small labels above WCAG AA contrast. */
+.xula-premium-showcase,
+.xula-premium-showcase__card {
+  --xps-gold-text: color-mix(in srgb, var(--xps-gold) 62%, var(--xps-ink));
 }
 
 /* ---------------------------------------------------------
@@ -49,7 +57,7 @@
   --xps-card: color-mix(in srgb, #fff 5%, var(--bg-secondary));
   --xps-ink: #fbf3e8;
   --xps-text: color-mix(in srgb, #fbf3e8 86%, transparent);
-  --xps-muted: color-mix(in srgb, #fbf3e8 62%, transparent);
+  --xps-muted: color-mix(in srgb, #fbf3e8 72%, transparent);
   --xps-line: color-mix(in srgb, #fbf3e8 14%, transparent);
   --xps-gold: var(--bg-tertiary);
 }
@@ -63,7 +71,7 @@
   --xps-card: rgb(var(--color-background));
   --xps-ink: rgb(var(--color-foreground));
   --xps-text: rgba(var(--color-foreground), .82);
-  --xps-muted: rgba(var(--color-foreground), .62);
+  --xps-muted: rgba(var(--color-foreground), .72);
   --xps-line: rgba(var(--color-foreground), .14);
   --xps-accent: rgb(var(--color-button));
   --accent: rgb(var(--color-button));
@@ -89,7 +97,7 @@
 .xula-premium-showcase__eyebrow {
   display: inline-block;
   font-size: 1.1rem;
-  color: var(--xps-gold);
+  color: var(--xps-gold-text);
   margin-bottom: 1.4rem;
 }
 
@@ -198,7 +206,14 @@
 }
 
 .xula-premium-showcase__image--secondary {
+  display: none;
   opacity: 0;
+}
+
+@media (hover: hover) {
+  .xula-premium-showcase__image--secondary {
+    display: block;
+  }
 }
 
 @media (hover: hover) {
@@ -252,7 +267,7 @@
 
 .xula-premium-showcase__kicker {
   font-size: 1.1rem;
-  color: var(--xps-gold);
+  color: var(--xps-gold-text);
   margin: 0;
 }
 
@@ -335,7 +350,7 @@
   align-items: center;
   gap: 1rem;
   font-size: 1.1rem;
-  color: var(--xps-gold);
+  color: var(--xps-gold-text);
   margin: 0;
 }
 
@@ -490,6 +505,7 @@
   align-items: baseline;
   flex-wrap: wrap;
   gap: 1rem;
+  margin: 0;
 }
 
 .xula-premium-showcase__price-current {
@@ -1033,83 +1049,8 @@ xula-showcase-select {
     flex: 1;
   }
 
-  /* ---------- 1 product: hero / feature banner ---------- */
-
-  .xula-premium-showcase--count-1 .xula-premium-showcase__card {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-    min-height: 60rem;
-  }
-
-  .xula-premium-showcase--count-1 .xula-premium-showcase__media {
-    border-radius: calc(var(--xps-radius) - 1px) 0 0 calc(var(--xps-radius) - 1px);
-    aspect-ratio: auto;
-    height: 100%;
-    min-height: 100%;
-  }
-
-  .xula-premium-showcase--count-1 .xula-premium-showcase__content {
-    justify-content: center;
-    gap: 1.8rem;
-    padding: 4.8rem 4rem;
-  }
-
-  .xula-premium-showcase--count-1 .xula-premium-showcase__title {
-    font-size: clamp(3.2rem, 4vw, 5.2rem);
-    line-height: 1;
-  }
-
-  .xula-premium-showcase--count-1 .xula-premium-showcase__excerpt {
-    font-size: 1.6rem;
-    max-width: 52ch;
-  }
-
-  .xula-premium-showcase--count-1 .xula-premium-showcase__specs {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 2.4rem;
-  }
-
-  .xula-premium-showcase--count-1 .xula-premium-showcase__spec,
-  .xula-premium-showcase--count-1 .xula-premium-showcase__spec:first-child,
-  .xula-premium-showcase--count-1 .xula-premium-showcase__spec:last-child {
-    padding: .9rem 0;
-    border-bottom: 1px dashed var(--xps-line);
-  }
-
-  .xula-premium-showcase--count-1 .xula-premium-showcase__origin {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .xula-premium-showcase--count-1 .xula-premium-showcase__buybox {
-    margin-top: .8rem;
-    padding: 2.4rem;
-    border: 1px solid var(--xps-line);
-    border-radius: var(--xps-radius);
-    background: color-mix(in srgb, var(--bg-tertiary) 7%, var(--xps-card));
-  }
-
-  .xula-premium-showcase--count-1 .xula-premium-showcase__price-current {
-    font-size: 2.6rem;
-  }
-
-  /* ---------- 2 products: double spotlight ---------- */
-
-  .xula-premium-showcase--count-2 .xula-premium-showcase__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 3.2rem;
-  }
-
-  .xula-premium-showcase--count-2 .xula-premium-showcase__content {
-    padding: 3.2rem 3.2rem 3.6rem;
-  }
-
-  .xula-premium-showcase--count-2 .xula-premium-showcase__title {
-    font-size: clamp(2.6rem, 3vw, 3.6rem);
-  }
-
   /* ---------- 3–6 products: 2-column editorial grid ----------
-     3 and 5 open with a wide horizontal lead card. */
+     3 opens with a full-width lead card (horizontal from 990px). */
 
   .xula-premium-showcase--count-3 .xula-premium-showcase__grid,
   .xula-premium-showcase--count-4 .xula-premium-showcase__grid,
@@ -1119,33 +1060,8 @@ xula-showcase-select {
     gap: 2.4rem;
   }
 
-  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child,
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child {
+  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child {
     grid-column: 1 / -1;
-  }
-
-  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__card,
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__card {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-  }
-
-  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__media,
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__media {
-    border-radius: calc(var(--xps-radius) - 1px) 0 0 calc(var(--xps-radius) - 1px);
-    aspect-ratio: auto;
-    min-height: 44rem;
-  }
-
-  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__content,
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__content {
-    justify-content: center;
-    padding: 3.6rem;
-  }
-
-  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__title,
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__title {
-    font-size: clamp(2.8rem, 3.2vw, 4rem);
   }
 
   .xula-premium-showcase--count-3 .xula-premium-showcase__media,
@@ -1156,16 +1072,32 @@ xula-showcase-select {
   }
 }
 
+/* Tablet: every collection shows one full-width card per row,
+   image on top and content below (multi-column layouts start at 990px) */
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .xula-premium-showcase .xula-premium-showcase__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3.2rem;
+  }
+
+  .xula-premium-showcase .xula-premium-showcase__card {
+    min-height: 0;
+  }
+
+  .xula-premium-showcase .xula-premium-showcase__media {
+    border-radius: calc(var(--xps-radius) - 1px) calc(var(--xps-radius) - 1px) 0 0;
+    aspect-ratio: 16 / 10;
+    height: auto;
+    min-height: 0;
+  }
+
+  .xula-premium-showcase .xula-premium-showcase__content {
+    justify-content: flex-start;
+    padding: 3.2rem 3.2rem 3.6rem;
+  }
+}
+
 @media screen and (min-width: 990px) {
-  .xula-premium-showcase--count-1 .xula-premium-showcase__card {
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-    min-height: 68rem;
-  }
-
-  .xula-premium-showcase--count-1 .xula-premium-showcase__content {
-    padding: 6.4rem 5.6rem;
-  }
-
   .xula-premium-showcase--count-2 .xula-premium-showcase__grid {
     gap: 4rem;
   }
@@ -1177,37 +1109,77 @@ xula-showcase-select {
     gap: 3.2rem;
   }
 
-  /* ---------- 5 products: 2 large on top + 3 below ---------- */
+  /* ---------- 2 products: one horizontal card per row ---------- */
 
-  .xula-premium-showcase--count-5 .xula-premium-showcase__grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+  .xula-premium-showcase--count-2 .xula-premium-showcase__grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item {
-    grid-column: span 2;
+  /* ---------- 4–5 products: 2 cards on top + horizontal rows below ---------- */
+
+  .xula-premium-showcase--count-4 .xula-premium-showcase__item:nth-child(n + 3),
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(n + 3) {
+    grid-column: 1 / -1;
   }
 
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(-n + 2) {
-    grid-column: span 3;
+  /* ---------- Horizontal card (shared by every collection) ----------
+     Image left, content right, CTAs on two rows. Used by the 1- and
+     2-product cards, the 3-product lead card and cards 3+ of the 4- and
+     5-product grids. */
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__card,
+  .xula-premium-showcase--count-2 .xula-premium-showcase__card,
+  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__card,
+  .xula-premium-showcase--count-4 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__card,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   }
 
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__card {
-    display: flex;
+  .xula-premium-showcase--count-1 .xula-premium-showcase__media,
+  .xula-premium-showcase--count-2 .xula-premium-showcase__media,
+  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__media,
+  .xula-premium-showcase--count-4 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__media,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__media {
+    border-radius: calc(var(--xps-radius) - 1px) 0 0 calc(var(--xps-radius) - 1px);
+    aspect-ratio: auto;
+    height: 100%;
+    min-height: 44rem;
   }
 
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__media {
-    border-radius: calc(var(--xps-radius) - 1px) calc(var(--xps-radius) - 1px) 0 0;
-    aspect-ratio: 5 / 4;
-    min-height: 0;
+  .xula-premium-showcase--count-1 .xula-premium-showcase__content,
+  .xula-premium-showcase--count-2 .xula-premium-showcase__content,
+  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__content,
+  .xula-premium-showcase--count-4 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__content,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__content {
+    justify-content: center;
+    padding: 3.6rem;
   }
 
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__content {
-    justify-content: flex-start;
-    padding: 2.4rem 2rem 2.8rem;
+  .xula-premium-showcase--count-1 .xula-premium-showcase__title,
+  .xula-premium-showcase--count-2 .xula-premium-showcase__title,
+  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__title,
+  .xula-premium-showcase--count-4 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__title,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__title {
+    font-size: clamp(2.8rem, 3.2vw, 4rem);
   }
 
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item:first-child .xula-premium-showcase__title {
-    font-size: clamp(2.2rem, 2.4vw, 2.8rem);
+  .xula-premium-showcase--count-1 .xula-premium-showcase__actions,
+  .xula-premium-showcase--count-2 .xula-premium-showcase__actions,
+  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__actions,
+  .xula-premium-showcase--count-4 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__actions,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .xula-premium-showcase--count-1 .xula-premium-showcase__submit,
+  .xula-premium-showcase--count-2 .xula-premium-showcase__submit,
+  .xula-premium-showcase--count-3 .xula-premium-showcase__item:first-child .xula-premium-showcase__submit,
+  .xula-premium-showcase--count-4 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__submit,
+  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__submit {
+    width: 100%;
+    flex: none;
   }
 
   /* ---------- 6 products: 3 × 2 grid ---------- */
@@ -1217,13 +1189,11 @@ xula-showcase-select {
   }
 
   /* Narrow 3-up cards: stack the add-to-cart and details link */
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__actions,
   .xula-premium-showcase--count-6 .xula-premium-showcase__actions {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .xula-premium-showcase--count-5 .xula-premium-showcase__item:nth-child(n + 3) .xula-premium-showcase__submit,
   .xula-premium-showcase--count-6 .xula-premium-showcase__submit {
     width: 100%;
     flex: none;

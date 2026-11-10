@@ -15,14 +15,11 @@
   endif
 
   case product_count
-    when 1
-      assign image_sizes = '(min-width: 990px) 55vw, (min-width: 750px) 50vw, calc(100vw - 32px)'
-      assign excerpt_words = 48
-    when 2
-      assign image_sizes = '(min-width: 750px) 45vw, calc(100vw - 32px)'
+    when 1, 2
+      assign image_sizes = '(min-width: 990px) 55vw, calc(100vw - 32px)'
       assign excerpt_words = 26
     else
-      assign image_sizes = '(min-width: 990px) 30vw, (min-width: 750px) 45vw, calc(100vw - 32px)'
+      assign image_sizes = '(min-width: 990px) 30vw, calc(100vw - 32px)'
       assign excerpt_words = 18
   endcase
 
@@ -44,6 +41,7 @@
   -%}
 {%- endcapture -%}
 
+{%- if product_count > 0 or request.design_mode -%}
 <section
   id="{{ showcase_id }}"
   class="xula-premium-showcase xula-premium-showcase--count-{{ product_count }} xula-premium-showcase--bg-{{ section.settings.background_style }}{% if section.settings.accent_border %} xula-premium-showcase--accent-border{% endif %}"
@@ -68,8 +66,26 @@
 
     {%- if product_count > 0 -%}
       <ul class="xula-premium-showcase__grid" role="list">
-        {%- for product in collection.products limit: product_count -%}
+        {%- comment -%}
+          Gift cards live in every collection by design. Two passes keep them
+          visible but always after the real products, so a product (not the
+          gift card) leads the showcase and the structured data.
+        {%- endcomment -%}
+        {%- assign item_index = 0 -%}
+        {%- for pass in (1..2) -%}
+        {%- for product in collection.products -%}
           {%- liquid
+            assign is_gift_card = product.gift_card? | default: false
+            if pass == 1 and is_gift_card
+              continue
+            elsif pass == 2 and is_gift_card == false
+              continue
+            endif
+            if item_index >= product_count
+              break
+            endif
+            assign item_index = item_index | plus: 1
+
             assign card_id = showcase_id | append: '-' | append: product.id
             assign form_id = card_id | append: '-form'
             assign current_variant = product.selected_or_first_available_variant
@@ -156,32 +172,31 @@
           {%- capture ld_item -%}
             {
               "@type": "ListItem",
-              "position": {{ forloop.index }},
-              "item": {
-                "@type": "Product",
-                "name": {{ product.title | json }},
-                "url": {{ shop.url | append: product.url | json }},
-                {%- if featured_media -%}
-                  "image": {{ featured_media | image_url: width: 1200 | prepend: 'https:' | json }},
-                {%- endif -%}
-                "description": {{ product.description | strip_html | truncatewords: 40 | json }},
-                "sku": {{ current_variant.sku | json }},
-                "brand": { "@type": "Brand", "name": {{ product.vendor | default: shop.name | json }} },
-                "offers": {
-                  "@type": "Offer",
-                  "priceCurrency": {{ cart.currency.iso_code | json }},
-                  "price": {{ current_variant.price | divided_by: 100.0 | json }},
-                  "availability": "https://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}",
-                  "url": {{ shop.url | append: product.url | json }}
-                }
-              }
+              "position": {{ item_index }},
+              "url": {{ request.origin | append: product.url | json }},
+              "name": {{ product.title | json }}
+              {%- if featured_media -%},
+                "image": {{ featured_media | image_url: width: 1200 | prepend: 'https:' | json }}
+              {%- endif %}
             }
           {%- endcapture -%}
           {%- liquid
-            unless forloop.first
+            if item_index > 1
               assign ld_items = ld_items | append: ','
-            endunless
+            endif
             assign ld_items = ld_items | append: ld_item
+
+            # Horizontal cards on desktop (image ≈ 55% of the row)
+            assign card_sizes = image_sizes
+            if product_count == 3 and item_index == 1
+              assign card_sizes = '(min-width: 990px) 55vw, calc(100vw - 32px)'
+            elsif product_count == 4 or product_count == 5
+              if item_index > 2
+                assign card_sizes = '(min-width: 990px) 55vw, calc(100vw - 32px)'
+              else
+                assign card_sizes = '(min-width: 990px) 45vw, calc(100vw - 32px)'
+              endif
+            endif
           -%}
 
           <li class="xula-premium-showcase__item">
@@ -205,8 +220,9 @@
                     | image_tag:
                       class: 'xula-premium-showcase__image xula-premium-showcase__image--primary',
                       widths: '400, 600, 800, 1000, 1200, 1600',
-                      sizes: image_sizes,
+                      sizes: card_sizes,
                       loading: 'lazy',
+                      decoding: 'async',
                       alt: image_alt
                   }}
                 {%- else -%}
@@ -220,8 +236,9 @@
                     | image_tag:
                       class: 'xula-premium-showcase__image xula-premium-showcase__image--secondary',
                       widths: '400, 600, 800, 1200',
-                      sizes: image_sizes,
+                      sizes: card_sizes,
                       loading: 'lazy',
+                      decoding: 'async',
                       alt: ''
                   }}
                 {%- endif -%}
@@ -238,10 +255,6 @@
               </a>
 
               <div class="xula-premium-showcase__content">
-                {%- if product_count == 1 and product.vendor != blank -%}
-                  <p class="xula-premium-showcase__kicker xula-type--code xula-type--lot">{{ product.vendor }}</p>
-                {%- endif -%}
-
                 <h3 id="{{ card_id }}-title" class="xula-premium-showcase__title">
                   <a href="{{ product.url }}" class="xula-premium-showcase__title-link">{{ product.title }}</a>
                 </h3>
@@ -337,21 +350,30 @@
                   data-xula-showcase-form
                 >
                   <input type="hidden" name="form_type" value="product">
-                  <input type="hidden" name="utf8" value="✓">
 
-                  <div class="xula-premium-showcase__price" data-xula-showcase-price-wrap>
-                    <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+                  {%- assign on_sale = false -%}
+                  {%- if current_variant.compare_at_price > current_variant.price -%}
+                    {%- assign on_sale = true -%}
+                  {%- endif -%}
+                  <p class="xula-premium-showcase__price" data-xula-showcase-price-wrap>
+                    <span
+                      class="visually-hidden"
+                      data-xula-showcase-price-label
+                      data-label-regular="{{ 'products.product.price.regular_price' | t | escape }}"
+                      data-label-sale="{{ 'products.product.price.sale_price' | t | escape }}"
+                    >
+                      {%- if on_sale -%}{{ 'products.product.price.sale_price' | t }}{%- else -%}{{ 'products.product.price.regular_price' | t }}{%- endif -%}
+                    </span>
                     <span class="xula-premium-showcase__price-current xula-type--code" data-xula-showcase-price>
                       {{- current_variant.price | money -}}
                     </span>
-                    <s
-                      class="xula-premium-showcase__price-compare xula-type--code"
-                      data-xula-showcase-compare
-                      {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}
-                    >
-                      {{- current_variant.compare_at_price | money -}}
-                    </s>
-                  </div>
+                    <span class="xula-premium-showcase__price-compare-wrap" data-xula-showcase-compare-wrap {% unless on_sale %}hidden{% endunless %}>
+                      <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+                      <s class="xula-premium-showcase__price-compare xula-type--code" data-xula-showcase-compare>
+                        {{- current_variant.compare_at_price | money -}}
+                      </s>
+                    </span>
+                  </p>
 
                   {%- if product.has_only_default_variant -%}
                     <input type="hidden" name="id" value="{{ current_variant.id }}" data-xula-showcase-variant>
@@ -494,7 +516,7 @@
                       name="add"
                       class="xula-btn xula-premium-showcase__submit"
                       data-xula-showcase-submit
-                      {% unless current_variant.available %}aria-disabled="true"{% endunless %}
+                      aria-disabled="{% if current_variant.available %}false{% else %}true{% endif %}"
                       aria-describedby="{{ card_id }}-title"
                     >
                       <span class="xula-premium-showcase__submit-text" data-xula-showcase-submit-text>
@@ -558,6 +580,7 @@
             </article>
           </li>
         {%- endfor -%}
+        {%- endfor -%}
       </ul>
 
       {%- if section.settings.show_collection_link and collection.url != blank -%}
@@ -576,20 +599,19 @@
           "@context": "https://schema.org",
           "@type": "ItemList",
           "name": {{ section.settings.heading | default: collection.title | json }},
-          "url": {{ shop.url | append: collection.url | json }},
+          "url": {{ request.origin | append: collection.url | json }},
           "numberOfItems": {{ product_count }},
           "itemListElement": [{{ ld_items }}]
         }
       </script>
     {%- else -%}
       <div class="xula-premium-showcase__empty">
-        {%- if request.design_mode -%}
-          <p>Select a collection with 1 to 6 products to preview the showcase.</p>
-        {%- endif -%}
+        <p>Select a collection with 1 to 6 products to preview the showcase.</p>
       </div>
     {%- endif -%}
   </div>
 </section>
+{%- endif -%}
 
 {% schema %}
 {
