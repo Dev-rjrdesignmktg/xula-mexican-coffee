@@ -171,6 +171,32 @@
   }
 }
 
+@media (min-width: 768px) and (max-width: 899px) {
+  .xula-cta__actions {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .xula-cta__trust {
+    justify-content: center;
+  }
+
+  .xula-cta__btn-primary {
+    width: auto;
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .xula-cta__btn-secondary {
+    align-self: auto;
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
 @media (min-width: 900px) {
   .xula-cta__frame {
     display: flex;
