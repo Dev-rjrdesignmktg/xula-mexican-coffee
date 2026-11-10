@@ -82,7 +82,7 @@
       "name": "Xula Promo Carousel",
       "settings": {
         "heading": "",
-        "slide_height": "standard",
+        "slide_height": "adapt",
         "enable_autoplay": false,
         "autoplay_interval": 5
       }

@@ -52,19 +52,20 @@
   display: flex;
   align-items: stretch;
   gap: 1.6rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
 /* ---------- Slide ---------- */
 
+/* Overflow is clipped on the media layer (not the slide) so text content can
+   grow the slide instead of being cut off when it is taller than the image. */
 .xula-promo-carousel__slide {
   position: relative;
+  display: flex;
+  flex-direction: column;
   flex: 0 0 100%;
   scroll-snap-align: start;
+  scroll-snap-stop: always;
   border-radius: 1.8rem;
-  overflow: hidden;
   isolation: isolate;
   background: var(--bg-tertiary);
 }
@@ -81,10 +82,25 @@
   min-height: 48rem;
 }
 
+/* Adapt to image: the slide takes the image's own aspect ratio, so the
+   full banner is visible at every viewport width (no cropping). Uses the
+   mobile image ratio below 750px when one is provided. */
+.xula-promo-carousel--height-adapt .xula-promo-carousel__slide {
+  min-height: 0;
+  aspect-ratio: var(--xula-promo-carousel-ratio-mobile, var(--xula-promo-carousel-ratio, 2.4));
+}
+
 .xula-promo-carousel__media {
   position: absolute;
   inset: 0;
   z-index: 0;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.xula-promo-carousel__media picture {
+  display: block;
+  height: 100%;
 }
 
 .xula-promo-carousel__image {
@@ -133,8 +149,18 @@
   opacity: 0.75;
 }
 
-.xula-promo-carousel__overlay--none {
-  display: none;
+/* ---------- Full-slide link (image-only banners) ---------- */
+
+.xula-promo-carousel__slide-link {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+}
+
+.xula-promo-carousel__slide-link:focus-visible {
+  outline: 3px solid var(--info);
+  outline-offset: -3px;
 }
 
 /* ---------- Content ---------- */
@@ -144,7 +170,7 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1 1 auto;
   justify-content: flex-end;
   padding: 2.4rem 2rem;
   color: #ffffff;
@@ -279,31 +305,48 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.9rem;
+  gap: 0.2rem;
   flex: 1 1 0%;
 }
 
+/* The button is a 2.4rem (24px) tap target (WCAG 2.5.8); the visible dot is
+   drawn by ::before so the design stays small. */
 .xula-promo-carousel__dot {
-  width: 1rem;
-  height: 1rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
   padding: 0;
+  margin: 0;
+  border: 0;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--bg-secondary) 35%, transparent);
   background: transparent;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.xula-promo-carousel__dot::before {
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--bg-secondary) 55%, transparent);
+  background: transparent;
   transition: background 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
 }
 
-.xula-promo-carousel__dot:hover {
+.xula-promo-carousel__dot:hover::before {
   border-color: var(--accent);
 }
 
 .xula-promo-carousel__dot:focus-visible {
   outline: 2px solid var(--info);
-  outline-offset: 2px;
+  outline-offset: 0;
 }
 
-.xula-promo-carousel__dot--active {
+.xula-promo-carousel__dot--active::before {
   background: var(--accent);
   border-color: var(--accent);
   transform: scale(1.2);
@@ -365,8 +408,13 @@
   }
 
   .xula-promo-carousel__cta,
-  .xula-promo-carousel__dot {
+  .xula-promo-carousel__nav,
+  .xula-promo-carousel__dot::before {
     transition: none;
+  }
+
+  .xula-promo-carousel__cta:hover {
+    transform: none;
   }
 }
 
@@ -383,6 +431,10 @@
 
   .xula-promo-carousel__track {
     gap: 2rem;
+  }
+
+  .xula-promo-carousel--height-adapt .xula-promo-carousel__slide {
+    aspect-ratio: var(--xula-promo-carousel-ratio, 2.4);
   }
 
   .xula-promo-carousel--height-compact .xula-promo-carousel__slide {

@@ -6,14 +6,21 @@
   assign slide_count = slides.size
   assign heading_id = 'xula-promo-carousel-heading-' | append: section.id
   assign track_id = 'xula-promo-carousel-track-' | append: section.id
-  assign live_id = 'xula-promo-carousel-live-' | append: section.id
   assign autoplay_ms = section.settings.autoplay_interval | times: 1000 | round
+
+  # Keep a valid heading outline: slide titles are h3 only under a visible h2.
+  assign slide_heading_tag = 'h2'
+  if section.settings.heading != blank
+    assign slide_heading_tag = 'h3'
+  endif
+
+  # Images live inside .page-width (max 1200px, 15px side padding).
+  assign img_sizes = '(min-width: 1200px) 1170px, calc(100vw - 30px)'
 -%}
 
 {%- if slide_count > 0 -%}
-<section
+<div
   class="xula-promo-carousel xula-promo-carousel--height-{{ section.settings.slide_height }}"
-  {% if section.settings.heading != blank %}aria-labelledby="{{ heading_id }}"{% else %}aria-label="Featured promotions"{% endif %}
   data-xula-promo-carousel
   data-autoplay="{{ section.settings.enable_autoplay }}"
   data-autoplay-interval="{{ autoplay_ms }}"
@@ -22,7 +29,7 @@
 
     {%- if section.settings.heading != blank -%}
       <div class="xula-promo-carousel__header">
-        <h2 class="xula-promo-carousel__heading" id="{{ heading_id }}">{{ section.settings.heading }}</h2>
+        <h2 class="xula-promo-carousel__heading" id="{{ heading_id }}">{{ section.settings.heading | escape }}</h2>
       </div>
     {%- endif -%}
 
@@ -33,160 +40,191 @@
       {% if section.settings.heading != blank %}aria-labelledby="{{ heading_id }}"{% else %}aria-label="Featured promotions"{% endif %}
     >
 
-      <div class="xula-promo-carousel__viewport" tabindex="0" role="group" aria-label="Scroll to see more">
-        <ul class="xula-promo-carousel__track" id="{{ track_id }}" data-xula-promo-carousel-track>
+      <div
+        class="xula-promo-carousel__viewport"
+        id="{{ track_id }}"
+        tabindex="0"
+        aria-label="Slides. Use the left and right arrow keys to navigate."
+        data-xula-promo-carousel-viewport
+      >
+        <div class="xula-promo-carousel__track" data-xula-promo-carousel-track>
           {%- for block in slides -%}
             {%- liquid
-              assign img_alt = block.settings.image_alt | default: block.settings.heading | default: shop.name
+              assign img_alt = block.settings.image_alt | default: block.settings.heading | default: ''
               assign has_mobile_image = false
               if block.settings.image_mobile != blank
                 assign has_mobile_image = true
               endif
+              assign ratio = 2.4
+              if block.settings.image != blank
+                assign ratio = block.settings.image.aspect_ratio
+              endif
+              assign ratio_mobile = ratio
+              if has_mobile_image
+                assign ratio_mobile = block.settings.image_mobile.aspect_ratio
+              endif
+              assign cta_link = block.settings.cta_link
+              if cta_link == '#'
+                assign cta_link = blank
+              endif
+              assign is_first = forloop.first
             -%}
-            <li
+            <div
               class="xula-promo-carousel__slide xula-promo-carousel__slide--{{ block.settings.position }}"
               role="group"
               aria-roledescription="slide"
-              aria-label="{{ forloop.index }} of {{ slide_count }}"
-              style="--xula-promo-carousel-accent: {{ block.settings.accent_color }};"
+              aria-label="{{ forloop.index }} of {{ slide_count }}{% if block.settings.heading != blank %}: {{ block.settings.heading | escape }}{% endif %}"
+              style="--xula-promo-carousel-accent: {{ block.settings.accent_color }}; --xula-promo-carousel-ratio: {{ ratio }}; --xula-promo-carousel-ratio-mobile: {{ ratio_mobile }};"
               data-xula-promo-carousel-slide
               {{ block.shopify_attributes }}
             >
               <div class="xula-promo-carousel__media">
-                <picture>
-                  {%- if has_mobile_image -%}
-                    <source
-                      media="(max-width: 749px)"
-                      srcset="
-                        {{ block.settings.image_mobile | image_url: width: 480 }} 480w,
-                        {{ block.settings.image_mobile | image_url: width: 750 }} 750w,
-                        {{ block.settings.image_mobile | image_url: width: 1080 }} 1080w
-                      "
-                    >
-                  {%- endif -%}
-                  {%- if block.settings.image != blank -%}
+                {%- if block.settings.image != blank -%}
+                  <picture>
+                    {%- if has_mobile_image -%}
+                      <source
+                        media="(max-width: 749px)"
+                        srcset="
+                          {{ block.settings.image_mobile | image_url: width: 480 }} 480w,
+                          {{ block.settings.image_mobile | image_url: width: 750 }} 750w,
+                          {{ block.settings.image_mobile | image_url: width: 1080 }} 1080w
+                        "
+                        sizes="calc(100vw - 30px)"
+                        width="{{ block.settings.image_mobile.width }}"
+                        height="{{ block.settings.image_mobile.height }}"
+                      >
+                    {%- endif -%}
                     <img
                       class="xula-promo-carousel__image"
                       src="{{ block.settings.image | image_url: width: 1600 }}"
                       srcset="
+                        {{ block.settings.image | image_url: width: 550 }} 550w,
                         {{ block.settings.image | image_url: width: 750 }} 750w,
                         {{ block.settings.image | image_url: width: 1100 }} 1100w,
                         {{ block.settings.image | image_url: width: 1600 }} 1600w,
                         {{ block.settings.image | image_url: width: 2400 }} 2400w
                       "
-                      sizes="(min-width: 750px) 100vw, 92vw"
+                      sizes="{{ img_sizes }}"
                       alt="{{ img_alt | escape }}"
                       width="{{ block.settings.image.width }}"
                       height="{{ block.settings.image.height }}"
-                      loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                      fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}"
+                      {% if is_first and section.index == 1 %}
+                        loading="eager" fetchpriority="high"
+                      {% else %}
+                        loading="lazy"
+                      {% endif %}
                       decoding="async"
                     >
-                  {%- else -%}
-                    {{ 'lifestyle-1' | placeholder_svg_tag: 'xula-promo-carousel__image xula-promo-carousel__image--placeholder placeholder-svg' }}
-                  {%- endif -%}
-                </picture>
-                <div class="xula-promo-carousel__overlay xula-promo-carousel__overlay--{{ block.settings.overlay_style }}" aria-hidden="true"></div>
+                  </picture>
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'xula-promo-carousel__image xula-promo-carousel__image--placeholder placeholder-svg' }}
+                {%- endif -%}
+                {%- if block.settings.overlay_style != 'none' -%}
+                  <div class="xula-promo-carousel__overlay xula-promo-carousel__overlay--{{ block.settings.overlay_style }}" aria-hidden="true"></div>
+                {%- endif -%}
               </div>
 
-              {%- if block.settings.heading != blank or block.settings.text != blank or block.settings.badge != blank -%}
+              {%- liquid
+                assign has_cta = false
+                if block.settings.cta_label != blank and cta_link != blank
+                  assign has_cta = true
+                endif
+              -%}
+              {%- if block.settings.heading != blank or block.settings.text != blank or block.settings.badge != blank or has_cta -%}
                 <div class="xula-promo-carousel__content xula-promo-carousel__content--{{ block.settings.position }}">
                   {%- if block.settings.badge != blank -%}
-                    <span class="xula-promo-carousel__badge">{{ block.settings.badge }}</span>
+                    <span class="xula-promo-carousel__badge">{{ block.settings.badge | escape }}</span>
                   {%- endif -%}
                   {%- if block.settings.heading != blank -%}
-                    <h3 class="xula-promo-carousel__slide-heading">{{ block.settings.heading }}</h3>
+                    <{{ slide_heading_tag }} class="xula-promo-carousel__slide-heading">{{ block.settings.heading | escape }}</{{ slide_heading_tag }}>
                   {%- endif -%}
                   {%- if block.settings.text != blank -%}
-                    <p class="xula-promo-carousel__text">{{ block.settings.text }}</p>
+                    <p class="xula-promo-carousel__text">{{ block.settings.text | escape | newline_to_br }}</p>
                   {%- endif -%}
-                  {%- if block.settings.cta_label != blank -%}
-                    <a href="{{ block.settings.cta_link | default: '#' }}" class="xula-promo-carousel__cta">
-                      <span>{{ block.settings.cta_label }}</span>
+                  {%- if has_cta -%}
+                    <a href="{{ cta_link }}" class="xula-promo-carousel__cta">
+                      <span>{{ block.settings.cta_label | escape }}</span>
                     </a>
                   {%- endif -%}
                 </div>
+              {%- elsif cta_link != blank -%}
+                {%- comment -%} Image-only banner: make the whole slide a link, named by its alt text. {%- endcomment -%}
+                <a
+                  href="{{ cta_link }}"
+                  class="xula-promo-carousel__slide-link"
+                  aria-label="{{ img_alt | default: 'View promotion' | escape }}"
+                ></a>
               {%- endif -%}
-            </li>
+            </div>
           {%- endfor -%}
-        </ul>
+        </div>
       </div>
 
-      <div class="xula-promo-carousel__controls">
-        <button
-          type="button"
-          class="xula-promo-carousel__nav xula-promo-carousel__nav--prev"
-          aria-label="Previous slide"
-          aria-controls="{{ track_id }}"
-          data-xula-promo-carousel-prev
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 4L7 12L15 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+      {%- if slide_count > 1 -%}
+        <div class="xula-promo-carousel__controls">
+          <button
+            type="button"
+            class="xula-promo-carousel__nav xula-promo-carousel__nav--prev"
+            aria-label="Previous slide"
+            aria-controls="{{ track_id }}"
+            disabled
+            data-xula-promo-carousel-prev
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M15 4L7 12L15 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
 
-        {%- if slide_count > 1 -%}
-          <div class="xula-promo-carousel__dots" role="group" aria-label="Select slide" data-xula-promo-carousel-dots>
+          <div class="xula-promo-carousel__dots" role="group" aria-label="Choose slide" data-xula-promo-carousel-dots>
             {%- for block in slides -%}
               <button
                 type="button"
                 class="xula-promo-carousel__dot{% if forloop.first %} xula-promo-carousel__dot--active{% endif %}"
                 aria-label="Go to slide {{ forloop.index }}"
-                aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+                aria-controls="{{ track_id }}"
+                {% if forloop.first %}aria-current="true"{% endif %}
                 data-xula-promo-carousel-dot
                 data-index="{{ forloop.index0 }}"
               ></button>
             {%- endfor -%}
           </div>
-        {%- endif -%}
 
-        <button
-          type="button"
-          class="xula-promo-carousel__nav xula-promo-carousel__nav--next"
-          aria-label="Next slide"
-          aria-controls="{{ track_id }}"
-          data-xula-promo-carousel-next
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4L17 12L9 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-
-        {%- if section.settings.enable_autoplay -%}
           <button
             type="button"
-            class="xula-promo-carousel__toggle"
-            aria-pressed="false"
-            aria-label="Pause autoplay"
-            data-label-pause="Pause autoplay"
-            data-label-play="Resume autoplay"
-            data-xula-promo-carousel-toggle
+            class="xula-promo-carousel__nav xula-promo-carousel__nav--next"
+            aria-label="Next slide"
+            aria-controls="{{ track_id }}"
+            data-xula-promo-carousel-next
           >
-            <span class="xula-promo-carousel__toggle-icon xula-promo-carousel__toggle-icon--pause" aria-hidden="true"></span>
-            <span class="xula-promo-carousel__toggle-icon xula-promo-carousel__toggle-icon--play" aria-hidden="true"></span>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M9 4L17 12L9 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-        {%- endif -%}
-      </div>
 
-      <div class="visually-hidden" role="status" aria-live="polite" id="{{ live_id }}" data-xula-promo-carousel-live></div>
+          {%- if section.settings.enable_autoplay -%}
+            <button
+              type="button"
+              class="xula-promo-carousel__toggle"
+              aria-pressed="false"
+              aria-label="Pause autoplay"
+              data-label-pause="Pause autoplay"
+              data-label-play="Resume autoplay"
+              data-xula-promo-carousel-toggle
+            >
+              <span class="xula-promo-carousel__toggle-icon xula-promo-carousel__toggle-icon--pause" aria-hidden="true"></span>
+              <span class="xula-promo-carousel__toggle-icon xula-promo-carousel__toggle-icon--play" aria-hidden="true"></span>
+            </button>
+          {%- endif -%}
+        </div>
+
+        <div
+          class="visually-hidden"
+          aria-live="polite"
+          aria-atomic="true"
+          data-live-template="Slide [index] of [total]"
+          data-xula-promo-carousel-live
+        ></div>
+      {%- endif -%}
 
     </div>
   </div>
-</section>
-
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "itemListElement": [
-      {%- for block in slides -%}
-        {
-          "@type": "ListItem",
-          "position": {{ forloop.index }},
-          "name": {{ block.settings.heading | default: block.settings.badge | default: shop.name | json }},
-          "image": {% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 1600 | prepend: 'https:' | json }}{% else %}null{% endif %},
-          "url": {{ block.settings.cta_link | default: shop.url | json }}
-        }{%- unless forloop.last -%},{%- endunless -%}
-      {%- endfor -%}
-    ]
-  }
-</script>
+</div>
 {%- endif -%}
 
 {% schema %}
@@ -214,11 +252,13 @@
       "id": "slide_height",
       "label": "Slide height",
       "options": [
+        { "value": "adapt", "label": "Adapt to image" },
         { "value": "compact", "label": "Compact" },
         { "value": "standard", "label": "Standard" },
         { "value": "tall", "label": "Tall" }
       ],
-      "default": "standard"
+      "default": "adapt",
+      "info": "\"Adapt to image\" shows the full image at every screen size without cropping. Add a mobile image to slides for a better fit on phones."
     },
     {
       "type": "header",
@@ -260,13 +300,13 @@
           "type": "image_picker",
           "id": "image_mobile",
           "label": "Background image (mobile)",
-          "info": "Optional. If omitted, the desktop image is used cropped."
+          "info": "Optional. Recommended for wide banners so text stays legible on phones."
         },
         {
           "type": "text",
           "id": "image_alt",
           "label": "Alt text",
-          "info": "Describes the image for screen readers and SEO. If omitted, the heading is used."
+          "info": "Describe the image and any text it contains (screen readers and SEO). If omitted, the heading is used."
         },
         {
           "type": "header",
@@ -300,7 +340,8 @@
         {
           "type": "url",
           "id": "cta_link",
-          "label": "Link"
+          "label": "Link",
+          "info": "If the slide has no text, the whole image becomes a link."
         },
         {
           "type": "header",

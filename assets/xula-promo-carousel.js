@@ -1,13 +1,12 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const carousels = document.querySelectorAll("[data-xula-promo-carousel]");
+(() => {
+  const SELECTOR = "[data-xula-promo-carousel]";
+  const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  if (!carousels.length) return;
+  const init = (carousel) => {
+    if (carousel.dataset.xulaPromoCarouselReady === "true") return;
+    carousel.dataset.xulaPromoCarouselReady = "true";
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  carousels.forEach((carousel) => {
-    const viewport = carousel.querySelector(".xula-promo-carousel__viewport");
-    const track = carousel.querySelector("[data-xula-promo-carousel-track]");
+    const viewport = carousel.querySelector("[data-xula-promo-carousel-viewport]");
     const slides = Array.from(carousel.querySelectorAll("[data-xula-promo-carousel-slide]"));
     const prevBtn = carousel.querySelector("[data-xula-promo-carousel-prev]");
     const nextBtn = carousel.querySelector("[data-xula-promo-carousel-next]");
@@ -15,52 +14,57 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggle = carousel.querySelector("[data-xula-promo-carousel-toggle]");
     const live = carousel.querySelector("[data-xula-promo-carousel-live]");
 
-    if (!viewport || !track || slides.length === 0) return;
+    if (!viewport || slides.length < 2) return;
 
-    if (slides.length < 2) {
-      if (prevBtn) prevBtn.disabled = true;
-      if (nextBtn) nextBtn.disabled = true;
-      if (toggle) toggle.hidden = true;
-      return;
-    }
+    const liveTemplate = (live && live.dataset.liveTemplate) || "Slide [index] of [total]";
+    const autoplayInterval = parseInt(carousel.dataset.autoplayInterval, 10) || 5000;
+    const autoplayEnabled = carousel.dataset.autoplay === "true" && !reduceMotionQuery.matches;
 
     let activeIndex = 0;
     let autoplayTimer = null;
-
-    const autoplayEnabled = carousel.dataset.autoplay === "true" && !reduceMotion;
-    const autoplayInterval = parseInt(carousel.dataset.autoplayInterval, 10) || 5000;
     let isPlaying = autoplayEnabled;
+    let userInteracted = false;
 
-    const scrollToIndex = (index, behavior) => {
-      const target = slides[index];
-      if (!target) return;
-      viewport.scrollTo({
-        left: target.offsetLeft - track.offsetLeft,
-        behavior: behavior || (reduceMotion ? "auto" : "smooth"),
-      });
+    const announce = (index) => {
+      // Only announce after the user acts; never on load or while autoplaying.
+      if (!live || !userInteracted || autoplayTimer) return;
+      live.textContent = liveTemplate
+        .replace("[index]", String(index + 1))
+        .replace("[total]", String(slides.length));
     };
 
     const updateActive = (index) => {
+      if (index === activeIndex && carousel.dataset.xulaPromoCarouselSynced === "true") return;
       activeIndex = index;
+      carousel.dataset.xulaPromoCarouselSynced = "true";
 
       dots.forEach((dot, i) => {
         const active = i === index;
         dot.classList.toggle("xula-promo-carousel__dot--active", active);
-        dot.setAttribute("aria-current", String(active));
+        if (active) {
+          dot.setAttribute("aria-current", "true");
+        } else {
+          dot.removeAttribute("aria-current");
+        }
       });
 
       if (prevBtn) prevBtn.disabled = index === 0;
       if (nextBtn) nextBtn.disabled = index === slides.length - 1;
 
-      if (live) live.textContent = `${index + 1} de ${slides.length}`;
+      announce(index);
     };
 
-    const goTo = (index) => {
+    const goTo = (index, fromUser = true) => {
       const clamped = Math.max(0, Math.min(slides.length - 1, index));
-      scrollToIndex(clamped);
+      if (fromUser) userInteracted = true;
+      const target = slides[clamped];
+      viewport.scrollTo({
+        left: target.offsetLeft - viewport.firstElementChild.offsetLeft,
+        behavior: reduceMotionQuery.matches ? "auto" : "smooth",
+      });
     };
 
-    // Keep controls in sync with native scroll (touch swipe, trackpad, etc.)
+    // Sync controls with native scrolling (swipe, trackpad, keyboard).
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -71,7 +75,6 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       { root: viewport, threshold: 0.6 }
     );
-
     slides.forEach((slide) => observer.observe(slide));
 
     if (prevBtn) prevBtn.addEventListener("click", () => goTo(activeIndex - 1));
@@ -85,65 +88,68 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     viewport.addEventListener("keydown", (event) => {
-      if (event.key === "ArrowRight") {
-        event.preventDefault();
-        goTo(activeIndex + 1);
-      } else if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        goTo(activeIndex - 1);
-      }
+      if (event.target !== viewport) return;
+      const keyMap = {
+        ArrowRight: activeIndex + 1,
+        ArrowLeft: activeIndex - 1,
+        Home: 0,
+        End: slides.length - 1,
+      };
+      if (!(event.key in keyMap)) return;
+      event.preventDefault();
+      goTo(keyMap[event.key]);
     });
+
+    viewport.addEventListener("pointerdown", () => { userInteracted = true; }, { passive: true });
+
+    /* ---------- Autoplay ---------- */
+
+    const setLiveMode = () => {
+      if (live) live.setAttribute("aria-live", autoplayTimer ? "off" : "polite");
+    };
 
     const stopAutoplay = () => {
       if (!autoplayTimer) return;
       clearInterval(autoplayTimer);
       autoplayTimer = null;
+      setLiveMode();
     };
 
     const startAutoplay = () => {
-      if (!isPlaying) return;
-      stopAutoplay();
+      if (!isPlaying || autoplayTimer) return;
       autoplayTimer = setInterval(() => {
-        const nextIndex = activeIndex + 1 >= slides.length ? 0 : activeIndex + 1;
-        scrollToIndex(nextIndex);
+        goTo(activeIndex + 1 >= slides.length ? 0 : activeIndex + 1, false);
       }, autoplayInterval);
+      setLiveMode();
     };
 
     if (autoplayEnabled) {
-      startAutoplay();
+      // Only run while the carousel is on screen (saves CPU/battery).
+      const visibilityObserver = new IntersectionObserver(
+        ([entry]) => (entry.isIntersecting ? startAutoplay() : stopAutoplay()),
+        { threshold: 0.25 }
+      );
+      visibilityObserver.observe(carousel);
 
       carousel.addEventListener("pointerenter", stopAutoplay);
-      carousel.addEventListener("pointerleave", () => {
-        if (isPlaying) startAutoplay();
-      });
-
+      carousel.addEventListener("pointerleave", startAutoplay);
       carousel.addEventListener("focusin", stopAutoplay);
       carousel.addEventListener("focusout", (event) => {
-        if (isPlaying && !carousel.contains(event.relatedTarget)) startAutoplay();
+        if (!carousel.contains(event.relatedTarget)) startAutoplay();
       });
 
       document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-          stopAutoplay();
-        } else if (isPlaying) {
-          startAutoplay();
-        }
+        if (document.hidden) stopAutoplay();
+        else startAutoplay();
       });
 
       if (toggle) {
         toggle.addEventListener("click", () => {
           isPlaying = !isPlaying;
           toggle.setAttribute("aria-pressed", String(!isPlaying));
-          toggle.setAttribute(
-            "aria-label",
-            isPlaying ? toggle.dataset.labelPause : toggle.dataset.labelPlay
-          );
-
-          if (isPlaying) {
-            startAutoplay();
-          } else {
-            stopAutoplay();
-          }
+          toggle.setAttribute("aria-label", isPlaying ? toggle.dataset.labelPause : toggle.dataset.labelPlay);
+          if (!isPlaying) stopAutoplay();
+          // When resuming, autoplay restarts on focusout/pointerleave.
         });
       }
     } else if (toggle) {
@@ -151,5 +157,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     updateActive(0);
-  });
-});
+  };
+
+  const initAll = (root = document) => {
+    root.querySelectorAll(SELECTOR).forEach(init);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => initAll());
+  } else {
+    initAll();
+  }
+
+  // Theme editor: re-init when the section is added or re-rendered.
+  document.addEventListener("shopify:section:load", (event) => initAll(event.target));
+})();
